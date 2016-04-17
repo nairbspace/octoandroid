@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">OctoAndroid</string>
+    <string name="ip_address">IP Address</string>
+    <string name="api_key">API Key</string>
+    <string name="qr_code">QR Code</string>
+    <string name="add_printer">Add Printer</string>
 </resources>
