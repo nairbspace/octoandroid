@@ -4,4 +4,6 @@
     <string name="api_key">API Key</string>
     <string name="qr_code">QR Code</string>
     <string name="add_printer">Add Printer</string>
+    <string name="add">Add</string>
+    <string name="port">Port</string>
 </resources>
