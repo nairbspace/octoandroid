@@ -44,7 +44,7 @@ public class AddPrinterPresenterImpl implements AddPrinterPresenter, AddPrinterI
 
         try {
             HttpUrl url = new HttpUrl.Builder()
-                    .scheme(scheme) // Try secure connection first
+                    .scheme(scheme)
                     .host(ipAddress)
                     .port(port)
                     .build();
@@ -103,7 +103,7 @@ public class AddPrinterPresenterImpl implements AddPrinterPresenter, AddPrinterI
 
     @Override
     public void onFailure() {
-        mAddPrinterScreen.showIpAddressError("Failure");
+        mAddPrinterScreen.showSnackbar("Failure");
     }
 
     @Override

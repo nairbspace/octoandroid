@@ -28,9 +28,10 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import timber.log.Timber;
 
 public class AddPrinterActivity extends AppCompatActivity implements AddPrinterScreen, TextView.OnEditorActionListener,
-        DialogInterface.OnClickListener, View.OnFocusChangeListener {
+        DialogInterface.OnClickListener, View.OnFocusChangeListener, View.OnClickListener {
 
     @Inject AddPrinterPresenterImpl mPresenter;
 
@@ -138,12 +139,7 @@ public class AddPrinterActivity extends AppCompatActivity implements AddPrinterS
     @Override
     public void showSnackbar(String message) {
         Snackbar.make(mScrollView, message, Snackbar.LENGTH_INDEFINITE)
-                .setAction("Action", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                    }
-                }).show();
+                .setAction("Ok", this).show();
     }
 
     @Override
@@ -185,6 +181,15 @@ public class AddPrinterActivity extends AppCompatActivity implements AddPrinterS
             case DialogInterface.BUTTON_POSITIVE:
                 mSslCheckBox.setChecked(false);
                 onAddPrinterButtonClicked();
+                break;
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case android.support.design.R.id.snackbar_action:
+                Timber.d("This is a snackbar");
                 break;
         }
     }
