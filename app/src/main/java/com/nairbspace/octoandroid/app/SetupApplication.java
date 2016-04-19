@@ -1,12 +1,25 @@
 package com.nairbspace.octoandroid.app;
 
 import android.app.Application;
-import android.support.design.BuildConfig;
+import android.content.Context;
 import android.util.Log;
+
+import com.nairbspace.octoandroid.BuildConfig;
+import com.nairbspace.octoandroid.di.components.AppComponent;
+import com.nairbspace.octoandroid.di.components.DaggerAppComponent;
+import com.nairbspace.octoandroid.di.modules.AppModule;
+import com.nairbspace.octoandroid.di.modules.NetworkModule;
+import com.nairbspace.octoandroid.di.modules.StorageModule;
 
 import timber.log.Timber;
 
 public class SetupApplication extends Application {
+
+    private AppComponent mAppComponent;
+
+    public static SetupApplication get(Context context) {
+        return (SetupApplication) context.getApplicationContext();
+    }
 
     @Override
     public void onCreate() {
@@ -17,6 +30,16 @@ public class SetupApplication extends Application {
         } else {
             Timber.plant(new CrashReportingTree());
         }
+
+        mAppComponent = DaggerAppComponent.builder()
+                .appModule(new AppModule(this))
+                .networkModule(new NetworkModule())
+                .storageModule(new StorageModule())
+                .build();
+    }
+
+    public AppComponent getAppComponent() {
+        return mAppComponent;
     }
 
     private class CrashReportingTree extends Timber.Tree {
