@@ -105,16 +105,16 @@
 
             <CheckBox
                 android:id="@+id/ssl_checkbox"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/secure_connection_ssl"/>
 
             <Button
                 android:id="@+id/add_printer_button"
-                style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:theme="@style/AddPrinterButtonStyle"
                 android:text="@string/add_printer"
                 android:textStyle="bold"/>
 

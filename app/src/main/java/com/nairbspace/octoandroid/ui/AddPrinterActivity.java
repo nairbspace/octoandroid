@@ -151,6 +151,7 @@ public class AddPrinterActivity extends AppCompatActivity implements AddPrinterS
         AlertDialog alertDialog = new AlertDialog.Builder(this)
                 .setTitle(title)
                 .setMessage(message)
+                .setIcon(R.drawable.exclamation_triangle)
                 .setNegativeButton("Cancel", this)
                 .setNeutralButton("Info", this)
                 .setPositiveButton("Ok", this)
