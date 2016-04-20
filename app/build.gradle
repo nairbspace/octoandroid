@@ -11,6 +11,9 @@ android {
             // to pre-dex each module and produce an APK that can be tested on
             // Android Lollipop without time consuming dex merging processes.
             minSdkVersion 21
+            resValue "string", "google_app_id", MyGoogleAppId
+            resValue "string", "my_ip_address", MyIpAddress
+            resValue "string", "my_api_key", MyApiKey
         }
         prod {
             // The actual minSdkVersion for the application.
@@ -43,7 +46,7 @@ dependencies {
     // Google
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.android.support:design:23.3.0'
-    compile 'com.google.android.gms:play-services:8.4.0' // QR Decoder
+    compile 'com.google.android.gms:play-services-vision:8.4.0' // QR Decoder
 
     // Butterknife
     compile 'com.jakewharton:butterknife:7.0.1'

@@ -58,7 +58,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textUri"
-                        android:maxLines="1"/>
+                        android:maxLines="1"
+                        android:text="@string/my_ip_address"/>
                 </android.support.design.widget.TextInputLayout>
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="0dp"
@@ -92,7 +93,8 @@
                         android:imeActionLabel="@string/add"
                         android:imeOptions="actionUnspecified"
                         android:inputType="textVisiblePassword"
-                        android:maxLines="1"/>
+                        android:maxLines="1"
+                        android:text="@string/my_api_key"/>
                 </android.support.design.widget.TextInputLayout>
                 <ImageButton
                     android:id="@+id/qr_button"
