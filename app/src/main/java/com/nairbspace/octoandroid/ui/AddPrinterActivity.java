@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -38,7 +39,7 @@ import butterknife.OnClick;
 import timber.log.Timber;
 
 public class AddPrinterActivity extends AuthenticatorActivity implements AddPrinterScreen, TextView.OnEditorActionListener,
-        DialogInterface.OnClickListener, View.OnFocusChangeListener, View.OnClickListener {
+        DialogInterface.OnClickListener, View.OnFocusChangeListener, View.OnClickListener, QrDialogFragment.OnFragmentInteractionListener {
 
     @Inject AddPrinterPresenterImpl mPresenter;
     @Inject AccountManager mAccountManager;
@@ -147,7 +148,9 @@ public class AddPrinterActivity extends AuthenticatorActivity implements AddPrin
 
     @Override
     public void showQrDialogFragment() {
-        // Intent start QrDialogFragment
+        DialogFragment df = QrDialogFragment.newInstance();
+        df.setCancelable(true);
+        df.show(getSupportFragmentManager(), null);
     }
 
     @Override
@@ -263,5 +266,10 @@ public class AddPrinterActivity extends AuthenticatorActivity implements AddPrin
                 Timber.d("This is a snackbar");
                 break;
         }
+    }
+
+    @Override
+    public void onQrFinished(String apiKey) {
+        mApiKeyEditText.setText(apiKey);
     }
 }

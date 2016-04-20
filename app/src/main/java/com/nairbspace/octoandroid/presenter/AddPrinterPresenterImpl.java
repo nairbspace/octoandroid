@@ -31,23 +31,25 @@ public class AddPrinterPresenterImpl implements AddPrinterPresenter, AddPrinterI
         String scheme = isSslChecked ? HTTPS_SCHEME : HTTP_SCHEME;
 
         // If user inputted http:// or https:// try to extract only IP Address
-        if (ipAddress.contains("://")) {
-            String[] split = ipAddress.split("://");
-            if (split.length > 0) {
-                ipAddress = split[1];
-            }
+        HttpUrl ipAddressUrl = HttpUrl.parse(ipAddress);
+        if (ipAddressUrl != null) {
+            ipAddress = ipAddressUrl.host();
         }
+
+//        // If user inputted http:// or https:// try to extract only IP Address
+//        if (ipAddress.contains("://")) {
+//            String[] split = ipAddress.split("://");
+//            if (split.length > 0) {
+//                ipAddress = split[1];
+//            }
+//        }
 
         if (apiKey == null) {
             apiKey = "";
         }
 
         try {
-            HttpUrl url = new HttpUrl.Builder()
-                    .scheme(scheme)
-                    .host(ipAddress)
-                    .port(port)
-                    .build();
+            new HttpUrl.Builder().scheme(scheme).host(ipAddress).port(port).build();
             mAddPrinterInteractor.login(scheme, ipAddress, port, apiKey, this);
         } catch (IllegalArgumentException e) {
             mAddPrinterScreen.showIpAddressError("Incorrect formatting");

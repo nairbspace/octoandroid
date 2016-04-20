@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingBottom="0dp"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingTop="0dp"
     tools:context=".ui.AddPrinterActivity">
 
     <ProgressBar
@@ -96,10 +96,12 @@
                 </android.support.design.widget.TextInputLayout>
                 <ImageButton
                     android:id="@+id/qr_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:scaleType="fitCenter"
                     android:src="@drawable/qr_icon"
+                    android:padding="0dp"
+                    android:background="@android:color/transparent"
                     android:contentDescription="@string/qr_code"/>
             </LinearLayout>
 

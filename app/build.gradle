@@ -3,6 +3,21 @@ apply plugin: 'com.neenbedankt.android-apt' // Dagger2
 apply plugin: 'com.jakewharton.hugo' // Hugo
 
 android {
+
+    productFlavors {
+        // Define separate dev and prod product flavors.
+        dev {
+            // dev utilizes minSDKVersion = 21 to allow the Android gradle plugin
+            // to pre-dex each module and produce an APK that can be tested on
+            // Android Lollipop without time consuming dex merging processes.
+            minSdkVersion 21
+        }
+        prod {
+            // The actual minSdkVersion for the application.
+            minSdkVersion 16
+        }
+    }
+
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
 
@@ -28,7 +43,7 @@ dependencies {
     // Google
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.android.support:design:23.3.0'
-//    compile 'com.google.android.gms:play-services:8.4.0' // QR Decoder
+    compile 'com.google.android.gms:play-services:8.4.0' // QR Decoder
 
     // Butterknife
     compile 'com.jakewharton:butterknife:7.0.1'

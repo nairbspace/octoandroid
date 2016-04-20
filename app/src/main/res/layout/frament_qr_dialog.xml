@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+    <SurfaceView
+        android:id="@+id/camera_view"
+        android:layout_width="@dimen/qr_square"
+        android:layout_height="@dimen/qr_square"
+        android:layout_centerInParent="true"
+        android:visibility="visible"/>
+
+    <ImageView
+        android:id="@+id/qr_frame"
+        android:layout_width="@dimen/qr_square"
+        android:layout_height="@dimen/qr_square"
+        android:src="@drawable/ic_crop_free_black_24dp"
+        android:tint="@android:color/white"
+        android:alpha=".1"
+        android:layout_centerInParent="true"
+        android:visibility="visible"/>
+
+    <ImageView
+        android:id="@+id/qr_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/camera_view"
+        android:layout_alignRight="@+id/camera_view"
+        android:layout_alignTop="@+id/camera_view"
+        android:alpha=".1"
+        android:background="#20000000"
+        android:src="@drawable/ic_close_black_24dp"
+        android:tint="@android:color/white"
+        android:contentDescription="@string/close"
+        android:visibility="visible"/>
+
+</RelativeLayout>

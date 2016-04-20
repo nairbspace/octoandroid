@@ -9,4 +9,5 @@
     <string name="secure_connection_ssl">Secure Connection (SSL)</string>
     <string name="printer_name">Printer Name</string>
     <string name="octoprint_background_image">OctoPrint Background Image</string>
+    <string name="close">Close</string>
 </resources>

@@ -7,4 +7,6 @@
     <!-- http://blog.danlew.net/2015/01/06/handling-android-resources-with-non-standard-formats/  -->
     <item name="match_parent" type="dimen">-1</item>
     <dimen name="add_printer_scroll_view_width">@dimen/match_parent</dimen>
+
+    <dimen name="qr_square">300dp</dimen>
 </resources>
