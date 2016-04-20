@@ -1,11 +1,13 @@
 package com.nairbspace.octoandroid.net;
 
-import retrofit2.Call;
+import com.nairbspace.octoandroid.model.Version;
+
 import retrofit2.http.GET;
+import rx.Observable;
 
 public interface OctoApi {
 
     @GET("/api/version")
-    Call<Version> getVersion();
+    Observable<Version> getVersion();
 
 }

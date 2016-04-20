@@ -1,19 +1,19 @@
 package com.nairbspace.octoandroid.interactor;
 
-import com.nairbspace.octoandroid.net.OctoApi;
 import com.nairbspace.octoandroid.net.OctoInterceptor;
-import com.nairbspace.octoandroid.net.Version;
+import com.nairbspace.octoandroid.net.OctoPrintApiImpl;
+import com.nairbspace.octoandroid.model.Version;
 
 import javax.inject.Inject;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import timber.log.Timber;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class AddPrinterInteractorImpl implements AddPrinterInteractor {
 
-    @Inject OctoApi mApi;
+    @Inject
+    OctoPrintApiImpl mApi;
     @Inject OctoInterceptor mInterceptor;
 
     @Inject
@@ -25,28 +25,27 @@ public class AddPrinterInteractorImpl implements AddPrinterInteractor {
     public void login(String scheme, String host, int port, String apiKey, final AddPrinterFinishedListener listener) {
         listener.onLoading();
         mInterceptor.setInterceptor(scheme, host, port, apiKey);
-        Call<Version> call = mApi.getVersion();
-        call.enqueue(new Callback<Version>() {
-            @Override
-            public void onResponse(Call<Version> call, Response<Version> response) {
-                listener.onComplete();
-                if (response.isSuccessful()) {
-                    listener.onSuccess();
-                } else {
-                    listener.onResponseFailure();
-                }
-            }
+        mApi.getVersionObservable().cache().subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Version>() {
+                    @Override
+                    public void onCompleted() {
+                        listener.onComplete();
+                        listener.onSuccess();
+                    }
 
-            @Override
-            public void onFailure(Call<Version> call, Throwable t) {
-                listener.onComplete();
-                if (t.getMessage().contains("Trust anchor for certification path not found.")) {
-                    Timber.d(t.getMessage());
-                    listener.onSslFailure();
-                } else {
-                    listener.onFailure();
-                }
-            }
-        });
+                    @Override
+                    public void onError(Throwable e) {
+                        if (e.getMessage().contains("Trust anchor for certification path not found.")) {
+                            listener.onSslFailure();
+                        } else {
+                            listener.onFailure();
+                        }
+                    }
+
+                    @Override
+                    public void onNext(Version version) {
+
+                    }
+                });
     }
 }

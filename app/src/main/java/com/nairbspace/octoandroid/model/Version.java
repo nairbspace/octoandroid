@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.net;
+package com.nairbspace.octoandroid.model;
 
 public class Version {
 

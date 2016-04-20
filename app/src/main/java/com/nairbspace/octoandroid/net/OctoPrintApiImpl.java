@@ -1,7 +1,11 @@
 package com.nairbspace.octoandroid.net;
 
+import com.nairbspace.octoandroid.model.Version;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import rx.Observable;
 
 @Singleton
 public class OctoPrintApiImpl {
@@ -21,9 +25,7 @@ public class OctoPrintApiImpl {
         mApi = api;
     }
 
-//    private Observable<Version> mVersionObservable = mApi.getVersion().cache();
-//
-//    public Observable<Version> getVersionObservable() {
-//        return mVersionObservable;
-//    }
+    public Observable<Version> getVersionObservable() {
+        return mApi.getVersion().cache();
+    }
 }

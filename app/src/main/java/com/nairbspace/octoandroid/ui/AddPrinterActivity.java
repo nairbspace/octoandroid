@@ -55,6 +55,25 @@ public class AddPrinterActivity extends AppCompatActivity implements AddPrinterS
         mApiKeyEditText.setOnEditorActionListener(this);
         mIpAddressEditText.setOnFocusChangeListener(this);
         mPortEditText.setOnFocusChangeListener(this);
+
+//        mInterceptor.setInterceptor("http", "192.168.1.204", 80, "");
+//        mApi.getObservableVersion().cache().subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())
+//        .subscribe(new Subscriber<Version>() {
+//            @Override
+//            public void onCompleted() {
+//                Timber.d("Complete");
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//                Timber.d("Error");
+//            }
+//
+//            @Override
+//            public void onNext(Version version) {
+//                Timber.d("onNext");
+//            }
+//        });
     }
 
     @Override
