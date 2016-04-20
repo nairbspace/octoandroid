@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="account_type">com.nairbspace.octoandroid</string>
+
+    <!-- User Data Keys -->
+    <string name="api_key_key">API_KEY_KEY</string> <!-- String -->
+    <string name="scheme_key">SCHEME_KEY</string> <!-- String -->
+    <string name="host_key">HOST_KEY</string> <!-- String -->
+    <string name="port_key">PORT_KEY</string> <!-- Integer -->
+</resources>

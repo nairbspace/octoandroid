@@ -8,7 +8,7 @@ public interface AddPrinterInteractor {
 
         void onComplete();
 
-        void onSuccess();
+        void onSuccess(String scheme, String host, int port, String apiKey);
 
         void onResponseFailure();
 

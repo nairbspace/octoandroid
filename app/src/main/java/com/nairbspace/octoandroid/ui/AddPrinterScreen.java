@@ -14,4 +14,6 @@ public interface AddPrinterScreen {
 
     void hideSoftKeyboard(boolean show);
 
+    void addAccount(String scheme, String host, int port, String apiKey);
+
 }

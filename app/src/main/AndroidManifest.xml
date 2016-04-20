@@ -2,6 +2,12 @@
 <manifest package="com.nairbspace.octoandroid"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- Account Manager -->
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+
+    <!-- For Retrofit-->
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
@@ -11,7 +17,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.AddPrinterActivity"
+        <activity
+            android:name=".ui.AddPrinterActivity"
             android:label="@string/add_printer"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -20,6 +27,20 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <!-- Services -->
+
+        <!-- Service needed for Account Manager -->
+        <service android:name=".data.account_manager.AuthenticatorService">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator"/>
+        </service>
+
     </application>
 
 </manifest>

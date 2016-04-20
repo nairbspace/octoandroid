@@ -92,8 +92,9 @@ public class AddPrinterPresenterImpl implements AddPrinterPresenter, AddPrinterI
     }
 
     @Override
-    public void onSuccess() {
+    public void onSuccess(String scheme, String host, int port, String apiKey) {
         mAddPrinterScreen.showSnackbar("Success");
+        mAddPrinterScreen.addAccount(scheme, host, port, apiKey);
     }
 
     @Override

@@ -8,20 +8,20 @@ import javax.inject.Singleton;
 import rx.Observable;
 
 @Singleton
-public class OctoPrintApiImpl {
-    private static OctoPrintApiImpl sApiImpl;
+public class OctoApiImpl {
+    private static OctoApiImpl sApiImpl;
     private OctoApi mApi;
 
     @Inject
-    public static OctoPrintApiImpl get(OctoApi api) {
+    public static OctoApiImpl get(OctoApi api) {
         if (sApiImpl == null) {
-            sApiImpl = new OctoPrintApiImpl(api);
+            sApiImpl = new OctoApiImpl(api);
         }
 
         return sApiImpl;
     }
 
-    private OctoPrintApiImpl(OctoApi api)  {
+    private OctoApiImpl(OctoApi api)  {
         mApi = api;
     }
 

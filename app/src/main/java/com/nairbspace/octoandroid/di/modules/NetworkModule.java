@@ -3,8 +3,8 @@ package com.nairbspace.octoandroid.di.modules;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.nairbspace.octoandroid.net.OctoApi;
+import com.nairbspace.octoandroid.net.OctoApiImpl;
 import com.nairbspace.octoandroid.net.OctoInterceptor;
-import com.nairbspace.octoandroid.net.OctoPrintApiImpl;
 
 import javax.inject.Singleton;
 
@@ -84,7 +84,7 @@ public class NetworkModule {
 
     @Provides
     @Singleton
-    OctoPrintApiImpl provideApiImpl(OctoApi api) {
-        return OctoPrintApiImpl.get(api);
+    OctoApiImpl provideApiImpl(OctoApi api) {
+        return OctoApiImpl.get(api);
     }
 }
