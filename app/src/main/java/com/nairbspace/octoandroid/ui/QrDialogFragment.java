@@ -52,7 +52,7 @@ public class QrDialogFragment extends DialogFragment implements SurfaceHolder.Ca
     private OnFragmentInteractionListener mListener;
 
     public interface OnFragmentInteractionListener {
-        void onQrFinished(String apiKey);
+        void onQrSuccess(String apiKey);
 
     }
 
@@ -144,7 +144,7 @@ public class QrDialogFragment extends DialogFragment implements SurfaceHolder.Ca
 
     @OnClick(R.id.qr_close)
     void closeQrDialogFragment() {
-        triggerQrFinishedListener(null);
+        dismiss();
     }
 
     private boolean haveCameraAccess() {
@@ -176,7 +176,7 @@ public class QrDialogFragment extends DialogFragment implements SurfaceHolder.Ca
 
     private void triggerQrFinishedListener(String apiKey) {
         if (mListener != null) {
-            mListener.onQrFinished(apiKey);
+            mListener.onQrSuccess(apiKey);
             dismiss();
         }
     }

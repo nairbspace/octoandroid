@@ -269,7 +269,7 @@ public class AddPrinterActivity extends AuthenticatorActivity implements AddPrin
     }
 
     @Override
-    public void onQrFinished(String apiKey) {
+    public void onQrSuccess(String apiKey) {
         mApiKeyEditText.setText(apiKey);
     }
 }
