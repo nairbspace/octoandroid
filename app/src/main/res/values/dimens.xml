@@ -2,6 +2,7 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 
     <!-- Formatting for match_parent as dimension -->
     <!-- http://blog.danlew.net/2015/01/06/handling-android-resources-with-non-standard-formats/  -->
@@ -9,4 +10,9 @@
     <dimen name="add_printer_scroll_view_width">@dimen/match_parent</dimen>
 
     <dimen name="qr_square">300dp</dimen>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="nav_header_vertical_spacing">16dp</dimen>
+    <dimen name="nav_horizontal_spacing">16dp</dimen>
+    <dimen name="nav_header_height">160dp</dimen>
 </resources>
