@@ -1,6 +1,5 @@
 package com.nairbspace.octoandroid.ui;
 
-import android.accounts.Account;
 import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.AccountManager;
 import android.animation.Animator;
@@ -9,15 +8,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -29,6 +25,7 @@ import android.widget.TextView;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
+import com.nairbspace.octoandroid.model.OctoAccount;
 import com.nairbspace.octoandroid.presenter.AddPrinterPresenterImpl;
 
 import javax.inject.Inject;
@@ -38,11 +35,15 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import timber.log.Timber;
 
-public class AddPrinterActivity extends AuthenticatorActivity implements AddPrinterScreen, TextView.OnEditorActionListener,
-        DialogInterface.OnClickListener, View.OnFocusChangeListener, View.OnClickListener, QrDialogFragment.OnFragmentInteractionListener {
+public class AddPrinterActivity extends AuthenticatorActivity implements AddPrinterScreen,
+        TextView.OnEditorActionListener, DialogInterface.OnClickListener,
+        View.OnFocusChangeListener, View.OnClickListener,
+        QrDialogFragment.OnFragmentInteractionListener {
+
+    public static final int REQUEST_CODE = 0;
 
     @Inject AddPrinterPresenterImpl mPresenter;
-    @Inject AccountManager mAccountManager;
+    @Inject OctoAccount mOctoAccount;
 
     @Bind(R.id.toolbar) Toolbar mToolbar;
     @Bind(R.id.add_printer_form) ScrollView mScrollView;
@@ -52,7 +53,6 @@ public class AddPrinterActivity extends AuthenticatorActivity implements AddPrin
     @Bind(R.id.port_edit_text) TextInputEditText mPortEditText;
     @Bind(R.id.api_key_edit_text) TextInputEditText mApiKeyEditText;
     @Bind(R.id.ssl_checkbox) CheckBox mSslCheckBox;
-
 
     /** Intent used to start activity, extras can be null if started within application **/
     public static Intent newIntent(Context context, AccountAuthenticatorResponse response, String accountType) {
@@ -67,6 +67,7 @@ public class AddPrinterActivity extends AuthenticatorActivity implements AddPrin
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         SetupApplication.get(this).getAppComponent().inject(this);
+        setResult(RESULT_CANCELED);
 
         setContentView(R.layout.activity_add_printer);
         ButterKnife.bind(this);
@@ -116,11 +117,13 @@ public class AddPrinterActivity extends AuthenticatorActivity implements AddPrin
 
     @OnClick(R.id.add_printer_button)
     public void onAddPrinterButtonClicked() {
+        String accountType = getIntent().getStringExtra(AccountManager.KEY_ACCOUNT_TYPE);
+        String accountName = mPrinterNameEditText.getText().toString();
         String ipAddress = mIpAddressEditText.getText().toString();
-        boolean isSslChecked = mSslCheckBox.isChecked();
-        int port = mPresenter.convertPortStringToInt(mPortEditText.getText().toString(), isSslChecked);
+        String port = mPortEditText.getText().toString();
         String apiKey = mApiKeyEditText.getText().toString();
-        mPresenter.validateCredentials(isSslChecked, ipAddress, port, apiKey);
+        boolean isSslChecked = mSslCheckBox.isChecked();
+        mPresenter.validateCredentials(accountType, accountName, ipAddress, port, apiKey, isSslChecked);
     }
 
     @Override
@@ -166,15 +169,15 @@ public class AddPrinterActivity extends AuthenticatorActivity implements AddPrin
 
     @Override
     public void showAlertDialog(String title, String message) {
-        AlertDialog alertDialog = new AlertDialog.Builder(this)
+        new AlertDialog.Builder(this)
                 .setTitle(title)
                 .setMessage(message)
                 .setIcon(R.drawable.exclamation_triangle)
                 .setNegativeButton("Cancel", this)
                 .setNeutralButton("Info", this)
                 .setPositiveButton("Ok", this)
-                .create();
-        alertDialog.show();
+                .create()
+                .show();
     }
 
     @Override
@@ -188,53 +191,31 @@ public class AddPrinterActivity extends AuthenticatorActivity implements AddPrin
     }
 
     @Override
-    public void addAccount(String scheme, String host, int port, String apiKey) {
-        String accountName = mPrinterNameEditText.getText().toString();
-        if (TextUtils.isEmpty(accountName)) {
-            accountName = mIpAddressEditText.getText().toString();
-        }
-
-        String accountType = getIntent().getStringExtra(AccountManager.KEY_ACCOUNT_TYPE);
-        if (TextUtils.isEmpty(accountType)) {
-            accountType = getResources().getString(R.string.account_type);
-        }
-
-        Account account = new Account(accountName, accountType);
-
-        Bundle userdata = new Bundle();
-        Resources res = getResources();
-        userdata.putString(res.getString(R.string.api_key_key), apiKey);
-        userdata.putString(res.getString(R.string.scheme_key), scheme);
-        userdata.putString(res.getString(R.string.host_key), host);
-        userdata.putInt(res.getString(R.string.port_key), port);
-
+    public void navigateToPreviousScreen(OctoAccount octoAccount) {
         AccountAuthenticatorResponse response = getIntent()
                 .getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE);
-
-        /**
-         * Delete the account if it already exists, if trying to add account that already exists
-         * it will not work.
-         * */
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-            mAccountManager.removeAccountExplicitly(account);
-        } else {
-            mAccountManager.removeAccount(account, null, null);
-        }
-
-        mAccountManager.addAccountExplicitly(account, null, userdata);
 
         /** If Activity is started from Account Manager then feed it back the information
          * it needs and finish Activity */
         if (response != null) {
-
             /** Adding all the intent extras currently does nothing since account has already
              * been added above, but might be useful later on.*/
+            Bundle userdata = new Bundle();
+            userdata.putString(OctoAccount.API_KEY_KEY, octoAccount.getApiKey());
+            userdata.putString(OctoAccount.SCHEME_KEY, octoAccount.getScheme());
+            userdata.putString(OctoAccount.SCHEME_KEY, octoAccount.getHost());
+            userdata.putInt(OctoAccount.PORT_KEY, octoAccount.getPort());
+
             Intent addAccount = getIntent();
-            addAccount.putExtra(AccountManager.KEY_ACCOUNT_NAME, accountName);
-            addAccount.putExtra(AccountManager.KEY_ACCOUNT_TYPE, accountType);
+            addAccount.putExtra(AccountManager.KEY_ACCOUNT_NAME, mOctoAccount.getAccountName());
+            addAccount.putExtra(AccountManager.KEY_ACCOUNT_TYPE, mOctoAccount.getAccountType());
             addAccount.putExtra(AccountManager.KEY_USERDATA, userdata);
             setAccountAuthenticatorResult(addAccount.getExtras());
             setResult(RESULT_OK, addAccount);
+            finish();
+        } else {
+            /** If this Activity is launched from another Activity */
+            setResult(RESULT_OK);
             finish();
         }
     }

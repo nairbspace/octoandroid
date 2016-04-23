@@ -1,75 +1,49 @@
 package com.nairbspace.octoandroid.presenter;
 
-import com.nairbspace.octoandroid.interactor.AddPrinterInteractor;
-import com.nairbspace.octoandroid.interactor.AddPrinterInteractorImpl;
+import com.nairbspace.octoandroid.interactor.GetPrinter;
+import com.nairbspace.octoandroid.interactor.GetPrinterImpl;
+import com.nairbspace.octoandroid.interactor.GetAccounts;
+import com.nairbspace.octoandroid.interactor.GetAccountsImpl;
+import com.nairbspace.octoandroid.model.OctoAccount;
 import com.nairbspace.octoandroid.ui.AddPrinterScreen;
 
 import javax.inject.Inject;
 
-import okhttp3.HttpUrl;
-
-public class AddPrinterPresenterImpl implements AddPrinterPresenter, AddPrinterInteractor.AddPrinterFinishedListener {
-
-    private static final String HTTP_SCHEME = "http";
-    private static final String HTTPS_SCHEME = "https";
+public class AddPrinterPresenterImpl implements AddPrinterPresenter,
+        GetPrinter.GetPrinterFinishedListener, GetAccounts.AddAccountListener{
 
     private AddPrinterScreen mAddPrinterScreen;
-    @Inject AddPrinterInteractorImpl mAddPrinterInteractor;
+    @Inject OctoAccount mOctoAccount;
+    @Inject
+    GetPrinterImpl mAddPrinterInteractor;
+    @Inject GetAccountsImpl mGetAccounts;
 
     @Inject
     public AddPrinterPresenterImpl() {
     }
 
     @Override
-    public void validateCredentials(boolean isSslChecked, String ipAddress, int port, String apiKey) {
+    public void validateCredentials(String accountType, String accountName, String ipAddress,
+                                    String port, String apiKey, boolean isSslChecked) {
 
         if (ipAddress == null || ipAddress.isEmpty()) {
             mAddPrinterScreen.showIpAddressError("IP Address cannot be blank");
             return;
         }
 
-        String scheme = isSslChecked ? HTTPS_SCHEME : HTTP_SCHEME;
+        accountType = mGetAccounts.validateAccountType(accountType);
+        ipAddress = mAddPrinterInteractor.extractHost(ipAddress);
+        accountName = mGetAccounts.validateAccountName(accountName, ipAddress);
+        int portNumber = mAddPrinterInteractor.convertPortStringToInt(port, isSslChecked);
+        String scheme = mAddPrinterInteractor.convertIsSslCheckedToScheme(isSslChecked);
 
-        // If user inputted http:// or https:// try to extract only IP Address
-        HttpUrl ipAddressUrl = HttpUrl.parse(ipAddress);
-        if (ipAddressUrl != null) {
-            ipAddress = ipAddressUrl.host();
-        }
+        mOctoAccount.setAccount(accountType, accountName, apiKey, scheme, ipAddress, portNumber);
 
-//        // If user inputted http:// or https:// try to extract only IP Address
-//        if (ipAddress.contains("://")) {
-//            String[] split = ipAddress.split("://");
-//            if (split.length > 0) {
-//                ipAddress = split[1];
-//            }
-//        }
-
-        if (apiKey == null) {
-            apiKey = "";
-        }
-
-        try {
-            new HttpUrl.Builder().scheme(scheme).host(ipAddress).port(port).build();
-            mAddPrinterInteractor.login(scheme, ipAddress, port, apiKey, this);
-        } catch (IllegalArgumentException e) {
+        if (mAddPrinterInteractor.isUrlValid(mOctoAccount)) {
+            mAddPrinterInteractor.getVersion(mOctoAccount, this);
+        } else {
             mAddPrinterScreen.showIpAddressError("Incorrect formatting");
         }
-    }
-
-    @Override
-    public int convertPortStringToInt(String port, boolean isSslChecked) {
-        int formattedPortNum;
-        try {
-            formattedPortNum = Integer.parseInt(port);
-        } catch (NumberFormatException e) {
-            if (isSslChecked) {
-                formattedPortNum = 443;
-            } else {
-                formattedPortNum = 80;
-            }
-        }
-
-        return formattedPortNum;
     }
 
     @Override
@@ -94,14 +68,9 @@ public class AddPrinterPresenterImpl implements AddPrinterPresenter, AddPrinterI
     }
 
     @Override
-    public void onSuccess(String scheme, String host, int port, String apiKey) {
+    public void onSuccess() {
         mAddPrinterScreen.showSnackbar("Success");
-        mAddPrinterScreen.addAccount(scheme, host, port, apiKey);
-    }
-
-    @Override
-    public void onResponseFailure() {
-        mAddPrinterScreen.showSnackbar("Failure");
+        mGetAccounts.addAccount(mOctoAccount, this);
     }
 
     @Override
@@ -113,5 +82,15 @@ public class AddPrinterPresenterImpl implements AddPrinterPresenter, AddPrinterI
     public void onSslFailure() {
         mAddPrinterScreen.showAlertDialog("SSL Error",
                 "SSL Certificate is not signed. If accessing printer locally try unsecure connection.");
+    }
+
+    @Override
+    public void onApiKeyFailure() {
+        mAddPrinterScreen.showSnackbar("Invalid API key");
+    }
+
+    @Override
+    public void onFinishedAddingAccount() {
+        mAddPrinterScreen.navigateToPreviousScreen(mOctoAccount);
     }
 }

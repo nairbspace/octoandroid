@@ -1,5 +1,6 @@
 package com.nairbspace.octoandroid.ui;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,13 +17,18 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.nairbspace.octoandroid.R;
+import com.nairbspace.octoandroid.app.SetupApplication;
+import com.nairbspace.octoandroid.presenter.MainPresenterImpl;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import rx.Observable;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, MainScreen {
+
+    @Inject MainPresenterImpl mMainPresenter;
 
     @Bind(R.id.toolbar) Toolbar mToolbar;
     @Bind(R.id.fab) FloatingActionButton mFab;
@@ -33,6 +39,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SetupApplication.get(this).getAppComponent().inject(this);
+
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
@@ -54,6 +62,13 @@ public class MainActivity extends AppCompatActivity
             hideIndicator();
         } else {
             unlockDrawer();
+        }
+
+        mMainPresenter.setView(this);
+
+        /** Prevent being checked twice if user rotates screen in AddPrinterActivity */
+        if (savedInstanceState == null) {
+            mMainPresenter.getAccounts();
         }
     }
 
@@ -160,6 +175,29 @@ public class MainActivity extends AppCompatActivity
         if (mToggle != null) {
             mToggle.syncState();
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+
+        if (requestCode == AddPrinterActivity.REQUEST_CODE) {
+            mMainPresenter.getAccounts();
+        } // TODO Need response if user decides to not login
+    }
+
+    @Override
+    public void navigateToAddPrinterActivity() {
+        Intent i = AddPrinterActivity.newIntent(this, null, null);
+        startActivityForResult(i, AddPrinterActivity.REQUEST_CODE);
+    }
+
+    @Override
+    public void displaySnackBar(String message) {
+        Snackbar.make(mFab, message, Snackbar.LENGTH_LONG).show();
     }
 
     @Override

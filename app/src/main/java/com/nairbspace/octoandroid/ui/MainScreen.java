@@ -15,4 +15,8 @@ public interface MainScreen {
     void hideIndicator();
 
     void syncToggleState();
+
+    void navigateToAddPrinterActivity();
+
+    void displaySnackBar(String message);
 }

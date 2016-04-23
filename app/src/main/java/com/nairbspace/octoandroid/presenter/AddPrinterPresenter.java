@@ -4,9 +4,8 @@ import com.nairbspace.octoandroid.ui.AddPrinterScreen;
 
 public interface AddPrinterPresenter {
 
-    void validateCredentials(boolean isSslChecked, String ipAddress, int port, String apiKey);
-
-    int convertPortStringToInt(String port, boolean isSslChecked);
+    void validateCredentials(String accountType, String accountName, String ipAddress,
+                             String port, String apiKey, boolean isSslChecked);
 
     void onDestroy();
 
