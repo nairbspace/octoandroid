@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="nav_horizontal_spacing">32dp</dimen>
-    <dimen name="drawer_size">320dp</dimen> <!-- TODO need to implement this in base layout for consistency -->
+    <dimen name="nav_width">320dp</dimen>
+    <dimen name="nav_margin">@dimen/nav_width</dimen>
 </resources>

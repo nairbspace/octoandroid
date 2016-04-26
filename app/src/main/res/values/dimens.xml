@@ -9,10 +9,12 @@
     <item name="match_parent" type="dimen">-1</item>
     <dimen name="add_printer_scroll_view_width">@dimen/match_parent</dimen>
 
-    <dimen name="qr_square">300dp</dimen>
-
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="nav_header_vertical_spacing">16dp</dimen>
     <dimen name="nav_horizontal_spacing">16dp</dimen>
     <dimen name="nav_header_height">160dp</dimen>
+
+    <item name="wrap_content" type="dimen">-2</item>
+    <dimen name="nav_width">@dimen/wrap_content</dimen>
+    <dimen name="nav_margin">0dp</dimen>
 </resources>
