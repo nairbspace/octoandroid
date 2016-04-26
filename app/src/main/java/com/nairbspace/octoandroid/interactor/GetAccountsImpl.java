@@ -2,16 +2,18 @@ package com.nairbspace.octoandroid.interactor;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.content.Context;
 import android.os.Build;
-import android.os.Bundle;
 import android.text.TextUtils;
 
-import com.nairbspace.octoandroid.model.OctoAccount;
+import com.nairbspace.octoandroid.R;
+import com.nairbspace.octoandroid.model.Printer;
 
 import javax.inject.Inject;
 
 public class GetAccountsImpl implements GetAccounts {
     @Inject AccountManager mAccountManager;
+    @Inject Context mContext;
 
     @Inject
     public GetAccountsImpl() {
@@ -29,19 +31,13 @@ public class GetAccountsImpl implements GetAccounts {
     }
 
     @Override
-    public void addAccount(OctoAccount octoAccount, GetAccounts.AddAccountListener listener) {
-
-        Account account = new Account(octoAccount.getAccountName(), octoAccount.getAccountType());
-
-        Bundle userdata = new Bundle();
-        userdata.putString(OctoAccount.API_KEY_KEY, octoAccount.getApiKey());
-        userdata.putString(OctoAccount.SCHEME_KEY, octoAccount.getScheme());
-        userdata.putString(OctoAccount.HOST_KEY, octoAccount.getHost());
-        userdata.putInt(OctoAccount.PORT_KEY, octoAccount.getPort());
+    public void addAccount(Printer printer, AddAccountListener listener) {
+        String accountType = "";
+        Account account = new Account(printer.getName(), validateAccountType(accountType));
 
         removeAccount(account); // Cannot overwrite, must delete first
 
-        mAccountManager.addAccountExplicitly(account, null, userdata);
+        mAccountManager.addAccountExplicitly(account, null, null);
         listener.onFinishedAddingAccount();
     }
 
@@ -57,7 +53,7 @@ public class GetAccountsImpl implements GetAccounts {
     @Override
     public String validateAccountType(String accountType) {
         if (TextUtils.isEmpty(accountType)) {
-            return OctoAccount.DEFAULT_ACCOUNT_TYPE;
+            return mContext.getResources().getString(R.string.account_type);
         }
         return accountType;
     }

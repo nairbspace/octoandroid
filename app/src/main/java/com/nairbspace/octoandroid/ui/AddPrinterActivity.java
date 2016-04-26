@@ -1,7 +1,5 @@
 package com.nairbspace.octoandroid.ui;
 
-import android.accounts.AccountAuthenticatorResponse;
-import android.accounts.AccountManager;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
@@ -13,6 +11,7 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.View;
@@ -25,7 +24,6 @@ import android.widget.TextView;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
-import com.nairbspace.octoandroid.model.OctoAccount;
 import com.nairbspace.octoandroid.presenter.AddPrinterPresenterImpl;
 
 import javax.inject.Inject;
@@ -35,7 +33,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import timber.log.Timber;
 
-public class AddPrinterActivity extends AuthenticatorActivity implements AddPrinterScreen,
+public class AddPrinterActivity extends AppCompatActivity implements AddPrinterScreen,
         TextView.OnEditorActionListener, DialogInterface.OnClickListener,
         View.OnFocusChangeListener, View.OnClickListener,
         QrDialogFragment.OnFragmentInteractionListener {
@@ -43,7 +41,6 @@ public class AddPrinterActivity extends AuthenticatorActivity implements AddPrin
     public static final int REQUEST_CODE = 0;
 
     @Inject AddPrinterPresenterImpl mPresenter;
-    @Inject OctoAccount mOctoAccount;
 
     @Bind(R.id.toolbar) Toolbar mToolbar;
     @Bind(R.id.add_printer_form) ScrollView mScrollView;
@@ -55,11 +52,8 @@ public class AddPrinterActivity extends AuthenticatorActivity implements AddPrin
     @Bind(R.id.ssl_checkbox) CheckBox mSslCheckBox;
 
     /** Intent used to start activity, extras can be null if started within application **/
-    public static Intent newIntent(Context context, AccountAuthenticatorResponse response, String accountType) {
-        Intent i = new Intent(context, AddPrinterActivity.class);
-        i.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
-        i.putExtra(AccountManager.KEY_ACCOUNT_TYPE, accountType);
-        return i;
+    public static Intent newIntent(Context context) {
+        return new Intent(context, AddPrinterActivity.class);
     }
 
     /** Bundle may contain savedInstanceState or bundle from Account Manager */
@@ -117,13 +111,12 @@ public class AddPrinterActivity extends AuthenticatorActivity implements AddPrin
 
     @OnClick(R.id.add_printer_button)
     public void onAddPrinterButtonClicked() {
-        String accountType = getIntent().getStringExtra(AccountManager.KEY_ACCOUNT_TYPE);
         String accountName = mPrinterNameEditText.getText().toString();
         String ipAddress = mIpAddressEditText.getText().toString();
         String port = mPortEditText.getText().toString();
         String apiKey = mApiKeyEditText.getText().toString();
         boolean isSslChecked = mSslCheckBox.isChecked();
-        mPresenter.validateCredentials(accountType, accountName, ipAddress, port, apiKey, isSslChecked);
+        mPresenter.validateCredentials(accountName, ipAddress, port, apiKey, isSslChecked);
     }
 
     @Override
@@ -191,33 +184,9 @@ public class AddPrinterActivity extends AuthenticatorActivity implements AddPrin
     }
 
     @Override
-    public void navigateToPreviousScreen(OctoAccount octoAccount) {
-        AccountAuthenticatorResponse response = getIntent()
-                .getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE);
-
-        /** If Activity is started from Account Manager then feed it back the information
-         * it needs and finish Activity */
-        if (response != null) {
-            /** Adding all the intent extras currently does nothing since account has already
-             * been added above, but might be useful later on.*/
-            Bundle userdata = new Bundle();
-            userdata.putString(OctoAccount.API_KEY_KEY, octoAccount.getApiKey());
-            userdata.putString(OctoAccount.SCHEME_KEY, octoAccount.getScheme());
-            userdata.putString(OctoAccount.SCHEME_KEY, octoAccount.getHost());
-            userdata.putInt(OctoAccount.PORT_KEY, octoAccount.getPort());
-
-            Intent addAccount = getIntent();
-            addAccount.putExtra(AccountManager.KEY_ACCOUNT_NAME, mOctoAccount.getAccountName());
-            addAccount.putExtra(AccountManager.KEY_ACCOUNT_TYPE, mOctoAccount.getAccountType());
-            addAccount.putExtra(AccountManager.KEY_USERDATA, userdata);
-            setAccountAuthenticatorResult(addAccount.getExtras());
-            setResult(RESULT_OK, addAccount);
-            finish();
-        } else {
-            /** If this Activity is launched from another Activity */
-            setResult(RESULT_OK);
-            finish();
-        }
+    public void navigateToPreviousScreen() {
+        setResult(RESULT_OK);
+        finish();
     }
 
     @Override

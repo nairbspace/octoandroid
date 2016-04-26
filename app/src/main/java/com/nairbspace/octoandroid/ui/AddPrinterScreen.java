@@ -1,7 +1,5 @@
 package com.nairbspace.octoandroid.ui;
 
-import com.nairbspace.octoandroid.model.OctoAccount;
-
 public interface AddPrinterScreen {
 
     void showProgress(Boolean show);
@@ -16,6 +14,5 @@ public interface AddPrinterScreen {
 
     void hideSoftKeyboard(boolean show);
 
-    void navigateToPreviousScreen(OctoAccount octoAccount);
-
+    void navigateToPreviousScreen();
 }

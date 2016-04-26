@@ -32,6 +32,7 @@ public class MainPresenterImpl implements MainPresenter, GetAccounts.RetrieveLis
 
     @Override
     public void onSuccess() {
+        mMainScreen.selectStatusNav();
         mMainScreen.displaySnackBar("Success");
     }
 }

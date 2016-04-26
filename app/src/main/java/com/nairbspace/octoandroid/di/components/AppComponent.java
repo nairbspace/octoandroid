@@ -1,5 +1,6 @@
 package com.nairbspace.octoandroid.di.components;
 
+import com.nairbspace.octoandroid.data.account_manager.Authenticator;
 import com.nairbspace.octoandroid.ui.AddPrinterActivity;
 import com.nairbspace.octoandroid.di.modules.AppModule;
 import com.nairbspace.octoandroid.di.modules.NetworkModule;
@@ -16,4 +17,6 @@ public interface AppComponent {
     void inject(AddPrinterActivity addPrinterActivity);
 
     void inject(MainActivity mainActivity);
+
+    void inject(Authenticator authenticator);
 }

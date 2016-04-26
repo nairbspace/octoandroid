@@ -1,6 +1,7 @@
 package com.nairbspace.octoandroid.interactor;
 
-import com.nairbspace.octoandroid.model.OctoAccount;
+import com.nairbspace.octoandroid.model.Printer;
+import com.nairbspace.octoandroid.model.Version;
 
 public interface GetPrinter {
 
@@ -19,13 +20,22 @@ public interface GetPrinter {
         void onApiKeyFailure();
     }
 
-    void getVersion(OctoAccount octoAccount, GetPrinterFinishedListener listener);
+    void getVersion(Printer printer, GetPrinterFinishedListener listener);
 
     String extractHost(String ipAddress);
 
-    boolean isUrlValid(OctoAccount octoAccount);
+    boolean isUrlValid(Printer printer);
 
     int convertPortStringToInt(String port, boolean isSslChecked);
 
     String convertIsSslCheckedToScheme(boolean isSslChecked);
+
+    Printer setPrinter(Printer printer, String accountName, String apiKey,
+                       String scheme, String ipAddress, int portNumber);
+
+    void addPrinterToDb(Printer printer);
+
+    void deleteOldPrintersInDb(Printer printer);
+
+    void addVersionToDb(Printer printer, Version version);
 }

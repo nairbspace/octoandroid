@@ -9,15 +9,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.nairbspace.octoandroid.app.SetupApplication;
+import com.nairbspace.octoandroid.interactor.GetPrinterImpl;
+import com.nairbspace.octoandroid.model.Printer;
 import com.nairbspace.octoandroid.ui.AddPrinterActivity;
+
+import javax.inject.Inject;
 
 public class Authenticator extends AbstractAccountAuthenticator {
 
-    private Context mContext;
+    @Inject Context mContext;
+    @Inject GetPrinterImpl mGetPrinter;
 
     public Authenticator(Context context) {
         super(context);
-        mContext = context;
+        SetupApplication.get(context).getAppComponent().inject(this);
     }
 
     @Override
@@ -27,7 +33,7 @@ public class Authenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle addAccount(AccountAuthenticatorResponse response, String accountType, String authTokenType, String[] requiredFeatures, Bundle options) throws NetworkErrorException {
-        Intent i = AddPrinterActivity.newIntent(mContext, response, accountType);
+        Intent i = AddPrinterActivity.newIntent(mContext);
 
         Bundle bundle = new Bundle();
         bundle.putParcelable(AccountManager.KEY_INTENT, i);
@@ -57,5 +63,15 @@ public class Authenticator extends AbstractAccountAuthenticator {
     @Override
     public Bundle hasFeatures(AccountAuthenticatorResponse response, Account account, String[] features) throws NetworkErrorException {
         return null;
+    }
+
+    @Override
+    public Bundle getAccountRemovalAllowed(AccountAuthenticatorResponse response, Account account) throws NetworkErrorException {
+        Printer printer = new Printer();
+        printer.setName(account.name);
+        mGetPrinter.deleteOldPrintersInDb(printer);
+        Bundle result = new Bundle();
+        result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, true);
+        return result;
     }
 }

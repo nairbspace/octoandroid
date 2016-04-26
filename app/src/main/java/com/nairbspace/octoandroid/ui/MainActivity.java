@@ -2,11 +2,14 @@ package com.nairbspace.octoandroid.ui;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -26,7 +29,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, MainScreen {
+        implements NavigationView.OnNavigationItemSelectedListener, MainScreen,
+        StatusFragment.OnFragmentInteractionListener{
 
     @Inject MainPresenterImpl mMainPresenter;
 
@@ -121,20 +125,20 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        switch (item.getItemId()) {
+            case R.id.nav_status:
+                inflateStatusFragment();
+                break;
+            case R.id.nav_gallery:
+                break;
+            case R.id.nav_slideshow:
+                break;
+            case R.id.nav_manage:
+                break;
+            case R.id.nav_share:
+                break;
+            case R.id.nav_send:
+                break;
         }
 
         closeDrawer();
@@ -191,7 +195,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void navigateToAddPrinterActivity() {
-        Intent i = AddPrinterActivity.newIntent(this, null, null);
+        Intent i = AddPrinterActivity.newIntent(this);
         startActivityForResult(i, AddPrinterActivity.REQUEST_CODE);
     }
 
@@ -201,7 +205,31 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public void inflateStatusFragment() {
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment fragment = fm.findFragmentById(R.id.content_main);
+
+        if (fragment == null) {
+            fragment = StatusFragment.newInstance(null, null);
+            fm.beginTransaction()
+                    .add(R.id.content_main, fragment)
+                    .commit();
+        }
+    }
+
+    @Override
+    public void selectStatusNav() {
+        inflateStatusFragment();
+        mNavView.setCheckedItem(R.id.nav_status);
+    }
+
+    @Override
     public void unlockDrawer() {
         mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }

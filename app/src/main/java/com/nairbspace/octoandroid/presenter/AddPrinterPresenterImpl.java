@@ -4,7 +4,7 @@ import com.nairbspace.octoandroid.interactor.GetPrinter;
 import com.nairbspace.octoandroid.interactor.GetPrinterImpl;
 import com.nairbspace.octoandroid.interactor.GetAccounts;
 import com.nairbspace.octoandroid.interactor.GetAccountsImpl;
-import com.nairbspace.octoandroid.model.OctoAccount;
+import com.nairbspace.octoandroid.model.Printer;
 import com.nairbspace.octoandroid.ui.AddPrinterScreen;
 
 import javax.inject.Inject;
@@ -13,17 +13,17 @@ public class AddPrinterPresenterImpl implements AddPrinterPresenter,
         GetPrinter.GetPrinterFinishedListener, GetAccounts.AddAccountListener{
 
     private AddPrinterScreen mAddPrinterScreen;
-    @Inject OctoAccount mOctoAccount;
-    @Inject
-    GetPrinterImpl mAddPrinterInteractor;
+    private Printer mPrinter;
+    @Inject GetPrinterImpl mAddPrinterInteractor;
     @Inject GetAccountsImpl mGetAccounts;
 
     @Inject
     public AddPrinterPresenterImpl() {
+        mPrinter = new Printer();
     }
 
     @Override
-    public void validateCredentials(String accountType, String accountName, String ipAddress,
+    public void validateCredentials(String accountName, String ipAddress,
                                     String port, String apiKey, boolean isSslChecked) {
 
         if (ipAddress == null || ipAddress.isEmpty()) {
@@ -31,16 +31,16 @@ public class AddPrinterPresenterImpl implements AddPrinterPresenter,
             return;
         }
 
-        accountType = mGetAccounts.validateAccountType(accountType);
         ipAddress = mAddPrinterInteractor.extractHost(ipAddress);
         accountName = mGetAccounts.validateAccountName(accountName, ipAddress);
         int portNumber = mAddPrinterInteractor.convertPortStringToInt(port, isSslChecked);
         String scheme = mAddPrinterInteractor.convertIsSslCheckedToScheme(isSslChecked);
 
-        mOctoAccount.setAccount(accountType, accountName, apiKey, scheme, ipAddress, portNumber);
+        mPrinter = mAddPrinterInteractor.setPrinter(mPrinter, accountName,
+                apiKey, scheme, ipAddress, portNumber);
 
-        if (mAddPrinterInteractor.isUrlValid(mOctoAccount)) {
-            mAddPrinterInteractor.getVersion(mOctoAccount, this);
+        if (mAddPrinterInteractor.isUrlValid(mPrinter)) {
+            mAddPrinterInteractor.getVersion(mPrinter, this);
         } else {
             mAddPrinterScreen.showIpAddressError("Incorrect formatting");
         }
@@ -70,7 +70,8 @@ public class AddPrinterPresenterImpl implements AddPrinterPresenter,
     @Override
     public void onSuccess() {
         mAddPrinterScreen.showSnackbar("Success");
-        mGetAccounts.addAccount(mOctoAccount, this);
+        mGetAccounts.addAccount(mPrinter, this);
+
     }
 
     @Override
@@ -91,6 +92,6 @@ public class AddPrinterPresenterImpl implements AddPrinterPresenter,
 
     @Override
     public void onFinishedAddingAccount() {
-        mAddPrinterScreen.navigateToPreviousScreen(mOctoAccount);
+        mAddPrinterScreen.navigateToPreviousScreen();
     }
 }

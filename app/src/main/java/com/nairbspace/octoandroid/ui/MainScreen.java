@@ -19,4 +19,8 @@ public interface MainScreen {
     void navigateToAddPrinterActivity();
 
     void displaySnackBar(String message);
+
+    void inflateStatusFragment();
+
+    void selectStatusNav();
 }

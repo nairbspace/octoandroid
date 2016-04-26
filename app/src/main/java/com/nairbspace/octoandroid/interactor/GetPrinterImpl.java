@@ -1,12 +1,15 @@
 package com.nairbspace.octoandroid.interactor;
 
-import com.nairbspace.octoandroid.model.OctoAccount;
+import com.nairbspace.octoandroid.model.Printer;
+import com.nairbspace.octoandroid.model.PrinterDao;
+import com.nairbspace.octoandroid.model.Version;
+import com.nairbspace.octoandroid.model.VersionDao;
 import com.nairbspace.octoandroid.net.OctoApiImpl;
 import com.nairbspace.octoandroid.net.OctoInterceptor;
-import com.nairbspace.octoandroid.model.Version;
 
 import javax.inject.Inject;
 
+import de.greenrobot.dao.DaoException;
 import okhttp3.HttpUrl;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -19,6 +22,8 @@ public class GetPrinterImpl implements GetPrinter {
 
     @Inject OctoApiImpl mApi;
     @Inject OctoInterceptor mInterceptor;
+    @Inject PrinterDao mPrinterDao;
+    @Inject VersionDao mVersionDao;
 
     @Inject
     public GetPrinterImpl() {
@@ -26,10 +31,10 @@ public class GetPrinterImpl implements GetPrinter {
     }
 
     @Override
-    public void getVersion(OctoAccount octoAccount, final GetPrinterFinishedListener listener) {
+    public void getVersion(final Printer printer, final GetPrinterFinishedListener listener) {
         listener.onLoading();
-        mInterceptor.setInterceptor(octoAccount.getScheme(), octoAccount.getHost(),
-                octoAccount.getPort(), octoAccount.getApiKey());
+        mInterceptor.setInterceptor(printer.getScheme(), printer.getHost(),
+                printer.getPort(), printer.getApi_key());
         mApi.getVersionObservable()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -48,13 +53,15 @@ public class GetPrinterImpl implements GetPrinter {
                         } else if (e.getMessage().contains("Invalid API key")) {
                             listener.onApiKeyFailure();
                         } else {
+                            e.printStackTrace();
                             listener.onFailure();
                         }
                     }
 
                     @Override
                     public void onNext(Version version) {
-
+                        addPrinterToDb(printer);
+                        addVersionToDb(printer, version);
                     }
                 });
     }
@@ -70,12 +77,12 @@ public class GetPrinterImpl implements GetPrinter {
     }
 
     @Override
-    public boolean isUrlValid(OctoAccount octoAccount) {
+    public boolean isUrlValid(Printer printer) {
         try {
             new HttpUrl.Builder()
-                    .scheme(octoAccount.getScheme())
-                    .host(octoAccount.getHost())
-                    .port(octoAccount.getPort())
+                    .scheme(printer.getScheme())
+                    .host(printer.getHost())
+                    .port(printer.getPort())
                     .build();
             return true;
         } catch (IllegalArgumentException e) {
@@ -102,5 +109,48 @@ public class GetPrinterImpl implements GetPrinter {
     @Override
     public String convertIsSslCheckedToScheme(boolean isSslChecked) {
         return isSslChecked ? HTTPS_SCHEME : HTTP_SCHEME;
+    }
+
+    @Override
+    public Printer setPrinter(Printer printer, String accountName, String apiKey,
+                              String scheme, String ipAddress, int portNumber) {
+        printer.setName(accountName);
+        printer.setApi_key(apiKey);
+        printer.setScheme(scheme);
+        printer.setHost(ipAddress);
+        printer.setPort(portNumber);
+        return printer;
+    }
+
+    @Override
+    public void addPrinterToDb(Printer printer) {
+        deleteOldPrintersInDb(printer);
+        mPrinterDao.insertOrReplace(printer);
+    }
+
+    @Override
+    public void deleteOldPrintersInDb(Printer printer) {
+
+        Printer oldPrinter;
+        try {
+            oldPrinter = mPrinterDao.queryBuilder()
+                    .where(PrinterDao.Properties.Name.eq(printer.getName()))
+                    .unique();
+        } catch (DaoException e) {
+            oldPrinter = null;
+        }
+
+        if (oldPrinter != null) {
+            mVersionDao.delete(oldPrinter.getVersion());
+            mPrinterDao.delete(oldPrinter);
+        }
+    }
+
+    @Override
+    public void addVersionToDb(Printer printer, Version version) {
+        mVersionDao.insertOrReplace(version);
+
+        printer.setVersion(version);
+        mPrinterDao.update(printer);
     }
 }

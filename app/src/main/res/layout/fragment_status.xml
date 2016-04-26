@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/status_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Status: "/>
+            <TextView
+                android:id="@+id/status_input"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/status_title"
+                android:hint="Disconnected"/>
+            <TextView
+                android:id="@+id/octoprint_version_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/status_title"
+                android:text="OctoPrint Version: "/>
+            <TextView
+                android:id="@+id/octoprint_version_input"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/octoprint_version_title"
+                android:layout_below="@id/status_title"
+                android:hint="0.2.1"/>
+            <TextView
+                android:id="@+id/api_version_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/octoprint_version_title"
+                android:text="API Version: "/>
+            <TextView
+                android:id="@+id/api_version_input"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/api_version_title"
+                android:layout_below="@id/octoprint_version_title"
+                android:hint="0.1.1"/>
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>
