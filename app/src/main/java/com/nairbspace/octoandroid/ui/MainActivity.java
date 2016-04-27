@@ -1,16 +1,17 @@
 package com.nairbspace.octoandroid.ui;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +23,7 @@ import android.view.View;
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
 import com.nairbspace.octoandroid.presenter.MainPresenterImpl;
+import com.nairbspace.octoandroid.ui.add_printer.AddPrinterActivity;
 
 import javax.inject.Inject;
 
@@ -30,7 +32,7 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, MainScreen,
-        StatusFragment.OnFragmentInteractionListener{
+        StatusFragment.OnFragmentInteractionListener, ConnectionFragment.OnFragmentInteractionListener{
 
     @Inject MainPresenterImpl mMainPresenter;
 
@@ -38,6 +40,8 @@ public class MainActivity extends AppCompatActivity
     @Bind(R.id.fab) FloatingActionButton mFab;
     @Bind(R.id.drawer_layout) DrawerLayout mDrawer;
     @Bind(R.id.nav_view) NavigationView mNavView;
+    @Bind(R.id.view_pager) ViewPager mViewPager;
+    @Bind(R.id.tab_layout) TabLayout mTabLayout;
     private ActionBarDrawerToggle mToggle;
 
     @Override
@@ -71,8 +75,16 @@ public class MainActivity extends AppCompatActivity
         mMainPresenter.setView(this);
 
         /** Prevent being checked twice if user rotates screen in AddPrinterActivity */
-        if (savedInstanceState == null) {
-            mMainPresenter.getAccounts();
+//        if (savedInstanceState == null) {
+//            mMainPresenter.getAccounts();
+//        }
+
+        if (mViewPager != null) {
+            mViewPager.setAdapter(new StatusFragmentPagerAdapter(getSupportFragmentManager(), this));
+        }
+
+        if (mTabLayout != null) {
+            mTabLayout.setupWithViewPager(mViewPager);
         }
     }
 
@@ -83,13 +95,13 @@ public class MainActivity extends AppCompatActivity
         syncToggleState();
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        if (mToggle != null) {
-            mToggle.onConfigurationChanged(newConfig);
-        }
-    }
+//    @Override
+//    public void onConfigurationChanged(Configuration newConfig) {
+//        super.onConfigurationChanged(newConfig);
+//        if (mToggle != null) {
+//            mToggle.onConfigurationChanged(newConfig);
+//        }
+//    }
 
     @Override
     public void onBackPressed() {
@@ -207,12 +219,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void inflateStatusFragment() {
         FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.content_main);
+        Fragment fragment = fm.findFragmentById(R.id.view_pager);
 
         if (fragment == null) {
             fragment = StatusFragment.newInstance(null, null);
             fm.beginTransaction()
-                    .add(R.id.content_main, fragment)
+                    .add(R.id.view_pager, fragment)
                     .commit();
         }
     }

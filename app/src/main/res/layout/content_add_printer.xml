@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="0dp"
-    tools:context=".ui.AddPrinterActivity">
+    tools:context=".ui.add_printer.AddPrinterActivity">
 
     <ProgressBar
         android:id="@+id/add_printer_progress"

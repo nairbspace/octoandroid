@@ -5,7 +5,7 @@ import com.nairbspace.octoandroid.interactor.GetPrinterImpl;
 import com.nairbspace.octoandroid.interactor.GetAccounts;
 import com.nairbspace.octoandroid.interactor.GetAccountsImpl;
 import com.nairbspace.octoandroid.model.Printer;
-import com.nairbspace.octoandroid.ui.AddPrinterScreen;
+import com.nairbspace.octoandroid.ui.add_printer.AddPrinterScreen;
 
 import javax.inject.Inject;
 

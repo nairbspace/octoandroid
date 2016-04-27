@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.ui;
+package com.nairbspace.octoandroid.ui.add_printer;
 
 import android.Manifest;
 import android.content.Context;

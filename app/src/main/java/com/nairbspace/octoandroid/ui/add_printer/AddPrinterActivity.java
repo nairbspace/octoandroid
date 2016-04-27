@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.ui;
+package com.nairbspace.octoandroid.ui.add_printer;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
