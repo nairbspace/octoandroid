@@ -10,11 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.Spinner;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
-import com.nairbspace.octoandroid.net.Connection;
 import com.nairbspace.octoandroid.presenter.ConnectionPresenterImpl;
 
 import java.util.ArrayList;
@@ -25,7 +26,6 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import timber.log.Timber;
 
 public class ConnectionFragment extends Fragment implements ConnectionScreen {
     private static final String ARG_PARAM1 = "param1";
@@ -40,10 +40,20 @@ public class ConnectionFragment extends Fragment implements ConnectionScreen {
     @Bind(R.id.serial_port_spinner) Spinner mSerialPortSpinner;
     @Bind(R.id.baudrate_spinner) Spinner mBaudrateSpinner;
     @Bind(R.id.printer_profile_spinner) Spinner mPrinterProfileSpinner;
+    @Bind(R.id.connect_button) Button mConnectButton;
+    @Bind(R.id.save_connection_settings_checkbox) CheckBox mSaveConnectionSettingsCheckBox;
+    @Bind(R.id.auto_connect_checkbox) CheckBox mAutoConnectCheckBox;
 
-    public ConnectionFragment() {
-        // Required empty public constructor
-    }
+    private int mDefaultSpinnerId = android.R.layout.simple_spinner_dropdown_item;
+
+    private List<String> mPorts = new ArrayList<>();
+    private ArrayAdapter<String> mSerialPortAdapter;
+
+    private List<Integer> mBaudrates = new ArrayList<>();
+    private ArrayAdapter<Integer> mBaudrateAdapter;
+
+    private List<String> mPrinterProfileNames = new ArrayList<>();
+    private ArrayAdapter<String> mPrinterProfileAdapter;
 
     public static ConnectionFragment newInstance(String param1, String param2) {
         ConnectionFragment fragment = new ConnectionFragment();
@@ -58,6 +68,7 @@ public class ConnectionFragment extends Fragment implements ConnectionScreen {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SetupApplication.get(getActivity()).getAppComponent().inject(this);
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -67,23 +78,38 @@ public class ConnectionFragment extends Fragment implements ConnectionScreen {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_connection, container, false);
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         ActionBar actionBar = activity.getSupportActionBar();
         if (actionBar != null) {
             actionBar.setTitle("Status");
         }
-
         ButterKnife.bind(this, view);
+        updateUI(mPorts, mBaudrates, mPrinterProfileNames);
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mPresenter.getConnection();
     }
 
     @OnClick(R.id.connect_button)
     void connectButtonPressed() {
-        Timber.d("Button pressed");
-        mPresenter.getConnection();
+        String connectButtonText = mConnectButton.getText().toString();
+        int portPosition = mSerialPortSpinner.getSelectedItemPosition();
+        int baudRatePosition = mBaudrateSpinner.getSelectedItemPosition();
+        int printerProfileNamePosition = mPrinterProfileSpinner.getSelectedItemPosition();
+        String port = mSerialPortSpinner.getSelectedItem().toString();
+        String baudrate = mBaudrateSpinner.getSelectedItem().toString();
+        String printerProfileName = mPrinterProfileSpinner.getSelectedItem().toString();
+        boolean isSaveConnectionChecked = mSaveConnectionSettingsCheckBox.isChecked();
+        boolean isAutoConnectChecked = mAutoConnectCheckBox.isChecked();
+
+        mPresenter.connectButtonClicked(connectButtonText, portPosition, baudRatePosition,
+                printerProfileNamePosition, isSaveConnectionChecked, isAutoConnectChecked);
     }
 
     public void onButtonPressed(Uri uri) {
@@ -116,29 +142,49 @@ public class ConnectionFragment extends Fragment implements ConnectionScreen {
     }
 
     @Override
-    public void updateUI(Connection connection) {
-        Connection.Options options = connection.getOptions();
-        List<String> ports = options.getPorts();
-        ArrayAdapter<String> portAdapter = new ArrayAdapter<String>(getContext(),
-                android.R.layout.simple_spinner_dropdown_item, ports);
-        mSerialPortSpinner.setAdapter(portAdapter);
+    public void updateUI(List<String> ports, List<Integer> baudrates, List<String> printerProfileNames) {
+        updateSerialPortSpinner(ports);
+        updateBaudRateSpinner(baudrates);
+        updatePrinterProfileSpinner(printerProfileNames);
+    }
 
-        List<Integer> baudrates = options.getBaudrates();
-        ArrayAdapter<Integer> baudratesAdapter = new ArrayAdapter<Integer>(getContext(),
-                android.R.layout.simple_spinner_dropdown_item, baudrates);
-        mBaudrateSpinner.setAdapter(baudratesAdapter);
-
-        List<Connection.PrinterProfile> printerProfiles = options.getPrinterProfiles();
-        List<String> printerProfileNames = new ArrayList<>();
-        for (Connection.PrinterProfile printerProfile : printerProfiles) {
-            printerProfileNames.add(printerProfile.getName());
+    @Override
+    public void updateSerialPortSpinner(List<String> ports) {
+        mPorts = ports;
+        if (mSerialPortAdapter == null) {
+            mSerialPortAdapter = new ArrayAdapter<>(getContext(), mDefaultSpinnerId, mPorts);
+            mSerialPortSpinner.setAdapter(mSerialPortAdapter);
+        } else {
+            mSerialPortAdapter.clear();
+            mSerialPortAdapter.addAll(mPorts);
+            mSerialPortAdapter.notifyDataSetChanged();
         }
+    }
 
-        ArrayAdapter<String> printerProfileAdapter = new ArrayAdapter<String>(getContext(),
-                android.R.layout.simple_spinner_dropdown_item, printerProfileNames);
-        mPrinterProfileSpinner.setAdapter(printerProfileAdapter);
+    @Override
+    public void updateBaudRateSpinner(List<Integer> baudrates) {
+        mBaudrates = baudrates;
+        if (mBaudrateAdapter == null) {
+            mBaudrateAdapter = new ArrayAdapter<>(getContext(), mDefaultSpinnerId, mBaudrates);
+            mBaudrateSpinner.setAdapter(mBaudrateAdapter);
+        } else {
+            mBaudrateAdapter.clear();
+            mBaudrateAdapter.addAll(mBaudrates);
+            mBaudrateAdapter.notifyDataSetChanged();
+        }
+    }
 
-
+    @Override
+    public void updatePrinterProfileSpinner(List<String> printerProfileNames) {
+        mPrinterProfileNames = printerProfileNames;
+        if (mPrinterProfileAdapter == null) {
+            mPrinterProfileAdapter = new ArrayAdapter<>(getContext(), mDefaultSpinnerId, mPrinterProfileNames);
+            mPrinterProfileSpinner.setAdapter(mPrinterProfileAdapter);
+        } else {
+            mPrinterProfileAdapter.clear();
+            mPrinterProfileAdapter.addAll(mPrinterProfileNames);
+            mPrinterProfileAdapter.notifyDataSetChanged();
+        }
     }
 
     public interface OnFragmentInteractionListener {

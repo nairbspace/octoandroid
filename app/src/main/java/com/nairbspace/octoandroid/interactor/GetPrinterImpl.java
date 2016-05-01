@@ -3,6 +3,7 @@ package com.nairbspace.octoandroid.interactor;
 import com.google.gson.Gson;
 import com.nairbspace.octoandroid.data.db.Printer;
 import com.nairbspace.octoandroid.data.db.PrinterDao;
+import com.nairbspace.octoandroid.data.pref.PrefManager;
 import com.nairbspace.octoandroid.net.OctoApiImpl;
 import com.nairbspace.octoandroid.net.OctoInterceptor;
 import com.nairbspace.octoandroid.net.Version;
@@ -24,6 +25,7 @@ public class GetPrinterImpl implements GetPrinter {
     @Inject OctoInterceptor mInterceptor;
     @Inject PrinterDao mPrinterDao;
     @Inject Gson mGson;
+    @Inject PrefManager mPrefManager;
 
     @Inject
     public GetPrinterImpl() {
@@ -150,5 +152,11 @@ public class GetPrinterImpl implements GetPrinter {
         String json = mGson.toJson(version);
         printer.setVersion_json(json);
         mPrinterDao.update(printer);
+        setActivePrinter(printer.getId());
+    }
+
+    @Override
+    public void setActivePrinter(long printerId) {
+        mPrefManager.setActivePrinter(printerId);
     }
 }

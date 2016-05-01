@@ -10,9 +10,9 @@ public interface OctoApi {
     @GET("/api/version")
     Observable<Version> getVersion();
 
-    @GET("api/connection")
+    @GET("/api/connection")
     Observable<Connection> getConnection();
 
-    @POST("api/connection")
+    @POST("/api/connection")
     Observable<Connect> postConnect(@Body Connect connect);
 }

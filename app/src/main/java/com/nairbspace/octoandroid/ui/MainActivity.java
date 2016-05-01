@@ -8,9 +8,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -29,10 +28,12 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, MainScreen,
-        StatusFragment.OnFragmentInteractionListener, ConnectionFragment.OnFragmentInteractionListener{
+        StatusFragment.OnFragmentInteractionListener,
+        ConnectionFragment.OnFragmentInteractionListener, View.OnClickListener{
 
     @Inject MainPresenterImpl mMainPresenter;
 
@@ -52,40 +53,15 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
-
-        mFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
+        mFab.setOnClickListener(this);
         mNavView.setNavigationItemSelectedListener(this);
         mToggle = new ActionBarDrawerToggle(this, mDrawer, mToolbar, R.string.drawer_open, R.string.drawer_close);
         mDrawer.addDrawerListener(mToggle);
-
-        if (isTabletAndLandscape()) {
-            lockDrawer();
-            hideIndicator();
-        } else {
-            unlockDrawer();
-        }
+        setDrawer();
+        inflateStatusAdapter();
 
         mMainPresenter.setView(this);
-
-        /** Prevent being checked twice if user rotates screen in AddPrinterActivity */
-//        if (savedInstanceState == null) {
-//            mMainPresenter.getAccounts();
-//        }
-
-        if (mViewPager != null) {
-            mViewPager.setAdapter(new StatusFragmentPagerAdapter(getSupportFragmentManager(), this));
-        }
-
-        if (mTabLayout != null) {
-            mTabLayout.setupWithViewPager(mViewPager);
-        }
+        mMainPresenter.getAccounts();
     }
 
     @Override
@@ -94,14 +70,6 @@ public class MainActivity extends AppCompatActivity
         closeDrawer(); // Not able to close during onCreate and screen is rotated
         syncToggleState();
     }
-
-//    @Override
-//    public void onConfigurationChanged(Configuration newConfig) {
-//        super.onConfigurationChanged(newConfig);
-//        if (mToggle != null) {
-//            mToggle.onConfigurationChanged(newConfig);
-//        }
-//    }
 
     @Override
     public void onBackPressed() {
@@ -139,7 +107,7 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
             case R.id.nav_status:
-                inflateStatusFragment();
+                inflateStatusAdapter();
                 break;
             case R.id.nav_gallery:
                 break;
@@ -217,22 +185,47 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void inflateStatusFragment() {
-        FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.view_pager);
+    public void selectStatusNav() {
+        mNavView.setCheckedItem(R.id.nav_status);
+    }
 
-        if (fragment == null) {
-            fragment = StatusFragment.newInstance(null, null);
-            fm.beginTransaction()
-                    .add(R.id.view_pager, fragment)
-                    .commit();
+    @Override
+    public void setDrawer() {
+        if (isTabletAndLandscape()) {
+            lockDrawer();
+            hideIndicator();
+        } else {
+            unlockDrawer();
         }
     }
 
     @Override
-    public void selectStatusNav() {
-        inflateStatusFragment();
-        mNavView.setCheckedItem(R.id.nav_status);
+    public void setAdapterAndTabLayout(PagerAdapter pagerAdapter) {
+        if (mViewPager != null) {
+            mViewPager.setAdapter(pagerAdapter);
+        }
+
+        if (mTabLayout != null) {
+            mTabLayout.setupWithViewPager(mViewPager);
+        }
+    }
+
+    @Override
+    public void inflateStatusAdapter() {
+        if (mViewPager.getAdapter() == null) {
+            PagerAdapter adapter = new StatusFragmentPagerAdapter(getSupportFragmentManager());
+            setAdapterAndTabLayout(adapter);
+        } else {
+            PagerAdapter currentAdapter = mViewPager.getAdapter();
+            Class adapterClass = currentAdapter.getClass();
+            if (!adapterClass.equals(StatusFragmentPagerAdapter.class)) {
+                PagerAdapter adapter = new StatusFragmentPagerAdapter(getSupportFragmentManager());
+                setAdapterAndTabLayout(adapter);
+            } else {
+                Timber.d("StatusFragmentPagerAdapter already visible");
+            }
+        }
+        selectStatusNav();
     }
 
     @Override
@@ -243,5 +236,16 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.fab:
+                Snackbar.make(mFab, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null)
+                        .show();
+                break;
+        }
     }
 }

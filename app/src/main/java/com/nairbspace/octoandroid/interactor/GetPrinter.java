@@ -38,4 +38,6 @@ public interface GetPrinter {
     void deleteOldPrintersInDb(Printer printer);
 
     void addVersionToDb(Printer printer, Version version);
+
+    void setActivePrinter(long printerId); // TODO will move this interface later
 }

@@ -16,9 +16,7 @@ public class Printer {
     /** Not-null value. */
     private String host;
     private int port;
-    /** Not-null value. */
     private String version_json;
-    /** Not-null value. */
     private String connection_json;
 
     public Printer() {
@@ -95,22 +93,18 @@ public class Printer {
         this.port = port;
     }
 
-    /** Not-null value. */
     public String getVersion_json() {
         return version_json;
     }
 
-    /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setVersion_json(String version_json) {
         this.version_json = version_json;
     }
 
-    /** Not-null value. */
     public String getConnection_json() {
         return connection_json;
     }
 
-    /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setConnection_json(String connection_json) {
         this.connection_json = connection_json;
     }

@@ -50,8 +50,8 @@ public class PrinterDao extends AbstractDao<Printer, Long> {
                 "\"SCHEME\" TEXT NOT NULL ," + // 3: scheme
                 "\"HOST\" TEXT NOT NULL ," + // 4: host
                 "\"PORT\" INTEGER NOT NULL ," + // 5: port
-                "\"VERSION_JSON\" TEXT NOT NULL ," + // 6: version_json
-                "\"CONNECTION_JSON\" TEXT NOT NULL );"); // 7: connection_json
+                "\"VERSION_JSON\" TEXT," + // 6: version_json
+                "\"CONNECTION_JSON\" TEXT);"); // 7: connection_json
     }
 
     /** Drops the underlying database table. */
@@ -74,8 +74,16 @@ public class PrinterDao extends AbstractDao<Printer, Long> {
         stmt.bindString(4, entity.getScheme());
         stmt.bindString(5, entity.getHost());
         stmt.bindLong(6, entity.getPort());
-        stmt.bindString(7, entity.getVersion_json());
-        stmt.bindString(8, entity.getConnection_json());
+ 
+        String version_json = entity.getVersion_json();
+        if (version_json != null) {
+            stmt.bindString(7, version_json);
+        }
+ 
+        String connection_json = entity.getConnection_json();
+        if (connection_json != null) {
+            stmt.bindString(8, connection_json);
+        }
     }
 
     /** @inheritdoc */
@@ -94,8 +102,8 @@ public class PrinterDao extends AbstractDao<Printer, Long> {
             cursor.getString(offset + 3), // scheme
             cursor.getString(offset + 4), // host
             cursor.getInt(offset + 5), // port
-            cursor.getString(offset + 6), // version_json
-            cursor.getString(offset + 7) // connection_json
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // version_json
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7) // connection_json
         );
         return entity;
     }
@@ -109,8 +117,8 @@ public class PrinterDao extends AbstractDao<Printer, Long> {
         entity.setScheme(cursor.getString(offset + 3));
         entity.setHost(cursor.getString(offset + 4));
         entity.setPort(cursor.getInt(offset + 5));
-        entity.setVersion_json(cursor.getString(offset + 6));
-        entity.setConnection_json(cursor.getString(offset + 7));
+        entity.setVersion_json(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setConnection_json(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
      }
     
     /** @inheritdoc */

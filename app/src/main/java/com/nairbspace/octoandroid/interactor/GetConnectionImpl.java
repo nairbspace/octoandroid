@@ -1,12 +1,13 @@
 package com.nairbspace.octoandroid.interactor;
 
-import com.nairbspace.octoandroid.net.Connection;
+import com.google.gson.Gson;
 import com.nairbspace.octoandroid.data.db.Printer;
 import com.nairbspace.octoandroid.data.db.PrinterDao;
+import com.nairbspace.octoandroid.data.pref.PrefManager;
+import com.nairbspace.octoandroid.net.Connect;
+import com.nairbspace.octoandroid.net.Connection;
 import com.nairbspace.octoandroid.net.OctoApiImpl;
 import com.nairbspace.octoandroid.net.OctoInterceptor;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -20,6 +21,10 @@ public class GetConnectionImpl implements GetConnection {
     @Inject OctoApiImpl mApi;
     @Inject PrinterDao mPrinterDao;
     @Inject OctoInterceptor mInterceptor;
+    @Inject Gson mGson;
+    @Inject PrefManager mPrefManager;
+
+    private Printer mPrinter;
 
     @Inject
     public GetConnectionImpl() {
@@ -28,11 +33,29 @@ public class GetConnectionImpl implements GetConnection {
 
     @Override
     public void getConnection(final GetConnectionFinishedListener listener) {
-        Printer printer = mPrinterDao.queryBuilder()
-                .where(PrinterDao.Properties.Name.eq("192.168.1.204"))
+
+        long printerId = mPrefManager.getActivePrinter();
+
+        if (printerId == PrefManager.NO_ACTIVE_PRINTER) {
+            listener.onFailure();
+            return;
+        }
+
+        mPrinter = mPrinterDao.queryBuilder()
+                .where(PrinterDao.Properties.Id.eq(printerId))
                 .unique();
 
-        mInterceptor.setInterceptor(printer.getScheme(), printer.getHost(), printer.getPort(), printer.getApi_key());
+
+        String json = mPrinter.getConnection_json();
+        Connection connection = mGson.fromJson(json, Connection.class);
+        listener.onSuccess(connection);
+
+        syncConnection(listener);
+    }
+
+    @Override
+    public void syncConnection(final GetConnectionFinishedListener listener) {
+        mInterceptor.setInterceptor(mPrinter.getScheme(), mPrinter.getHost(), mPrinter.getPort(), mPrinter.getApi_key());
 
         listener.onLoading();
         mApi.getConnectionObservable()
@@ -51,21 +74,39 @@ public class GetConnectionImpl implements GetConnection {
 
                     @Override
                     public void onNext(Connection connection) {
-                        checkData(connection);
+                        saveConnection(connection);
                         listener.onSuccess(connection);
                     }
                 });
     }
 
-    void checkData(Connection connection) {
-        Connection.Current current = connection.getCurrent();
-        Connection.Options option = connection.getOptions();
+    @Override
+    public void saveConnection(Connection connection) {
+        String json = mGson.toJson(connection);
+        mPrinter.setConnection_json(json);
+        mPrinterDao.update(mPrinter);
+    }
 
-        Timber.d(current.getPort());
+    @Override
+    public void postConnect(Connect connect) {
+        mApi.postConnectObservable(connect)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Connect>() {
+                    @Override
+                    public void onCompleted() {
+                        Timber.d("Connected");
+                    }
 
-        List<Integer> baudrates = option.getBaudrates();
-        for (int baudrate : baudrates) {
-            Timber.d(baudrate + "");
-        }
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(Connect connect) {
+
+                    }
+                });
     }
 }

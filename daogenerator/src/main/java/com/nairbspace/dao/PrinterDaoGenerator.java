@@ -40,8 +40,8 @@ public class PrinterDaoGenerator {
         printer.addStringProperty("scheme").notNull();
         printer.addStringProperty("host").notNull();
         printer.addIntProperty("port").notNull();
-        printer.addStringProperty("version_json").notNull();
-        printer.addStringProperty("connection_json").notNull();
+        printer.addStringProperty("version_json");
+        printer.addStringProperty("connection_json");
         return printer;
     }
 

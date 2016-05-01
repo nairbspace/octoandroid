@@ -1,5 +1,7 @@
 package com.nairbspace.octoandroid.ui;
 
+import android.support.v4.view.PagerAdapter;
+
 public interface MainScreen {
 
     void closeDrawer();
@@ -20,7 +22,11 @@ public interface MainScreen {
 
     void displaySnackBar(String message);
 
-    void inflateStatusFragment();
-
     void selectStatusNav();
+
+    void setDrawer();
+
+    void setAdapterAndTabLayout(PagerAdapter pagerAdapter);
+
+    void inflateStatusAdapter();
 }

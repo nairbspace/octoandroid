@@ -24,6 +24,15 @@ public class Connect {
     @Expose
     private Boolean autoconnect;
 
+    public Connect(String command, String port, Integer baudrate, String printerProfile, Boolean save, Boolean autoconnect) {
+        this.command = command;
+        this.port = port;
+        this.baudrate = baudrate;
+        this.printerProfile = printerProfile;
+        this.save = save;
+        this.autoconnect = autoconnect;
+    }
+
     public String getCommand() {
         return command;
     }
@@ -70,5 +79,17 @@ public class Connect {
 
     public void setAutoconnect(Boolean autoconnect) {
         this.autoconnect = autoconnect;
+    }
+
+    @Override
+    public String toString() {
+        return "Connect{" +
+                "command='" + command + '\'' +
+                ", port='" + port + '\'' +
+                ", baudrate=" + baudrate +
+                ", printerProfile='" + printerProfile + '\'' +
+                ", save=" + save +
+                ", autoconnect=" + autoconnect +
+                '}';
     }
 }
