@@ -1,9 +1,5 @@
 package com.nairbspace.octoandroid.net;
 
-import com.nairbspace.octoandroid.model.Connect;
-import com.nairbspace.octoandroid.model.Connection;
-import com.nairbspace.octoandroid.model.Version;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 

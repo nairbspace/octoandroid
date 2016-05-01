@@ -1,6 +1,6 @@
 package com.nairbspace.octoandroid.interactor;
 
-import com.nairbspace.octoandroid.model.Connection;
+import com.nairbspace.octoandroid.net.Connection;
 
 public interface GetConnection {
 

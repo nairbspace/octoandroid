@@ -7,7 +7,7 @@ import android.os.Build;
 import android.text.TextUtils;
 
 import com.nairbspace.octoandroid.R;
-import com.nairbspace.octoandroid.model.Printer;
+import com.nairbspace.octoandroid.data.db.Printer;
 
 import javax.inject.Inject;
 

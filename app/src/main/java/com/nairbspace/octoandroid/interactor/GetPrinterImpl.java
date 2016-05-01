@@ -1,11 +1,11 @@
 package com.nairbspace.octoandroid.interactor;
 
-import com.nairbspace.octoandroid.model.Printer;
-import com.nairbspace.octoandroid.model.PrinterDao;
-import com.nairbspace.octoandroid.model.Version;
-import com.nairbspace.octoandroid.model.VersionDao;
+import com.google.gson.Gson;
+import com.nairbspace.octoandroid.data.db.Printer;
+import com.nairbspace.octoandroid.data.db.PrinterDao;
 import com.nairbspace.octoandroid.net.OctoApiImpl;
 import com.nairbspace.octoandroid.net.OctoInterceptor;
+import com.nairbspace.octoandroid.net.Version;
 
 import javax.inject.Inject;
 
@@ -23,7 +23,7 @@ public class GetPrinterImpl implements GetPrinter {
     @Inject OctoApiImpl mApi;
     @Inject OctoInterceptor mInterceptor;
     @Inject PrinterDao mPrinterDao;
-    @Inject VersionDao mVersionDao;
+    @Inject Gson mGson;
 
     @Inject
     public GetPrinterImpl() {
@@ -141,16 +141,14 @@ public class GetPrinterImpl implements GetPrinter {
         }
 
         if (oldPrinter != null) {
-            mVersionDao.delete(oldPrinter.getVersion());
             mPrinterDao.delete(oldPrinter);
         }
     }
 
     @Override
     public void addVersionToDb(Printer printer, Version version) {
-        mVersionDao.insertOrReplace(version);
-
-        printer.setVersion(version);
+        String json = mGson.toJson(version);
+        printer.setVersion_json(json);
         mPrinterDao.update(printer);
     }
 }

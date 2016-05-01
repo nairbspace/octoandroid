@@ -2,12 +2,11 @@ package com.nairbspace.dao;
 
 import de.greenrobot.daogenerator.DaoGenerator;
 import de.greenrobot.daogenerator.Entity;
-import de.greenrobot.daogenerator.Property;
 import de.greenrobot.daogenerator.Schema;
 
 public class PrinterDaoGenerator {
     private static final int DB_VERSION = 1;
-    private static final String DEFAULT_JAVA_PACKAGE = "com.nairbspace.octoandroid.model";
+    private static final String DEFAULT_JAVA_PACKAGE = "com.nairbspace.octoandroid.data.db";
     private static final String OUT_DIR = "./app/src/main/java";
 
     public static void main(String[] args) throws Exception {
@@ -22,14 +21,14 @@ public class PrinterDaoGenerator {
 
         /** Entities */
         Entity printer = addPrinter(schema);
-        Entity version = addVersion(schema);
+//        Entity version = addVersion(schema);
 
         /** Properties */
 //        Property printerIdForVersion = version.addLongProperty("printerId").getProperty();
-        Property versionIdForPrinter = printer.addLongProperty("versionId").getProperty();
+//        Property versionIdForPrinter = printer.addLongProperty("versionId").getProperty();
 
         /** Relationship between Entities */
-        printer.addToOne(version, versionIdForPrinter); // one-to-one printer.getVersion()
+//        printer.addToOne(version, versionIdForPrinter); // one-to-one printer.getVersion()
 //        version.addToOne(printer, printerIdForVersion); // one-to-one version.getPrinter()
     }
 
@@ -41,6 +40,8 @@ public class PrinterDaoGenerator {
         printer.addStringProperty("scheme").notNull();
         printer.addStringProperty("host").notNull();
         printer.addIntProperty("port").notNull();
+        printer.addStringProperty("version_json").notNull();
+        printer.addStringProperty("connection_json").notNull();
         return printer;
     }
 

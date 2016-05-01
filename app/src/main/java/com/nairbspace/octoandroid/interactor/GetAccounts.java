@@ -2,7 +2,7 @@ package com.nairbspace.octoandroid.interactor;
 
 import android.accounts.Account;
 
-import com.nairbspace.octoandroid.model.Printer;
+import com.nairbspace.octoandroid.data.db.Printer;
 
 public interface GetAccounts {
 

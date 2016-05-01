@@ -2,7 +2,7 @@ package com.nairbspace.octoandroid.presenter;
 
 import com.nairbspace.octoandroid.interactor.GetConnection;
 import com.nairbspace.octoandroid.interactor.GetConnectionImpl;
-import com.nairbspace.octoandroid.model.Connection;
+import com.nairbspace.octoandroid.net.Connection;
 import com.nairbspace.octoandroid.ui.ConnectionScreen;
 
 import javax.inject.Inject;

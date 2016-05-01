@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.model;
+package com.nairbspace.octoandroid.net;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

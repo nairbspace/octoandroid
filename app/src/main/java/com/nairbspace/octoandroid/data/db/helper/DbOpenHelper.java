@@ -1,9 +1,9 @@
-package com.nairbspace.octoandroid.data.db;
+package com.nairbspace.octoandroid.data.db.helper;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.nairbspace.octoandroid.model.DaoMaster;
+import com.nairbspace.octoandroid.data.db.DaoMaster;
 
 public class DbOpenHelper extends DaoMaster.OpenHelper {
 

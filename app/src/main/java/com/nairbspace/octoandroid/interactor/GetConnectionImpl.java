@@ -1,8 +1,8 @@
 package com.nairbspace.octoandroid.interactor;
 
-import com.nairbspace.octoandroid.model.Connection;
-import com.nairbspace.octoandroid.model.Printer;
-import com.nairbspace.octoandroid.model.PrinterDao;
+import com.nairbspace.octoandroid.net.Connection;
+import com.nairbspace.octoandroid.data.db.Printer;
+import com.nairbspace.octoandroid.data.db.PrinterDao;
 import com.nairbspace.octoandroid.net.OctoApiImpl;
 import com.nairbspace.octoandroid.net.OctoInterceptor;
 

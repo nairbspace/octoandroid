@@ -7,11 +7,10 @@ import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.preference.PreferenceManager;
 
-import com.nairbspace.octoandroid.data.db.DbOpenHelper;
-import com.nairbspace.octoandroid.model.DaoMaster;
-import com.nairbspace.octoandroid.model.DaoSession;
-import com.nairbspace.octoandroid.model.PrinterDao;
-import com.nairbspace.octoandroid.model.VersionDao;
+import com.nairbspace.octoandroid.data.db.DaoMaster;
+import com.nairbspace.octoandroid.data.db.DaoSession;
+import com.nairbspace.octoandroid.data.db.PrinterDao;
+import com.nairbspace.octoandroid.data.db.helper.DbOpenHelper;
 
 import javax.inject.Singleton;
 
@@ -62,12 +61,6 @@ public class StorageModule {
     @Singleton
     PrinterDao providePrinterDao(DaoSession daoSession) {
         return daoSession.getPrinterDao();
-    }
-
-    @Provides
-    @Singleton
-    VersionDao provideVersionDao(DaoSession daoSession) {
-        return daoSession.getVersionDao();
     }
 }
 

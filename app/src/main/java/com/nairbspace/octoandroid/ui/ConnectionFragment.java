@@ -14,7 +14,7 @@ import android.widget.Spinner;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
-import com.nairbspace.octoandroid.model.Connection;
+import com.nairbspace.octoandroid.net.Connection;
 import com.nairbspace.octoandroid.presenter.ConnectionPresenterImpl;
 
 import java.util.ArrayList;

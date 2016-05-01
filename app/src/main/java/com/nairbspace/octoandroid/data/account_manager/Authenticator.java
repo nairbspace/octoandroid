@@ -11,7 +11,7 @@ import android.os.Bundle;
 
 import com.nairbspace.octoandroid.app.SetupApplication;
 import com.nairbspace.octoandroid.interactor.GetPrinterImpl;
-import com.nairbspace.octoandroid.model.Printer;
+import com.nairbspace.octoandroid.data.db.Printer;
 import com.nairbspace.octoandroid.ui.add_printer.AddPrinterActivity;
 
 import javax.inject.Inject;
