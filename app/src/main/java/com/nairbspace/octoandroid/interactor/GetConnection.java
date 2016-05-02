@@ -1,7 +1,7 @@
 package com.nairbspace.octoandroid.interactor;
 
-import com.nairbspace.octoandroid.net.Connect;
-import com.nairbspace.octoandroid.net.Connection;
+import com.nairbspace.octoandroid.net.model.Connect;
+import com.nairbspace.octoandroid.net.model.Connection;
 
 public interface GetConnection {
 
@@ -19,11 +19,13 @@ public interface GetConnection {
         void onApiKeyFailure();
     }
 
-    void getConnection(GetConnectionFinishedListener listener);
+    void getConnectionFromDb(GetConnectionFinishedListener listener);
 
-    void syncConnection(GetConnectionFinishedListener listener);
+    void pollConnection(GetConnectionFinishedListener listener);
 
     void saveConnection(Connection connection);
 
-    void postConnect(Connect connect);
+    void postConnect(Connect connect, GetConnectionFinishedListener listener);
+
+    void unsubscribePollConnection();
 }

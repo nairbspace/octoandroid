@@ -1,15 +1,19 @@
 package com.nairbspace.octoandroid.presenter;
 
-import com.nairbspace.octoandroid.net.Connect;
+import com.nairbspace.octoandroid.net.model.Connect;
 import com.nairbspace.octoandroid.ui.ConnectionScreen;
 
 public interface ConnectionPresenter {
 
     void onDestroy();
 
+    void isVisible();
+
+    void isNotVisible();
+
     void setView(ConnectionScreen screen);
 
-    void getConnection();
+    void getData();
 
     void postConnect(Connect connect);
 

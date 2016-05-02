@@ -1,5 +1,9 @@
 package com.nairbspace.octoandroid.net;
 
+import com.nairbspace.octoandroid.net.model.Connect;
+import com.nairbspace.octoandroid.net.model.Connection;
+import com.nairbspace.octoandroid.net.model.Version;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -28,10 +32,10 @@ public class OctoApiImpl {
     }
 
     public Observable<Connection> getConnectionObservable() {
-        return mApi.getConnection().cache();
+        return mApi.getConnection();
     }
 
     public Observable<Connect> postConnectObservable(Connect connect) {
-        return mApi.postConnect(connect).cache();
+        return mApi.postConnect(connect);
     }
 }

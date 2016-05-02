@@ -1,9 +1,10 @@
-package com.nairbspace.octoandroid.net;
+package com.nairbspace.octoandroid.net.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Connect {
+    public static final String CONNECT = "connect";
 
     @SerializedName("command")
     @Expose
@@ -31,6 +32,10 @@ public class Connect {
         this.printerProfile = printerProfile;
         this.save = save;
         this.autoconnect = autoconnect;
+    }
+
+    public Connect(String command) {
+        this.command = command;
     }
 
     public String getCommand() {

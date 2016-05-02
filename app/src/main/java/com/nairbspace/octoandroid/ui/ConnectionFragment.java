@@ -6,12 +6,14 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 
 import com.nairbspace.octoandroid.R;
@@ -28,6 +30,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class ConnectionFragment extends Fragment implements ConnectionScreen {
+    private static final String CONNECT = "Connect";
+    private static final String DISCONNECT = "Disconnect";
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -37,6 +42,8 @@ public class ConnectionFragment extends Fragment implements ConnectionScreen {
     private OnFragmentInteractionListener mListener;
     @Inject ConnectionPresenterImpl mPresenter;
 
+    @Bind(R.id.connect_progressbar) ProgressBar mConnectProgressBar;
+    @Bind(R.id.connect_cardview) CardView mConnectCardView;
     @Bind(R.id.serial_port_spinner) Spinner mSerialPortSpinner;
     @Bind(R.id.baudrate_spinner) Spinner mBaudrateSpinner;
     @Bind(R.id.printer_profile_spinner) Spinner mPrinterProfileSpinner;
@@ -86,14 +93,9 @@ public class ConnectionFragment extends Fragment implements ConnectionScreen {
             actionBar.setTitle("Status");
         }
         ButterKnife.bind(this, view);
-        updateUI(mPorts, mBaudrates, mPrinterProfileNames);
+        updateUI(mPorts, mBaudrates, mPrinterProfileNames, true);
+        mPresenter.getData();
         return view;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        mPresenter.getConnection();
     }
 
     @OnClick(R.id.connect_button)
@@ -102,9 +104,6 @@ public class ConnectionFragment extends Fragment implements ConnectionScreen {
         int portPosition = mSerialPortSpinner.getSelectedItemPosition();
         int baudRatePosition = mBaudrateSpinner.getSelectedItemPosition();
         int printerProfileNamePosition = mPrinterProfileSpinner.getSelectedItemPosition();
-        String port = mSerialPortSpinner.getSelectedItem().toString();
-        String baudrate = mBaudrateSpinner.getSelectedItem().toString();
-        String printerProfileName = mPrinterProfileSpinner.getSelectedItem().toString();
         boolean isSaveConnectionChecked = mSaveConnectionSettingsCheckBox.isChecked();
         boolean isAutoConnectChecked = mAutoConnectCheckBox.isChecked();
 
@@ -130,6 +129,19 @@ public class ConnectionFragment extends Fragment implements ConnectionScreen {
     }
 
     @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && mPresenter != null && getView() != null) {
+            mPresenter.isVisible();
+        }
+
+        if (!isVisibleToUser && mPresenter != null) {
+            mPresenter.isNotVisible();
+//            showProgressBar(false); // TODO see if this is necessary
+        }
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
@@ -142,10 +154,25 @@ public class ConnectionFragment extends Fragment implements ConnectionScreen {
     }
 
     @Override
-    public void updateUI(List<String> ports, List<Integer> baudrates, List<String> printerProfileNames) {
+    public void updateUI(List<String> ports, List<Integer> baudrates,
+                         List<String> printerProfileNames, boolean isNotConnected) {
         updateSerialPortSpinner(ports);
         updateBaudRateSpinner(baudrates);
         updatePrinterProfileSpinner(printerProfileNames);
+
+        mSerialPortSpinner.setEnabled(isNotConnected);
+        mBaudrateSpinner.setEnabled(isNotConnected);
+        mPrinterProfileSpinner.setEnabled(isNotConnected);
+        mSaveConnectionSettingsCheckBox.setEnabled(isNotConnected);
+        mAutoConnectCheckBox.setEnabled(isNotConnected);
+        mConnectButton.setText(isNotConnected ? CONNECT : DISCONNECT);
+    }
+
+    @Override
+    public void updateUiWithDefaults(int defaultPortId, int defaultBaudrateId, int defaultProfileNameId) {
+        mSerialPortSpinner.setSelection(defaultPortId);
+        mBaudrateSpinner.setSelection(defaultBaudrateId);
+        mSerialPortSpinner.setSelection(defaultProfileNameId);
     }
 
     @Override
@@ -185,6 +212,12 @@ public class ConnectionFragment extends Fragment implements ConnectionScreen {
             mPrinterProfileAdapter.addAll(mPrinterProfileNames);
             mPrinterProfileAdapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public void showProgressBar(boolean isLoading) {
+        mConnectProgressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
+        mConnectCardView.setVisibility(isLoading ? View.GONE : View.VISIBLE);
     }
 
     public interface OnFragmentInteractionListener {

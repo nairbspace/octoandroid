@@ -4,15 +4,21 @@ import com.google.gson.Gson;
 import com.nairbspace.octoandroid.data.db.Printer;
 import com.nairbspace.octoandroid.data.db.PrinterDao;
 import com.nairbspace.octoandroid.data.pref.PrefManager;
-import com.nairbspace.octoandroid.net.Connect;
-import com.nairbspace.octoandroid.net.Connection;
+import com.nairbspace.octoandroid.net.model.Connect;
+import com.nairbspace.octoandroid.net.model.Connection;
 import com.nairbspace.octoandroid.net.OctoApiImpl;
 import com.nairbspace.octoandroid.net.OctoInterceptor;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
 
+import rx.Observable;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
@@ -25,6 +31,7 @@ public class GetConnectionImpl implements GetConnection {
     @Inject PrefManager mPrefManager;
 
     private Printer mPrinter;
+    private Subscription mPollSubscription;
 
     @Inject
     public GetConnectionImpl() {
@@ -32,48 +39,47 @@ public class GetConnectionImpl implements GetConnection {
 
 
     @Override
-    public void getConnection(final GetConnectionFinishedListener listener) {
+    public void getConnectionFromDb(final GetConnectionFinishedListener listener) {
 
         long printerId = mPrefManager.getActivePrinter();
 
         if (printerId == PrefManager.NO_ACTIVE_PRINTER) {
             listener.onFailure();
-            return;
+        } else {
+            mPrinter = mPrinterDao.queryBuilder()
+                    .where(PrinterDao.Properties.Id.eq(printerId))
+                    .unique();
+
+            String json = mPrinter.getConnection_json();
+            Connection connection = mGson.fromJson(json, Connection.class);
+            listener.onSuccess(connection);
+
+            pollConnection(listener);
         }
-
-        mPrinter = mPrinterDao.queryBuilder()
-                .where(PrinterDao.Properties.Id.eq(printerId))
-                .unique();
-
-
-        String json = mPrinter.getConnection_json();
-        Connection connection = mGson.fromJson(json, Connection.class);
-        listener.onSuccess(connection);
-
-        syncConnection(listener);
     }
 
     @Override
-    public void syncConnection(final GetConnectionFinishedListener listener) {
+    public void pollConnection(final GetConnectionFinishedListener listener) {
         mInterceptor.setInterceptor(mPrinter.getScheme(), mPrinter.getHost(), mPrinter.getPort(), mPrinter.getApi_key());
-
-        listener.onLoading();
-        mApi.getConnectionObservable()
+        mPollSubscription = Observable.interval(5, TimeUnit.SECONDS)
+                .flatMap(new Func1<Long, Observable<Connection>>() {
+                    @Override
+                    public Observable<Connection> call(Long aLong) {
+                        return mApi.getConnectionObservable();
+                    }
+                })
+                .doOnError(new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Timber.d(throwable.toString());
+                    }
+                })
+                .retry()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Connection>() {
+                .subscribe(new Action1<Connection>() {
                     @Override
-                    public void onCompleted() {
-                        listener.onComplete();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(Connection connection) {
+                    public void call(Connection connection) {
                         saveConnection(connection);
                         listener.onSuccess(connection);
                     }
@@ -88,19 +94,19 @@ public class GetConnectionImpl implements GetConnection {
     }
 
     @Override
-    public void postConnect(Connect connect) {
+    public void postConnect(Connect connect, final GetConnectionFinishedListener listener) {
+        listener.onLoading();
         mApi.postConnectObservable(connect)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Connect>() {
                     @Override
                     public void onCompleted() {
-                        Timber.d("Connected");
                     }
 
                     @Override
                     public void onError(Throwable e) {
-
+                        listener.onFailure();
                     }
 
                     @Override
@@ -108,5 +114,12 @@ public class GetConnectionImpl implements GetConnection {
 
                     }
                 });
+    }
+
+    @Override
+    public void unsubscribePollConnection() {
+        if (mPollSubscription != null) {
+            mPollSubscription.unsubscribe();
+        }
     }
 }

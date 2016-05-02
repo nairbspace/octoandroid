@@ -1,5 +1,9 @@
 package com.nairbspace.octoandroid.net;
 
+import com.nairbspace.octoandroid.net.model.Connect;
+import com.nairbspace.octoandroid.net.model.Connection;
+import com.nairbspace.octoandroid.net.model.Version;
+
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;

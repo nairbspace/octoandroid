@@ -6,7 +6,7 @@ import com.nairbspace.octoandroid.data.db.PrinterDao;
 import com.nairbspace.octoandroid.data.pref.PrefManager;
 import com.nairbspace.octoandroid.net.OctoApiImpl;
 import com.nairbspace.octoandroid.net.OctoInterceptor;
-import com.nairbspace.octoandroid.net.Version;
+import com.nairbspace.octoandroid.net.model.Version;
 
 import javax.inject.Inject;
 

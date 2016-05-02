@@ -1,7 +1,7 @@
 package com.nairbspace.octoandroid.interactor;
 
 import com.nairbspace.octoandroid.data.db.Printer;
-import com.nairbspace.octoandroid.net.Version;
+import com.nairbspace.octoandroid.net.model.Version;
 
 public interface GetPrinter {
 
