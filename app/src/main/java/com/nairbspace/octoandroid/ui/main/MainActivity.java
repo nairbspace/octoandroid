@@ -3,6 +3,7 @@ package com.nairbspace.octoandroid.ui.main;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -13,7 +14,6 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,7 +22,9 @@ import android.widget.TextView;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
-import com.nairbspace.octoandroid.ui.StatusFragmentPagerAdapter;
+import com.nairbspace.octoandroid.ui.Presenter;
+import com.nairbspace.octoandroid.ui.BaseActivity;
+import com.nairbspace.octoandroid.ui.add_printer.StatusFragmentPagerAdapter;
 import com.nairbspace.octoandroid.ui.add_printer.AddPrinterActivity;
 import com.nairbspace.octoandroid.ui.connection.ConnectionFragment;
 import com.nairbspace.octoandroid.ui.status.StatusFragment;
@@ -33,12 +35,12 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends BaseActivity<MainScreen>
         implements NavigationView.OnNavigationItemSelectedListener, MainScreen,
         StatusFragment.OnFragmentInteractionListener,
         ConnectionFragment.OnFragmentInteractionListener, View.OnClickListener{
 
-    @Inject MainPresenterImpl mMainPresenter;
+    @Inject MainPresenter mPresenter;
 
     @Bind(R.id.toolbar) Toolbar mToolbar;
     @Bind(R.id.fab) FloatingActionButton mFab;
@@ -54,7 +56,6 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SetupApplication.get(this).getAppComponent().inject(this);
-
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
@@ -67,9 +68,6 @@ public class MainActivity extends AppCompatActivity
         mDrawer.addDrawerListener(mToggle);
         setDrawer();
         inflateStatusAdapter();
-
-        mMainPresenter.setView(this);
-        mMainPresenter.getAccounts();
     }
 
     @Override
@@ -177,7 +175,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         if (requestCode == AddPrinterActivity.REQUEST_CODE) {
-            mMainPresenter.getAccounts();
+            mPresenter.getAccounts();
         } // TODO Need response if user decides to not login
     }
 
@@ -261,5 +259,17 @@ public class MainActivity extends AppCompatActivity
                         .show();
                 break;
         }
+    }
+
+    @NonNull
+    @Override
+    protected Presenter setPresenter() {
+        return mPresenter;
+    }
+
+    @NonNull
+    @Override
+    protected MainScreen setScreen() {
+        return this;
     }
 }

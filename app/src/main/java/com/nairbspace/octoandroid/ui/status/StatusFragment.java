@@ -13,15 +13,15 @@ import android.widget.TextView;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
-import com.nairbspace.octoandroid.ui.BaseFragment;
 import com.nairbspace.octoandroid.ui.Presenter;
+import com.nairbspace.octoandroid.ui.BaseViewPagerFragment;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class StatusFragment extends BaseFragment<StatusScreen> implements StatusScreen {
+public class StatusFragment extends BaseViewPagerFragment<StatusScreen> implements StatusScreen {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 

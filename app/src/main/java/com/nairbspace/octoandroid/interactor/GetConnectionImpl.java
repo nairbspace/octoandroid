@@ -54,15 +54,13 @@ public class GetConnectionImpl implements GetConnection {
                 String json = mPrinter.getConnectionJson();
                 Connection connection = mGson.fromJson(json, Connection.class);
                 listener.onDbSuccess(connection);
-
-                pollConnection(listener);
             }
         }
     }
 
     @Override
     public void pollConnection(final GetConnectionFinishedListener listener) {
-        if (mPrinter != null) {
+        if (mPrinter != null && mPollSubscription == null) {
             mPollSubscription = Observable.interval(5, TimeUnit.SECONDS)
                     .flatMap(new Func1<Long, Observable<Connection>>() {
                         @Override
@@ -125,6 +123,7 @@ public class GetConnectionImpl implements GetConnection {
     public void unsubscribePollConnection() {
         if (mPollSubscription != null) {
             mPollSubscription.unsubscribe();
+            mPollSubscription = null;
         }
     }
 }

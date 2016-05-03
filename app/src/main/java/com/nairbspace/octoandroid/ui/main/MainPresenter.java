@@ -1,7 +1,39 @@
 package com.nairbspace.octoandroid.ui.main;
 
-public interface MainPresenter {
+import com.nairbspace.octoandroid.data.db.Printer;
+import com.nairbspace.octoandroid.interactor.GetAccounts;
+import com.nairbspace.octoandroid.interactor.GetAccountsImpl;
+import com.nairbspace.octoandroid.ui.Presenter;
 
-    void setView(MainScreen mainScreen);
-    void getAccounts();
+import javax.inject.Inject;
+
+public class MainPresenter extends Presenter<MainScreen> implements GetAccounts.RetrieveListener {
+
+    @Inject GetAccountsImpl mGetAccounts;
+    private MainScreen mScreen;
+
+    @Inject
+    public MainPresenter() {
+    }
+
+    @Override
+    public void onEmpty() {
+        mScreen.navigateToAddPrinterActivity();
+    }
+
+    @Override
+    public void onSuccess(Printer printer) {
+        mScreen.updateNavHeader(printer.getName(), printer.getHost());
+        mScreen.displaySnackBar("Success");
+    }
+
+    @Override
+    protected void onInitialize(MainScreen mainScreen) {
+        mScreen = mainScreen;
+        getAccounts();
+    }
+
+    protected void getAccounts() {
+        mGetAccounts.retrieveAccounts(this);
+    }
 }

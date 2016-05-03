@@ -9,7 +9,8 @@ import com.nairbspace.octoandroid.ui.Presenter;
 
 import javax.inject.Inject;
 
-public class StatusPresenter implements Presenter<StatusScreen>, GetPrinterState.GetPrinterStateFinishedListener {
+public class StatusPresenter extends Presenter<StatusScreen>
+        implements GetPrinterState.GetPrinterStateFinishedListener {
 
     @Inject GetPrinterStateImpl mGetPrinterState;
     private StatusScreen mScreen;
@@ -27,39 +28,39 @@ public class StatusPresenter implements Presenter<StatusScreen>, GetPrinterState
             mScreen.updateApiVersion(version.getApi());
         }
         if (printer.getPrinterStateJson() != null) {
-            String printerStateJson = printer.getConnectionJson();
-            PrinterState printerState = mGetPrinterState.convertJsonToGson(printerStateJson, PrinterState.class);
-            mScreen.updateMachineState(printerState.getState().getText());
+            String printerStateJson = printer.getPrinterStateJson();
+            PrinterState printerState = mGetPrinterState
+                    .convertJsonToGson(printerStateJson, PrinterState.class);
+            if (printerState.getState() != null) {
+                mScreen.updateMachineState(printerState.getState().getText());
+            }
         }
     }
 
     @Override
-    public void setScreen(StatusScreen statusScreen) {
-        mScreen = statusScreen;
+    public void onPollSuccess(PrinterState printerState) {
+        try {
+            PrinterState.State state = printerState.getState();
+            String machineState = state.getText();
+            mScreen.updateMachineState(machineState);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void onStart() {
+    protected void onInitialize(StatusScreen statusScreen) {
+        mScreen = statusScreen;
         mGetPrinterState.getDataFromDb(this);
     }
 
     @Override
-    public void onResume() {
-
+    protected void isVisibleToUser() {
+        mGetPrinterState.pollPrinterState(this);
     }
 
     @Override
-    public void onPause() {
-
-    }
-
-    @Override
-    public void onStop() {
-
-    }
-
-    @Override
-    public void onDestroy() {
-        mScreen = null;
+    protected void isNotVisibleToUser() {
+        mGetPrinterState.unsubscribePollSubscription();
     }
 }

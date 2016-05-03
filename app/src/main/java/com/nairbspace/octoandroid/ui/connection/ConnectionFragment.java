@@ -3,7 +3,7 @@ package com.nairbspace.octoandroid.ui.connection;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -18,6 +18,8 @@ import android.widget.Spinner;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
+import com.nairbspace.octoandroid.ui.Presenter;
+import com.nairbspace.octoandroid.ui.BaseViewPagerFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +30,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ConnectionFragment extends Fragment implements ConnectionScreen {
+public class ConnectionFragment extends BaseViewPagerFragment<ConnectionScreen> implements ConnectionScreen {
     private static final String CONNECT = "Connect";
     private static final String DISCONNECT = "Disconnect";
 
@@ -39,7 +41,7 @@ public class ConnectionFragment extends Fragment implements ConnectionScreen {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-    @Inject ConnectionPresenterImpl mPresenter;
+    @Inject ConnectionPresenter mPresenter;
 
     @Bind(R.id.connect_progressbar) ProgressBar mConnectProgressBar;
     @Bind(R.id.connect_cardview) CardView mConnectCardView;
@@ -79,8 +81,6 @@ public class ConnectionFragment extends Fragment implements ConnectionScreen {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-        mPresenter.setView(this);
     }
 
     @Override
@@ -93,7 +93,6 @@ public class ConnectionFragment extends Fragment implements ConnectionScreen {
         }
         ButterKnife.bind(this, view);
         updateUI(mPorts, mBaudrates, mPrinterProfileNames, true);
-        mPresenter.getData();
         return view;
     }
 
@@ -127,35 +126,22 @@ public class ConnectionFragment extends Fragment implements ConnectionScreen {
         }
     }
 
+    @NonNull
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && mPresenter != null && getView() != null) {
-            mPresenter.isVisible();
-        }
-
-        if (!isVisibleToUser && mPresenter != null) {
-            mPresenter.isNotVisible();
-//            showProgressBar(false); // TODO see if this is necessary
-        }
+    protected Presenter setPresenter() {
+        return mPresenter;
     }
 
+    @NonNull
     @Override
-    public void onStop() {
-        super.onStop();
-        mPresenter.isNotVisible();
+    protected ConnectionScreen setScreen() {
+        return this;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-    @Override
-    public void onDestroy() {
-        mPresenter.onDestroy();
-        super.onDestroy();
     }
 
     @Override

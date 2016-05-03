@@ -18,7 +18,7 @@ public abstract class BaseFragment<T> extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setPresenter().setScreen(setScreen());
+        setPresenter().onInitialize(setScreen());
     }
 
     @Override
@@ -45,9 +45,10 @@ public abstract class BaseFragment<T> extends Fragment {
         setPresenter().onStop();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void onDestroy() {
         super.onDestroy();
-        setPresenter().onDestroy();
+        setPresenter().onDestroy(setScreen());
     }
 }

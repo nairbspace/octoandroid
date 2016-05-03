@@ -2,6 +2,7 @@ package com.nairbspace.octoandroid.net;
 
 import com.nairbspace.octoandroid.net.model.Connect;
 import com.nairbspace.octoandroid.net.model.Connection;
+import com.nairbspace.octoandroid.net.model.PrinterState;
 import com.nairbspace.octoandroid.net.model.Version;
 
 import javax.inject.Inject;
@@ -37,5 +38,9 @@ public class OctoApiImpl {
 
     public Observable<Connect> postConnectObservable(Connect connect) {
         return mApi.postConnect(connect);
+    }
+
+    public Observable<PrinterState> getPrinterStateObservable() {
+        return mApi.getPrinter();
     }
 }

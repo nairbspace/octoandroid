@@ -7,11 +7,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.View;
@@ -24,6 +24,8 @@ import android.widget.TextView;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
+import com.nairbspace.octoandroid.ui.Presenter;
+import com.nairbspace.octoandroid.ui.BaseActivity;
 
 import javax.inject.Inject;
 
@@ -32,14 +34,14 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import timber.log.Timber;
 
-public class AddPrinterActivity extends AppCompatActivity implements AddPrinterScreen,
+public class AddPrinterActivity extends BaseActivity<AddPrinterScreen> implements AddPrinterScreen,
         TextView.OnEditorActionListener, DialogInterface.OnClickListener,
         View.OnFocusChangeListener, View.OnClickListener,
         QrDialogFragment.OnFragmentInteractionListener {
 
     public static final int REQUEST_CODE = 0;
 
-    @Inject AddPrinterPresenterImpl mPresenter;
+    @Inject AddPrinterPresenter mPresenter;
 
     @Bind(R.id.toolbar) Toolbar mToolbar;
     @Bind(R.id.add_printer_form) ScrollView mScrollView;
@@ -65,7 +67,6 @@ public class AddPrinterActivity extends AppCompatActivity implements AddPrinterS
         setContentView(R.layout.activity_add_printer);
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
-        mPresenter.setView(this);
         mApiKeyEditText.setOnEditorActionListener(this);
         mIpAddressEditText.setOnFocusChangeListener(this);
         mPortEditText.setOnFocusChangeListener(this);
@@ -160,6 +161,15 @@ public class AddPrinterActivity extends AppCompatActivity implements AddPrinterS
     }
 
     @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case android.support.design.R.id.snackbar_action:
+                Timber.d("This is a snackbar");
+                break;
+        }
+    }
+
+    @Override
     public void showAlertDialog(String title, String message) {
         new AlertDialog.Builder(this)
                 .setTitle(title)
@@ -189,12 +199,6 @@ public class AddPrinterActivity extends AppCompatActivity implements AddPrinterS
     }
 
     @Override
-    protected void onDestroy() {
-        mPresenter.onDestroy();
-        super.onDestroy();
-    }
-
-    @Override
     public void onClick(DialogInterface dialog, int which) {
         switch (which) {
             case DialogInterface.BUTTON_NEGATIVE:
@@ -209,16 +213,19 @@ public class AddPrinterActivity extends AppCompatActivity implements AddPrinterS
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case android.support.design.R.id.snackbar_action:
-                Timber.d("This is a snackbar");
-                break;
-        }
-    }
-
-    @Override
     public void onQrSuccess(String apiKey) {
         mApiKeyEditText.setText(apiKey);
+    }
+
+    @NonNull
+    @Override
+    protected Presenter setPresenter() {
+        return mPresenter;
+    }
+
+    @NonNull
+    @Override
+    protected AddPrinterScreen setScreen() {
+        return this;
     }
 }
