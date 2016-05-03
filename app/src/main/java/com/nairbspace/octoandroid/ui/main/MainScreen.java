@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.ui;
+package com.nairbspace.octoandroid.ui.main;
 
 import android.support.v4.view.PagerAdapter;
 
@@ -29,4 +29,6 @@ public interface MainScreen {
     void setAdapterAndTabLayout(PagerAdapter pagerAdapter);
 
     void inflateStatusAdapter();
+
+    void updateNavHeader(String printerName, String ipAddress);
 }

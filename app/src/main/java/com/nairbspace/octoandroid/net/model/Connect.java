@@ -1,29 +1,16 @@
 package com.nairbspace.octoandroid.net.model;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Connect {
     public static final String CONNECT = "connect";
 
-    @SerializedName("command")
-    @Expose
-    private String command;
-    @SerializedName("port")
-    @Expose
-    private String port;
-    @SerializedName("baudrate")
-    @Expose
-    private Integer baudrate;
-    @SerializedName("printerProfile")
-    @Expose
-    private String printerProfile;
-    @SerializedName("save")
-    @Expose
-    private Boolean save;
-    @SerializedName("autoconnect")
-    @Expose
-    private Boolean autoconnect;
+    @SerializedName("command") private String command;
+    @SerializedName("port") private String port;
+    @SerializedName("baudrate") private Integer baudrate;
+    @SerializedName("printerProfile") private String printerProfile;
+    @SerializedName("save") private Boolean save;
+    @SerializedName("autoconnect") private Boolean autoconnect;
 
     public Connect(String command, String port, Integer baudrate, String printerProfile, Boolean save, Boolean autoconnect) {
         this.command = command;

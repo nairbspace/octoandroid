@@ -36,7 +36,7 @@ public class GetPrinterImpl implements GetPrinter {
     public void getVersion(final Printer printer, final GetPrinterFinishedListener listener) {
         listener.onLoading();
         mInterceptor.setInterceptor(printer.getScheme(), printer.getHost(),
-                printer.getPort(), printer.getApi_key());
+                printer.getPort(), printer.getApiKey());
         mApi.getVersionObservable()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -117,7 +117,7 @@ public class GetPrinterImpl implements GetPrinter {
     public Printer setPrinter(Printer printer, String accountName, String apiKey,
                               String scheme, String ipAddress, int portNumber) {
         printer.setName(accountName);
-        printer.setApi_key(apiKey);
+        printer.setApiKey(apiKey);
         printer.setScheme(scheme);
         printer.setHost(ipAddress);
         printer.setPort(portNumber);
@@ -150,7 +150,7 @@ public class GetPrinterImpl implements GetPrinter {
     @Override
     public void addVersionToDb(Printer printer, Version version) {
         String json = mGson.toJson(version);
-        printer.setVersion_json(json);
+        printer.setVersionJson(json);
         mPrinterDao.update(printer);
         setActivePrinter(printer.getId());
     }

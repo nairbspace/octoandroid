@@ -1,11 +1,10 @@
-package com.nairbspace.octoandroid.presenter;
+package com.nairbspace.octoandroid.ui.add_printer;
 
 import com.nairbspace.octoandroid.interactor.GetPrinter;
 import com.nairbspace.octoandroid.interactor.GetPrinterImpl;
 import com.nairbspace.octoandroid.interactor.GetAccounts;
 import com.nairbspace.octoandroid.interactor.GetAccountsImpl;
 import com.nairbspace.octoandroid.data.db.Printer;
-import com.nairbspace.octoandroid.ui.add_printer.AddPrinterScreen;
 
 import javax.inject.Inject;
 

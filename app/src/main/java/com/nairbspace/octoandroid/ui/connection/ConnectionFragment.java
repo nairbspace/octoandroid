@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.ui;
+package com.nairbspace.octoandroid.ui.connection;
 
 import android.content.Context;
 import android.net.Uri;
@@ -18,7 +18,6 @@ import android.widget.Spinner;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
-import com.nairbspace.octoandroid.presenter.ConnectionPresenterImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -142,6 +141,12 @@ public class ConnectionFragment extends Fragment implements ConnectionScreen {
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        mPresenter.isNotVisible();
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
@@ -173,6 +178,7 @@ public class ConnectionFragment extends Fragment implements ConnectionScreen {
         mSerialPortSpinner.setSelection(defaultPortId);
         mBaudrateSpinner.setSelection(defaultBaudrateId);
         mSerialPortSpinner.setSelection(defaultProfileNameId);
+        mConnectButton.setEnabled(true);
     }
 
     @Override

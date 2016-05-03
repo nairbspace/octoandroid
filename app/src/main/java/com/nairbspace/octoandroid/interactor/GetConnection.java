@@ -12,6 +12,8 @@ public interface GetConnection {
 
         void onSuccess(Connection connection);
 
+        void onDbSuccess(Connection connection);
+
         void onFailure();
 
         void onSslFailure();

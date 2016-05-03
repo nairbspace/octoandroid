@@ -4,10 +4,10 @@ import com.google.gson.Gson;
 import com.nairbspace.octoandroid.data.db.Printer;
 import com.nairbspace.octoandroid.data.db.PrinterDao;
 import com.nairbspace.octoandroid.data.pref.PrefManager;
-import com.nairbspace.octoandroid.net.model.Connect;
-import com.nairbspace.octoandroid.net.model.Connection;
 import com.nairbspace.octoandroid.net.OctoApiImpl;
 import com.nairbspace.octoandroid.net.OctoInterceptor;
+import com.nairbspace.octoandroid.net.model.Connect;
+import com.nairbspace.octoandroid.net.model.Connection;
 
 import java.util.concurrent.TimeUnit;
 
@@ -50,46 +50,51 @@ public class GetConnectionImpl implements GetConnection {
                     .where(PrinterDao.Properties.Id.eq(printerId))
                     .unique();
 
-            String json = mPrinter.getConnection_json();
-            Connection connection = mGson.fromJson(json, Connection.class);
-            listener.onSuccess(connection);
+            if (mPrinter != null) {
+                String json = mPrinter.getConnectionJson();
+                Connection connection = mGson.fromJson(json, Connection.class);
+                listener.onDbSuccess(connection);
 
-            pollConnection(listener);
+                pollConnection(listener);
+            }
         }
     }
 
     @Override
     public void pollConnection(final GetConnectionFinishedListener listener) {
-        mInterceptor.setInterceptor(mPrinter.getScheme(), mPrinter.getHost(), mPrinter.getPort(), mPrinter.getApi_key());
-        mPollSubscription = Observable.interval(5, TimeUnit.SECONDS)
-                .flatMap(new Func1<Long, Observable<Connection>>() {
-                    @Override
-                    public Observable<Connection> call(Long aLong) {
-                        return mApi.getConnectionObservable();
-                    }
-                })
-                .doOnError(new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        Timber.d(throwable.toString());
-                    }
-                })
-                .retry()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Connection>() {
-                    @Override
-                    public void call(Connection connection) {
-                        saveConnection(connection);
-                        listener.onSuccess(connection);
-                    }
-                });
+        if (mPrinter != null) {
+            mPollSubscription = Observable.interval(5, TimeUnit.SECONDS)
+                    .flatMap(new Func1<Long, Observable<Connection>>() {
+                        @Override
+                        public Observable<Connection> call(Long aLong) {
+                            mInterceptor.setInterceptor(mPrinter.getScheme(),
+                                    mPrinter.getHost(), mPrinter.getPort(), mPrinter.getApiKey());
+                            return mApi.getConnectionObservable();
+                        }
+                    })
+                    .doOnError(new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            Timber.d(throwable.toString());
+                        }
+                    })
+                    .retry()
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<Connection>() {
+                        @Override
+                        public void call(Connection connection) {
+                            saveConnection(connection);
+                            listener.onSuccess(connection);
+                        }
+                    });
+        }
     }
 
     @Override
     public void saveConnection(Connection connection) {
         String json = mGson.toJson(connection);
-        mPrinter.setConnection_json(json);
+        mPrinter.setConnectionJson(json);
         mPrinterDao.update(mPrinter);
     }
 

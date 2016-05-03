@@ -1,6 +1,5 @@
 package com.nairbspace.octoandroid.net.model;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
@@ -8,12 +7,8 @@ import java.util.List;
 
 public class Connection {
 
-    @SerializedName("current")
-    @Expose
-    private Current current;
-    @SerializedName("options")
-    @Expose
-    private Options options;
+    @SerializedName("current") private Current current;
+    @SerializedName("options") private Options options;
 
     public Current getCurrent() {
         return current;
@@ -34,18 +29,10 @@ public class Connection {
 
     public class Current {
 
-        @SerializedName("baudrate")
-        @Expose
-        private Integer baudrate;
-        @SerializedName("port")
-        @Expose
-        private String port;
-        @SerializedName("printerProfile")
-        @Expose
-        private String printerProfile;
-        @SerializedName("state")
-        @Expose
-        private String state;
+        @SerializedName("baudrate") private Integer baudrate;
+        @SerializedName("port") private String port;
+        @SerializedName("printerProfile") private String printerProfile;
+        @SerializedName("state") private String state;
 
         public Integer getBaudrate() {
             return baudrate;
@@ -83,24 +70,12 @@ public class Connection {
 
     public class Options {
 
-        @SerializedName("baudratePreference")
-        @Expose
-        private Integer baudratePreference;
-        @SerializedName("baudrates")
-        @Expose
-        private List<Integer> baudrates = new ArrayList<Integer>();
-        @SerializedName("portPreference")
-        @Expose
-        private String portPreference;
-        @SerializedName("ports")
-        @Expose
-        private List<String> ports = new ArrayList<String>();
-        @SerializedName("printerProfilePreference")
-        @Expose
-        private String printerProfilePreference;
-        @SerializedName("printerProfiles")
-        @Expose
-        private List<PrinterProfile> printerProfiles = new ArrayList<PrinterProfile>();
+        @SerializedName("baudratePreference") private Integer baudratePreference;
+        @SerializedName("baudrates") private List<Integer> baudrates = new ArrayList<Integer>();
+        @SerializedName("portPreference") private String portPreference;
+        @SerializedName("ports") private List<String> ports = new ArrayList<String>();
+        @SerializedName("printerProfilePreference") private String printerProfilePreference;
+        @SerializedName("printerProfiles") private List<PrinterProfile> printerProfiles = new ArrayList<PrinterProfile>();
 
         public Integer getBaudratePreference() {
             return baudratePreference;
@@ -153,12 +128,8 @@ public class Connection {
 
     public class PrinterProfile {
 
-        @SerializedName("id")
-        @Expose
-        private String id;
-        @SerializedName("name")
-        @Expose
-        private String name;
+        @SerializedName("id") private String id;
+        @SerializedName("name") private String name;
 
         public String getId() {
             return id;

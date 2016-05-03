@@ -24,7 +24,6 @@ import android.widget.TextView;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
-import com.nairbspace.octoandroid.presenter.AddPrinterPresenterImpl;
 
 import javax.inject.Inject;
 

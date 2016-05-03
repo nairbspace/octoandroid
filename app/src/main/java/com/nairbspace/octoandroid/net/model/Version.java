@@ -1,9 +1,11 @@
 package com.nairbspace.octoandroid.net.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Version {
 
-    private String api;
-    private String server;
+    @SerializedName("api") private String api;
+    @SerializedName("server") private String server;
 
     public String getApi() {
         return api;

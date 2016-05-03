@@ -8,7 +8,7 @@ public interface GetAccounts {
 
     interface RetrieveListener {
         void onEmpty();
-        void onSuccess();
+        void onSuccess(Printer printer);
     }
 
     interface AddAccountListener {

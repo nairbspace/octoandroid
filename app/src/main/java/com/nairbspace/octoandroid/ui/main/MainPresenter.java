@@ -1,6 +1,4 @@
-package com.nairbspace.octoandroid.presenter;
-
-import com.nairbspace.octoandroid.ui.MainScreen;
+package com.nairbspace.octoandroid.ui.main;
 
 public interface MainPresenter {
 

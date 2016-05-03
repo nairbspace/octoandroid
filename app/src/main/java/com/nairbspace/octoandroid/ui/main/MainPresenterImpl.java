@@ -1,8 +1,8 @@
-package com.nairbspace.octoandroid.presenter;
+package com.nairbspace.octoandroid.ui.main;
 
+import com.nairbspace.octoandroid.data.db.Printer;
 import com.nairbspace.octoandroid.interactor.GetAccounts;
 import com.nairbspace.octoandroid.interactor.GetAccountsImpl;
-import com.nairbspace.octoandroid.ui.MainScreen;
 
 import javax.inject.Inject;
 
@@ -31,7 +31,8 @@ public class MainPresenterImpl implements MainPresenter, GetAccounts.RetrieveLis
     }
 
     @Override
-    public void onSuccess() {
+    public void onSuccess(Printer printer) {
+        mMainScreen.updateNavHeader(printer.getName(), printer.getHost());
         mMainScreen.displaySnackBar("Success");
     }
 }

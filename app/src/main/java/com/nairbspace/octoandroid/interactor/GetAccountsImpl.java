@@ -8,12 +8,16 @@ import android.text.TextUtils;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.data.db.Printer;
+import com.nairbspace.octoandroid.data.db.PrinterDao;
+import com.nairbspace.octoandroid.data.pref.PrefManager;
 
 import javax.inject.Inject;
 
 public class GetAccountsImpl implements GetAccounts {
     @Inject AccountManager mAccountManager;
     @Inject Context mContext;
+    @Inject PrefManager mPrefManager;
+    @Inject PrinterDao mPrinterDao;
 
     @Inject
     public GetAccountsImpl() {
@@ -26,7 +30,14 @@ public class GetAccountsImpl implements GetAccounts {
         if (accounts.length == 0) {
             listener.onEmpty();
         } else {
-            listener.onSuccess();
+            // TODO need better logic if no active printer, etc.
+            long printerId = mPrefManager.getActivePrinter();
+            if (printerId != PrefManager.NO_ACTIVE_PRINTER) {
+                Printer activePrinter = mPrinterDao.queryBuilder()
+                        .where(PrinterDao.Properties.Id.eq(printerId))
+                        .unique();
+                listener.onSuccess(activePrinter);
+            }
         }
     }
 

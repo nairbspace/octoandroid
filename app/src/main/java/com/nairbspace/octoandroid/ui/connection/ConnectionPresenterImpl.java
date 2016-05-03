@@ -1,10 +1,9 @@
-package com.nairbspace.octoandroid.presenter;
+package com.nairbspace.octoandroid.ui.connection;
 
 import com.nairbspace.octoandroid.interactor.GetConnection;
 import com.nairbspace.octoandroid.interactor.GetConnectionImpl;
 import com.nairbspace.octoandroid.net.model.Connect;
 import com.nairbspace.octoandroid.net.model.Connection;
-import com.nairbspace.octoandroid.ui.ConnectionScreen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -145,6 +144,13 @@ public class ConnectionPresenterImpl implements ConnectionPresenter,
 
             mScreen.updateUiWithDefaults(defaultPortId, defaultBaudrateId, defaultPrinterNameId);
             ifFirstTime = false;
+        }
+    }
+
+    @Override
+    public void onDbSuccess(Connection connection) {
+        if (connection != null) {
+            onSuccess(connection);
         }
     }
 

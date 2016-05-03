@@ -1,6 +1,4 @@
-package com.nairbspace.octoandroid.presenter;
-
-import com.nairbspace.octoandroid.ui.add_printer.AddPrinterScreen;
+package com.nairbspace.octoandroid.ui.add_printer;
 
 public interface AddPrinterPresenter {
 

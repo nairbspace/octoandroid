@@ -1,7 +1,6 @@
-package com.nairbspace.octoandroid.presenter;
+package com.nairbspace.octoandroid.ui.connection;
 
 import com.nairbspace.octoandroid.net.model.Connect;
-import com.nairbspace.octoandroid.ui.ConnectionScreen;
 
 public interface ConnectionPresenter {
 

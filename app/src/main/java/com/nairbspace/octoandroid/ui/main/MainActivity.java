@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.ui;
+package com.nairbspace.octoandroid.ui.main;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -18,11 +18,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
-import com.nairbspace.octoandroid.presenter.MainPresenterImpl;
+import com.nairbspace.octoandroid.ui.StatusFragmentPagerAdapter;
 import com.nairbspace.octoandroid.ui.add_printer.AddPrinterActivity;
+import com.nairbspace.octoandroid.ui.connection.ConnectionFragment;
+import com.nairbspace.octoandroid.ui.status.StatusFragment;
 
 import javax.inject.Inject;
 
@@ -44,6 +47,8 @@ public class MainActivity extends AppCompatActivity
     @Bind(R.id.view_pager) ViewPager mViewPager;
     @Bind(R.id.tab_layout) TabLayout mTabLayout;
     private ActionBarDrawerToggle mToggle;
+    private TextView mPrinterNameNavTextView;
+    private TextView mPrinterIpAddressNavTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +60,9 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(mToolbar);
         mFab.setOnClickListener(this);
         mNavView.setNavigationItemSelectedListener(this);
+        View navHeaderView = mNavView.getHeaderView(0);
+        mPrinterNameNavTextView = ButterKnife.findById(navHeaderView, R.id.printer_name_nav_textview);
+        mPrinterIpAddressNavTextView = ButterKnife.findById(navHeaderView, R.id.printer_ip_address_nav_textview);
         mToggle = new ActionBarDrawerToggle(this, mDrawer, mToolbar, R.string.drawer_open, R.string.drawer_close);
         mDrawer.addDrawerListener(mToggle);
         setDrawer();
@@ -226,6 +234,12 @@ public class MainActivity extends AppCompatActivity
             }
         }
         selectStatusNav();
+    }
+
+    @Override
+    public void updateNavHeader(String printerName, String ipAddress) {
+        mPrinterNameNavTextView.setText(printerName);
+        mPrinterIpAddressNavTextView.setText(ipAddress);
     }
 
     @Override

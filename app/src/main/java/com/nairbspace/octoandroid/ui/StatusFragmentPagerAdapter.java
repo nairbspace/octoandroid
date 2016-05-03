@@ -4,6 +4,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.nairbspace.octoandroid.ui.connection.ConnectionFragment;
+import com.nairbspace.octoandroid.ui.status.StatusFragment;
+
 public class StatusFragmentPagerAdapter extends FragmentPagerAdapter {
     private static final int PAGE_COUNT =  2;
     private String tabTitles[] = new String[] { "Connection", "State" };

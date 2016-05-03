@@ -10,14 +10,15 @@ public class Printer {
     /** Not-null value. */
     private String name;
     /** Not-null value. */
-    private String api_key;
+    private String apiKey;
     /** Not-null value. */
     private String scheme;
     /** Not-null value. */
     private String host;
     private int port;
-    private String version_json;
-    private String connection_json;
+    private String versionJson;
+    private String connectionJson;
+    private String printerStateJson;
 
     public Printer() {
     }
@@ -26,15 +27,16 @@ public class Printer {
         this.id = id;
     }
 
-    public Printer(Long id, String name, String api_key, String scheme, String host, int port, String version_json, String connection_json) {
+    public Printer(Long id, String name, String apiKey, String scheme, String host, int port, String versionJson, String connectionJson, String printerStateJson) {
         this.id = id;
         this.name = name;
-        this.api_key = api_key;
+        this.apiKey = apiKey;
         this.scheme = scheme;
         this.host = host;
         this.port = port;
-        this.version_json = version_json;
-        this.connection_json = connection_json;
+        this.versionJson = versionJson;
+        this.connectionJson = connectionJson;
+        this.printerStateJson = printerStateJson;
     }
 
     public Long getId() {
@@ -56,13 +58,13 @@ public class Printer {
     }
 
     /** Not-null value. */
-    public String getApi_key() {
-        return api_key;
+    public String getApiKey() {
+        return apiKey;
     }
 
     /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setApi_key(String api_key) {
-        this.api_key = api_key;
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
     }
 
     /** Not-null value. */
@@ -93,20 +95,28 @@ public class Printer {
         this.port = port;
     }
 
-    public String getVersion_json() {
-        return version_json;
+    public String getVersionJson() {
+        return versionJson;
     }
 
-    public void setVersion_json(String version_json) {
-        this.version_json = version_json;
+    public void setVersionJson(String versionJson) {
+        this.versionJson = versionJson;
     }
 
-    public String getConnection_json() {
-        return connection_json;
+    public String getConnectionJson() {
+        return connectionJson;
     }
 
-    public void setConnection_json(String connection_json) {
-        this.connection_json = connection_json;
+    public void setConnectionJson(String connectionJson) {
+        this.connectionJson = connectionJson;
+    }
+
+    public String getPrinterStateJson() {
+        return printerStateJson;
+    }
+
+    public void setPrinterStateJson(String printerStateJson) {
+        this.printerStateJson = printerStateJson;
     }
 
 }
