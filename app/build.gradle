@@ -61,6 +61,7 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.0.0'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0' // RxJava Callback adapter
     compile 'com.squareup.okhttp3:logging-interceptor:3.2.0' // To enable logs
+    compile 'com.appunite:websockets-rxjava:4.0.1' // RxJava WebSockets
 
     // Dagger2
     compile 'com.google.dagger:dagger:2.0.2'
