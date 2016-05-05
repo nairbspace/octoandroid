@@ -1,7 +1,7 @@
 package com.nairbspace.octoandroid.interactor;
 
-import com.nairbspace.octoandroid.net.rest.model.Connect;
-import com.nairbspace.octoandroid.net.rest.model.Connection;
+import com.nairbspace.octoandroid.data.net.rest.model.Connect;
+import com.nairbspace.octoandroid.data.net.rest.model.Connection;
 
 public interface GetConnection {
 

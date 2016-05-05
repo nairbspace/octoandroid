@@ -2,9 +2,9 @@ package com.nairbspace.octoandroid.di.modules;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.nairbspace.octoandroid.net.rest.OctoApi;
-import com.nairbspace.octoandroid.net.rest.OctoApiImpl;
-import com.nairbspace.octoandroid.net.rest.OctoInterceptor;
+import com.nairbspace.octoandroid.data.net.rest.OctoApi;
+import com.nairbspace.octoandroid.data.net.rest.OctoApiImpl;
+import com.nairbspace.octoandroid.data.net.rest.OctoInterceptor;
 
 import javax.inject.Singleton;
 

@@ -4,9 +4,9 @@ import com.google.gson.Gson;
 import com.nairbspace.octoandroid.data.db.Printer;
 import com.nairbspace.octoandroid.data.db.PrinterDao;
 import com.nairbspace.octoandroid.data.pref.PrefManager;
-import com.nairbspace.octoandroid.net.rest.OctoApiImpl;
-import com.nairbspace.octoandroid.net.rest.OctoInterceptor;
-import com.nairbspace.octoandroid.net.rest.model.PrinterState;
+import com.nairbspace.octoandroid.data.net.rest.OctoApiImpl;
+import com.nairbspace.octoandroid.data.net.rest.OctoInterceptor;
+import com.nairbspace.octoandroid.data.net.rest.model.PrinterState;
 
 import javax.inject.Inject;
 

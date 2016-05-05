@@ -60,12 +60,8 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.0.1'
     apt 'com.jakewharton:butterknife-compiler:8.0.1'
 
-    // Retrofit
-    compile 'com.squareup.retrofit2:retrofit:2.0.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.0.0'
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0' // RxJava Callback adapter
-    compile 'com.squareup.okhttp3:logging-interceptor:3.2.0' // To enable logs
-    compile 'com.appunite:websockets-rxjava:4.0.1' // RxJava WebSockets
+    // RxJava WebSockets
+    compile 'com.appunite:websockets-rxjava:4.0.1'
 
     // Dagger2
     compile 'com.google.dagger:dagger:2.4'
@@ -78,9 +74,6 @@ dependencies {
     // RxJava and RxAndroid
     compile 'io.reactivex:rxandroid:1.1.0'
     compile 'io.reactivex:rxjava:1.1.3'
-
-    // GreenDAO
-    compile 'de.greenrobot:greendao:2.1.0'
 
     // Websocket
     compile 'com.koushikdutta.async:androidasync:2.1.7'

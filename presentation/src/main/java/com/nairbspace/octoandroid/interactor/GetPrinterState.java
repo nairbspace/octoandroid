@@ -1,7 +1,6 @@
 package com.nairbspace.octoandroid.interactor;
 
 import com.nairbspace.octoandroid.data.db.Printer;
-import com.nairbspace.octoandroid.net.rest.model.PrinterState;
 
 public interface GetPrinterState {
 

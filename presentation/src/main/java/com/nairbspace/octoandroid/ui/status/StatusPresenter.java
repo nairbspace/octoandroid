@@ -3,7 +3,7 @@ package com.nairbspace.octoandroid.ui.status;
 import com.nairbspace.octoandroid.data.db.Printer;
 import com.nairbspace.octoandroid.interactor.GetPrinterState;
 import com.nairbspace.octoandroid.interactor.GetPrinterStateImpl;
-import com.nairbspace.octoandroid.net.rest.model.PrinterState;
+import com.nairbspace.octoandroid.data.net.rest.model.PrinterState;
 import com.nairbspace.octoandroid.ui.EventPresenter;
 
 import javax.inject.Inject;

@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.net.rest.model;
+package com.nairbspace.octoandroid.data.net.rest.model;
 
 import com.google.gson.annotations.SerializedName;
 
