@@ -30,7 +30,7 @@ public class PrinterDao extends AbstractDao<Printer, Long> {
         public final static Property VersionJson = new Property(6, String.class, "versionJson", false, "version_json");
         public final static Property ConnectionJson = new Property(7, String.class, "connectionJson", false, "connection_json");
         public final static Property PrinterStateJson = new Property(8, String.class, "printerStateJson", false, "printer_state_json");
-    }
+    };
 
 
     public PrinterDao(DaoConfig config) {
