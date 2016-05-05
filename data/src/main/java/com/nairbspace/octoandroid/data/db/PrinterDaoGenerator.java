@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.data;
+package com.nairbspace.octoandroid.data.db;
 
 import de.greenrobot.daogenerator.DaoGenerator;
 import de.greenrobot.daogenerator.Entity;
@@ -7,7 +7,7 @@ import de.greenrobot.daogenerator.Schema;
 public class PrinterDaoGenerator {
     private static final int DB_VERSION = 1;
     private static final String DEFAULT_JAVA_PACKAGE = "com.nairbspace.octoandroid.data.db";
-    private static final String OUT_DIR = "./app/src/main/java";
+    private static final String OUT_DIR = "./data/src/main/java";
 
     public static void main(String[] args) throws Exception {
         Schema schema = new Schema(DB_VERSION, DEFAULT_JAVA_PACKAGE);
