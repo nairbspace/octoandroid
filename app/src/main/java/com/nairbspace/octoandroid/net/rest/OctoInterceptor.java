@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.net;
+package com.nairbspace.octoandroid.net.rest;
 
 import java.io.IOException;
 
@@ -19,15 +19,7 @@ public class OctoInterceptor implements Interceptor {
     private String mApiKey;
 
     @Inject
-    public static OctoInterceptor get() {
-        if (sInterceptor == null) {
-            sInterceptor = new OctoInterceptor();
-        }
-        return sInterceptor;
-    }
-
-    private OctoInterceptor() {
-        // Intentionally blank
+    public OctoInterceptor() {
     }
 
     public void setInterceptor(String scheme, String host, int port, String apiKey) {

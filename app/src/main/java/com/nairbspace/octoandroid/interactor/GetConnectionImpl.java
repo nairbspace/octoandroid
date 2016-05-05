@@ -4,10 +4,10 @@ import com.google.gson.Gson;
 import com.nairbspace.octoandroid.data.db.Printer;
 import com.nairbspace.octoandroid.data.db.PrinterDao;
 import com.nairbspace.octoandroid.data.pref.PrefManager;
-import com.nairbspace.octoandroid.net.OctoApiImpl;
-import com.nairbspace.octoandroid.net.OctoInterceptor;
-import com.nairbspace.octoandroid.net.model.Connect;
-import com.nairbspace.octoandroid.net.model.Connection;
+import com.nairbspace.octoandroid.net.rest.OctoApiImpl;
+import com.nairbspace.octoandroid.net.rest.OctoInterceptor;
+import com.nairbspace.octoandroid.net.rest.model.Connect;
+import com.nairbspace.octoandroid.net.rest.model.Connection;
 
 import java.util.concurrent.TimeUnit;
 

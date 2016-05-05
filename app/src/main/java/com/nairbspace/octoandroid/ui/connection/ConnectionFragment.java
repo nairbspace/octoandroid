@@ -18,15 +18,15 @@ import android.widget.Spinner;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
-import com.nairbspace.octoandroid.ui.Presenter;
 import com.nairbspace.octoandroid.ui.BaseViewPagerFragment;
+import com.nairbspace.octoandroid.ui.Presenter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -43,14 +43,14 @@ public class ConnectionFragment extends BaseViewPagerFragment<ConnectionScreen> 
     private OnFragmentInteractionListener mListener;
     @Inject ConnectionPresenter mPresenter;
 
-    @Bind(R.id.connect_progressbar) ProgressBar mConnectProgressBar;
-    @Bind(R.id.connect_cardview) CardView mConnectCardView;
-    @Bind(R.id.serial_port_spinner) Spinner mSerialPortSpinner;
-    @Bind(R.id.baudrate_spinner) Spinner mBaudrateSpinner;
-    @Bind(R.id.printer_profile_spinner) Spinner mPrinterProfileSpinner;
-    @Bind(R.id.connect_button) Button mConnectButton;
-    @Bind(R.id.save_connection_settings_checkbox) CheckBox mSaveConnectionSettingsCheckBox;
-    @Bind(R.id.auto_connect_checkbox) CheckBox mAutoConnectCheckBox;
+    @BindView(R.id.connect_progressbar) ProgressBar mConnectProgressBar;
+    @BindView(R.id.connect_cardview) CardView mConnectCardView;
+    @BindView(R.id.serial_port_spinner) Spinner mSerialPortSpinner;
+    @BindView(R.id.baudrate_spinner) Spinner mBaudrateSpinner;
+    @BindView(R.id.printer_profile_spinner) Spinner mPrinterProfileSpinner;
+    @BindView(R.id.connect_button) Button mConnectButton;
+    @BindView(R.id.save_connection_settings_checkbox) CheckBox mSaveConnectionSettingsCheckBox;
+    @BindView(R.id.auto_connect_checkbox) CheckBox mAutoConnectCheckBox;
 
     private int mDefaultSpinnerId = android.R.layout.simple_spinner_dropdown_item;
 

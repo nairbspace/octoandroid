@@ -13,12 +13,12 @@ import android.widget.TextView;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
-import com.nairbspace.octoandroid.ui.Presenter;
 import com.nairbspace.octoandroid.ui.BaseViewPagerFragment;
+import com.nairbspace.octoandroid.ui.Presenter;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class StatusFragment extends BaseViewPagerFragment<StatusScreen> implements StatusScreen {
@@ -30,9 +30,7 @@ public class StatusFragment extends BaseViewPagerFragment<StatusScreen> implemen
 
     @Inject StatusPresenter mPresenter;
 
-    @Bind(R.id.machine_state_input) TextView mMachineStateTextView;
-    @Bind(R.id.octoprint_version_input) TextView mOctoPrintVersionTextView;
-    @Bind(R.id.api_version_input) TextView mApiVersionTextView;
+    @BindView(R.id.machine_state_textview) TextView mMachineStateTextView;
 
     private OnFragmentInteractionListener mListener;
 
@@ -105,12 +103,10 @@ public class StatusFragment extends BaseViewPagerFragment<StatusScreen> implemen
 
     @Override
     public void updateOctoPrintVersion(String octoPrintVersion) {
-        mOctoPrintVersionTextView.setText(octoPrintVersion);
     }
 
     @Override
     public void updateApiVersion(String apiVersion) {
-        mApiVersionTextView.setText(apiVersion);
     }
 
     @NonNull

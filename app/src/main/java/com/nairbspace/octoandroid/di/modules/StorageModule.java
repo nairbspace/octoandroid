@@ -31,7 +31,7 @@ public class StorageModule {
     @Provides
     @Singleton
     PrefManager providePrefManager(SharedPreferences sp) {
-        return PrefManager.get(sp);
+        return new PrefManager(sp);
     }
 
     @Provides

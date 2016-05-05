@@ -32,13 +32,12 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/machine_state_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Machine State: "/>
 
                 <TextView
-                    android:id="@+id/machine_state_input"
+                    android:id="@+id/machine_state_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="Disconnected"/>
@@ -50,16 +49,15 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/octoprint_version_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="OctoPrint Version: "/>
+                    android:text="File: "/>
 
                 <TextView
                     android:id="@+id/octoprint_version_input"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="0.2.1"/>
+                    tools:text="octoprint.gcode"/>
             </LinearLayout>
 
             <LinearLayout
@@ -68,16 +66,78 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/api_version_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="API Version: "/>
+                    android:text="Print Time: "/>
 
                 <TextView
-                    android:id="@+id/api_version_input"
+                    android:id="@+id/print_time_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="0.1.1"/>
+                    tools:text="10:10"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Print Time Left: "/>
+
+                <TextView
+                    android:id="@+id/print_time_left_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="01:01"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Printed: "/>
+
+                <TextView
+                    android:id="@+id/printed_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="10%"/>
+                <!--TODO check what "Printed" represents -->
+            </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/printing_progressbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                tools:progress="50"/>
+            <!--TODO should separate this into fragment that is visible all the time-->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@android:drawable/ic_media_pause"
+                    android:text="Pause"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cancel"
+                    android:drawableStart="@android:drawable/ic_menu_close_clear_cancel"/>
             </LinearLayout>
 
         </LinearLayout>

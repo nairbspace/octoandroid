@@ -10,6 +10,7 @@ import com.nairbspace.octoandroid.di.components.DaggerAppComponent;
 import com.nairbspace.octoandroid.di.modules.AppModule;
 import com.nairbspace.octoandroid.di.modules.NetworkModule;
 import com.nairbspace.octoandroid.di.modules.StorageModule;
+import com.squareup.leakcanary.LeakCanary;
 
 import timber.log.Timber;
 
@@ -24,13 +25,24 @@ public class SetupApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        initializeTimber();
+        initializeLeakCanary();
+        initializeInjector();
+    }
 
+    private void initializeTimber() {
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         } else {
             Timber.plant(new CrashReportingTree());
         }
+    }
 
+    private void initializeLeakCanary() {
+        LeakCanary.install(this);
+    }
+
+    private void initializeInjector() {
         mAppComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
                 .networkModule(new NetworkModule())

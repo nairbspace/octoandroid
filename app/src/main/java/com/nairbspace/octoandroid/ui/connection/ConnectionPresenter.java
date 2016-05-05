@@ -2,8 +2,8 @@ package com.nairbspace.octoandroid.ui.connection;
 
 import com.nairbspace.octoandroid.interactor.GetConnection;
 import com.nairbspace.octoandroid.interactor.GetConnectionImpl;
-import com.nairbspace.octoandroid.net.model.Connect;
-import com.nairbspace.octoandroid.net.model.Connection;
+import com.nairbspace.octoandroid.net.rest.model.Connect;
+import com.nairbspace.octoandroid.net.rest.model.Connection;
 import com.nairbspace.octoandroid.ui.Presenter;
 
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ public class ConnectionPresenter extends Presenter<ConnectionScreen> implements
 
     @Override
     protected void isVisibleToUser() {
-        mGetConnection.pollConnection(this);
+//        mGetConnection.pollConnection(this);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.websocket.model;
+package com.nairbspace.octoandroid.net.websocket.model;
 
 import com.google.gson.annotations.SerializedName;
 

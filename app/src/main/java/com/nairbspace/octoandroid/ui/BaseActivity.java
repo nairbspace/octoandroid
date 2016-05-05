@@ -5,7 +5,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
+import javax.inject.Inject;
+
 public abstract class BaseActivity<T> extends AppCompatActivity {
+
+    @Inject Navigator mNavigator;
 
     @NonNull protected abstract Presenter setPresenter();
 
@@ -21,7 +25,7 @@ public abstract class BaseActivity<T> extends AppCompatActivity {
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        setPresenter().onInitialize(this);
+        setPresenter().onInitialize(setScreen());
     }
 
     protected void onResume() {
@@ -46,5 +50,9 @@ public abstract class BaseActivity<T> extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         setPresenter().onDestroy(setScreen());
+    }
+
+    public Navigator getNavigator() {
+        return mNavigator;
     }
 }

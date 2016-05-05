@@ -24,12 +24,12 @@ import android.widget.TextView;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
-import com.nairbspace.octoandroid.ui.Presenter;
 import com.nairbspace.octoandroid.ui.BaseActivity;
+import com.nairbspace.octoandroid.ui.Presenter;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import timber.log.Timber;
@@ -39,18 +39,16 @@ public class AddPrinterActivity extends BaseActivity<AddPrinterScreen> implement
         View.OnFocusChangeListener, View.OnClickListener,
         QrDialogFragment.OnFragmentInteractionListener {
 
-    public static final int REQUEST_CODE = 0;
-
     @Inject AddPrinterPresenter mPresenter;
 
-    @Bind(R.id.toolbar) Toolbar mToolbar;
-    @Bind(R.id.add_printer_form) ScrollView mScrollView;
-    @Bind(R.id.add_printer_progress) ProgressBar mProgressBar;
-    @Bind(R.id.printer_name_edit_text) TextInputEditText mPrinterNameEditText;
-    @Bind(R.id.ip_address_edit_text) TextInputEditText mIpAddressEditText;
-    @Bind(R.id.port_edit_text) TextInputEditText mPortEditText;
-    @Bind(R.id.api_key_edit_text) TextInputEditText mApiKeyEditText;
-    @Bind(R.id.ssl_checkbox) CheckBox mSslCheckBox;
+    @BindView(R.id.toolbar) Toolbar mToolbar;
+    @BindView(R.id.add_printer_form) ScrollView mScrollView;
+    @BindView(R.id.add_printer_progress) ProgressBar mProgressBar;
+    @BindView(R.id.printer_name_edit_text) TextInputEditText mPrinterNameEditText;
+    @BindView(R.id.ip_address_edit_text) TextInputEditText mIpAddressEditText;
+    @BindView(R.id.port_edit_text) TextInputEditText mPortEditText;
+    @BindView(R.id.api_key_edit_text) TextInputEditText mApiKeyEditText;
+    @BindView(R.id.ssl_checkbox) CheckBox mSslCheckBox;
 
     /** Intent used to start activity, extras can be null if started within application **/
     public static Intent newIntent(Context context) {

@@ -3,13 +3,12 @@ package com.nairbspace.octoandroid.ui.status;
 import com.nairbspace.octoandroid.data.db.Printer;
 import com.nairbspace.octoandroid.interactor.GetPrinterState;
 import com.nairbspace.octoandroid.interactor.GetPrinterStateImpl;
-import com.nairbspace.octoandroid.net.model.PrinterState;
-import com.nairbspace.octoandroid.net.model.Version;
-import com.nairbspace.octoandroid.ui.Presenter;
+import com.nairbspace.octoandroid.net.rest.model.PrinterState;
+import com.nairbspace.octoandroid.ui.EventPresenter;
 
 import javax.inject.Inject;
 
-public class StatusPresenter extends Presenter<StatusScreen>
+public class StatusPresenter extends EventPresenter<StatusScreen, String>
         implements GetPrinterState.GetPrinterStateFinishedListener {
 
     @Inject GetPrinterStateImpl mGetPrinterState;
@@ -20,13 +19,19 @@ public class StatusPresenter extends Presenter<StatusScreen>
     }
 
     @Override
+    protected void onInitialize(StatusScreen statusScreen) {
+        mScreen = statusScreen;
+        mGetPrinterState.getDataFromDb(this);
+    }
+
+    @Override
     public void onSuccessDb(Printer printer) {
-        if (printer.getVersionJson() != null) {
-            String versionJson = printer.getVersionJson();
-            Version version = mGetPrinterState.convertJsonToGson(versionJson, Version.class);
-            mScreen.updateOctoPrintVersion(version.getServer());
-            mScreen.updateApiVersion(version.getApi());
-        }
+//        if (printer.getVersionJson() != null) {
+//            String versionJson = printer.getVersionJson();
+//            Version version = mGetPrinterState.convertJsonToGson(versionJson, Version.class);
+//            mScreen.updateOctoPrintVersion(version.getServer());
+//            mScreen.updateApiVersion(version.getApi());
+//        }
         if (printer.getPrinterStateJson() != null) {
             String printerStateJson = printer.getPrinterStateJson();
             PrinterState printerState = mGetPrinterState
@@ -38,29 +43,7 @@ public class StatusPresenter extends Presenter<StatusScreen>
     }
 
     @Override
-    public void onPollSuccess(PrinterState printerState) {
-        try {
-            PrinterState.State state = printerState.getState();
-            String machineState = state.getText();
-            mScreen.updateMachineState(machineState);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    protected void onInitialize(StatusScreen statusScreen) {
-        mScreen = statusScreen;
-        mGetPrinterState.getDataFromDb(this);
-    }
-
-    @Override
-    protected void isVisibleToUser() {
-        mGetPrinterState.pollPrinterState(this);
-    }
-
-    @Override
-    protected void isNotVisibleToUser() {
-        mGetPrinterState.unsubscribePollSubscription();
+    protected void onEvent(String s) {
+        mScreen.updateMachineState(s);
     }
 }

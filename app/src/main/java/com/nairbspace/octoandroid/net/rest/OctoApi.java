@@ -1,9 +1,9 @@
-package com.nairbspace.octoandroid.net;
+package com.nairbspace.octoandroid.net.rest;
 
-import com.nairbspace.octoandroid.net.model.Connect;
-import com.nairbspace.octoandroid.net.model.Connection;
-import com.nairbspace.octoandroid.net.model.PrinterState;
-import com.nairbspace.octoandroid.net.model.Version;
+import com.nairbspace.octoandroid.net.rest.model.Connect;
+import com.nairbspace.octoandroid.net.rest.model.Connection;
+import com.nairbspace.octoandroid.net.rest.model.PrinterState;
+import com.nairbspace.octoandroid.net.rest.model.Version;
 
 import retrofit2.http.Body;
 import retrofit2.http.GET;

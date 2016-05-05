@@ -54,7 +54,8 @@ dependencies {
     compile 'com.google.android.gms:play-services-vision:8.4.0'
 
     // Butterknife
-    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.jakewharton:butterknife:8.0.1'
+    apt 'com.jakewharton:butterknife-compiler:8.0.1'
 
     // Retrofit
     compile 'com.squareup.retrofit2:retrofit:2.0.0'
@@ -64,8 +65,8 @@ dependencies {
     compile 'com.appunite:websockets-rxjava:4.0.1' // RxJava WebSockets
 
     // Dagger2
-    compile 'com.google.dagger:dagger:2.0.2'
-    apt 'com.google.dagger:dagger-compiler:2.0.2'
+    compile 'com.google.dagger:dagger:2.4'
+    apt 'com.google.dagger:dagger-compiler:2.4'
     provided 'javax.annotation:jsr250-api:1.0'
 
     // Timber
@@ -77,4 +78,15 @@ dependencies {
 
     // GreenDAO
     compile 'de.greenrobot:greendao:2.1.0'
+
+    // Websocket
+    compile 'com.koushikdutta.async:androidasync:2.1.7'
+
+    // EventBus
+    compile 'org.greenrobot:eventbus:3.0.0'
+
+    // LeakCanary
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
 }

@@ -25,7 +25,7 @@ import com.nairbspace.octoandroid.R;
 
 import java.io.IOException;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -45,9 +45,9 @@ public class QrDialogFragment extends DialogFragment implements SurfaceHolder.Ca
     private boolean isPermissionDenied;
     private String mApiKey;
 
-    @Bind(R.id.camera_view) SurfaceView mCameraView;
-    @Bind(R.id.qr_close) ImageView mCloseButton;
-    @Bind(R.id.qr_frame) ImageView mQrFrame;
+    @BindView(R.id.camera_view) SurfaceView mCameraView;
+    @BindView(R.id.qr_close) ImageView mCloseButton;
+    @BindView(R.id.qr_frame) ImageView mQrFrame;
 
     private OnFragmentInteractionListener mListener;
 

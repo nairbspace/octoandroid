@@ -22,16 +22,15 @@ import android.widget.TextView;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
-import com.nairbspace.octoandroid.ui.Presenter;
 import com.nairbspace.octoandroid.ui.BaseActivity;
+import com.nairbspace.octoandroid.ui.Presenter;
 import com.nairbspace.octoandroid.ui.add_printer.StatusFragmentPagerAdapter;
-import com.nairbspace.octoandroid.ui.add_printer.AddPrinterActivity;
 import com.nairbspace.octoandroid.ui.connection.ConnectionFragment;
 import com.nairbspace.octoandroid.ui.status.StatusFragment;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
@@ -42,12 +41,12 @@ public class MainActivity extends BaseActivity<MainScreen>
 
     @Inject MainPresenter mPresenter;
 
-    @Bind(R.id.toolbar) Toolbar mToolbar;
-    @Bind(R.id.fab) FloatingActionButton mFab;
-    @Bind(R.id.drawer_layout) DrawerLayout mDrawer;
-    @Bind(R.id.nav_view) NavigationView mNavView;
-    @Bind(R.id.view_pager) ViewPager mViewPager;
-    @Bind(R.id.tab_layout) TabLayout mTabLayout;
+    @BindView(R.id.toolbar) Toolbar mToolbar;
+    @BindView(R.id.fab) FloatingActionButton mFab;
+    @BindView(R.id.drawer_layout) DrawerLayout mDrawer;
+    @BindView(R.id.nav_view) NavigationView mNavView;
+    @BindView(R.id.view_pager) ViewPager mViewPager;
+    @BindView(R.id.tab_layout) TabLayout mTabLayout;
     private ActionBarDrawerToggle mToggle;
     private TextView mPrinterNameNavTextView;
     private TextView mPrinterIpAddressNavTextView;
@@ -68,6 +67,7 @@ public class MainActivity extends BaseActivity<MainScreen>
         mDrawer.addDrawerListener(mToggle);
         setDrawer();
         inflateStatusAdapter();
+        getNavigator().startWebsocketService(this);
     }
 
     @Override
@@ -174,15 +174,16 @@ public class MainActivity extends BaseActivity<MainScreen>
             return;
         }
 
-        if (requestCode == AddPrinterActivity.REQUEST_CODE) {
+        if (requestCode == getNavigator().getAddPrinterRequestCode()) { // TODO need to decide if going to implement this way.
             mPresenter.getAccounts();
         } // TODO Need response if user decides to not login
     }
 
     @Override
     public void navigateToAddPrinterActivity() {
-        Intent i = AddPrinterActivity.newIntent(this);
-        startActivityForResult(i, AddPrinterActivity.REQUEST_CODE);
+//        Intent i = AddPrinterActivity.newIntent(this);
+//        startActivityForResult(i, AddPrinterActivity.REQUEST_CODE);
+        getNavigator().navigateToAddPrinterActivityForResult(this);
     }
 
     @Override

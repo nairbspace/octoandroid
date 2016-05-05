@@ -1,10 +1,11 @@
-package com.nairbspace.octoandroid.websocket.model;
+package com.nairbspace.octoandroid.net.websocket.model;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class Current {
+/** Exact copy of Websocket Current class. */ // TODO clean up redudancy
+public class History {
 
     @SerializedName("state") private State state;
     @SerializedName("job") private Job job;
@@ -14,12 +15,20 @@ public class Current {
     @SerializedName("temps") private List<Temps> temps;
     @SerializedName("logs") private List<String> logs;
     @SerializedName("messages") private List<String> messages;
-    @SerializedName("serverTime") private Long serverTime; // Pretty sure unix, not in doc
-    @SerializedName("busyFiles") private BusyFiles busyFiles; // Not in docs
+    @SerializedName("serverTime") private Float serverTime; // Pretty sure unix, not in doc
+    @SerializedName("busyFiles") private List<BusyFiles> busyFiles; // Not in docs
+
+    public State getState() {
+        return state;
+    }
 
     public class State {
         @SerializedName("text") private String text;
         @SerializedName("flags") private Flags flags;
+
+        public String getText() {
+            return text;
+        }
 
         public class Flags {
             @SerializedName("operational") private Boolean operational;
