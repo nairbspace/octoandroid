@@ -1,5 +1,24 @@
 apply plugin: 'java'
 
+configurations {
+    provided
+}
+
+//noinspection GroovyAssignabilityCheck
+sourceSets {
+    main {
+        compileClasspath += configurations.provided //TODO don't know how this works
+    }
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    // Dagger2
+    compile 'com.google.dagger:dagger:2.4'
+    provided 'com.google.dagger:dagger-compiler:2.4'
+    provided 'javax.annotation:jsr250-api:1.0'
+
+    // RxJava
+    compile 'io.reactivex:rxjava:1.1.3'
 }

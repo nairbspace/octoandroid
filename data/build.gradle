@@ -20,25 +20,24 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-
+    compile project(':domain')
     // GreenDAO
     compile 'de.greenrobot:greendao-generator:2.1.0'
     compile 'de.greenrobot:greendao:2.1.0'
-
     // Dagger2
     compile 'com.google.dagger:dagger:2.4'
     apt 'com.google.dagger:dagger-compiler:2.4'
     provided 'javax.annotation:jsr250-api:1.0'
-
     // RxJava and RxAndroid
     compile 'io.reactivex:rxandroid:1.1.0'
     compile 'io.reactivex:rxjava:1.1.3'
-
     // Retrofit
     compile 'com.squareup.retrofit2:retrofit:2.0.0'
     compile 'com.squareup.retrofit2:converter-gson:2.0.0'
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0' // RxJava Callback adapter
-    compile 'com.squareup.okhttp3:logging-interceptor:3.2.0' // To enable logs
+    // Retrofit RxJava Callback adapter
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0'
+    // OkHttp Logs
+    compile 'com.squareup.okhttp3:logging-interceptor:3.2.0'
 }
