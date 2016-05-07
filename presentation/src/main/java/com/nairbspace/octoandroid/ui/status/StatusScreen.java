@@ -6,7 +6,7 @@ public interface StatusScreen {
 
     void updateMachineState(String machineState);
 
-    void updateOctoPrintVersion(String octoPrintVersion);
+    void updateFileName(String fileName);
 
-    void updateApiVersion(String apiVersion);
+    void updateTime(String time);
 }

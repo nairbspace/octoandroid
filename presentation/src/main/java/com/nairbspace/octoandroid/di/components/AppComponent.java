@@ -1,6 +1,6 @@
 package com.nairbspace.octoandroid.di.components;
 
-import com.nairbspace.octoandroid.data.account_manager.Authenticator;
+import com.nairbspace.octoandroid.account_manager.Authenticator;
 import com.nairbspace.octoandroid.di.modules.AppModule;
 import com.nairbspace.octoandroid.di.modules.NetworkModule;
 import com.nairbspace.octoandroid.di.modules.StorageModule;

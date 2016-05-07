@@ -12,7 +12,6 @@ import okhttp3.Response;
 
 @Singleton
 public class OctoInterceptor implements Interceptor {
-    private static OctoInterceptor sInterceptor;
     private String mScheme;
     private String mHost;
     private int mPort;

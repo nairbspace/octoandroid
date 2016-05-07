@@ -13,6 +13,7 @@ import com.nairbspace.octoandroid.app.SetupApplication;
 import com.nairbspace.octoandroid.data.db.Printer;
 import com.nairbspace.octoandroid.data.db.PrinterDao;
 import com.nairbspace.octoandroid.data.pref.PrefManager;
+import com.nairbspace.octoandroid.net.websocket.model.CurrentHistory;
 import com.nairbspace.octoandroid.net.websocket.model.WebsocketObj;
 
 import org.greenrobot.eventbus.EventBus;
@@ -94,20 +95,44 @@ public class WebsocketService extends Service
             mWebsocketObj = mGson.fromJson(s, WebsocketObj.class);
             // TODO emit data via Eventbus
 
-            if (mWebsocketObj.getCurrent().getState().getText() != null) {
-                final String machineStatus = mWebsocketObj.getCurrent().getState().getText();
-                Timber.d(machineStatus);
+            CurrentHistory currentHistory = mWebsocketObj.current();
+            String[] array = new String[3];
+            if (currentHistory.state().text() != null &&
+                    currentHistory.job().file().name() != null &&
+                    currentHistory.progress().printTime() != null) {
+                array[0] = currentHistory.state().text();
+                array[1] = currentHistory.job().file().name();
+                array[2] = currentHistory.progress().printTime().toString();
 
-                Observable.just(machineStatus)
+                Timber.d(array[0]);
+                Timber.d(array[1]);
+                Timber.d(array[2]);
+
+
+                Observable.just(array)
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Action1<String>() {
+                        .subscribe(new Action1<String[]>() {
                             @Override
-                            public void call(String s) {
-                                mEventBus.post(s);
+                            public void call(String[] strings) {
+                                mEventBus.post(strings);
                             }
                         });
-
             }
+
+
+//            if (mWebsocketObj.getCurrent().getState().getText() != null) {
+//                final String machineStatus = mWebsocketObj.getCurrent().getState().getText();
+//                Timber.d(machineStatus);
+//
+//                Observable.just(machineStatus)
+//                        .observeOn(AndroidSchedulers.mainThread())
+//                        .subscribe(new Action1<String>() {
+//                            @Override
+//                            public void call(String s) {
+//                                mEventBus.post(s);
+//                            }
+//                        });
+//            }
         } catch (Exception e) {
             e.printStackTrace();
         }

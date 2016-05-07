@@ -1,14 +1,14 @@
 package com.nairbspace.octoandroid.ui.status;
 
 import com.nairbspace.octoandroid.data.db.Printer;
+import com.nairbspace.octoandroid.data.net.rest.model.PrinterState;
 import com.nairbspace.octoandroid.interactor.GetPrinterState;
 import com.nairbspace.octoandroid.interactor.GetPrinterStateImpl;
-import com.nairbspace.octoandroid.data.net.rest.model.PrinterState;
 import com.nairbspace.octoandroid.ui.EventPresenter;
 
 import javax.inject.Inject;
 
-public class StatusPresenter extends EventPresenter<StatusScreen, String>
+public class StatusPresenter extends EventPresenter<StatusScreen, String[]>
         implements GetPrinterState.GetPrinterStateFinishedListener {
 
     @Inject GetPrinterStateImpl mGetPrinterState;
@@ -29,21 +29,23 @@ public class StatusPresenter extends EventPresenter<StatusScreen, String>
 //        if (printer.getVersionJson() != null) {
 //            String versionJson = printer.getVersionJson();
 //            Version version = mGetPrinterState.convertJsonToGson(versionJson, Version.class);
-//            mScreen.updateOctoPrintVersion(version.getServer());
-//            mScreen.updateApiVersion(version.getApi());
+//            mScreen.updateFileName(version.getServer());
+//            mScreen.updateTime(version.getApi());
 //        }
         if (printer.getPrinterStateJson() != null) {
             String printerStateJson = printer.getPrinterStateJson();
             PrinterState printerState = mGetPrinterState
                     .convertJsonToGson(printerStateJson, PrinterState.class);
-            if (printerState.getState() != null) {
-                mScreen.updateMachineState(printerState.getState().getText());
+            if (printerState.state() != null) {
+                mScreen.updateMachineState(printerState.state().text());
             }
         }
     }
 
     @Override
-    protected void onEvent(String s) {
-        mScreen.updateMachineState(s);
+    protected void onEvent(String[] strings) {
+        mScreen.updateMachineState(strings[0]);
+        mScreen.updateFileName(strings[1]);
+        mScreen.updateTime(strings[2]);
     }
 }

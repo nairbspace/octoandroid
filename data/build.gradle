@@ -40,4 +40,8 @@ dependencies {
     compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0'
     // OkHttp Logs
     compile 'com.squareup.okhttp3:logging-interceptor:3.2.0'
+    // AutoValue
+    compile 'com.google.auto.value:auto-value:1.2'
+    apt 'com.google.auto.value:auto-value:1.2'
+    apt 'com.ryanharter.auto.value:auto-value-gson:0.2.5'
 }

@@ -31,6 +31,8 @@ public class StatusFragment extends BaseViewPagerFragment<StatusScreen> implemen
     @Inject StatusPresenter mPresenter;
 
     @BindView(R.id.machine_state_textview) TextView mMachineStateTextView;
+    @BindView(R.id.file_textview) TextView mFileTextview;
+    @BindView(R.id.print_time_textview) TextView mPrintTimeTextView;
 
     private OnFragmentInteractionListener mListener;
 
@@ -92,8 +94,8 @@ public class StatusFragment extends BaseViewPagerFragment<StatusScreen> implemen
     @Override
     public void updateUI(String machineState, String octoPrintVersion, String apiVersion) {
         updateMachineState(machineState);
-        updateOctoPrintVersion(octoPrintVersion);
-        updateApiVersion(apiVersion);
+        updateFileName(octoPrintVersion);
+        updateTime(apiVersion);
     }
 
     @Override
@@ -102,11 +104,13 @@ public class StatusFragment extends BaseViewPagerFragment<StatusScreen> implemen
     }
 
     @Override
-    public void updateOctoPrintVersion(String octoPrintVersion) {
+    public void updateFileName(String fileName) {
+        mFileTextview.setText(fileName);
     }
 
     @Override
-    public void updateApiVersion(String apiVersion) {
+    public void updateTime(String time) {
+        mPrintTimeTextView.setText(time);
     }
 
     @NonNull

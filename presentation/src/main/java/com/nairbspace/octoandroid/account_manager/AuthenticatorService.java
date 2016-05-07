@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.data.account_manager;
+package com.nairbspace.octoandroid.account_manager;
 
 import android.app.Service;
 import android.content.Intent;

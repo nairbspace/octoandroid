@@ -1,9 +1,9 @@
 package com.nairbspace.octoandroid.ui.connection;
 
-import com.nairbspace.octoandroid.interactor.GetConnection;
-import com.nairbspace.octoandroid.interactor.GetConnectionImpl;
 import com.nairbspace.octoandroid.data.net.rest.model.Connect;
 import com.nairbspace.octoandroid.data.net.rest.model.Connection;
+import com.nairbspace.octoandroid.interactor.GetConnection;
+import com.nairbspace.octoandroid.interactor.GetConnectionImpl;
 import com.nairbspace.octoandroid.ui.Presenter;
 
 import java.util.ArrayList;
@@ -51,20 +51,20 @@ public class ConnectionPresenter extends Presenter<ConnectionScreen> implements
 
         mClickedCommand = connectButtonText.toLowerCase();
 
-        Connection.Options options = mConnection.getOptions();
-        String port = options.getPorts().get(portPosition);
-        int baudrate = options.getBaudrates().get(baudratePosition);
-        String printerProfileId = options.getPrinterProfiles().get(printerProfileNamePosition).getId();
+        Connection.Options options = mConnection.options();
+        String port = options.ports().get(portPosition);
+        int baudrate = options.baudrates().get(baudratePosition);
+        String printerProfileId = options.printerProfiles().get(printerProfileNamePosition).id();
 
-        Connect connect = new Connect(mClickedCommand);
-        if (mClickedCommand.equals(Connect.CONNECT)) {
-            connect.setPort(port);
-            connect.setBaudrate(baudrate);
-            connect.setPrinterProfile(printerProfileId);
-            connect.setSave(isSaveConnectionSettingsChecked);
-            connect.setAutoconnect(isAutoConnectChecked);
+        Connect.Builder builder = Connect.builder().command(mClickedCommand);
+        if (mClickedCommand.equals(Connect.COMMAND_CONNECT)) {
+            builder.port(port)
+                    .baudrate(baudrate)
+                    .printerProfile(printerProfileId)
+                    .save(isSaveConnectionSettingsChecked)
+                    .autoconnect(isAutoConnectChecked);
+            postConnect(builder.build());
         }
-        postConnect(connect);
     }
 
     @Override
@@ -81,8 +81,8 @@ public class ConnectionPresenter extends Presenter<ConnectionScreen> implements
     public void onSuccess(Connection connection) {
         mConnection = connection;
 
-        Connection.Current current = mConnection.getCurrent();
-        String state = current.getState();
+        Connection.Current current = mConnection.current();
+        String state = current.state();
         boolean isNotConnected = state.equals("Closed");
 
         if (mClickedCommand != null) { // TODO Clean up this logic for onRotate
@@ -98,36 +98,36 @@ public class ConnectionPresenter extends Presenter<ConnectionScreen> implements
             mClickedCommand = null;
         }
 
-        Connection.Options options = mConnection.getOptions();
-        List<String> ports = options.getPorts();
+        Connection.Options options = mConnection.options();
+        List<String> ports = options.ports();
 
-        List<Integer> baudrates = options.getBaudrates();
+        List<Integer> baudrates = options.baudrates();
 
-        List<Connection.PrinterProfile> printerProfiles = options.getPrinterProfiles();
+        List<Connection.PrinterProfile> printerProfiles = options.printerProfiles();
         List<String> printerProfileNames = new ArrayList<>();
         for (Connection.PrinterProfile printerProfile : printerProfiles) {
-            printerProfileNames.add(printerProfile.getName());
+            printerProfileNames.add(printerProfile.name());
         }
         mScreen.updateUI(ports, baudrates, printerProfileNames, isNotConnected);
 
         if (ifFirstTime) { // TODO need better logic so it doesn't check everytime
             int defaultPortId = 0;
             for (int i = 0; i < ports.size(); i++) {
-                if (ports.get(i).equals(options.getPortPreference())) {
+                if (ports.get(i).equals(options.portPreference())) {
                     defaultPortId = i;
                 }
             }
 
             int defaultBaudrateId = 0;
             for (int i = 0; i < baudrates.size(); i++) {
-                if (baudrates.get(i).equals(options.getBaudratePreference())) {
+                if (baudrates.get(i).equals(options.baudratePreference())) {
                     defaultBaudrateId = i;
                 }
             }
 
             int defaultPrinterNameId = 0;
             for(int i =0; i<printerProfileNames.size(); i++) {
-                if (printerProfileNames.get(i).equals(options.getPrinterProfilePreference())) {
+                if (printerProfileNames.get(i).equals(options.printerProfilePreference())) {
                     defaultPrinterNameId = i;
                 }
             }

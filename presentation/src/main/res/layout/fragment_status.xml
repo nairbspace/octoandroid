@@ -54,7 +54,7 @@
                     android:text="File: "/>
 
                 <TextView
-                    android:id="@+id/octoprint_version_input"
+                    android:id="@+id/file_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="octoprint.gcode"/>

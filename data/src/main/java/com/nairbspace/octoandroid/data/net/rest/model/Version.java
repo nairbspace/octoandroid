@@ -1,17 +1,10 @@
 package com.nairbspace.octoandroid.data.net.rest.model;
 
+import com.google.auto.value.AutoValue;
 import com.google.gson.annotations.SerializedName;
 
-public class Version {
-
-    @SerializedName("api") private String api;
-    @SerializedName("server") private String server;
-
-    public String getApi() {
-        return api;
-    }
-
-    public String getServer() {
-        return server;
-    }
+@AutoValue
+public abstract class Version {
+    @SerializedName("api") public abstract String api();
+    @SerializedName("server") public abstract String server();
 }

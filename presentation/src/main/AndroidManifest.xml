@@ -44,7 +44,7 @@
 
         <!-- Services -->
         <!-- Service needed for Account Manager -->
-        <service android:name=".data.account_manager.AuthenticatorService">
+        <service android:name=".account_manager.AuthenticatorService">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator"/>
             </intent-filter>
