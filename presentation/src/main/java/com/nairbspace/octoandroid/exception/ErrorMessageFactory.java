@@ -23,7 +23,7 @@ public class ErrorMessageFactory {
         return message;
     }
 
-    public static boolean isThereActivePrinter(Exception exception) {
-        return !(exception instanceof NoActivePrinterException);
+    public static boolean isThereNoActivePrinter(Exception exception) {
+        return (exception instanceof NoActivePrinterException);
     }
 }

@@ -10,9 +10,13 @@ import com.nairbspace.octoandroid.data.exception.PrinterDataNotFoundException;
 import com.nairbspace.octoandroid.data.pref.PrefManager;
 import com.nairbspace.octoandroid.domain.executor.ThreadExecutor;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import rx.Observable;
 import rx.Subscriber;
 
+@Singleton
 public class PrinterCacheImpl implements PrinterCache {
 
     private final Context mContext;
@@ -20,6 +24,7 @@ public class PrinterCacheImpl implements PrinterCache {
     private final ThreadExecutor mThreadExecutor;
     private final PrefManager mPrefManager;
 
+    @Inject
     public PrinterCacheImpl(@NonNull Context context,
                             @NonNull PrinterDbEntityDao printerDbEntityDao,
                             @NonNull ThreadExecutor threadExecutor,

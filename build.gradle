@@ -12,6 +12,7 @@ buildscript {
 
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8' // Dagger2
         classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1' // Hugo
+        classpath "com.fernandocejas.frodo:frodo-plugin:0.8.2" // Frodo (RxLogger)
     }
 }
 

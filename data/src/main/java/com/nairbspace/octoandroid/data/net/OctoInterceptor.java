@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.data.net.rest;
+package com.nairbspace.octoandroid.data.net;
 
 import java.io.IOException;
 

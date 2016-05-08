@@ -1,12 +1,18 @@
-package com.nairbspace.octoandroid.data.entity.mapper;
+package com.nairbspace.octoandroid.data.db.mapper;
 
 import android.support.annotation.NonNull;
 
 import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
 import com.nairbspace.octoandroid.domain.Printer;
 
-public class PrinterEntityDataMapper {
-    public PrinterEntityDataMapper() {
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
+public class PrinterDbEntityDataMapper {
+
+    @Inject
+    public PrinterDbEntityDataMapper() {
     }
 
     public Printer transform(@NonNull PrinterDbEntity printerDbEntity) {

@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt' // Dagger2
 apply plugin: 'com.jakewharton.hugo' // Hugo
+apply plugin: 'com.fernandocejas.frodo' // Frodo RxLogger
 
 android {
 

@@ -6,8 +6,8 @@ import com.nairbspace.octoandroid.data.db.PrinterDbEntityDao;
 import com.nairbspace.octoandroid.data.entity.ConnectEntity;
 import com.nairbspace.octoandroid.data.entity.ConnectionEntity;
 import com.nairbspace.octoandroid.data.pref.PrefManager;
-import com.nairbspace.octoandroid.data.net.rest.OctoApiImpl;
-import com.nairbspace.octoandroid.data.net.rest.OctoInterceptor;
+import com.nairbspace.octoandroid.data.net.OctoApiImpl;
+import com.nairbspace.octoandroid.data.net.OctoInterceptor;
 
 import java.util.concurrent.TimeUnit;
 

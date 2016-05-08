@@ -24,7 +24,6 @@ import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
 import com.nairbspace.octoandroid.ui.BaseActivity;
 import com.nairbspace.octoandroid.ui.Presenter;
-import com.nairbspace.octoandroid.ui.add_printer.StatusFragmentPagerAdapter;
 import com.nairbspace.octoandroid.ui.connection.ConnectionFragment;
 import com.nairbspace.octoandroid.ui.status.StatusFragment;
 
@@ -39,7 +38,7 @@ public class MainActivity extends BaseActivity<MainScreen>
         StatusFragment.OnFragmentInteractionListener,
         ConnectionFragment.OnFragmentInteractionListener, View.OnClickListener{
 
-    @Inject MainPresenter mPresenter;
+    @Inject MainPresenterTwo mPresenter;
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.fab) FloatingActionButton mFab;
@@ -175,7 +174,7 @@ public class MainActivity extends BaseActivity<MainScreen>
         }
 
         if (requestCode == getNavigator().getAddPrinterRequestCode()) { // TODO need to decide if going to implement this way.
-            mPresenter.getAccounts();
+//            mPresenter.getAccounts();
         } // TODO Need response if user decides to not login
     }
 

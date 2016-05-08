@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.ui.add_printer;
+package com.nairbspace.octoandroid.ui.main;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
