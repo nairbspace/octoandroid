@@ -57,6 +57,7 @@ public class GetAccountsImpl implements GetAccounts {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
             mAccountManager.removeAccountExplicitly(account);
         } else {
+            //noinspection deprecation
             mAccountManager.removeAccount(account, null, null);
         }
     }

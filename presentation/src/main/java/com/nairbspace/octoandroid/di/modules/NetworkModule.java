@@ -2,6 +2,7 @@ package com.nairbspace.octoandroid.di.modules;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.nairbspace.octoandroid.data.net.rest.AutoValueTypeAdapterFactory;
 import com.nairbspace.octoandroid.data.net.rest.OctoApi;
 import com.nairbspace.octoandroid.data.net.rest.OctoApiImpl;
 import com.nairbspace.octoandroid.data.net.rest.OctoInterceptor;
@@ -46,8 +47,15 @@ public class NetworkModule {
 
     @Provides
     @Singleton
-    Gson provideGson() {
+    AutoValueTypeAdapterFactory provideAutoValueTypeAdapterFactory() {
+        return new AutoValueTypeAdapterFactory();
+    }
+
+    @Provides
+    @Singleton
+    Gson provideGson(AutoValueTypeAdapterFactory typeAdapterFactory) {
         GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapterFactory(typeAdapterFactory);
 //        gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES); // TODO: Change field naming policies
         return gsonBuilder.create();
     }

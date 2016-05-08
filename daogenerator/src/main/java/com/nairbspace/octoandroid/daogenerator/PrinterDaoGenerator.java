@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.data.db;
+package com.nairbspace.octoandroid.daogenerator;
 
 import de.greenrobot.daogenerator.DaoGenerator;
 import de.greenrobot.daogenerator.Entity;

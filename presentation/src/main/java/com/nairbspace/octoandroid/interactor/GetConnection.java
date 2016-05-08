@@ -10,9 +10,15 @@ public interface GetConnection {
 
         void onComplete();
 
+        void onPostComplete(Connect connect);
+
         void onSuccess(Connection connection);
 
+        void onNoActivePrinter();
+
         void onDbSuccess(Connection connection);
+
+        void onDbFailure();
 
         void onFailure();
 
@@ -20,6 +26,8 @@ public interface GetConnection {
 
         void onApiKeyFailure();
     }
+
+    void getConnection(GetConnectionFinishedListener listener);
 
     void getConnectionFromDb(GetConnectionFinishedListener listener);
 

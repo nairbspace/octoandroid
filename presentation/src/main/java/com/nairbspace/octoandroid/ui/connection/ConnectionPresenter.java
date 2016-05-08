@@ -49,22 +49,20 @@ public class ConnectionPresenter extends Presenter<ConnectionScreen> implements
                                      boolean isSaveConnectionSettingsChecked,
                                      boolean isAutoConnectChecked) {
 
-        mClickedCommand = connectButtonText.toLowerCase();
-
         Connection.Options options = mConnection.options();
         String port = options.ports().get(portPosition);
         int baudrate = options.baudrates().get(baudratePosition);
         String printerProfileId = options.printerProfiles().get(printerProfileNamePosition).id();
 
-        Connect.Builder builder = Connect.builder().command(mClickedCommand);
-        if (mClickedCommand.equals(Connect.COMMAND_CONNECT)) {
-            builder.port(port)
-                    .baudrate(baudrate)
-                    .printerProfile(printerProfileId)
-                    .save(isSaveConnectionSettingsChecked)
-                    .autoconnect(isAutoConnectChecked);
-            postConnect(builder.build());
-        }
+        Connect connect = Connect.builder()
+                .command(connectButtonText.toLowerCase())
+                .port(port)
+                .baudrate(baudrate)
+                .printerProfile(printerProfileId)
+                .save(isSaveConnectionSettingsChecked)
+                .autoconnect(isAutoConnectChecked)
+                .build();
+        postConnect(connect);
     }
 
     @Override
@@ -75,6 +73,16 @@ public class ConnectionPresenter extends Presenter<ConnectionScreen> implements
     @Override
     public void onComplete() {
 
+    }
+
+    @Override
+    public void onPostComplete(Connect connect) {
+        mScreen.showProgressBar(false);
+        if (connect.command().equals(Connect.COMMAND_DISCONNECT)) {
+            mScreen.showConnectScreen(true);
+        } else {
+            mScreen.showConnectScreen(false);
+        }
     }
 
     @Override
@@ -138,10 +146,58 @@ public class ConnectionPresenter extends Presenter<ConnectionScreen> implements
     }
 
     @Override
+    public void onNoActivePrinter() {
+        // Launch add activity
+    }
+
+    @Override
     public void onDbSuccess(Connection connection) {
-        if (connection != null) {
-            onSuccess(connection);
+        Connection.Current current = connection.current();
+        String state = current.state();
+        boolean isNotConnected = state.equals("Closed");
+
+        Connection.Options options = connection.options();
+        List<String> ports = options.ports();
+        List<Integer> baudrates = options.baudrates();
+        List<Connection.PrinterProfile> printerProfiles = options.printerProfiles();
+        List<String> printerProfileNames = new ArrayList<>();
+
+        for (Connection.PrinterProfile printerProfile : printerProfiles) {
+            printerProfileNames.add(printerProfile.name());
         }
+
+        mScreen.updateUI(ports, baudrates, printerProfileNames, isNotConnected);
+
+        int defaultPortId = 0;
+        for (int i = 0; i < ports.size(); i++) {
+            if (ports.get(i).equals(options.portPreference())) {
+                defaultPortId = i;
+            }
+        }
+
+        int defaultBaudrateId = 0;
+        for (int i = 0; i < baudrates.size(); i++) {
+            if (baudrates.get(i).equals(options.baudratePreference())) {
+                defaultBaudrateId = i;
+            }
+        }
+
+        int defaultPrinterNameId = 0;
+        for(int i =0; i<printerProfileNames.size(); i++) {
+            if (printerProfileNames.get(i).equals(options.printerProfilePreference())) {
+                defaultPrinterNameId = i;
+            }
+        }
+
+        mScreen.updateUiWithDefaults(defaultPortId, defaultBaudrateId, defaultPrinterNameId);
+
+        mGetConnection.getConnection(this);
+
+    }
+
+    @Override
+    public void onDbFailure() {
+        mGetConnection.getConnection(this);
     }
 
     @Override

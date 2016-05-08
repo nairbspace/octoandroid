@@ -32,6 +32,7 @@ public class GetConnectionImpl implements GetConnection {
 
     private Printer mPrinter;
     private Subscription mPollSubscription;
+    private Connection mConnection;
 
     @Inject
     public GetConnectionImpl() {
@@ -39,12 +40,28 @@ public class GetConnectionImpl implements GetConnection {
 
 
     @Override
+    public void getConnection(final GetConnectionFinishedListener listener) {
+        if (mPrinter != null) {
+            mInterceptor.setInterceptor(mPrinter.getScheme(), mPrinter.getHost(), mPrinter.getPort(), mPrinter.getApiKey());
+            mApi.getConnectionObservable()
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<Connection>() {
+                        @Override
+                        public void call(Connection connection) {
+                            listener.onSuccess(connection);
+                        }
+                    });
+        }
+    }
+
+    @Override
     public void getConnectionFromDb(final GetConnectionFinishedListener listener) {
 
         long printerId = mPrefManager.getActivePrinter();
 
         if (printerId == PrefManager.NO_ACTIVE_PRINTER) {
-            listener.onFailure();
+            listener.onNoActivePrinter();
         } else {
             mPrinter = mPrinterDao.queryBuilder()
                     .where(PrinterDao.Properties.Id.eq(printerId))
@@ -53,7 +70,11 @@ public class GetConnectionImpl implements GetConnection {
             if (mPrinter != null) {
                 String json = mPrinter.getConnectionJson();
                 Connection connection = mGson.fromJson(json, Connection.class);
-                listener.onDbSuccess(connection);
+                if (connection != null) {
+                    listener.onDbSuccess(connection);
+                } else {
+                    listener.onDbFailure();
+                }
             }
         }
     }
@@ -97,7 +118,7 @@ public class GetConnectionImpl implements GetConnection {
     }
 
     @Override
-    public void postConnect(Connect connect, final GetConnectionFinishedListener listener) {
+    public void postConnect(final Connect connect, final GetConnectionFinishedListener listener) {
         listener.onLoading();
         mApi.postConnectObservable(connect)
                 .subscribeOn(Schedulers.newThread())
@@ -105,6 +126,7 @@ public class GetConnectionImpl implements GetConnection {
                 .subscribe(new Subscriber<Connect>() {
                     @Override
                     public void onCompleted() {
+                        listener.onPostComplete(connect);
                     }
 
                     @Override

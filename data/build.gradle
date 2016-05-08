@@ -23,8 +23,9 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile project(':domain')
+    // Support annotations
+    compile 'com.android.support:support-annotations:23.3.0'
     // GreenDAO
-    compile 'de.greenrobot:greendao-generator:2.1.0'
     compile 'de.greenrobot:greendao:2.1.0'
     // Dagger2
     compile 'com.google.dagger:dagger:2.4'

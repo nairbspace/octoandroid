@@ -18,6 +18,7 @@ import android.widget.Spinner;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
+import com.nairbspace.octoandroid.data.net.rest.model.Connect;
 import com.nairbspace.octoandroid.ui.BaseViewPagerFragment;
 import com.nairbspace.octoandroid.ui.Presenter;
 
@@ -31,8 +32,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class ConnectionFragment extends BaseViewPagerFragment<ConnectionScreen> implements ConnectionScreen {
-    private static final String CONNECT = "Connect";
-    private static final String DISCONNECT = "Disconnect";
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -151,12 +150,7 @@ public class ConnectionFragment extends BaseViewPagerFragment<ConnectionScreen> 
         updateBaudRateSpinner(baudrates);
         updatePrinterProfileSpinner(printerProfileNames);
 
-        mSerialPortSpinner.setEnabled(isNotConnected);
-        mBaudrateSpinner.setEnabled(isNotConnected);
-        mPrinterProfileSpinner.setEnabled(isNotConnected);
-        mSaveConnectionSettingsCheckBox.setEnabled(isNotConnected);
-        mAutoConnectCheckBox.setEnabled(isNotConnected);
-        mConnectButton.setText(isNotConnected ? CONNECT : DISCONNECT);
+        showConnectScreen(isNotConnected);
     }
 
     @Override
@@ -210,6 +204,16 @@ public class ConnectionFragment extends BaseViewPagerFragment<ConnectionScreen> 
     public void showProgressBar(boolean isLoading) {
         mConnectProgressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
         mConnectCardView.setVisibility(isLoading ? View.GONE : View.VISIBLE);
+    }
+
+    @Override
+    public void showConnectScreen(boolean isNotConnected) {
+        mSerialPortSpinner.setEnabled(isNotConnected);
+        mBaudrateSpinner.setEnabled(isNotConnected);
+        mPrinterProfileSpinner.setEnabled(isNotConnected);
+        mSaveConnectionSettingsCheckBox.setEnabled(isNotConnected);
+        mAutoConnectCheckBox.setEnabled(isNotConnected);
+        mConnectButton.setText(isNotConnected ? Connect.COMMAND_CONNECT.toUpperCase() : Connect.COMMAND_DISCONNECT);
     }
 
     public interface OnFragmentInteractionListener {

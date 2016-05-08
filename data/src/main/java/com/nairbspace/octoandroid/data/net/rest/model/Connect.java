@@ -1,18 +1,27 @@
 package com.nairbspace.octoandroid.data.net.rest.model;
 
+import android.support.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.annotations.SerializedName;
+import com.nairbspace.octoandroid.data.net.rest.AutoGson;
 
 @AutoValue
+@AutoGson(autoValueClass = AutoValue_Connect.class)
 public abstract class Connect {
     public static final String COMMAND_CONNECT = "connect";
+    public static final String COMMAND_DISCONNECT = "disconnect";
 
     @SerializedName("command") public abstract String command();
-    @SerializedName("port") public abstract String port();
-    @SerializedName("baudrate") public abstract Integer baudrate();
-    @SerializedName("printerProfile") public abstract String printerProfile();
-    @SerializedName("save") public abstract Boolean save();
-    @SerializedName("autoconnect") public abstract Boolean autoconnect();
+    @Nullable @SerializedName("port") public abstract String port();
+    @Nullable @SerializedName("baudrate") public abstract Integer baudrate();
+    @Nullable @SerializedName("printerProfile") public abstract String printerProfile();
+    @Nullable @SerializedName("save") public abstract Boolean save();
+    @Nullable @SerializedName("autoconnect") public abstract Boolean autoconnect();
+
+//    public static TypeAdapter<Connect> typeAdapter(Gson gson) {
+//        return new AutoValue_Connect.GsonTypeAdapter(gson);
+//    }
 
     public static Builder builder() {
         return new AutoValue_Connect.Builder();

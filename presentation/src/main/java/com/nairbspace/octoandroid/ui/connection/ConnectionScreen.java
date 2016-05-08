@@ -15,4 +15,6 @@ public interface ConnectionScreen {
 
     void showProgressBar(boolean isLoading);
 
+    void showConnectScreen(boolean isNotConnected);
+
 }

@@ -67,7 +67,7 @@ public class MainActivity extends BaseActivity<MainScreen>
         mDrawer.addDrawerListener(mToggle);
         setDrawer();
         inflateStatusAdapter();
-        getNavigator().startWebsocketService(this);
+//        getNavigator().startWebsocketService(this);
     }
 
     @Override
