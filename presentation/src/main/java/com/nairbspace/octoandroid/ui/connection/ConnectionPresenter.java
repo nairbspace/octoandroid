@@ -1,7 +1,7 @@
 package com.nairbspace.octoandroid.ui.connection;
 
-import com.nairbspace.octoandroid.data.net.rest.model.Connect;
-import com.nairbspace.octoandroid.data.net.rest.model.Connection;
+import com.nairbspace.octoandroid.data.entity.ConnectEntity;
+import com.nairbspace.octoandroid.data.entity.ConnectionEntity;
 import com.nairbspace.octoandroid.interactor.GetConnection;
 import com.nairbspace.octoandroid.interactor.GetConnectionImpl;
 import com.nairbspace.octoandroid.ui.Presenter;
@@ -15,7 +15,7 @@ public class ConnectionPresenter extends Presenter<ConnectionScreen> implements
         GetConnection.GetConnectionFinishedListener{
 
     private ConnectionScreen mScreen;
-    private Connection mConnection;
+    private ConnectionEntity mConnectionEntity;
     private boolean ifFirstTime = true;
     private String mClickedCommand;
     @Inject GetConnectionImpl mGetConnection;
@@ -40,8 +40,8 @@ public class ConnectionPresenter extends Presenter<ConnectionScreen> implements
         mGetConnection.unsubscribePollConnection();
     }
 
-    public void postConnect(Connect connect) {
-        mGetConnection.postConnect(connect, this);
+    public void postConnect(ConnectEntity connectEntity) {
+        mGetConnection.postConnect(connectEntity, this);
     }
 
     public void connectButtonClicked(String connectButtonText, int portPosition,
@@ -49,12 +49,12 @@ public class ConnectionPresenter extends Presenter<ConnectionScreen> implements
                                      boolean isSaveConnectionSettingsChecked,
                                      boolean isAutoConnectChecked) {
 
-        Connection.Options options = mConnection.options();
+        ConnectionEntity.Options options = mConnectionEntity.options();
         String port = options.ports().get(portPosition);
         int baudrate = options.baudrates().get(baudratePosition);
         String printerProfileId = options.printerProfiles().get(printerProfileNamePosition).id();
 
-        Connect connect = Connect.builder()
+        ConnectEntity connectEntity = ConnectEntity.builder()
                 .command(connectButtonText.toLowerCase())
                 .port(port)
                 .baudrate(baudrate)
@@ -62,7 +62,7 @@ public class ConnectionPresenter extends Presenter<ConnectionScreen> implements
                 .save(isSaveConnectionSettingsChecked)
                 .autoconnect(isAutoConnectChecked)
                 .build();
-        postConnect(connect);
+        postConnect(connectEntity);
     }
 
     @Override
@@ -76,9 +76,9 @@ public class ConnectionPresenter extends Presenter<ConnectionScreen> implements
     }
 
     @Override
-    public void onPostComplete(Connect connect) {
+    public void onPostComplete(ConnectEntity connectEntity) {
         mScreen.showProgressBar(false);
-        if (connect.command().equals(Connect.COMMAND_DISCONNECT)) {
+        if (connectEntity.command().equals(ConnectEntity.COMMAND_DISCONNECT)) {
             mScreen.showConnectScreen(true);
         } else {
             mScreen.showConnectScreen(false);
@@ -86,10 +86,10 @@ public class ConnectionPresenter extends Presenter<ConnectionScreen> implements
     }
 
     @Override
-    public void onSuccess(Connection connection) {
-        mConnection = connection;
+    public void onSuccess(ConnectionEntity connectionEntity) {
+        mConnectionEntity = connectionEntity;
 
-        Connection.Current current = mConnection.current();
+        ConnectionEntity.Current current = mConnectionEntity.current();
         String state = current.state();
         boolean isNotConnected = state.equals("Closed");
 
@@ -106,14 +106,14 @@ public class ConnectionPresenter extends Presenter<ConnectionScreen> implements
             mClickedCommand = null;
         }
 
-        Connection.Options options = mConnection.options();
+        ConnectionEntity.Options options = mConnectionEntity.options();
         List<String> ports = options.ports();
 
         List<Integer> baudrates = options.baudrates();
 
-        List<Connection.PrinterProfile> printerProfiles = options.printerProfiles();
+        List<ConnectionEntity.PrinterProfile> printerProfiles = options.printerProfiles();
         List<String> printerProfileNames = new ArrayList<>();
-        for (Connection.PrinterProfile printerProfile : printerProfiles) {
+        for (ConnectionEntity.PrinterProfile printerProfile : printerProfiles) {
             printerProfileNames.add(printerProfile.name());
         }
         mScreen.updateUI(ports, baudrates, printerProfileNames, isNotConnected);
@@ -151,18 +151,18 @@ public class ConnectionPresenter extends Presenter<ConnectionScreen> implements
     }
 
     @Override
-    public void onDbSuccess(Connection connection) {
-        Connection.Current current = connection.current();
+    public void onDbSuccess(ConnectionEntity connectionEntity) {
+        ConnectionEntity.Current current = connectionEntity.current();
         String state = current.state();
         boolean isNotConnected = state.equals("Closed");
 
-        Connection.Options options = connection.options();
+        ConnectionEntity.Options options = connectionEntity.options();
         List<String> ports = options.ports();
         List<Integer> baudrates = options.baudrates();
-        List<Connection.PrinterProfile> printerProfiles = options.printerProfiles();
+        List<ConnectionEntity.PrinterProfile> printerProfiles = options.printerProfiles();
         List<String> printerProfileNames = new ArrayList<>();
 
-        for (Connection.PrinterProfile printerProfile : printerProfiles) {
+        for (ConnectionEntity.PrinterProfile printerProfile : printerProfiles) {
             printerProfileNames.add(printerProfile.name());
         }
 

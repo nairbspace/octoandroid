@@ -1,9 +1,9 @@
 package com.nairbspace.octoandroid.data.net.rest;
 
-import com.nairbspace.octoandroid.data.net.rest.model.Connect;
-import com.nairbspace.octoandroid.data.net.rest.model.Connection;
-import com.nairbspace.octoandroid.data.net.rest.model.PrinterState;
-import com.nairbspace.octoandroid.data.net.rest.model.Version;
+import com.nairbspace.octoandroid.data.entity.ConnectEntity;
+import com.nairbspace.octoandroid.data.entity.ConnectionEntity;
+import com.nairbspace.octoandroid.data.entity.PrinterStateEntity;
+import com.nairbspace.octoandroid.data.entity.VersionEntity;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -20,19 +20,19 @@ public class OctoApiImpl {
         mApi = api;
     }
 
-    public Observable<Version> getVersionObservable() {
+    public Observable<VersionEntity> getVersionObservable() {
         return mApi.getVersion().cache();
     }
 
-    public Observable<Connection> getConnectionObservable() {
+    public Observable<ConnectionEntity> getConnectionObservable() {
         return mApi.getConnection();
     }
 
-    public Observable<Connect> postConnectObservable(Connect connect) {
-        return mApi.postConnect(connect);
+    public Observable<ConnectEntity> postConnectObservable(ConnectEntity connectEntity) {
+        return mApi.postConnect(connectEntity);
     }
 
-    public Observable<PrinterState> getPrinterStateObservable() {
+    public Observable<PrinterStateEntity> getPrinterStateObservable() {
         return mApi.getPrinter();
     }
 }

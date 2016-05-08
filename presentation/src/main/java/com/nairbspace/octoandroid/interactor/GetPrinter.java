@@ -1,7 +1,7 @@
 package com.nairbspace.octoandroid.interactor;
 
-import com.nairbspace.octoandroid.data.db.Printer;
-import com.nairbspace.octoandroid.data.net.rest.model.Version;
+import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
+import com.nairbspace.octoandroid.data.entity.VersionEntity;
 
 public interface GetPrinter {
 
@@ -20,24 +20,24 @@ public interface GetPrinter {
         void onApiKeyFailure();
     }
 
-    void getVersion(Printer printer, GetPrinterFinishedListener listener);
+    void getVersion(PrinterDbEntity printerDbEntity, GetPrinterFinishedListener listener);
 
     String extractHost(String ipAddress);
 
-    boolean isUrlValid(Printer printer);
+    boolean isUrlValid(PrinterDbEntity printerDbEntity);
 
     int convertPortStringToInt(String port, boolean isSslChecked);
 
     String convertIsSslCheckedToScheme(boolean isSslChecked);
 
-    Printer setPrinter(Printer printer, String accountName, String apiKey,
-                       String scheme, String ipAddress, int portNumber);
+    PrinterDbEntity setPrinter(PrinterDbEntity printerDbEntity, String accountName, String apiKey,
+                               String scheme, String ipAddress, int portNumber);
 
-    void addPrinterToDb(Printer printer);
+    void addPrinterToDb(PrinterDbEntity printerDbEntity);
 
-    void deleteOldPrintersInDb(Printer printer);
+    void deleteOldPrintersInDb(PrinterDbEntity printerDbEntity);
 
-    void addVersionToDb(Printer printer, Version version);
+    void addVersionToDb(PrinterDbEntity printerDbEntity, VersionEntity versionEntity);
 
     void setActivePrinter(long printerId); // TODO will move this interface later
 }

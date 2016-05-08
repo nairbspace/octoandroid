@@ -2,7 +2,7 @@ package com.nairbspace.octoandroid.di.modules;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.nairbspace.octoandroid.data.net.rest.AutoValueTypeAdapterFactory;
+import com.nairbspace.octoandroid.data.entity.AutoValueTypeAdapterFactory;
 import com.nairbspace.octoandroid.data.net.rest.OctoApi;
 import com.nairbspace.octoandroid.data.net.rest.OctoApiImpl;
 import com.nairbspace.octoandroid.data.net.rest.OctoInterceptor;

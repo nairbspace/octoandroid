@@ -2,13 +2,13 @@ package com.nairbspace.octoandroid.interactor;
 
 import android.accounts.Account;
 
-import com.nairbspace.octoandroid.data.db.Printer;
+import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
 
 public interface GetAccounts {
 
     interface RetrieveListener {
         void onEmpty();
-        void onSuccess(Printer printer);
+        void onSuccess(PrinterDbEntity printerDbEntity);
     }
 
     interface AddAccountListener {
@@ -18,7 +18,7 @@ public interface GetAccounts {
 
     void retrieveAccounts(RetrieveListener listener);
 
-    void addAccount(Printer printer, AddAccountListener listener);
+    void addAccount(PrinterDbEntity printerDbEntity, AddAccountListener listener);
 
     void removeAccount(Account account);
 

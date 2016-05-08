@@ -4,7 +4,7 @@ package com.nairbspace.octoandroid.data.db;
 /**
  * Entity mapped to table "PRINTER".
  */
-public class Printer {
+public class PrinterDbEntity {
 
     private Long id;
     /** Not-null value. */
@@ -20,14 +20,14 @@ public class Printer {
     private String connectionJson;
     private String printerStateJson;
 
-    public Printer() {
+    public PrinterDbEntity() {
     }
 
-    public Printer(Long id) {
+    public PrinterDbEntity(Long id) {
         this.id = id;
     }
 
-    public Printer(Long id, String name, String apiKey, String scheme, String host, int port, String versionJson, String connectionJson, String printerStateJson) {
+    public PrinterDbEntity(Long id, String name, String apiKey, String scheme, String host, int port, String versionJson, String connectionJson, String printerStateJson) {
         this.id = id;
         this.name = name;
         this.apiKey = apiKey;

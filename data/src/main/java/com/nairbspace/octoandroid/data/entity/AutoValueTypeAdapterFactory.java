@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.data.net.rest;
+package com.nairbspace.octoandroid.data.entity;
 
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;

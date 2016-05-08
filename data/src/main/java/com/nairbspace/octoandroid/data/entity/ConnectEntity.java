@@ -1,14 +1,13 @@
-package com.nairbspace.octoandroid.data.net.rest.model;
+package com.nairbspace.octoandroid.data.entity;
 
 import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 import com.google.gson.annotations.SerializedName;
-import com.nairbspace.octoandroid.data.net.rest.AutoGson;
 
 @AutoValue
-@AutoGson(autoValueClass = AutoValue_Connect.class)
-public abstract class Connect {
+@AutoGson(autoValueClass = AutoValue_ConnectEntity.class)
+public abstract class ConnectEntity {
     public static final String COMMAND_CONNECT = "connect";
     public static final String COMMAND_DISCONNECT = "disconnect";
 
@@ -24,7 +23,7 @@ public abstract class Connect {
 //    }
 
     public static Builder builder() {
-        return new AutoValue_Connect.Builder();
+        return new AutoValue_ConnectEntity.Builder();
     }
 
     @AutoValue.Builder
@@ -35,6 +34,6 @@ public abstract class Connect {
         public abstract Builder printerProfile(String printerProfile);
         public abstract Builder save(Boolean save);
         public abstract Builder autoconnect(Boolean autoconnect);
-        public abstract Connect build();
+        public abstract ConnectEntity build();
     }
 }

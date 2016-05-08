@@ -33,7 +33,8 @@ public class PrinterDaoGenerator {
     }
 
     private static Entity addPrinter(Schema schema) {
-        Entity printer = schema.addEntity("Printer");
+        Entity printer = schema.addEntity("PrinterDbEntity");
+        printer.setTableName("PRINTER");
         printer.addIdProperty().primaryKey();
         printer.addStringProperty("name").notNull().unique();
         printer.addStringProperty("apiKey").columnName("api_key").notNull();

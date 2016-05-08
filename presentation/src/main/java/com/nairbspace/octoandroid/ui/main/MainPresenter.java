@@ -1,6 +1,6 @@
 package com.nairbspace.octoandroid.ui.main;
 
-import com.nairbspace.octoandroid.data.db.Printer;
+import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
 import com.nairbspace.octoandroid.interactor.GetAccounts;
 import com.nairbspace.octoandroid.interactor.GetAccountsImpl;
 import com.nairbspace.octoandroid.ui.Presenter;
@@ -22,8 +22,8 @@ public class MainPresenter extends Presenter<MainScreen> implements GetAccounts.
     }
 
     @Override
-    public void onSuccess(Printer printer) {
-        mScreen.updateNavHeader(printer.getName(), printer.getHost());
+    public void onSuccess(PrinterDbEntity printerDbEntity) {
+        mScreen.updateNavHeader(printerDbEntity.getName(), printerDbEntity.getHost());
         mScreen.displaySnackBar("Success");
     }
 

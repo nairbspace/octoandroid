@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.data.net.rest;
+package com.nairbspace.octoandroid.data.entity;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

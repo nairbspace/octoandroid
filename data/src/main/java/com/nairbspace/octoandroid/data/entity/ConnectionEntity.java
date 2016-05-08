@@ -1,16 +1,15 @@
-package com.nairbspace.octoandroid.data.net.rest.model;
+package com.nairbspace.octoandroid.data.entity;
 
 import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 import com.google.gson.annotations.SerializedName;
-import com.nairbspace.octoandroid.data.net.rest.AutoGson;
 
 import java.util.List;
 
 @AutoValue
-@AutoGson(autoValueClass = AutoValue_Connection.class)
-public abstract class Connection {
+@AutoGson(autoValueClass = AutoValue_ConnectionEntity.class)
+public abstract class ConnectionEntity {
     @SerializedName("current") public abstract Current current();
     @SerializedName("options") public abstract Options options();
 
@@ -19,7 +18,7 @@ public abstract class Connection {
 //    }
 
     @AutoValue
-    @AutoGson(autoValueClass = AutoValue_Connection_Current.class)
+    @AutoGson(autoValueClass = AutoValue_ConnectionEntity_Current.class)
     public abstract static class Current {
         @Nullable @SerializedName("baudrate") public abstract Integer baudrate();
         @Nullable @SerializedName("port") public abstract String port();
@@ -32,7 +31,7 @@ public abstract class Connection {
     }
 
     @AutoValue
-    @AutoGson(autoValueClass = AutoValue_Connection_Options.class)
+    @AutoGson(autoValueClass = AutoValue_ConnectionEntity_Options.class)
     public abstract static class Options {
         @SerializedName("baudratePreference") public abstract Integer baudratePreference();
         @SerializedName("baudrates") public abstract List<Integer> baudrates();
@@ -47,9 +46,9 @@ public abstract class Connection {
     }
 
     @AutoValue
-    @AutoGson(autoValueClass = AutoValue_Connection_PrinterProfile.class)
+    @AutoGson(autoValueClass = AutoValue_ConnectionEntity_PrinterProfile.class)
     public abstract static class PrinterProfile {
-        @SerializedName("id") public abstract String id();
+        @SerializedName("printerDetails") public abstract String id();
         @SerializedName("name") public abstract String name();
 
 //        public static TypeAdapter<PrinterProfile> typeAdapter(Gson gson) {

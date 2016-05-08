@@ -18,7 +18,7 @@ import android.widget.Spinner;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
-import com.nairbspace.octoandroid.data.net.rest.model.Connect;
+import com.nairbspace.octoandroid.data.entity.ConnectEntity;
 import com.nairbspace.octoandroid.ui.BaseViewPagerFragment;
 import com.nairbspace.octoandroid.ui.Presenter;
 
@@ -213,7 +213,7 @@ public class ConnectionFragment extends BaseViewPagerFragment<ConnectionScreen> 
         mPrinterProfileSpinner.setEnabled(isNotConnected);
         mSaveConnectionSettingsCheckBox.setEnabled(isNotConnected);
         mAutoConnectCheckBox.setEnabled(isNotConnected);
-        mConnectButton.setText(isNotConnected ? Connect.COMMAND_CONNECT.toUpperCase() : Connect.COMMAND_DISCONNECT);
+        mConnectButton.setText(isNotConnected ? ConnectEntity.COMMAND_CONNECT.toUpperCase() : ConnectEntity.COMMAND_DISCONNECT);
     }
 
     public interface OnFragmentInteractionListener {

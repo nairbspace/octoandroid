@@ -10,7 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.nairbspace.octoandroid.app.SetupApplication;
-import com.nairbspace.octoandroid.data.db.Printer;
+import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
 import com.nairbspace.octoandroid.interactor.GetPrinterImpl;
 import com.nairbspace.octoandroid.ui.add_printer.AddPrinterActivity;
 
@@ -68,9 +68,9 @@ public class Authenticator extends AbstractAccountAuthenticator {
     // TODO need to fix the way account is synced.
     @Override
     public Bundle getAccountRemovalAllowed(AccountAuthenticatorResponse response, Account account) throws NetworkErrorException {
-        Printer printer = new Printer();
-        printer.setName(account.name);
-        mGetPrinter.deleteOldPrintersInDb(printer);
+        PrinterDbEntity printerDbEntity = new PrinterDbEntity();
+        printerDbEntity.setName(account.name);
+        mGetPrinter.deleteOldPrintersInDb(printerDbEntity);
         Bundle result = new Bundle();
         result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, true);
         return result;

@@ -1,13 +1,13 @@
 package com.nairbspace.octoandroid.interactor;
 
 import com.google.gson.Gson;
-import com.nairbspace.octoandroid.data.db.Printer;
-import com.nairbspace.octoandroid.data.db.PrinterDao;
+import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
+import com.nairbspace.octoandroid.data.db.PrinterDbEntityDao;
+import com.nairbspace.octoandroid.data.entity.ConnectEntity;
+import com.nairbspace.octoandroid.data.entity.ConnectionEntity;
 import com.nairbspace.octoandroid.data.pref.PrefManager;
 import com.nairbspace.octoandroid.data.net.rest.OctoApiImpl;
 import com.nairbspace.octoandroid.data.net.rest.OctoInterceptor;
-import com.nairbspace.octoandroid.data.net.rest.model.Connect;
-import com.nairbspace.octoandroid.data.net.rest.model.Connection;
 
 import java.util.concurrent.TimeUnit;
 
@@ -25,14 +25,15 @@ import timber.log.Timber;
 public class GetConnectionImpl implements GetConnection {
 
     @Inject OctoApiImpl mApi;
-    @Inject PrinterDao mPrinterDao;
+    @Inject
+    PrinterDbEntityDao mPrinterDbEntityDao;
     @Inject OctoInterceptor mInterceptor;
     @Inject Gson mGson;
     @Inject PrefManager mPrefManager;
 
-    private Printer mPrinter;
+    private PrinterDbEntity mPrinterDbEntity;
     private Subscription mPollSubscription;
-    private Connection mConnection;
+    private ConnectionEntity mConnectionEntity;
 
     @Inject
     public GetConnectionImpl() {
@@ -41,15 +42,15 @@ public class GetConnectionImpl implements GetConnection {
 
     @Override
     public void getConnection(final GetConnectionFinishedListener listener) {
-        if (mPrinter != null) {
-            mInterceptor.setInterceptor(mPrinter.getScheme(), mPrinter.getHost(), mPrinter.getPort(), mPrinter.getApiKey());
+        if (mPrinterDbEntity != null) {
+            mInterceptor.setInterceptor(mPrinterDbEntity.getScheme(), mPrinterDbEntity.getHost(), mPrinterDbEntity.getPort(), mPrinterDbEntity.getApiKey());
             mApi.getConnectionObservable()
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Action1<Connection>() {
+                    .subscribe(new Action1<ConnectionEntity>() {
                         @Override
-                        public void call(Connection connection) {
-                            listener.onSuccess(connection);
+                        public void call(ConnectionEntity connectionEntity) {
+                            listener.onSuccess(connectionEntity);
                         }
                     });
         }
@@ -63,15 +64,15 @@ public class GetConnectionImpl implements GetConnection {
         if (printerId == PrefManager.NO_ACTIVE_PRINTER) {
             listener.onNoActivePrinter();
         } else {
-            mPrinter = mPrinterDao.queryBuilder()
-                    .where(PrinterDao.Properties.Id.eq(printerId))
+            mPrinterDbEntity = mPrinterDbEntityDao.queryBuilder()
+                    .where(PrinterDbEntityDao.Properties.Id.eq(printerId))
                     .unique();
 
-            if (mPrinter != null) {
-                String json = mPrinter.getConnectionJson();
-                Connection connection = mGson.fromJson(json, Connection.class);
-                if (connection != null) {
-                    listener.onDbSuccess(connection);
+            if (mPrinterDbEntity != null) {
+                String json = mPrinterDbEntity.getConnectionJson();
+                ConnectionEntity connectionEntity = mGson.fromJson(json, ConnectionEntity.class);
+                if (connectionEntity != null) {
+                    listener.onDbSuccess(connectionEntity);
                 } else {
                     listener.onDbFailure();
                 }
@@ -81,13 +82,13 @@ public class GetConnectionImpl implements GetConnection {
 
     @Override
     public void pollConnection(final GetConnectionFinishedListener listener) {
-        if (mPrinter != null && mPollSubscription == null) {
+        if (mPrinterDbEntity != null && mPollSubscription == null) {
             mPollSubscription = Observable.interval(5, TimeUnit.SECONDS)
-                    .flatMap(new Func1<Long, Observable<Connection>>() {
+                    .flatMap(new Func1<Long, Observable<ConnectionEntity>>() {
                         @Override
-                        public Observable<Connection> call(Long aLong) {
-                            mInterceptor.setInterceptor(mPrinter.getScheme(),
-                                    mPrinter.getHost(), mPrinter.getPort(), mPrinter.getApiKey());
+                        public Observable<ConnectionEntity> call(Long aLong) {
+                            mInterceptor.setInterceptor(mPrinterDbEntity.getScheme(),
+                                    mPrinterDbEntity.getHost(), mPrinterDbEntity.getPort(), mPrinterDbEntity.getApiKey());
                             return mApi.getConnectionObservable();
                         }
                     })
@@ -100,33 +101,33 @@ public class GetConnectionImpl implements GetConnection {
                     .retry()
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Action1<Connection>() {
+                    .subscribe(new Action1<ConnectionEntity>() {
                         @Override
-                        public void call(Connection connection) {
-                            saveConnection(connection);
-                            listener.onSuccess(connection);
+                        public void call(ConnectionEntity connectionEntity) {
+                            saveConnection(connectionEntity);
+                            listener.onSuccess(connectionEntity);
                         }
                     });
         }
     }
 
     @Override
-    public void saveConnection(Connection connection) {
-        String json = mGson.toJson(connection);
-        mPrinter.setConnectionJson(json);
-        mPrinterDao.update(mPrinter);
+    public void saveConnection(ConnectionEntity connectionEntity) {
+        String json = mGson.toJson(connectionEntity);
+        mPrinterDbEntity.setConnectionJson(json);
+        mPrinterDbEntityDao.update(mPrinterDbEntity);
     }
 
     @Override
-    public void postConnect(final Connect connect, final GetConnectionFinishedListener listener) {
+    public void postConnect(final ConnectEntity connectEntity, final GetConnectionFinishedListener listener) {
         listener.onLoading();
-        mApi.postConnectObservable(connect)
+        mApi.postConnectObservable(connectEntity)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Connect>() {
+                .subscribe(new Subscriber<ConnectEntity>() {
                     @Override
                     public void onCompleted() {
-                        listener.onPostComplete(connect);
+                        listener.onPostComplete(connectEntity);
                     }
 
                     @Override
@@ -135,7 +136,7 @@ public class GetConnectionImpl implements GetConnection {
                     }
 
                     @Override
-                    public void onNext(Connect connect) {
+                    public void onNext(ConnectEntity connectEntity) {
 
                     }
                 });

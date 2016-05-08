@@ -1,12 +1,12 @@
 package com.nairbspace.octoandroid.interactor;
 
 import com.google.gson.Gson;
-import com.nairbspace.octoandroid.data.db.Printer;
-import com.nairbspace.octoandroid.data.db.PrinterDao;
+import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
+import com.nairbspace.octoandroid.data.db.PrinterDbEntityDao;
 import com.nairbspace.octoandroid.data.pref.PrefManager;
 import com.nairbspace.octoandroid.data.net.rest.OctoApiImpl;
 import com.nairbspace.octoandroid.data.net.rest.OctoInterceptor;
-import com.nairbspace.octoandroid.data.net.rest.model.Version;
+import com.nairbspace.octoandroid.data.entity.VersionEntity;
 
 import javax.inject.Inject;
 
@@ -23,7 +23,8 @@ public class GetPrinterImpl implements GetPrinter {
 
     @Inject OctoApiImpl mApi;
     @Inject OctoInterceptor mInterceptor;
-    @Inject PrinterDao mPrinterDao;
+    @Inject
+    PrinterDbEntityDao mPrinterDbEntityDao;
     @Inject Gson mGson;
     @Inject PrefManager mPrefManager;
 
@@ -33,14 +34,14 @@ public class GetPrinterImpl implements GetPrinter {
     }
 
     @Override
-    public void getVersion(final Printer printer, final GetPrinterFinishedListener listener) {
+    public void getVersion(final PrinterDbEntity printerDbEntity, final GetPrinterFinishedListener listener) {
         listener.onLoading();
-        mInterceptor.setInterceptor(printer.getScheme(), printer.getHost(),
-                printer.getPort(), printer.getApiKey());
+        mInterceptor.setInterceptor(printerDbEntity.getScheme(), printerDbEntity.getHost(),
+                printerDbEntity.getPort(), printerDbEntity.getApiKey());
         mApi.getVersionObservable()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Version>() {
+                .subscribe(new Subscriber<VersionEntity>() {
                     @Override
                     public void onCompleted() {
                         listener.onComplete();
@@ -61,9 +62,9 @@ public class GetPrinterImpl implements GetPrinter {
                     }
 
                     @Override
-                    public void onNext(Version version) {
-                        addPrinterToDb(printer);
-                        addVersionToDb(printer, version);
+                    public void onNext(VersionEntity versionEntity) {
+                        addPrinterToDb(printerDbEntity);
+                        addVersionToDb(printerDbEntity, versionEntity);
                     }
                 });
     }
@@ -79,12 +80,12 @@ public class GetPrinterImpl implements GetPrinter {
     }
 
     @Override
-    public boolean isUrlValid(Printer printer) {
+    public boolean isUrlValid(PrinterDbEntity printerDbEntity) {
         try {
             new HttpUrl.Builder()
-                    .scheme(printer.getScheme())
-                    .host(printer.getHost())
-                    .port(printer.getPort())
+                    .scheme(printerDbEntity.getScheme())
+                    .host(printerDbEntity.getHost())
+                    .port(printerDbEntity.getPort())
                     .build();
             return true;
         } catch (IllegalArgumentException e) {
@@ -114,45 +115,45 @@ public class GetPrinterImpl implements GetPrinter {
     }
 
     @Override
-    public Printer setPrinter(Printer printer, String accountName, String apiKey,
-                              String scheme, String ipAddress, int portNumber) {
-        printer.setName(accountName);
-        printer.setApiKey(apiKey);
-        printer.setScheme(scheme);
-        printer.setHost(ipAddress);
-        printer.setPort(portNumber);
-        return printer;
+    public PrinterDbEntity setPrinter(PrinterDbEntity printerDbEntity, String accountName, String apiKey,
+                                      String scheme, String ipAddress, int portNumber) {
+        printerDbEntity.setName(accountName);
+        printerDbEntity.setApiKey(apiKey);
+        printerDbEntity.setScheme(scheme);
+        printerDbEntity.setHost(ipAddress);
+        printerDbEntity.setPort(portNumber);
+        return printerDbEntity;
     }
 
     @Override
-    public void addPrinterToDb(Printer printer) {
-        deleteOldPrintersInDb(printer);
-        mPrinterDao.insertOrReplace(printer);
+    public void addPrinterToDb(PrinterDbEntity printerDbEntity) {
+        deleteOldPrintersInDb(printerDbEntity);
+        mPrinterDbEntityDao.insertOrReplace(printerDbEntity);
     }
 
     @Override
-    public void deleteOldPrintersInDb(Printer printer) {
+    public void deleteOldPrintersInDb(PrinterDbEntity printerDbEntity) {
 
-        Printer oldPrinter;
+        PrinterDbEntity oldPrinterDbEntity;
         try {
-            oldPrinter = mPrinterDao.queryBuilder()
-                    .where(PrinterDao.Properties.Name.eq(printer.getName()))
+            oldPrinterDbEntity = mPrinterDbEntityDao.queryBuilder()
+                    .where(PrinterDbEntityDao.Properties.Name.eq(printerDbEntity.getName()))
                     .unique();
         } catch (DaoException e) {
-            oldPrinter = null;
+            oldPrinterDbEntity = null;
         }
 
-        if (oldPrinter != null) {
-            mPrinterDao.delete(oldPrinter);
+        if (oldPrinterDbEntity != null) {
+            mPrinterDbEntityDao.delete(oldPrinterDbEntity);
         }
     }
 
     @Override
-    public void addVersionToDb(Printer printer, Version version) {
-        String json = mGson.toJson(version);
-        printer.setVersionJson(json);
-        mPrinterDao.update(printer);
-        setActivePrinter(printer.getId());
+    public void addVersionToDb(PrinterDbEntity printerDbEntity, VersionEntity versionEntity) {
+        String json = mGson.toJson(versionEntity);
+        printerDbEntity.setVersionJson(json);
+        mPrinterDbEntityDao.update(printerDbEntity);
+        setActivePrinter(printerDbEntity.getId());
     }
 
     @Override

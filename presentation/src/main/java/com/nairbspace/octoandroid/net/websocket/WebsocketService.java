@@ -10,8 +10,8 @@ import com.google.gson.Gson;
 import com.koushikdutta.async.http.AsyncHttpClient;
 import com.koushikdutta.async.http.WebSocket;
 import com.nairbspace.octoandroid.app.SetupApplication;
-import com.nairbspace.octoandroid.data.db.Printer;
-import com.nairbspace.octoandroid.data.db.PrinterDao;
+import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
+import com.nairbspace.octoandroid.data.db.PrinterDbEntityDao;
 import com.nairbspace.octoandroid.data.pref.PrefManager;
 import com.nairbspace.octoandroid.net.websocket.model.CurrentHistory;
 import com.nairbspace.octoandroid.net.websocket.model.WebsocketObj;
@@ -33,9 +33,10 @@ public class WebsocketService extends Service
 
     @Inject Gson mGson;
     @Inject EventBus mEventBus;
-    @Inject PrinterDao mPrinterDao;
+    @Inject
+    PrinterDbEntityDao mPrinterDbEntityDao;
     @Inject PrefManager mPrefManager;
-    private Printer mPrinter;
+    private PrinterDbEntity mPrinterDbEntity;
 
     private WebSocket mWebsocket;
     private WebsocketObj mWebsocketObj;
@@ -56,20 +57,20 @@ public class WebsocketService extends Service
         SetupApplication.get(this).getAppComponent().inject(this);
 
         long printerId = mPrefManager.getActivePrinter();
-        mPrinter = mPrinterDao.queryBuilder()
-                .where(PrinterDao.Properties.Id.eq(printerId))
+        mPrinterDbEntity = mPrinterDbEntityDao.queryBuilder()
+                .where(PrinterDbEntityDao.Properties.Id.eq(printerId))
                 .unique();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (mPrinter == null) {
+        if (mPrinterDbEntity == null) {
             stopSelf();
             return super.onStartCommand(intent, flags, startId);
         }
 
-        String scheme = mPrinter.getScheme(); // Async client converts to ws or wss respectively.
-        String host = mPrinter.getHost();
+        String scheme = mPrinterDbEntity.getScheme(); // Async client converts to ws or wss respectively.
+        String host = mPrinterDbEntity.getHost();
         String path = "/sockjs/websocket";
         try {
             String uri = new URI(scheme, host, path, null).toString();

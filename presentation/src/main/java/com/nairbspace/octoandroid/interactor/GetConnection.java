@@ -1,7 +1,7 @@
 package com.nairbspace.octoandroid.interactor;
 
-import com.nairbspace.octoandroid.data.net.rest.model.Connect;
-import com.nairbspace.octoandroid.data.net.rest.model.Connection;
+import com.nairbspace.octoandroid.data.entity.ConnectEntity;
+import com.nairbspace.octoandroid.data.entity.ConnectionEntity;
 
 public interface GetConnection {
 
@@ -10,13 +10,13 @@ public interface GetConnection {
 
         void onComplete();
 
-        void onPostComplete(Connect connect);
+        void onPostComplete(ConnectEntity connectEntity);
 
-        void onSuccess(Connection connection);
+        void onSuccess(ConnectionEntity connectionEntity);
 
         void onNoActivePrinter();
 
-        void onDbSuccess(Connection connection);
+        void onDbSuccess(ConnectionEntity connectionEntity);
 
         void onDbFailure();
 
@@ -33,9 +33,9 @@ public interface GetConnection {
 
     void pollConnection(GetConnectionFinishedListener listener);
 
-    void saveConnection(Connection connection);
+    void saveConnection(ConnectionEntity connectionEntity);
 
-    void postConnect(Connect connect, GetConnectionFinishedListener listener);
+    void postConnect(ConnectEntity connectEntity, GetConnectionFinishedListener listener);
 
     void unsubscribePollConnection();
 }

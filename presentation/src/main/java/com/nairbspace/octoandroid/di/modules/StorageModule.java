@@ -9,7 +9,7 @@ import android.preference.PreferenceManager;
 
 import com.nairbspace.octoandroid.data.db.DaoMaster;
 import com.nairbspace.octoandroid.data.db.DaoSession;
-import com.nairbspace.octoandroid.data.db.PrinterDao;
+import com.nairbspace.octoandroid.data.db.PrinterDbEntityDao;
 import com.nairbspace.octoandroid.data.db.helper.DbOpenHelper;
 import com.nairbspace.octoandroid.data.pref.PrefManager;
 
@@ -66,8 +66,8 @@ public class StorageModule {
 
     @Provides
     @Singleton
-    PrinterDao providePrinterDao(DaoSession daoSession) {
-        return daoSession.getPrinterDao();
+    PrinterDbEntityDao providePrinterDao(DaoSession daoSession) {
+        return daoSession.getPrinterDbEntityDao();
     }
 }
 

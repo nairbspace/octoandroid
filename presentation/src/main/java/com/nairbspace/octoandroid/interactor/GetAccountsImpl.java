@@ -7,8 +7,8 @@ import android.os.Build;
 import android.text.TextUtils;
 
 import com.nairbspace.octoandroid.R;
-import com.nairbspace.octoandroid.data.db.Printer;
-import com.nairbspace.octoandroid.data.db.PrinterDao;
+import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
+import com.nairbspace.octoandroid.data.db.PrinterDbEntityDao;
 import com.nairbspace.octoandroid.data.pref.PrefManager;
 
 import javax.inject.Inject;
@@ -17,7 +17,8 @@ public class GetAccountsImpl implements GetAccounts {
     @Inject AccountManager mAccountManager;
     @Inject Context mContext;
     @Inject PrefManager mPrefManager;
-    @Inject PrinterDao mPrinterDao;
+    @Inject
+    PrinterDbEntityDao mPrinterDbEntityDao;
 
     @Inject
     public GetAccountsImpl() {
@@ -30,21 +31,21 @@ public class GetAccountsImpl implements GetAccounts {
         if (accounts.length == 0) {
             listener.onEmpty();
         } else {
-            // TODO need better logic if no active printer, etc.
+            // TODO need better logic if no active printerDetails, etc.
             long printerId = mPrefManager.getActivePrinter();
             if (printerId != PrefManager.NO_ACTIVE_PRINTER) {
-                Printer activePrinter = mPrinterDao.queryBuilder()
-                        .where(PrinterDao.Properties.Id.eq(printerId))
+                PrinterDbEntity activePrinterDbEntity = mPrinterDbEntityDao.queryBuilder()
+                        .where(PrinterDbEntityDao.Properties.Id.eq(printerId))
                         .unique();
-                listener.onSuccess(activePrinter);
+                listener.onSuccess(activePrinterDbEntity);
             }
         }
     }
 
     @Override
-    public void addAccount(Printer printer, AddAccountListener listener) {
+    public void addAccount(PrinterDbEntity printerDbEntity, AddAccountListener listener) {
         String accountType = "";
-        Account account = new Account(printer.getName(), validateAccountType(accountType));
+        Account account = new Account(printerDbEntity.getName(), validateAccountType(accountType));
 
         removeAccount(account); // Cannot overwrite, must delete first
 

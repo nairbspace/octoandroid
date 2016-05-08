@@ -1,6 +1,6 @@
 package com.nairbspace.octoandroid.ui.add_printer;
 
-import com.nairbspace.octoandroid.data.db.Printer;
+import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
 import com.nairbspace.octoandroid.interactor.GetAccounts;
 import com.nairbspace.octoandroid.interactor.GetAccountsImpl;
 import com.nairbspace.octoandroid.interactor.GetPrinter;
@@ -13,13 +13,13 @@ public class AddPrinterPresenter extends Presenter<AddPrinterScreen> implements
         GetPrinter.GetPrinterFinishedListener, GetAccounts.AddAccountListener{
 
     private AddPrinterScreen mScreen;
-    private Printer mPrinter;
+    private PrinterDbEntity mPrinterDbEntity;
     @Inject GetPrinterImpl mAddPrinterInteractor;
     @Inject GetAccountsImpl mGetAccounts;
 
     @Inject
     public AddPrinterPresenter() {
-        mPrinter = new Printer();
+        mPrinterDbEntity = new PrinterDbEntity();
     }
 
     public void validateCredentials(String accountName, String ipAddress,
@@ -35,11 +35,11 @@ public class AddPrinterPresenter extends Presenter<AddPrinterScreen> implements
         int portNumber = mAddPrinterInteractor.convertPortStringToInt(port, isSslChecked);
         String scheme = mAddPrinterInteractor.convertIsSslCheckedToScheme(isSslChecked);
 
-        mPrinter = mAddPrinterInteractor.setPrinter(mPrinter, accountName,
+        mPrinterDbEntity = mAddPrinterInteractor.setPrinter(mPrinterDbEntity, accountName,
                 apiKey, scheme, ipAddress, portNumber);
 
-        if (mAddPrinterInteractor.isUrlValid(mPrinter)) {
-            mAddPrinterInteractor.getVersion(mPrinter, this);
+        if (mAddPrinterInteractor.isUrlValid(mPrinterDbEntity)) {
+            mAddPrinterInteractor.getVersion(mPrinterDbEntity, this);
         } else {
             mScreen.showIpAddressError("Incorrect formatting");
         }
@@ -64,7 +64,7 @@ public class AddPrinterPresenter extends Presenter<AddPrinterScreen> implements
     @Override
     public void onSuccess() {
         mScreen.showSnackbar("Success");
-        mGetAccounts.addAccount(mPrinter, this);
+        mGetAccounts.addAccount(mPrinterDbEntity, this);
 
     }
 
@@ -76,7 +76,7 @@ public class AddPrinterPresenter extends Presenter<AddPrinterScreen> implements
     @Override
     public void onSslFailure() {
         mScreen.showAlertDialog("SSL Error",
-                "SSL Certificate is not signed. If accessing printer locally try unsecure connection.");
+                "SSL Certificate is not signed. If accessing printerDetails locally try unsecure connection.");
     }
 
     @Override

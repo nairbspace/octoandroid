@@ -1,23 +1,24 @@
 package com.nairbspace.octoandroid.interactor;
 
 import com.google.gson.Gson;
-import com.nairbspace.octoandroid.data.db.Printer;
-import com.nairbspace.octoandroid.data.db.PrinterDao;
+import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
+import com.nairbspace.octoandroid.data.db.PrinterDbEntityDao;
 import com.nairbspace.octoandroid.data.pref.PrefManager;
 import com.nairbspace.octoandroid.data.net.rest.OctoApiImpl;
 import com.nairbspace.octoandroid.data.net.rest.OctoInterceptor;
-import com.nairbspace.octoandroid.data.net.rest.model.PrinterState;
+import com.nairbspace.octoandroid.data.entity.PrinterStateEntity;
 
 import javax.inject.Inject;
 
 public class GetPrinterStateImpl implements GetPrinterState {
 
     @Inject PrefManager mPrefManager;
-    @Inject PrinterDao mPrinterDao;
+    @Inject
+    PrinterDbEntityDao mPrinterDbEntityDao;
     @Inject Gson mGson;
     @Inject OctoInterceptor mInterceptor;
     @Inject OctoApiImpl mApi;
-    private Printer mPrinter;
+    private PrinterDbEntity mPrinterDbEntity;
 
     @Inject
     public GetPrinterStateImpl() {
@@ -27,12 +28,12 @@ public class GetPrinterStateImpl implements GetPrinterState {
     public void getDataFromDb(GetPrinterStateFinishedListener listener) {
         long id = mPrefManager.getActivePrinter();
         if (id != PrefManager.NO_ACTIVE_PRINTER) {
-            mPrinter = mPrinterDao.queryBuilder()
-                    .where(PrinterDao.Properties.Id.eq(id))
+            mPrinterDbEntity = mPrinterDbEntityDao.queryBuilder()
+                    .where(PrinterDbEntityDao.Properties.Id.eq(id))
                     .unique();
 
-            if (mPrinter != null) {
-                listener.onSuccessDb(mPrinter);
+            if (mPrinterDbEntity != null) {
+                listener.onSuccessDb(mPrinterDbEntity);
             }
         }
     }
@@ -42,11 +43,11 @@ public class GetPrinterStateImpl implements GetPrinterState {
         return mGson.fromJson(json, type);
     }
 
-    private void savePrinterState(PrinterState printerState) {
-        if (mPrinter != null) {
-            String printerStateJson = mGson.toJson(printerState);
-            mPrinter.setPrinterStateJson(printerStateJson);
-            mPrinterDao.update(mPrinter);
+    private void savePrinterState(PrinterStateEntity printerStateEntity) {
+        if (mPrinterDbEntity != null) {
+            String printerStateJson = mGson.toJson(printerStateEntity);
+            mPrinterDbEntity.setPrinterStateJson(printerStateJson);
+            mPrinterDbEntityDao.update(mPrinterDbEntity);
         }
     }
 }

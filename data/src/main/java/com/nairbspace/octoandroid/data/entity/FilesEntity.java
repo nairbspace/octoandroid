@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.data.net.rest.model;
+package com.nairbspace.octoandroid.data.entity;
 
 import com.google.auto.value.AutoValue;
 import com.google.gson.annotations.SerializedName;
@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 @AutoValue
-public abstract class Files {
+public abstract class FilesEntity {
     @SerializedName("files") public abstract List<File> files();
     @SerializedName("free") public abstract Integer free();
     @SerializedName("total") public abstract Integer total();

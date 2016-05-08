@@ -1,10 +1,10 @@
-package com.nairbspace.octoandroid.data.net.rest.model;
+package com.nairbspace.octoandroid.data.entity;
 
 import com.google.auto.value.AutoValue;
 import com.google.gson.annotations.SerializedName;
 
 @AutoValue
-public abstract class PrinterState {
+public abstract class PrinterStateEntity {
     @SerializedName("sd") public abstract Sd sd();
     @SerializedName("state") public abstract State state();
     @SerializedName("temperature") public abstract Temperature temperature();
