@@ -3,8 +3,8 @@ package com.nairbspace.octoandroid.interactor;
 import com.google.gson.Gson;
 import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
 import com.nairbspace.octoandroid.data.db.PrinterDbEntityDao;
+import com.nairbspace.octoandroid.data.net.OctoApiImplDeprecated;
 import com.nairbspace.octoandroid.data.pref.PrefManager;
-import com.nairbspace.octoandroid.data.net.OctoApiImpl;
 import com.nairbspace.octoandroid.data.net.OctoInterceptor;
 import com.nairbspace.octoandroid.data.entity.VersionEntity;
 
@@ -21,7 +21,8 @@ public class GetPrinterImpl implements GetPrinter {
     private static final String HTTP_SCHEME = "http";
     private static final String HTTPS_SCHEME = "https";
 
-    @Inject OctoApiImpl mApi;
+    @Inject
+    OctoApiImplDeprecated mApi;
     @Inject OctoInterceptor mInterceptor;
     @Inject
     PrinterDbEntityDao mPrinterDbEntityDao;

@@ -1,48 +1,41 @@
 package com.nairbspace.octoandroid.ui.add_printer;
 
-import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
-import com.nairbspace.octoandroid.interactor.GetAccounts;
-import com.nairbspace.octoandroid.interactor.GetAccountsImpl;
-import com.nairbspace.octoandroid.interactor.GetPrinter;
-import com.nairbspace.octoandroid.interactor.GetPrinterImpl;
-import com.nairbspace.octoandroid.ui.Presenter;
+import com.nairbspace.octoandroid.domain.AddPrinter;
+import com.nairbspace.octoandroid.domain.Printer;
+import com.nairbspace.octoandroid.domain.Version;
+import com.nairbspace.octoandroid.domain.interactor.GetVersion;
+import com.nairbspace.octoandroid.domain.interactor.TransformAddPrinter;
+import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
+import com.nairbspace.octoandroid.exception.ErrorMessageFactory;
+import com.nairbspace.octoandroid.model.AddPrinterModel;
+import com.nairbspace.octoandroid.model.mapper.AddPrinterModelDomainMapper;
+import com.nairbspace.octoandroid.ui.UseCasePresenter;
 
 import javax.inject.Inject;
 
-public class AddPrinterPresenter extends Presenter<AddPrinterScreen> implements
-        GetPrinter.GetPrinterFinishedListener, GetAccounts.AddAccountListener{
+import rx.Observable;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.Subscriptions;
+
+public class AddPrinterPresenter extends UseCasePresenter<AddPrinterScreen> {
 
     private AddPrinterScreen mScreen;
-    private PrinterDbEntity mPrinterDbEntity;
-    @Inject GetPrinterImpl mAddPrinterInteractor;
-    @Inject GetAccountsImpl mGetAccounts;
+    private final AddPrinterModelDomainMapper mDomainMapper;
+    private final TransformAddPrinter mTransformAddPrinterUseCase;
+    private Subscription mTransformSubscription = Subscriptions.unsubscribed();
+    private final GetVersion mGetVersionUseCase;
 
     @Inject
-    public AddPrinterPresenter() {
-        mPrinterDbEntity = new PrinterDbEntity();
-    }
-
-    public void validateCredentials(String accountName, String ipAddress,
-                                    String port, String apiKey, boolean isSslChecked) {
-
-        if (ipAddress == null || ipAddress.isEmpty()) {
-            mScreen.showIpAddressError("IP Address cannot be blank");
-            return;
-        }
-
-        ipAddress = mAddPrinterInteractor.extractHost(ipAddress);
-        accountName = mGetAccounts.validateAccountName(accountName, ipAddress);
-        int portNumber = mAddPrinterInteractor.convertPortStringToInt(port, isSslChecked);
-        String scheme = mAddPrinterInteractor.convertIsSslCheckedToScheme(isSslChecked);
-
-        mPrinterDbEntity = mAddPrinterInteractor.setPrinter(mPrinterDbEntity, accountName,
-                apiKey, scheme, ipAddress, portNumber);
-
-        if (mAddPrinterInteractor.isUrlValid(mPrinterDbEntity)) {
-            mAddPrinterInteractor.getVersion(mPrinterDbEntity, this);
-        } else {
-            mScreen.showIpAddressError("Incorrect formatting");
-        }
+    public AddPrinterPresenter(TransformAddPrinter transformAddPrinterUseCase,
+                               AddPrinterModelDomainMapper domainMapper,
+                               GetVersion getVersionUseCase) {
+        super(transformAddPrinterUseCase);
+        mTransformAddPrinterUseCase = transformAddPrinterUseCase;
+        mDomainMapper = domainMapper;
+        mGetVersionUseCase = getVersionUseCase;
     }
 
     @Override
@@ -50,42 +43,78 @@ public class AddPrinterPresenter extends Presenter<AddPrinterScreen> implements
         mScreen = addPrinterScreen;
     }
 
-    @Override
-    public void onLoading() {
-        mScreen.hideSoftKeyboard(true);
+    public void onAddPrinterClicked(final AddPrinterModel addPrinterModel) {
         mScreen.showProgress(true);
+        mTransformSubscription = Observable.create(new Observable.OnSubscribe<AddPrinter>() {
+            @Override
+            public void call(Subscriber<? super AddPrinter> subscriber) {
+                try {
+                    AddPrinter addPrinter = mDomainMapper.transform(addPrinterModel);
+                    subscriber.onNext(addPrinter);
+                    subscriber.onCompleted();
+                } catch (Exception e) {
+                    subscriber.onError(e);
+                }
+            }
+        }).subscribeOn(Schedulers.newThread())
+                .subscribe(new Action1<AddPrinter>() {
+                    @Override
+                    public void call(AddPrinter addPrinter) {
+                        mTransformAddPrinterUseCase.setAddPrinter(addPrinter);
+                        mTransformAddPrinterUseCase.execute(new AddPrinterSubscriber());
+                    }
+                });
     }
 
     @Override
-    public void onComplete() {
-        mScreen.showProgress(false);
+    protected void onDestroy(AddPrinterScreen addPrinterScreen) {
+        super.onDestroy(addPrinterScreen);
+        if (!mTransformSubscription.isUnsubscribed()) {
+            mTransformSubscription.unsubscribe();
+        }
+        mGetVersionUseCase.unsubscribe();
     }
 
-    @Override
-    public void onSuccess() {
-        mScreen.showSnackbar("Success");
-        mGetAccounts.addAccount(mPrinterDbEntity, this);
+    protected final class AddPrinterSubscriber extends DefaultSubscriber<Printer> {
 
+        @Override
+        public void onCompleted() {
+
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            mScreen.showProgress(false);
+            String errorMessage = ErrorMessageFactory
+                    .createIpAddressError(mScreen.context(), (Exception) e);
+            mScreen.showIpAddressError(errorMessage);
+            e.printStackTrace();
+        }
+
+        @Override
+        public void onNext(Printer printer) {
+            mGetVersionUseCase.setPrinter(printer);
+            mGetVersionUseCase.execute(new GetVersionSubscriber());
+        }
     }
 
-    @Override
-    public void onFailure() {
-        mScreen.showSnackbar("Failure");
+    protected final class GetVersionSubscriber extends DefaultSubscriber<Version> {
+        @Override
+        public void onCompleted() {
+            mScreen.showProgress(false);
+            mScreen.showIpAddressError("Success!!!!");
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            mScreen.showProgress(false);
+            e.printStackTrace();
+        }
+
+        @Override
+        public void onNext(Version version) {
+
+        }
     }
 
-    @Override
-    public void onSslFailure() {
-        mScreen.showAlertDialog("SSL Error",
-                "SSL Certificate is not signed. If accessing printerDetails locally try unsecure connection.");
-    }
-
-    @Override
-    public void onApiKeyFailure() {
-        mScreen.showSnackbar("Invalid API key");
-    }
-
-    @Override
-    public void onFinishedAddingAccount() {
-        mScreen.navigateToPreviousScreen();
-    }
 }

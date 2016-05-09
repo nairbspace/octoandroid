@@ -28,6 +28,22 @@ public class OctoInterceptor implements Interceptor {
         mApiKey = apiKey;
     }
 
+    public void setScheme(String scheme) {
+        mScheme = scheme;
+    }
+
+    public void setHost(String host) {
+        mHost = host;
+    }
+
+    public void setPort(int port) {
+        mPort = port;
+    }
+
+    public void setApiKey(String apiKey) {
+        mApiKey = apiKey;
+    }
+
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request original = chain.request();

@@ -70,11 +70,4 @@ public class AppModule {
     PrinterRepository providePrinterRepository(PrinterDataRepository printerDataRepository) {
         return printerDataRepository;
     }
-
-    @Provides
-    @Singleton // TODO DO NOT IMPLEMENT AS SINGLETON!!!
-    UseCase provideGetPrinterDetailsUseCase(PrinterRepository repository, ThreadExecutor threadExecutor,
-                                            PostExecutionThread postExecutionThread) {
-        return new GetPrinterDetails(repository, threadExecutor, postExecutionThread);
-    }
 }

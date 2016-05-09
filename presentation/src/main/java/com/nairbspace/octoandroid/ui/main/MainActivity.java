@@ -1,5 +1,6 @@
 package com.nairbspace.octoandroid.ui.main;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -38,7 +39,7 @@ public class MainActivity extends BaseActivity<MainScreen>
         StatusFragment.OnFragmentInteractionListener,
         ConnectionFragment.OnFragmentInteractionListener, View.OnClickListener{
 
-    @Inject MainPresenterTwo mPresenter;
+    @Inject MainPresenter mPresenter;
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.fab) FloatingActionButton mFab;
@@ -174,7 +175,7 @@ public class MainActivity extends BaseActivity<MainScreen>
         }
 
         if (requestCode == getNavigator().getAddPrinterRequestCode()) { // TODO need to decide if going to implement this way.
-//            mPresenter.getAccounts();
+//            mPresenter.getAccounts(); // TODO implement new screen on respond back
         } // TODO Need response if user decides to not login
     }
 
@@ -238,6 +239,11 @@ public class MainActivity extends BaseActivity<MainScreen>
     public void updateNavHeader(String printerName, String ipAddress) {
         mPrinterNameNavTextView.setText(printerName);
         mPrinterIpAddressNavTextView.setText(ipAddress);
+    }
+
+    @Override
+    public Context context() {
+        return this;
     }
 
     @Override

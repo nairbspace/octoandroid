@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.nairbspace.octoandroid.data.entity.AutoValueTypeAdapterFactory;
 import com.nairbspace.octoandroid.data.net.OctoApi;
-import com.nairbspace.octoandroid.data.net.OctoApiImpl;
+import com.nairbspace.octoandroid.data.net.OctoApiImplDeprecated;
 import com.nairbspace.octoandroid.data.net.OctoInterceptor;
 
 import javax.inject.Singleton;
@@ -92,7 +92,7 @@ public class NetworkModule {
 
     @Provides
     @Singleton
-    OctoApiImpl provideApiImpl(OctoApi api) {
-        return new OctoApiImpl(api);
+    OctoApiImplDeprecated provideApiImpl(OctoApi api) {
+        return new OctoApiImplDeprecated(api);
     }
 }

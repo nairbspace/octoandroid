@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
+import com.nairbspace.octoandroid.model.AddPrinterModel;
 import com.nairbspace.octoandroid.ui.BaseActivity;
 import com.nairbspace.octoandroid.ui.Presenter;
 
@@ -39,7 +40,8 @@ public class AddPrinterActivity extends BaseActivity<AddPrinterScreen> implement
         View.OnFocusChangeListener, View.OnClickListener,
         QrDialogFragment.OnFragmentInteractionListener {
 
-    @Inject AddPrinterPresenter mPresenter;
+    @Inject
+    AddPrinterPresenter mPresenter;
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.add_printer_form) ScrollView mScrollView;
@@ -109,12 +111,20 @@ public class AddPrinterActivity extends BaseActivity<AddPrinterScreen> implement
 
     @OnClick(R.id.add_printer_button)
     public void onAddPrinterButtonClicked() {
-        String accountName = mPrinterNameEditText.getText().toString();
-        String ipAddress = mIpAddressEditText.getText().toString();
-        String port = mPortEditText.getText().toString();
-        String apiKey = mApiKeyEditText.getText().toString();
-        boolean isSslChecked = mSslCheckBox.isChecked();
-        mPresenter.validateCredentials(accountName, ipAddress, port, apiKey, isSslChecked);
+//        String accountName = mPrinterNameEditText.getText().toString();
+//        String ipAddress = mIpAddressEditText.getText().toString();
+//        String port = mPortEditText.getText().toString();
+//        String apiKey = mApiKeyEditText.getText().toString();
+//        boolean isSslChecked = mSslCheckBox.isChecked();
+//        mPresenter.validateCredentials(accountName, ipAddress, port, apiKey, isSslChecked);
+        AddPrinterModel model = AddPrinterModel.builder()
+                .accountName(mPrinterNameEditText.getText().toString())
+                .ipAddress(mIpAddressEditText.getText().toString())
+                .port(mPortEditText.getText().toString())
+                .apiKey(mApiKeyEditText.getText().toString())
+                .isSslChecked(mSslCheckBox.isChecked())
+                .build();
+        mPresenter.onAddPrinterClicked(model);
     }
 
     @Override
@@ -194,6 +204,11 @@ public class AddPrinterActivity extends BaseActivity<AddPrinterScreen> implement
     public void navigateToPreviousScreen() {
         setResult(RESULT_OK);
         finish();
+    }
+
+    @Override
+    public Context context() {
+        return this;
     }
 
     @Override

@@ -1,39 +1,53 @@
 package com.nairbspace.octoandroid.ui.main;
 
-import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
-import com.nairbspace.octoandroid.interactor.GetAccounts;
-import com.nairbspace.octoandroid.interactor.GetAccountsImpl;
-import com.nairbspace.octoandroid.ui.Presenter;
+import com.fernandocejas.frodo.annotation.RxLogSubscriber;
+import com.nairbspace.octoandroid.domain.Printer;
+import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
+import com.nairbspace.octoandroid.domain.interactor.GetPrinterDetails;
+import com.nairbspace.octoandroid.exception.ErrorMessageFactory;
+import com.nairbspace.octoandroid.ui.UseCasePresenter;
 
 import javax.inject.Inject;
 
-public class MainPresenter extends Presenter<MainScreen> implements GetAccounts.RetrieveListener {
+public class MainPresenter extends UseCasePresenter<MainScreen> {
 
-    @Inject GetAccountsImpl mGetAccounts;
-    private MainScreen mScreen;
+    private MainScreen mMainScreen;
+    private final GetPrinterDetails mUseCase;
 
     @Inject
-    public MainPresenter() {
-    }
-
-    @Override
-    public void onEmpty() {
-        mScreen.navigateToAddPrinterActivity();
-    }
-
-    @Override
-    public void onSuccess(PrinterDbEntity printerDbEntity) {
-        mScreen.updateNavHeader(printerDbEntity.getName(), printerDbEntity.getHost());
-        mScreen.displaySnackBar("Success");
+    public MainPresenter(GetPrinterDetails getPrinterDetailsUseCase) {
+        super(getPrinterDetailsUseCase);
+        mUseCase = getPrinterDetailsUseCase;
     }
 
     @Override
     protected void onInitialize(MainScreen mainScreen) {
-        mScreen = mainScreen;
-        getAccounts();
+        mMainScreen = mainScreen;
+        mUseCase.execute(new PrinterDetailsSubscriber());
     }
 
-    protected void getAccounts() {
-        mGetAccounts.retrieveAccounts(this);
+    @RxLogSubscriber
+    protected final class PrinterDetailsSubscriber extends DefaultSubscriber<Printer> {
+
+        @Override
+        public void onCompleted() {
+            mMainScreen.displaySnackBar("onComplete");
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            Exception exception = (Exception) e;
+            if (ErrorMessageFactory.isThereNoActivePrinter(exception)) {
+                mMainScreen.navigateToAddPrinterActivity();
+            } else {
+                String error = ErrorMessageFactory.create(mMainScreen.context(), exception);
+                mMainScreen.displaySnackBar(error);
+            }
+        }
+
+        @Override
+        public void onNext(Printer printer) {
+            // TODO Transform and add nav data
+        }
     }
 }

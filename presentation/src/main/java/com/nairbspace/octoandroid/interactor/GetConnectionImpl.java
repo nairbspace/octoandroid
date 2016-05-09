@@ -6,7 +6,7 @@ import com.nairbspace.octoandroid.data.db.PrinterDbEntityDao;
 import com.nairbspace.octoandroid.data.entity.ConnectEntity;
 import com.nairbspace.octoandroid.data.entity.ConnectionEntity;
 import com.nairbspace.octoandroid.data.pref.PrefManager;
-import com.nairbspace.octoandroid.data.net.OctoApiImpl;
+import com.nairbspace.octoandroid.data.net.OctoApiImplDeprecated;
 import com.nairbspace.octoandroid.data.net.OctoInterceptor;
 
 import java.util.concurrent.TimeUnit;
@@ -24,7 +24,8 @@ import timber.log.Timber;
 
 public class GetConnectionImpl implements GetConnection {
 
-    @Inject OctoApiImpl mApi;
+    @Inject
+    OctoApiImplDeprecated mApi;
     @Inject
     PrinterDbEntityDao mPrinterDbEntityDao;
     @Inject OctoInterceptor mInterceptor;

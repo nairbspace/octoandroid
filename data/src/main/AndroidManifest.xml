@@ -1,6 +1,10 @@
 <manifest package="com.nairbspace.octoandroid.data"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!--TODO read how this affects permissions in presentation module-->
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
+
     <application android:allowBackup="true"/>
 
 </manifest>

@@ -11,12 +11,12 @@ import javax.inject.Singleton;
 import rx.Observable;
 
 @Singleton
-public class OctoApiImpl {
-    private static OctoApiImpl sApiImpl;
+public class OctoApiImplDeprecated {
+    private static OctoApiImplDeprecated sApiImpl;
     private OctoApi mApi;
 
     @Inject
-    public OctoApiImpl(OctoApi api)  {
+    public OctoApiImplDeprecated(OctoApi api)  {
         mApi = api;
     }
 

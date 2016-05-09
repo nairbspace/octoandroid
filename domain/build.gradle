@@ -16,12 +16,15 @@ sourceSets {
     }
 }
 
+repositories {
+    maven { url SdkRepoDir } // For android support annotations
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
     // Dagger2
-    compile 'com.google.dagger:dagger:2.4'
-    provided 'com.google.dagger:dagger-compiler:2.4'
+    compile 'javax.inject:javax.inject:1'
     provided 'javax.annotation:jsr250-api:1.0'
 
     // RxJava
@@ -30,4 +33,5 @@ dependencies {
     // AutoValue
     compile 'com.google.auto.value:auto-value:1.2'
     provided 'com.google.auto.value:auto-value:1.2' //TODO not sure if this should be apt
+    compile 'com.android.support:support-annotations:23.3.0'
 }
