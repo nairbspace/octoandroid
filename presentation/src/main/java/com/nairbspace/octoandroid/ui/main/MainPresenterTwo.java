@@ -7,24 +7,25 @@ import com.nairbspace.octoandroid.domain.exception.ErrorBundle;
 import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
 import com.nairbspace.octoandroid.domain.interactor.UseCase;
 import com.nairbspace.octoandroid.exception.ErrorMessageFactory;
-import com.nairbspace.octoandroid.ui.Presenter;
+import com.nairbspace.octoandroid.ui.UseCasePresenter;
 
 import javax.inject.Inject;
 
-public class MainPresenterTwo extends Presenter<MainScreen> {
+public class MainPresenterTwo extends UseCasePresenter<MainScreen> {
 
     private MainScreen mMainScreen;
-    private UseCase mGetPrinterDetailsUseCase;
+    private final UseCase mUseCase;
 
     @Inject
     public MainPresenterTwo(UseCase getPrinterDetailsUseCase) {
-        mGetPrinterDetailsUseCase = getPrinterDetailsUseCase;
+        super(getPrinterDetailsUseCase);
+        mUseCase = getPrinterDetailsUseCase;
     }
 
     @Override
     protected void onInitialize(MainScreen mainScreen) {
         mMainScreen = mainScreen;
-        mGetPrinterDetailsUseCase.execute(new PrinterDetailsSubscriber());
+        mUseCase.execute(new PrinterDetailsSubscriber());
     }
 
     private void success() {
@@ -38,7 +39,7 @@ public class MainPresenterTwo extends Presenter<MainScreen> {
     }
 
     @RxLogSubscriber
-    private final class PrinterDetailsSubscriber extends DefaultSubscriber<Printer> {
+    protected final class PrinterDetailsSubscriber extends DefaultSubscriber<Printer> {
 
         @Override
         public void onCompleted() {
