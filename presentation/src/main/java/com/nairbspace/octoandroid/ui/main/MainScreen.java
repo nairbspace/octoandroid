@@ -19,7 +19,7 @@ public interface MainScreen {
 
     void syncToggleState();
 
-    void navigateToAddPrinterActivity();
+    void navigateToAddPrinterActivityForResult();
 
     void displaySnackBar(String message);
 
@@ -34,4 +34,8 @@ public interface MainScreen {
     void updateNavHeader(String printerName, String ipAddress);
 
     Context context();
+
+    void displaySnackBarAddPrinterFailure();
+
+    void refreshStatusAdapter();
 }

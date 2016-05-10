@@ -1,6 +1,7 @@
 package com.nairbspace.octoandroid.exception;
 
 import android.content.Context;
+import android.content.res.Resources;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.data.exception.IncorrectAddPrinterFormattingException;
@@ -12,6 +13,7 @@ import com.nairbspace.octoandroid.data.exception.PrinterDataNotFoundException;
 public class ErrorMessageFactory {
 
     private ErrorMessageFactory() {
+        // TODO need better way to implement this
     }
 
     public static String create(Context context, Exception exception) {
@@ -42,5 +44,25 @@ public class ErrorMessageFactory {
             message = context.getString(R.string.exception_incorrect_ip_address_formatting);
         }
         return message;
+    }
+
+    public static String createGetVersionError(Context context, String error) {
+        Resources resources = context.getResources();
+        String message = resources.getString(R.string.exception_message_generic);
+        if (error.contains(resources.getString(R.string.exception_ssl_error))) {
+            message = resources.getString(R.string.ssl_error_display_message);
+        } else if (error.contains(resources.getString(R.string.exception_invalid_api_key))) {
+            message = resources.getString(R.string.exception_invalid_api_key);
+        }
+
+        return message;
+    }
+
+    public static boolean ifSslError(Context context, String error) {
+        return error.contains(context.getResources().getString(R.string.exception_ssl_error));
+    }
+
+    public static String getSslTitle(Context context) {
+        return context.getResources().getString(R.string.ssl_error_title);
     }
 }

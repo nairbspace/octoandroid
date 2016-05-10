@@ -3,34 +3,28 @@ package com.nairbspace.octoandroid.ui.add_printer;
 import com.nairbspace.octoandroid.domain.AddPrinter;
 import com.nairbspace.octoandroid.domain.Printer;
 import com.nairbspace.octoandroid.domain.Version;
+import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
 import com.nairbspace.octoandroid.domain.interactor.GetVersion;
 import com.nairbspace.octoandroid.domain.interactor.TransformAddPrinter;
-import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
 import com.nairbspace.octoandroid.exception.ErrorMessageFactory;
 import com.nairbspace.octoandroid.model.AddPrinterModel;
-import com.nairbspace.octoandroid.model.mapper.AddPrinterModelDomainMapper;
+import com.nairbspace.octoandroid.model.mapper.DomainMapper;
 import com.nairbspace.octoandroid.ui.UseCasePresenter;
 
 import javax.inject.Inject;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
 import rx.functions.Action1;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.Subscriptions;
 
 public class AddPrinterPresenter extends UseCasePresenter<AddPrinterScreen> {
 
     private AddPrinterScreen mScreen;
-    private final AddPrinterModelDomainMapper mDomainMapper;
+    private final DomainMapper mDomainMapper;
     private final TransformAddPrinter mTransformAddPrinterUseCase;
-    private Subscription mTransformSubscription = Subscriptions.unsubscribed();
     private final GetVersion mGetVersionUseCase;
 
     @Inject
     public AddPrinterPresenter(TransformAddPrinter transformAddPrinterUseCase,
-                               AddPrinterModelDomainMapper domainMapper,
+                               DomainMapper domainMapper,
                                GetVersion getVersionUseCase) {
         super(transformAddPrinterUseCase);
         mTransformAddPrinterUseCase = transformAddPrinterUseCase;
@@ -44,47 +38,36 @@ public class AddPrinterPresenter extends UseCasePresenter<AddPrinterScreen> {
     }
 
     public void onAddPrinterClicked(final AddPrinterModel addPrinterModel) {
-        mScreen.showProgress(true);
-        mTransformSubscription = Observable.create(new Observable.OnSubscribe<AddPrinter>() {
+        mDomainMapper.transformObservable(addPrinterModel).subscribe(new Action1<AddPrinter>() {
             @Override
-            public void call(Subscriber<? super AddPrinter> subscriber) {
-                try {
-                    AddPrinter addPrinter = mDomainMapper.transform(addPrinterModel);
-                    subscriber.onNext(addPrinter);
-                    subscriber.onCompleted();
-                } catch (Exception e) {
-                    subscriber.onError(e);
-                }
+            public void call(AddPrinter addPrinter) {
+                showLoading(true);
+                mTransformAddPrinterUseCase.setAddPrinter(addPrinter);
+                mTransformAddPrinterUseCase.execute(new AddPrinterSubscriber());
             }
-        }).subscribeOn(Schedulers.newThread())
-                .subscribe(new Action1<AddPrinter>() {
-                    @Override
-                    public void call(AddPrinter addPrinter) {
-                        mTransformAddPrinterUseCase.setAddPrinter(addPrinter);
-                        mTransformAddPrinterUseCase.execute(new AddPrinterSubscriber());
-                    }
-                });
+        });
     }
 
     @Override
     protected void onDestroy(AddPrinterScreen addPrinterScreen) {
         super.onDestroy(addPrinterScreen);
-        if (!mTransformSubscription.isUnsubscribed()) {
-            mTransformSubscription.unsubscribe();
-        }
-        mGetVersionUseCase.unsubscribe();
+        mGetVersionUseCase.unsubscribe(); // super class only able to do unsubscribe from one subscription.
     }
 
-    protected final class AddPrinterSubscriber extends DefaultSubscriber<Printer> {
-
-        @Override
-        public void onCompleted() {
-
+    private void showLoading(boolean shouldShow) {
+        if (shouldShow) {
+            mScreen.hideSoftKeyboard(true);
+            mScreen.showProgress(true);
+        } else {
+            mScreen.showProgress(false);
         }
+    }
+
+    private final class AddPrinterSubscriber extends DefaultSubscriber<Printer> {
 
         @Override
         public void onError(Throwable e) {
-            mScreen.showProgress(false);
+            showLoading(false);
             String errorMessage = ErrorMessageFactory
                     .createIpAddressError(mScreen.context(), (Exception) e);
             mScreen.showIpAddressError(errorMessage);
@@ -98,23 +81,24 @@ public class AddPrinterPresenter extends UseCasePresenter<AddPrinterScreen> {
         }
     }
 
-    protected final class GetVersionSubscriber extends DefaultSubscriber<Version> {
+    private final class GetVersionSubscriber extends DefaultSubscriber<Version> {
         @Override
         public void onCompleted() {
-            mScreen.showProgress(false);
-            mScreen.showIpAddressError("Success!!!!");
+            showLoading(false);
+            mScreen.navigateToPreviousScreen();
         }
 
         @Override
         public void onError(Throwable e) {
             mScreen.showProgress(false);
             e.printStackTrace();
-        }
-
-        @Override
-        public void onNext(Version version) {
-
+            String message = ErrorMessageFactory.createGetVersionError(mScreen.context(), e.getMessage());
+            if (ErrorMessageFactory.ifSslError(mScreen.context(), e.getMessage())) {
+                String alertTitle = ErrorMessageFactory.getSslTitle(mScreen.context());
+                mScreen.showAlertDialog(alertTitle, message);
+            } else {
+                mScreen.showSnackbar(message);
+            }
         }
     }
-
 }

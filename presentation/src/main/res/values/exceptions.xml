@@ -5,4 +5,9 @@
     <string name="exception_message_printer_not_found">Cannot retrieve printer data. Check your internet connection</string>
     <string name="exception_ip_address_blank">IP Address cannot be blank</string>
     <string name="exception_incorrect_ip_address_formatting">Incorrect formatting</string>
+
+    <string name="exception_ssl_error">Trust anchor for certification path not found.</string>
+    <string name="ssl_error_title">SSL Error</string>
+    <string name="ssl_error_display_message">SSL Certificate is not signed. If accessing printerDetails locally try unsecure connection.</string>
+    <string name="exception_invalid_api_key">Invalid API key</string>
 </resources>

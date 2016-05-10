@@ -170,20 +170,30 @@ public class MainActivity extends BaseActivity<MainScreen>
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != RESULT_OK) {
-            return;
+        if (requestCode == getNavigator().getAddPrinterRequestCode()) {
+            if (resultCode == RESULT_OK) {
+                mPresenter.execute();
+                refreshStatusAdapter();
+            } else {
+                displaySnackBarAddPrinterFailure();
+            }
         }
-
-        if (requestCode == getNavigator().getAddPrinterRequestCode()) { // TODO need to decide if going to implement this way.
-//            mPresenter.getAccounts(); // TODO implement new screen on respond back
-        } // TODO Need response if user decides to not login
     }
 
     @Override
-    public void navigateToAddPrinterActivity() {
-//        Intent i = AddPrinterActivity.newIntent(this);
-//        startActivityForResult(i, AddPrinterActivity.REQUEST_CODE);
+    public void navigateToAddPrinterActivityForResult() {
         getNavigator().navigateToAddPrinterActivityForResult(this);
+    }
+
+    @Override
+    public void displaySnackBarAddPrinterFailure() {
+        Snackbar.make(mFab, R.string.no_printer_found, Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.add, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        navigateToAddPrinterActivityForResult();
+                    }
+                }).show();
     }
 
     @Override
@@ -215,6 +225,15 @@ public class MainActivity extends BaseActivity<MainScreen>
         if (mTabLayout != null) {
             mTabLayout.setupWithViewPager(mViewPager);
         }
+    }
+
+    @Override
+    public void refreshStatusAdapter() {
+        if (mViewPager.getAdapter() != null) {
+            Timber.d("Set adapter null");
+            mViewPager.setAdapter(null);
+        }
+        inflateStatusAdapter();
     }
 
     @Override

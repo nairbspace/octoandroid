@@ -1,6 +1,7 @@
 package com.nairbspace.octoandroid.domain.interactor;
 
 import com.nairbspace.octoandroid.domain.Printer;
+import com.nairbspace.octoandroid.domain.exception.NullUseCaseBuilderException;
 import com.nairbspace.octoandroid.domain.executor.PostExecutionThread;
 import com.nairbspace.octoandroid.domain.executor.ThreadExecutor;
 import com.nairbspace.octoandroid.domain.repository.PrinterRepository;
@@ -23,6 +24,9 @@ public class GetVersion extends UseCase {
 
     @Override
     protected Observable buildUseCaseObservable() {
+        if (mPrinter == null) {
+            return Observable.error(new NullUseCaseBuilderException());
+        }
         return mPrinterRepository.printerVersion(mPrinter);
     }
 

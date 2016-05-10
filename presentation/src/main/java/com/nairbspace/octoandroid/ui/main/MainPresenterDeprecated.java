@@ -18,7 +18,7 @@ public class MainPresenterDeprecated extends Presenter<MainScreen> implements Ge
 
     @Override
     public void onEmpty() {
-        mScreen.navigateToAddPrinterActivity();
+        mScreen.navigateToAddPrinterActivityForResult();
     }
 
     @Override

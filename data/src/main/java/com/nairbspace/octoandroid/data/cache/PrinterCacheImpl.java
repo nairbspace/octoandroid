@@ -19,6 +19,7 @@ import com.nairbspace.octoandroid.domain.executor.ThreadExecutor;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import de.greenrobot.dao.DaoException;
 import rx.Observable;
 import rx.Subscriber;
 
@@ -69,7 +70,6 @@ public class PrinterCacheImpl implements PrinterCache {
                     }
 
                 }
-
             }
         });
     }
@@ -78,21 +78,25 @@ public class PrinterCacheImpl implements PrinterCache {
     public void put(PrinterDbEntity printerDbEntity, VersionEntity versionEntity) {
         String versionJson = mGson.toJson(versionEntity, VersionEntity.class);
         printerDbEntity.setVersionJson(versionJson);
-        printerDbEntity = checkIfPrinterExistsInDb(printerDbEntity);
+        deleteOldPrinterInDb(printerDbEntity);
         mPrinterDbEntityDao.insertOrReplace(printerDbEntity);
         setActivePrinter(printerDbEntity);
         addAccount(printerDbEntity);
     }
 
-    // TODO can probably clean this logic up
-    private PrinterDbEntity checkIfPrinterExistsInDb(PrinterDbEntity printerDbEntity) {
-        PrinterDbEntity oldPrinterDbEntity = mPrinterDbEntityDao.queryBuilder()
-                .where(PrinterDbEntityDao.Properties.Name.eq(printerDbEntity.getName()))
-                .unique();
-        if (oldPrinterDbEntity != null) {
-            printerDbEntity = oldPrinterDbEntity;
+    private void deleteOldPrinterInDb(PrinterDbEntity printerDbEntity) {
+        PrinterDbEntity oldPrinterDbEntity;
+        try {
+            oldPrinterDbEntity = mPrinterDbEntityDao.queryBuilder()
+                    .where(PrinterDbEntityDao.Properties.Name.eq(printerDbEntity.getName()))
+                    .unique();
+        } catch (DaoException e) {
+            oldPrinterDbEntity = null;
         }
-        return printerDbEntity;
+
+        if (oldPrinterDbEntity != null) {
+            mPrinterDbEntityDao.delete(oldPrinterDbEntity);
+        }
     }
 
     private void setActivePrinter(PrinterDbEntity printerDbEntity) {

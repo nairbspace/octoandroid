@@ -15,6 +15,7 @@ public class PrinterDbEntityDataMapper {
 
     @Inject
     public PrinterDbEntityDataMapper() {
+        // TODO clean up mapper
     }
 
     public Printer transformWithNoId(@NonNull PrinterDbEntity printerDbEntity) {

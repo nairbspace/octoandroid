@@ -21,6 +21,8 @@ import rx.Subscriber;
 
 public class ApiConnection implements OctoApi {
     private static final String HTTP_SCHEME = "http";
+    private static final int HTTP_PORT = 80;
+    private static final int HTTPS_PORT = 443;
     private static final String HTTPS_SCHEME = "https";
 
     private final OctoInterceptor mOctoInterceptor;
@@ -114,9 +116,9 @@ public class ApiConnection implements OctoApi {
             formattedPortNum = Integer.parseInt(port);
         } catch (NumberFormatException e) {
             if (isSslChecked) {
-                formattedPortNum = 443;
+                formattedPortNum = HTTPS_PORT;
             } else {
-                formattedPortNum = 80;
+                formattedPortNum = HTTP_PORT;
             }
         }
 

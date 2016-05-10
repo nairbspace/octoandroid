@@ -40,8 +40,7 @@ public class AddPrinterActivity extends BaseActivity<AddPrinterScreen> implement
         View.OnFocusChangeListener, View.OnClickListener,
         QrDialogFragment.OnFragmentInteractionListener {
 
-    @Inject
-    AddPrinterPresenter mPresenter;
+    @Inject AddPrinterPresenter mPresenter;
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.add_printer_form) ScrollView mScrollView;
@@ -52,12 +51,10 @@ public class AddPrinterActivity extends BaseActivity<AddPrinterScreen> implement
     @BindView(R.id.api_key_edit_text) TextInputEditText mApiKeyEditText;
     @BindView(R.id.ssl_checkbox) CheckBox mSslCheckBox;
 
-    /** Intent used to start activity, extras can be null if started within application **/
     public static Intent newIntent(Context context) {
         return new Intent(context, AddPrinterActivity.class);
     }
 
-    /** Bundle may contain savedInstanceState or bundle from Account Manager */
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
@@ -111,12 +108,6 @@ public class AddPrinterActivity extends BaseActivity<AddPrinterScreen> implement
 
     @OnClick(R.id.add_printer_button)
     public void onAddPrinterButtonClicked() {
-//        String accountName = mPrinterNameEditText.getText().toString();
-//        String ipAddress = mIpAddressEditText.getText().toString();
-//        String port = mPortEditText.getText().toString();
-//        String apiKey = mApiKeyEditText.getText().toString();
-//        boolean isSslChecked = mSslCheckBox.isChecked();
-//        mPresenter.validateCredentials(accountName, ipAddress, port, apiKey, isSslChecked);
         AddPrinterModel model = AddPrinterModel.builder()
                 .accountName(mPrinterNameEditText.getText().toString())
                 .ipAddress(mIpAddressEditText.getText().toString())
@@ -214,7 +205,7 @@ public class AddPrinterActivity extends BaseActivity<AddPrinterScreen> implement
     @Override
     public void onClick(DialogInterface dialog, int which) {
         switch (which) {
-            case DialogInterface.BUTTON_NEGATIVE:
+            case DialogInterface.BUTTON_NEGATIVE: // TODO need to implement info on SSL error
                 break;
             case DialogInterface.BUTTON_NEUTRAL:
                 break;
