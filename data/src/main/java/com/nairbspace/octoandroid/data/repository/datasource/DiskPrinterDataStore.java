@@ -28,8 +28,18 @@ public class DiskPrinterDataStore implements PrinterDataStore {
     }
 
     @Override
-    public Observable<VersionEntity> printerVersion(PrinterDbEntity printerDbEntity) {
+    public Observable<VersionEntity> printerVersionEntity(PrinterDbEntity printerDbEntity) {
         // Will only get printer version from cloud
         return Observable.error(new PrinterDataNotFoundException());
+    }
+
+    @Override
+    public Observable<Boolean> deletePrinterDbEntityDetails(PrinterDbEntity printerDbEntity) {
+        return mPrinterCache.deleteOldPrinterInDbObservable(printerDbEntity);
+    }
+
+    @Override
+    public Observable<PrinterDbEntity> printerDbEntityDetails(String name) {
+        return mPrinterCache.get(name);
     }
 }

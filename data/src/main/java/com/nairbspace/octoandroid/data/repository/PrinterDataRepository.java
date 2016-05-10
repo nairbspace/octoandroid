@@ -97,7 +97,7 @@ public class PrinterDataRepository implements PrinterRepository {
             public Observable<VersionEntity> call(PrinterDbEntity printerDbEntity) {
                 mPrinterDbEntity = printerDbEntity;
                 PrinterDataStore printerDataStore = mPrinterDataStoreFactory.createCloudDataStore();
-                return printerDataStore.printerVersion(printerDbEntity);
+                return printerDataStore.printerVersionEntity(printerDbEntity);
             }
         }).map(new Func1<VersionEntity, Version>() {
             @Override
@@ -106,5 +106,39 @@ public class PrinterDataRepository implements PrinterRepository {
                 return mPrinterDbEntityDataMapper.transform(versionEntity);
             }
         });
+    }
+
+    @Override
+    public Observable<Boolean> deletePrinterDetails(final Printer printer) {
+        return Observable.create(new Observable.OnSubscribe<PrinterDbEntity>() {
+            @Override
+            public void call(Subscriber<? super PrinterDbEntity> subscriber) {
+                try {
+                    PrinterDbEntity printerDbEntity = mPrinterDbEntityDataMapper.transformToEntity(printer);
+                    subscriber.onNext(printerDbEntity);
+                    subscriber.onCompleted();
+                } catch (Exception e) {
+                    subscriber.onError(e);
+                }
+            }
+        }).flatMap(new Func1<PrinterDbEntity, Observable<Boolean>>() {
+            @Override
+            public Observable<Boolean> call(PrinterDbEntity printerDbEntity) {
+                PrinterDataStore printerDataStore = mPrinterDataStoreFactory.create();
+                return printerDataStore.deletePrinterDbEntityDetails(printerDbEntity);
+            }
+        });
+    }
+
+    @Override
+    public Observable<Printer> printerDetails(String name) {
+        PrinterDataStore printerDataStore = mPrinterDataStoreFactory.create();
+        return printerDataStore.printerDbEntityDetails(name)
+                .map(new Func1<PrinterDbEntity, Printer>() {
+                    @Override
+                    public Printer call(PrinterDbEntity printerDbEntity) {
+                        return mPrinterDbEntityDataMapper.transformWithNoId(printerDbEntity);
+                    }
+                });
     }
 }

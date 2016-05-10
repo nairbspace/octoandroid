@@ -12,5 +12,9 @@ public interface PrinterDataStore {
 
     Observable<PrinterDbEntity> transformAddPrinterEntity(AddPrinterEntity addPrinterEntity);
 
-    Observable<VersionEntity> printerVersion(PrinterDbEntity printerDbEntity);
+    Observable<VersionEntity> printerVersionEntity(PrinterDbEntity printerDbEntity);
+
+    Observable<Boolean> deletePrinterDbEntityDetails(PrinterDbEntity printerDbEntity);
+
+    Observable<PrinterDbEntity> printerDbEntityDetails(String name);
 }

@@ -31,8 +31,19 @@ public class CloudPrinterDataStore implements PrinterDataStore {
     }
 
     @Override
-    public Observable<VersionEntity> printerVersion(PrinterDbEntity printerDbEntity) {
+    public Observable<VersionEntity> printerVersionEntity(PrinterDbEntity printerDbEntity) {
         mApiConnection.setOctoInterceptor(printerDbEntity);
         return mApiConnection.getVersion();
+    }
+
+    @Override
+    public Observable<Boolean> deletePrinterDbEntityDetails(PrinterDbEntity printerDbEntity) {
+        // Can't delete printer db from cloud
+        return Observable.error(new PrinterDataNotFoundException());
+    }
+
+    @Override
+    public Observable<PrinterDbEntity> printerDbEntityDetails(String name) {
+        return Observable.error(new PrinterDataNotFoundException());
     }
 }

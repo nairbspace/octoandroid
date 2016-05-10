@@ -9,20 +9,25 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.fernandocejas.frodo.annotation.RxLogSubscriber;
 import com.nairbspace.octoandroid.app.SetupApplication;
-import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
-import com.nairbspace.octoandroid.interactor.GetPrinterImpl;
+import com.nairbspace.octoandroid.domain.Printer;
+import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
+import com.nairbspace.octoandroid.domain.interactor.DeletePrinterDetails;
+import com.nairbspace.octoandroid.domain.interactor.GetPrinterDetailsByName;
 import com.nairbspace.octoandroid.ui.add_printer.AddPrinterActivity;
 
 import javax.inject.Inject;
 
 public class Authenticator extends AbstractAccountAuthenticator {
 
-    @Inject Context mContext;
-    @Inject GetPrinterImpl mGetPrinter;
+    private Context mContext;
+    @Inject GetPrinterDetailsByName mPrinterDetailsByName;
+    @Inject DeletePrinterDetails mDeletePrinterDetails;
 
     public Authenticator(Context context) {
         super(context);
+        mContext = context;
         SetupApplication.get(context).getAppComponent().inject(this);
     }
 
@@ -65,14 +70,46 @@ public class Authenticator extends AbstractAccountAuthenticator {
         return null;
     }
 
-    // TODO need to fix the way account is synced.
     @Override
     public Bundle getAccountRemovalAllowed(AccountAuthenticatorResponse response, Account account) throws NetworkErrorException {
-        PrinterDbEntity printerDbEntity = new PrinterDbEntity();
-        printerDbEntity.setName(account.name);
-        mGetPrinter.deleteOldPrintersInDb(printerDbEntity);
+        String name = account.name;
+        mPrinterDetailsByName.setName(name);
+        mPrinterDetailsByName.execute(new GetPrinterDetailsSubscriber());
+
         Bundle result = new Bundle();
         result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, true);
         return result;
+    }
+
+    @RxLogSubscriber
+    private final class GetPrinterDetailsSubscriber extends DefaultSubscriber<Printer> {
+
+        @Override
+        public void onError(Throwable e) {
+            super.onError(e);
+            // TODO should log this somehow in case to try later
+        }
+
+        @Override
+        public void onNext(Printer printer) {
+            super.onNext(printer);
+            mDeletePrinterDetails.setPrinter(printer);
+            mDeletePrinterDetails.execute(new DeletePrinterDetailsSubscriber());
+        }
+    }
+
+    @RxLogSubscriber
+    private final class DeletePrinterDetailsSubscriber extends DefaultSubscriber<Boolean> {
+
+        @Override
+        public void onError(Throwable e) {
+            super.onError(e);
+            // TODO should log this somehow in case to try later
+        }
+
+        @Override
+        public void onNext(Boolean aBoolean) {
+            super.onNext(aBoolean);
+        }
     }
 }

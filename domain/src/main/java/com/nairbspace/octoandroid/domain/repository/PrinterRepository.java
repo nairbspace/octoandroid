@@ -13,4 +13,8 @@ public interface PrinterRepository {
     Observable<Printer> transformAddPrinter(AddPrinter addPrinter);
 
     Observable<Version> printerVersion(Printer printer);
+
+    Observable<Boolean> deletePrinterDetails(Printer printer);
+
+    Observable<Printer> printerDetails(String name);
 }

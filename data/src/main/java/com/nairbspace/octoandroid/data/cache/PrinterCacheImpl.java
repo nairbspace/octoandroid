@@ -58,20 +58,59 @@ public class PrinterCacheImpl implements PrinterCache {
                 if (printerId == PrefManager.NO_ACTIVE_PRINTER) {
                     subscriber.onError(new NoActivePrinterException());
                 } else {
-                    PrinterDbEntity printerDbEntity = mPrinterDbEntityDao.queryBuilder()
+                    PrinterDbEntity printerDbEntity = mPrinterDbEntityDao.queryBuilder() // TODO Try block
                             .where(PrinterDbEntityDao.Properties.Id.eq(printerId))
                             .unique();
 
                     if (printerDbEntity != null) {
+                        if (!doesPrinterExistInAccountManager(printerDbEntity)) {
+                            addAccount(printerDbEntity);
+                        }
                         subscriber.onNext(printerDbEntity);
                         subscriber.onCompleted();
                     } else {
                         subscriber.onError(new PrinterDataNotFoundException());
                     }
-
                 }
             }
         });
+    }
+
+    @Override
+    public Observable<PrinterDbEntity> get(final String name) {
+        return Observable.create(new Observable.OnSubscribe<PrinterDbEntity>() {
+            @Override
+            public void call(Subscriber<? super PrinterDbEntity> subscriber) {
+                PrinterDbEntity printerDbEntity;
+                try {
+                    printerDbEntity = mPrinterDbEntityDao.queryBuilder()
+                            .where(PrinterDbEntityDao.Properties.Name.eq(name))
+                            .unique();
+                } catch (DaoException e) {
+                    printerDbEntity = null;
+                    subscriber.onError(new PrinterDataNotFoundException());
+                }
+
+                if (printerDbEntity != null) {
+                    subscriber.onNext(printerDbEntity);
+                    subscriber.onCompleted();
+                }
+            }
+        });
+    }
+
+    private boolean doesPrinterExistInAccountManager(PrinterDbEntity printerDbEntity) {
+        Account[] accounts = mAccountManager.getAccounts();
+        if (accounts.length == 0) {
+            return false;
+        }
+
+        for (Account account : accounts) {
+            if (account.name.equals(printerDbEntity.getName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -84,6 +123,35 @@ public class PrinterCacheImpl implements PrinterCache {
         addAccount(printerDbEntity);
     }
 
+    @Override
+    public Observable<Boolean> deleteOldPrinterInDbObservable(final PrinterDbEntity printerDbEntity) {
+        return Observable.create(new Observable.OnSubscribe<Boolean>() {
+            @Override
+            public void call(Subscriber<? super Boolean> subscriber) {
+                PrinterDbEntity oldPrinterDbEntity;
+                try {
+                    oldPrinterDbEntity = mPrinterDbEntityDao.queryBuilder()
+                            .where(PrinterDbEntityDao.Properties.Name.eq(printerDbEntity.getName()))
+                            .unique();
+                } catch (DaoException e) {
+                    subscriber.onError(new PrinterDataNotFoundException());
+                    oldPrinterDbEntity = null;
+                }
+
+                if (oldPrinterDbEntity != null) {
+                    if (oldPrinterDbEntity.getId() == mPrefManager.getActivePrinter()) {
+                        //TODO need to handle this when there's multiple printers!!
+                        mPrefManager.setActivePrinter(PrefManager.NO_ACTIVE_PRINTER);
+                    }
+                    mPrinterDbEntityDao.delete(oldPrinterDbEntity);
+                    subscriber.onNext(true);
+                    subscriber.onCompleted();
+                }
+            }
+        });
+    }
+
+    // TODO combine with code above
     private void deleteOldPrinterInDb(PrinterDbEntity printerDbEntity) {
         PrinterDbEntity oldPrinterDbEntity;
         try {
