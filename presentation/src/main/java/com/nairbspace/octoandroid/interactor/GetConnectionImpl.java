@@ -5,7 +5,7 @@ import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
 import com.nairbspace.octoandroid.data.db.PrinterDbEntityDao;
 import com.nairbspace.octoandroid.data.entity.ConnectEntity;
 import com.nairbspace.octoandroid.data.entity.ConnectionEntity;
-import com.nairbspace.octoandroid.data.pref.PrefManager;
+import com.nairbspace.octoandroid.data.disk.PrefHelper;
 import com.nairbspace.octoandroid.data.net.OctoApiImplDeprecated;
 import com.nairbspace.octoandroid.data.net.OctoInterceptor;
 
@@ -30,7 +30,8 @@ public class GetConnectionImpl implements GetConnection {
     PrinterDbEntityDao mPrinterDbEntityDao;
     @Inject OctoInterceptor mInterceptor;
     @Inject Gson mGson;
-    @Inject PrefManager mPrefManager;
+    @Inject
+    PrefHelper mPrefHelper;
 
     private PrinterDbEntity mPrinterDbEntity;
     private Subscription mPollSubscription;
@@ -60,9 +61,9 @@ public class GetConnectionImpl implements GetConnection {
     @Override
     public void getConnectionFromDb(final GetConnectionFinishedListener listener) {
 
-        long printerId = mPrefManager.getActivePrinter();
+        long printerId = mPrefHelper.getActivePrinter();
 
-        if (printerId == PrefManager.NO_ACTIVE_PRINTER) {
+        if (printerId == PrefHelper.NO_ACTIVE_PRINTER) {
             listener.onNoActivePrinter();
         } else {
             mPrinterDbEntity = mPrinterDbEntityDao.queryBuilder()

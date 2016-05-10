@@ -3,14 +3,12 @@ package com.nairbspace.octoandroid.di.modules;
 import android.app.Application;
 import android.content.Context;
 
-import com.nairbspace.octoandroid.data.cache.PrinterCache;
-import com.nairbspace.octoandroid.data.cache.PrinterCacheImpl;
+import com.nairbspace.octoandroid.data.disk.DiskManager;
+import com.nairbspace.octoandroid.data.disk.DiskManagerImpl;
 import com.nairbspace.octoandroid.data.executor.JobExecutor;
 import com.nairbspace.octoandroid.data.repository.PrinterDataRepository;
 import com.nairbspace.octoandroid.domain.executor.PostExecutionThread;
 import com.nairbspace.octoandroid.domain.executor.ThreadExecutor;
-import com.nairbspace.octoandroid.domain.interactor.GetPrinterDetails;
-import com.nairbspace.octoandroid.domain.interactor.UseCase;
 import com.nairbspace.octoandroid.domain.repository.PrinterRepository;
 import com.nairbspace.octoandroid.ui.UiThread;
 
@@ -61,7 +59,7 @@ public class AppModule {
 
     @Provides
     @Singleton
-    PrinterCache providePrinterCache(PrinterCacheImpl printerCache) {
+    DiskManager providePrinterCache(DiskManagerImpl printerCache) {
         return printerCache;
     }
 

@@ -1,9 +1,14 @@
-package com.nairbspace.octoandroid.data.db.mapper;
+package com.nairbspace.octoandroid.data.mapper;
 
 import android.support.annotation.NonNull;
 
+import com.google.gson.Gson;
 import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
+import com.nairbspace.octoandroid.data.entity.AddPrinterEntity;
+import com.nairbspace.octoandroid.data.entity.ConnectionEntity;
 import com.nairbspace.octoandroid.data.entity.VersionEntity;
+import com.nairbspace.octoandroid.domain.AddPrinter;
+import com.nairbspace.octoandroid.domain.Connection;
 import com.nairbspace.octoandroid.domain.Printer;
 import com.nairbspace.octoandroid.domain.Version;
 
@@ -11,10 +16,13 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class PrinterDbEntityDataMapper {
+public class DataMapper {
+
+    private final Gson mGson;
 
     @Inject
-    public PrinterDbEntityDataMapper() {
+    public DataMapper(Gson gson) {
+        mGson = gson;
         // TODO clean up mapper
     }
 
@@ -48,5 +56,24 @@ public class PrinterDbEntityDataMapper {
                 .api(versionEntity.api())
                 .server(versionEntity.server())
                 .build();
+    }
+
+    public AddPrinterEntity transform(AddPrinter addPrinter) {
+        return AddPrinterEntity.builder()
+                .accountName(addPrinter.accountName())
+                .ipAddress(addPrinter.ipAddress())
+                .port(addPrinter.port())
+                .apiKey(addPrinter.apiKey())
+                .isSslChecked(addPrinter.isSslChecked())
+                .build();
+    }
+
+    public Connection transform(ConnectionEntity connectionEntity) {
+        String json = mGson.toJson(connectionEntity);
+        return mGson.fromJson(json, Connection.class);
+    }
+
+    public String serialize(VersionEntity versionEntity) {
+        return mGson.toJson(versionEntity, VersionEntity.class);
     }
 }

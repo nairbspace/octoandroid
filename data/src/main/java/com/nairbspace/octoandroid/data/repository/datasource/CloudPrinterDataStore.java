@@ -1,6 +1,6 @@
 package com.nairbspace.octoandroid.data.repository.datasource;
 
-import com.nairbspace.octoandroid.data.cache.PrinterCache;
+import com.nairbspace.octoandroid.data.disk.DiskManager;
 import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
 import com.nairbspace.octoandroid.data.entity.AddPrinterEntity;
 import com.nairbspace.octoandroid.data.entity.VersionEntity;
@@ -12,11 +12,11 @@ import rx.Observable;
 public class CloudPrinterDataStore implements PrinterDataStore {
 
     private final ApiConnection mApiConnection;
-    private final PrinterCache mPrinterCache;
+    private final DiskManager mDiskManager;
 
-    public CloudPrinterDataStore(ApiConnection apiConnection, PrinterCache printerCache) {
+    public CloudPrinterDataStore(ApiConnection apiConnection, DiskManager diskManager) {
         mApiConnection = apiConnection;
-        mPrinterCache = printerCache;
+        mDiskManager = diskManager;
     }
 
     @Override

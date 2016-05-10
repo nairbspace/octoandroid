@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
 import com.nairbspace.octoandroid.data.db.PrinterDbEntityDao;
 import com.nairbspace.octoandroid.data.net.OctoApiImplDeprecated;
-import com.nairbspace.octoandroid.data.pref.PrefManager;
+import com.nairbspace.octoandroid.data.disk.PrefHelper;
 import com.nairbspace.octoandroid.data.net.OctoInterceptor;
 import com.nairbspace.octoandroid.data.entity.PrinterStateEntity;
 
@@ -12,7 +12,8 @@ import javax.inject.Inject;
 
 public class GetPrinterStateImpl implements GetPrinterState {
 
-    @Inject PrefManager mPrefManager;
+    @Inject
+    PrefHelper mPrefHelper;
     @Inject
     PrinterDbEntityDao mPrinterDbEntityDao;
     @Inject Gson mGson;
@@ -27,8 +28,8 @@ public class GetPrinterStateImpl implements GetPrinterState {
 
     @Override
     public void getDataFromDb(GetPrinterStateFinishedListener listener) {
-        long id = mPrefManager.getActivePrinter();
-        if (id != PrefManager.NO_ACTIVE_PRINTER) {
+        long id = mPrefHelper.getActivePrinter();
+        if (id != PrefHelper.NO_ACTIVE_PRINTER) {
             mPrinterDbEntity = mPrinterDbEntityDao.queryBuilder()
                     .where(PrinterDbEntityDao.Properties.Id.eq(id))
                     .unique();

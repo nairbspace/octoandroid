@@ -10,9 +10,9 @@ import com.google.gson.Gson;
 import com.koushikdutta.async.http.AsyncHttpClient;
 import com.koushikdutta.async.http.WebSocket;
 import com.nairbspace.octoandroid.app.SetupApplication;
+import com.nairbspace.octoandroid.data.disk.PrefHelper;
 import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
 import com.nairbspace.octoandroid.data.db.PrinterDbEntityDao;
-import com.nairbspace.octoandroid.data.pref.PrefManager;
 import com.nairbspace.octoandroid.net.websocket.model.CurrentHistory;
 import com.nairbspace.octoandroid.net.websocket.model.WebsocketObj;
 
@@ -35,7 +35,8 @@ public class WebsocketService extends Service
     @Inject EventBus mEventBus;
     @Inject
     PrinterDbEntityDao mPrinterDbEntityDao;
-    @Inject PrefManager mPrefManager;
+    @Inject
+    PrefHelper mPrefHelper;
     private PrinterDbEntity mPrinterDbEntity;
 
     private WebSocket mWebsocket;
@@ -56,7 +57,7 @@ public class WebsocketService extends Service
         super.onCreate();
         SetupApplication.get(this).getAppComponent().inject(this);
 
-        long printerId = mPrefManager.getActivePrinter();
+        long printerId = mPrefHelper.getActivePrinter();
         mPrinterDbEntity = mPrinterDbEntityDao.queryBuilder()
                 .where(PrinterDbEntityDao.Properties.Id.eq(printerId))
                 .unique();

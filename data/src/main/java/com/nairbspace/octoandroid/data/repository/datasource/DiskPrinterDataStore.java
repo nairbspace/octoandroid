@@ -1,6 +1,6 @@
 package com.nairbspace.octoandroid.data.repository.datasource;
 
-import com.nairbspace.octoandroid.data.cache.PrinterCache;
+import com.nairbspace.octoandroid.data.disk.DiskManager;
 import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
 import com.nairbspace.octoandroid.data.entity.AddPrinterEntity;
 import com.nairbspace.octoandroid.data.entity.VersionEntity;
@@ -10,15 +10,15 @@ import rx.Observable;
 
 public class DiskPrinterDataStore implements PrinterDataStore {
 
-    private final PrinterCache mPrinterCache;
+    private final DiskManager mDiskManager;
 
-    public DiskPrinterDataStore(PrinterCache printerCache) {
-        mPrinterCache = printerCache;
+    public DiskPrinterDataStore(DiskManager diskManager) {
+        mDiskManager = diskManager;
     }
 
     @Override
     public Observable<PrinterDbEntity> printerDbEntityDetails() {
-        return mPrinterCache.get();
+        return mDiskManager.get();
     }
 
     @Override
@@ -35,11 +35,11 @@ public class DiskPrinterDataStore implements PrinterDataStore {
 
     @Override
     public Observable<Boolean> deletePrinterDbEntityDetails(PrinterDbEntity printerDbEntity) {
-        return mPrinterCache.deleteOldPrinterInDbObservable(printerDbEntity);
+        return mDiskManager.deleteOldPrinterInDbObservable(printerDbEntity);
     }
 
     @Override
     public Observable<PrinterDbEntity> printerDbEntityDetails(String name) {
-        return mPrinterCache.get(name);
+        return mDiskManager.get(name);
     }
 }
