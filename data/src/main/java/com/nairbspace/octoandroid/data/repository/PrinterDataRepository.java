@@ -4,12 +4,12 @@ import com.nairbspace.octoandroid.data.disk.DiskManager;
 import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
 import com.nairbspace.octoandroid.data.entity.AddPrinterEntity;
 import com.nairbspace.octoandroid.data.entity.VersionEntity;
-import com.nairbspace.octoandroid.data.mapper.DataMapper;
+import com.nairbspace.octoandroid.data.mapper.EntityMapper;
 import com.nairbspace.octoandroid.data.repository.datasource.PrinterDataStore;
 import com.nairbspace.octoandroid.data.repository.datasource.PrinterDataStoreFactory;
-import com.nairbspace.octoandroid.domain.AddPrinter;
-import com.nairbspace.octoandroid.domain.Printer;
-import com.nairbspace.octoandroid.domain.Version;
+import com.nairbspace.octoandroid.domain.pojo.AddPrinter;
+import com.nairbspace.octoandroid.domain.pojo.Printer;
+import com.nairbspace.octoandroid.domain.pojo.Version;
 import com.nairbspace.octoandroid.domain.repository.PrinterRepository;
 
 import javax.inject.Inject;
@@ -23,15 +23,15 @@ import rx.functions.Func1;
 public class PrinterDataRepository implements PrinterRepository {
 
     private final PrinterDataStoreFactory mPrinterDataStoreFactory;
-    private final DataMapper mDataMapper;
+    private final EntityMapper mEntityMapper;
     private final DiskManager mDiskManager;
     private PrinterDbEntity mPrinterDbEntity;
 
     @Inject
-    public PrinterDataRepository(DataMapper dataMapper,
+    public PrinterDataRepository(EntityMapper entityMapper,
                                  PrinterDataStoreFactory printerDataStoreFactory,
                                  DiskManager diskManager) {
-        mDataMapper = dataMapper;
+        mEntityMapper = entityMapper;
         mPrinterDataStoreFactory = printerDataStoreFactory;
         mDiskManager = diskManager;
     }
@@ -43,7 +43,7 @@ public class PrinterDataRepository implements PrinterRepository {
                 .map(new Func1<PrinterDbEntity, Printer>() {
                     @Override
                     public Printer call(PrinterDbEntity printerDbEntity) {
-                        return mDataMapper.transformWithNoId(printerDbEntity);
+                        return mEntityMapper.transformWithNoId(printerDbEntity);
                     }
                 });
     }
@@ -54,7 +54,7 @@ public class PrinterDataRepository implements PrinterRepository {
             @Override
             public void call(Subscriber<? super AddPrinterEntity> subscriber) {
                 try {
-                    AddPrinterEntity addPrinterEntity = mDataMapper.transform(addPrinter);
+                    AddPrinterEntity addPrinterEntity = mEntityMapper.transform(addPrinter);
                     subscriber.onNext(addPrinterEntity);
                     subscriber.onCompleted();
                 } catch (Exception e) {
@@ -70,7 +70,7 @@ public class PrinterDataRepository implements PrinterRepository {
         }).map(new Func1<PrinterDbEntity, Printer>() {
             @Override
             public Printer call(PrinterDbEntity printerDbEntity) {
-                return mDataMapper.transformWithNoId(printerDbEntity);
+                return mEntityMapper.transformWithNoId(printerDbEntity);
             }
         });
     }
@@ -81,7 +81,7 @@ public class PrinterDataRepository implements PrinterRepository {
             @Override
             public void call(Subscriber<? super PrinterDbEntity> subscriber) {
                 try {
-                    PrinterDbEntity printerDbEntity = mDataMapper.transformToEntity(printer);
+                    PrinterDbEntity printerDbEntity = mEntityMapper.transformToEntity(printer);
                     subscriber.onNext(printerDbEntity);
                     subscriber.onCompleted();
                 } catch (Exception e) {
@@ -99,7 +99,7 @@ public class PrinterDataRepository implements PrinterRepository {
             @Override
             public Version call(VersionEntity versionEntity) {
                 mDiskManager.put(mPrinterDbEntity, versionEntity);
-                return mDataMapper.transform(versionEntity);
+                return mEntityMapper.transform(versionEntity);
             }
         });
     }
@@ -110,7 +110,7 @@ public class PrinterDataRepository implements PrinterRepository {
             @Override
             public void call(Subscriber<? super PrinterDbEntity> subscriber) {
                 try {
-                    PrinterDbEntity printerDbEntity = mDataMapper.transformToEntity(printer);
+                    PrinterDbEntity printerDbEntity = mEntityMapper.transformToEntity(printer);
                     subscriber.onNext(printerDbEntity);
                     subscriber.onCompleted();
                 } catch (Exception e) {
@@ -133,7 +133,7 @@ public class PrinterDataRepository implements PrinterRepository {
                 .map(new Func1<PrinterDbEntity, Printer>() {
                     @Override
                     public Printer call(PrinterDbEntity printerDbEntity) {
-                        return mDataMapper.transformWithNoId(printerDbEntity);
+                        return mEntityMapper.transformWithNoId(printerDbEntity);
                     }
                 });
     }

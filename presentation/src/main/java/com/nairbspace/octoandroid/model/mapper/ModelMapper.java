@@ -1,7 +1,7 @@
 package com.nairbspace.octoandroid.model.mapper;
 
-import com.nairbspace.octoandroid.domain.AddPrinter;
-import com.nairbspace.octoandroid.domain.Printer;
+import com.nairbspace.octoandroid.domain.pojo.AddPrinter;
+import com.nairbspace.octoandroid.domain.pojo.Printer;
 import com.nairbspace.octoandroid.exception.TransformErrorException;
 import com.nairbspace.octoandroid.model.AddPrinterModel;
 import com.nairbspace.octoandroid.model.PrinterModel;
@@ -13,10 +13,10 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class DomainMapper {
+public class ModelMapper {
 
     @Inject
-    public DomainMapper() {
+    public ModelMapper() {
         // TODO Figure out better way to map
     }
 

@@ -7,21 +7,21 @@ import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
 import com.nairbspace.octoandroid.data.entity.AddPrinterEntity;
 import com.nairbspace.octoandroid.data.entity.ConnectionEntity;
 import com.nairbspace.octoandroid.data.entity.VersionEntity;
-import com.nairbspace.octoandroid.domain.AddPrinter;
-import com.nairbspace.octoandroid.domain.Connection;
-import com.nairbspace.octoandroid.domain.Printer;
-import com.nairbspace.octoandroid.domain.Version;
+import com.nairbspace.octoandroid.domain.pojo.AddPrinter;
+import com.nairbspace.octoandroid.domain.pojo.Connection;
+import com.nairbspace.octoandroid.domain.pojo.Printer;
+import com.nairbspace.octoandroid.domain.pojo.Version;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class DataMapper {
+public class EntityMapper {
 
     private final Gson mGson;
 
     @Inject
-    public DataMapper(Gson gson) {
+    public EntityMapper(Gson gson) {
         mGson = gson;
         // TODO clean up mapper
     }

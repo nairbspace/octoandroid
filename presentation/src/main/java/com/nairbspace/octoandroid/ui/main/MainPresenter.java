@@ -1,12 +1,12 @@
 package com.nairbspace.octoandroid.ui.main;
 
 import com.fernandocejas.frodo.annotation.RxLogSubscriber;
-import com.nairbspace.octoandroid.domain.Printer;
+import com.nairbspace.octoandroid.domain.pojo.Printer;
 import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
 import com.nairbspace.octoandroid.domain.interactor.GetPrinterDetails;
 import com.nairbspace.octoandroid.exception.ErrorMessageFactory;
 import com.nairbspace.octoandroid.model.PrinterModel;
-import com.nairbspace.octoandroid.model.mapper.DomainMapper;
+import com.nairbspace.octoandroid.model.mapper.ModelMapper;
 import com.nairbspace.octoandroid.ui.UseCasePresenter;
 
 import javax.inject.Inject;
@@ -17,13 +17,13 @@ public class MainPresenter extends UseCasePresenter<MainScreen> {
 
     private MainScreen mMainScreen;
     private final GetPrinterDetails mUseCase;
-    private final DomainMapper mDomainMapper;
+    private final ModelMapper mModelMapper;
 
     @Inject
-    public MainPresenter(GetPrinterDetails getPrinterDetailsUseCase, DomainMapper domainMapper) {
+    public MainPresenter(GetPrinterDetails getPrinterDetailsUseCase, ModelMapper modelMapper) {
         super(getPrinterDetailsUseCase);
         mUseCase = getPrinterDetailsUseCase;
-        mDomainMapper = domainMapper;
+        mModelMapper = modelMapper;
     }
 
     @Override
@@ -52,7 +52,7 @@ public class MainPresenter extends UseCasePresenter<MainScreen> {
 
         @Override
         public void onNext(Printer printer) {
-            mDomainMapper.transformObservable(printer).subscribe(new Action1<PrinterModel>() {
+            mModelMapper.transformObservable(printer).subscribe(new Action1<PrinterModel>() {
                 @Override
                 public void call(PrinterModel printerModel) {
                     mMainScreen.updateNavHeader(printerModel.name(), printerModel.host());

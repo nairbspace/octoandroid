@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.domain;
+package com.nairbspace.octoandroid.domain.pojo;
 
 import android.support.annotation.Nullable;
 

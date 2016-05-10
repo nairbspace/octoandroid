@@ -4,7 +4,7 @@ import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
 import com.nairbspace.octoandroid.data.entity.VersionEntity;
 import com.nairbspace.octoandroid.data.exception.NoActivePrinterException;
 import com.nairbspace.octoandroid.data.exception.PrinterDataNotFoundException;
-import com.nairbspace.octoandroid.data.mapper.DataMapper;
+import com.nairbspace.octoandroid.data.mapper.EntityMapper;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -18,11 +18,11 @@ public class DiskManagerImpl implements DiskManager {
     private final PrefHelper mPrefHelper;
     private final AccountHelper mAccountHelper;
     private final DbHelper mDbHelper;
-    private final DataMapper mMapper;
+    private final EntityMapper mMapper;
 
     @Inject
     public DiskManagerImpl(PrefHelper prefHelper, AccountHelper accountHelper,
-                           DbHelper dbHelper, DataMapper mapper) {
+                           DbHelper dbHelper, EntityMapper mapper) {
         mPrefHelper = prefHelper;
         mAccountHelper = accountHelper;
         mDbHelper = dbHelper;

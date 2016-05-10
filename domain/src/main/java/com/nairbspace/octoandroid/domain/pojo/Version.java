@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.domain;
+package com.nairbspace.octoandroid.domain.pojo;
 
 import com.google.auto.value.AutoValue;
 

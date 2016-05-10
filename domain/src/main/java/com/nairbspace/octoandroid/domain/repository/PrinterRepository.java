@@ -1,8 +1,8 @@
 package com.nairbspace.octoandroid.domain.repository;
 
-import com.nairbspace.octoandroid.domain.AddPrinter;
-import com.nairbspace.octoandroid.domain.Printer;
-import com.nairbspace.octoandroid.domain.Version;
+import com.nairbspace.octoandroid.domain.pojo.AddPrinter;
+import com.nairbspace.octoandroid.domain.pojo.Printer;
+import com.nairbspace.octoandroid.domain.pojo.Version;
 
 import rx.Observable;
 
