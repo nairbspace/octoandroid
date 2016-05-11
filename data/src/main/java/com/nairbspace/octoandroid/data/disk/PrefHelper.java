@@ -12,6 +12,7 @@ import javax.inject.Singleton;
 public class PrefHelper {
     private static final String ACTIVE_PRINTER = "active_printer";
     public static final long NO_ACTIVE_PRINTER = 0;
+    private static final String LAST_SAVE_TIME_KEY = "last_save_time";
 
     private SharedPreferences mPreferences;
 
@@ -40,5 +41,13 @@ public class PrefHelper {
 
     public boolean doesActivePrinterExist() {
         return getActivePrinter() != NO_ACTIVE_PRINTER;
+    }
+
+    public void setSaveTimeMillis(long currentMillis) {
+        mPreferences.edit().putLong(LAST_SAVE_TIME_KEY, currentMillis).apply();
+    }
+
+    public long getLastSaveTimeMillis() {
+        return mPreferences.getLong(LAST_SAVE_TIME_KEY, 0);
     }
 }

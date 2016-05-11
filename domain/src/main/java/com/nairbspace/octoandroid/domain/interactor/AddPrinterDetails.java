@@ -10,15 +10,15 @@ import javax.inject.Inject;
 
 import rx.Observable;
 
-public class TransformAddPrinter extends UseCase {
+public class AddPrinterDetails extends UseCase {
 
     private final PrinterRepository mPrinterRepository;
     private AddPrinter mAddPrinter;
 
     @Inject
-    public TransformAddPrinter(ThreadExecutor threadExecutor,
-                               PostExecutionThread postExecutionThread,
-                               PrinterRepository printerRepository) {
+    public AddPrinterDetails(ThreadExecutor threadExecutor,
+                             PostExecutionThread postExecutionThread,
+                             PrinterRepository printerRepository) {
         super(threadExecutor, postExecutionThread);
         mPrinterRepository = printerRepository;
     }
@@ -28,7 +28,7 @@ public class TransformAddPrinter extends UseCase {
         if (mAddPrinter == null) {
             return Observable.error(new NullUseCaseBuilderException());
         }
-        return mPrinterRepository.transformAddPrinter(mAddPrinter);
+        return mPrinterRepository.addPrinterDetails(mAddPrinter);
     }
 
     public void setAddPrinter(AddPrinter addPrinter) { // TODO need to see if can implement this other way

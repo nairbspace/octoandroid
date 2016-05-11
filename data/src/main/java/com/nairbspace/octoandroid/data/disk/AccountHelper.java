@@ -20,17 +20,22 @@ public class AccountHelper {
     }
 
     public boolean doesPrinterExistInAccountManager(PrinterDbEntity printerDbEntity) {
+        Account account = findPrinterAccount(printerDbEntity);
+        return account != null;
+    }
+
+    public Account findPrinterAccount(PrinterDbEntity printerDbEntity) {
         Account[] accounts = mAccountManager.getAccounts();
         if (accounts.length == 0) {
-            return false;
+            return null;
         }
 
         for (Account account : accounts) {
             if (account.name.equals(printerDbEntity.getName())) {
-                return true;
+                return account;
             }
         }
-        return false;
+        return null;
     }
 
     private String validateAccountType(String accountType) {
@@ -38,6 +43,13 @@ public class AccountHelper {
             return "com.nairbspace.actoandroid"; // TODO should add in data res folder
         }
         return accountType;
+    }
+
+    public void removeAccount(PrinterDbEntity printerDbEntity) {
+        Account account = findPrinterAccount(printerDbEntity);
+        if (account != null) {
+            removeAccount(account);
+        }
     }
 
     private void removeAccount(Account account) {

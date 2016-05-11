@@ -1,9 +1,12 @@
 package com.nairbspace.octoandroid.model.mapper;
 
+import com.google.gson.Gson;
 import com.nairbspace.octoandroid.domain.pojo.AddPrinter;
+import com.nairbspace.octoandroid.domain.pojo.Connection;
 import com.nairbspace.octoandroid.domain.pojo.Printer;
 import com.nairbspace.octoandroid.exception.TransformErrorException;
 import com.nairbspace.octoandroid.model.AddPrinterModel;
+import com.nairbspace.octoandroid.model.ConnectionModel;
 import com.nairbspace.octoandroid.model.PrinterModel;
 
 import javax.inject.Inject;
@@ -15,12 +18,15 @@ import rx.schedulers.Schedulers;
 
 public class ModelMapper {
 
+    private final Gson mGson;
+
     @Inject
-    public ModelMapper() {
+    public ModelMapper(Gson gson) {
+        mGson = gson;
         // TODO Figure out better way to map
     }
 
-    public Observable<AddPrinter> transformObservable(final AddPrinterModel addPrinterModel) {
+    public Observable<AddPrinter> transformObs(final AddPrinterModel addPrinterModel) {
         //noinspection unchecked
         return setThreads(Observable.create(new Observable.OnSubscribe<AddPrinter>() {
             @Override
@@ -42,7 +48,7 @@ public class ModelMapper {
         }));
     }
 
-    public Observable<PrinterModel> transformObservable(final Printer printer) {
+    public Observable<PrinterModel> transformObs(final Printer printer) {
         //noinspection unchecked
         return setThreads(Observable.create(new Observable.OnSubscribe<PrinterModel>() {
             @Override
@@ -65,6 +71,34 @@ public class ModelMapper {
         }));
     }
 
+    public Observable<ConnectionModel> transformObs(final Connection connection) {
+        //noinspection unchecked
+        return setThreads(Observable.create(new Observable.OnSubscribe<ConnectionModel>() {
+            @Override
+            public void call(Subscriber<? super ConnectionModel> subscriber) {
+                try {
+                    ConnectionModel connectionModel = transform(connection, ConnectionModel.class);
+                    subscriber.onNext(connectionModel);
+                } catch (Exception e) {
+                    subscriber.onError(new TransformErrorException());
+                }
+            }
+        }));
+    }
+
+    /**
+     *
+     * @param inputObject Input object
+     * @param outputType Output class
+     * @param <T> Generic output
+     * @return Output object
+     */
+    public <T> T transform(Object inputObject, Class<T> outputType) {
+        String json = mGson.toJson(inputObject);
+        return mGson.fromJson(json, outputType);
+    }
+
+    // TODO need to fix threads
     public Observable setThreads(Observable observable) {
         return observable.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread());

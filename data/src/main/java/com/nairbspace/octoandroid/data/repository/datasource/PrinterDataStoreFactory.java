@@ -1,10 +1,7 @@
 package com.nairbspace.octoandroid.data.repository.datasource;
 
-import android.content.Context;
-import android.support.annotation.NonNull;
-
 import com.nairbspace.octoandroid.data.disk.DiskManager;
-import com.nairbspace.octoandroid.data.net.ApiConnection;
+import com.nairbspace.octoandroid.data.net.ApiManagerImpl;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -12,16 +9,13 @@ import javax.inject.Singleton;
 @Singleton
 public class PrinterDataStoreFactory {
 
-    private final Context mContext;
     private final DiskManager mDiskManager;
-    private final ApiConnection mApiConnection;
+    private final ApiManagerImpl mApiManagerImpl;
 
     @Inject
-    public PrinterDataStoreFactory(@NonNull Context context, @NonNull DiskManager diskManager,
-                                   @NonNull ApiConnection apiConnection) {
-        mContext = context;
+    public PrinterDataStoreFactory(DiskManager diskManager, ApiManagerImpl apiManagerImpl) {
         mDiskManager = diskManager;
-        mApiConnection = apiConnection;
+        mApiManagerImpl = apiManagerImpl;
     }
 
     public PrinterDataStore createDiskDataStore() {
@@ -32,7 +26,18 @@ public class PrinterDataStoreFactory {
 
     public PrinterDataStore createCloudDataStore() {
         PrinterDataStore printerDataStore;
-        printerDataStore = new CloudPrinterDataStore(mApiConnection, mDiskManager);
+        printerDataStore = new CloudPrinterDataStore(mApiManagerImpl, mDiskManager);
+        return printerDataStore;
+    }
+
+    public PrinterDataStore create() {
+        PrinterDataStore printerDataStore;
+
+        if (mDiskManager.isSaved() && !mDiskManager.isExpired()) {
+            printerDataStore = createDiskDataStore();
+        } else {
+            printerDataStore = createCloudDataStore();
+        }
         return printerDataStore;
     }
 }

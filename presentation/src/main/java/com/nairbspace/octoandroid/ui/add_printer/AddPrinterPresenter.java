@@ -1,11 +1,9 @@
 package com.nairbspace.octoandroid.ui.add_printer;
 
-import com.nairbspace.octoandroid.domain.pojo.AddPrinter;
-import com.nairbspace.octoandroid.domain.pojo.Printer;
-import com.nairbspace.octoandroid.domain.pojo.Version;
+import com.nairbspace.octoandroid.domain.interactor.AddPrinterDetails;
 import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
-import com.nairbspace.octoandroid.domain.interactor.GetVersion;
-import com.nairbspace.octoandroid.domain.interactor.TransformAddPrinter;
+import com.nairbspace.octoandroid.domain.interactor.VerifyPrinter;
+import com.nairbspace.octoandroid.domain.pojo.AddPrinter;
 import com.nairbspace.octoandroid.exception.ErrorMessageFactory;
 import com.nairbspace.octoandroid.model.AddPrinterModel;
 import com.nairbspace.octoandroid.model.mapper.ModelMapper;
@@ -19,17 +17,17 @@ public class AddPrinterPresenter extends UseCasePresenter<AddPrinterScreen> {
 
     private AddPrinterScreen mScreen;
     private final ModelMapper mModelMapper;
-    private final TransformAddPrinter mTransformAddPrinterUseCase;
-    private final GetVersion mGetVersionUseCase;
+    private final AddPrinterDetails mAddPrinterDetails;
+    private final VerifyPrinter mVerifyPrinter;
 
     @Inject
-    public AddPrinterPresenter(TransformAddPrinter transformAddPrinterUseCase,
+    public AddPrinterPresenter(AddPrinterDetails addPrinterDetails,
                                ModelMapper modelMapper,
-                               GetVersion getVersionUseCase) {
-        super(transformAddPrinterUseCase);
-        mTransformAddPrinterUseCase = transformAddPrinterUseCase;
+                               VerifyPrinter verifyPrinter) {
+        super(addPrinterDetails);
+        mAddPrinterDetails = addPrinterDetails;
         mModelMapper = modelMapper;
-        mGetVersionUseCase = getVersionUseCase;
+        mVerifyPrinter = verifyPrinter;
     }
 
     @Override
@@ -38,12 +36,12 @@ public class AddPrinterPresenter extends UseCasePresenter<AddPrinterScreen> {
     }
 
     public void onAddPrinterClicked(final AddPrinterModel addPrinterModel) {
-        mModelMapper.transformObservable(addPrinterModel).subscribe(new Action1<AddPrinter>() {
+        mModelMapper.transformObs(addPrinterModel).subscribe(new Action1<AddPrinter>() {
             @Override
             public void call(AddPrinter addPrinter) {
                 showLoading(true);
-                mTransformAddPrinterUseCase.setAddPrinter(addPrinter);
-                mTransformAddPrinterUseCase.execute(new AddPrinterSubscriber());
+                mAddPrinterDetails.setAddPrinter(addPrinter);
+                mAddPrinterDetails.execute(new AddPrinterSubscriber());
             }
         });
     }
@@ -51,7 +49,7 @@ public class AddPrinterPresenter extends UseCasePresenter<AddPrinterScreen> {
     @Override
     protected void onDestroy(AddPrinterScreen addPrinterScreen) {
         super.onDestroy(addPrinterScreen);
-        mGetVersionUseCase.unsubscribe(); // super class only able to do unsubscribe from one subscription.
+        mVerifyPrinter.unsubscribe(); // super class only able to do unsubscribe from one subscription.
     }
 
     private void showLoading(boolean shouldShow) {
@@ -63,7 +61,7 @@ public class AddPrinterPresenter extends UseCasePresenter<AddPrinterScreen> {
         }
     }
 
-    private final class AddPrinterSubscriber extends DefaultSubscriber<Printer> {
+    private final class AddPrinterSubscriber extends DefaultSubscriber<Boolean> {
 
         @Override
         public void onError(Throwable e) {
@@ -75,17 +73,18 @@ public class AddPrinterPresenter extends UseCasePresenter<AddPrinterScreen> {
         }
 
         @Override
-        public void onNext(Printer printer) {
-            mGetVersionUseCase.setPrinter(printer);
-            mGetVersionUseCase.execute(new GetVersionSubscriber());
+        public void onNext(Boolean aBoolean) {
+            if (aBoolean) {
+                mVerifyPrinter.execute(new GetVersionSubscriber());
+            }
         }
     }
 
-    private final class GetVersionSubscriber extends DefaultSubscriber<Version> {
+    private final class GetVersionSubscriber extends DefaultSubscriber<Boolean> {
+
         @Override
         public void onCompleted() {
             showLoading(false);
-            mScreen.navigateToPreviousScreen();
         }
 
         @Override
@@ -98,6 +97,13 @@ public class AddPrinterPresenter extends UseCasePresenter<AddPrinterScreen> {
                 mScreen.showAlertDialog(alertTitle, message);
             } else {
                 mScreen.showSnackbar(message);
+            }
+        }
+
+        @Override
+        public void onNext(Boolean aBoolean) {
+            if (aBoolean) {
+                mScreen.navigateToPreviousScreen();
             }
         }
     }

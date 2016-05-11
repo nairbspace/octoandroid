@@ -1,5 +1,8 @@
 package com.nairbspace.octoandroid.data.net;
 
+import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
+import com.nairbspace.octoandroid.data.disk.DbHelper;
+
 import java.io.IOException;
 
 import javax.inject.Inject;
@@ -12,50 +15,33 @@ import okhttp3.Response;
 
 @Singleton
 public class OctoInterceptor implements Interceptor {
-    private String mScheme;
-    private String mHost;
-    private int mPort;
-    private String mApiKey;
+
+    private final DbHelper mDbHelper;
 
     @Inject
-    public OctoInterceptor() {
-    }
-
-    public void setInterceptor(String scheme, String host, int port, String apiKey) {
-        mScheme = scheme;
-        mHost = host;
-        mPort = port;
-        mApiKey = apiKey;
-    }
-
-    public void setScheme(String scheme) {
-        mScheme = scheme;
-    }
-
-    public void setHost(String host) {
-        mHost = host;
-    }
-
-    public void setPort(int port) {
-        mPort = port;
-    }
-
-    public void setApiKey(String apiKey) {
-        mApiKey = apiKey;
+    public OctoInterceptor(DbHelper dbHelper) {
+        mDbHelper = dbHelper;
     }
 
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request original = chain.request();
-        if (mScheme != null && mHost != null && mApiKey != null) {
+
+        PrinterDbEntity printerDbEntity = mDbHelper.getActivePrinterDbEntity();
+        if (printerDbEntity == null) {
+            return chain.proceed(original);
+        }
+
+        if (printerDbEntity.getScheme() != null && printerDbEntity.getHost() != null &&
+                printerDbEntity.getApiKey() != null) {
             HttpUrl newUrl = original.url().newBuilder()
-                    .scheme(mScheme)
-                    .host(mHost)
-                    .port(mPort)
+                    .scheme(printerDbEntity.getScheme())
+                    .host(printerDbEntity.getHost())
+                    .port(printerDbEntity.getPort())
                     .build();
             original = original.newBuilder()
                     .url(newUrl)
-                    .header("X-Api-Key", mApiKey)
+                    .header("X-Api-Key", printerDbEntity.getApiKey())
                     .build();
         } // TODO need another interceptor for uploading files or different headers
         return chain.proceed(original);

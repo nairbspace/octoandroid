@@ -2,7 +2,10 @@ package com.nairbspace.octoandroid.di.modules;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.nairbspace.octoandroid.data.disk.DbHelper;
 import com.nairbspace.octoandroid.data.entity.AutoValueTypeAdapterFactory;
+import com.nairbspace.octoandroid.data.net.ApiManager;
+import com.nairbspace.octoandroid.data.net.ApiManagerImpl;
 import com.nairbspace.octoandroid.data.net.OctoApi;
 import com.nairbspace.octoandroid.data.net.OctoApiImplDeprecated;
 import com.nairbspace.octoandroid.data.net.OctoInterceptor;
@@ -23,8 +26,8 @@ public class NetworkModule {
 
     @Singleton
     @Provides
-    OctoInterceptor provideInterceptor() {
-        return new OctoInterceptor();
+    OctoInterceptor provideInterceptor(DbHelper dbHelper) {
+        return new OctoInterceptor(dbHelper);
     }
 
     @Singleton
@@ -94,5 +97,11 @@ public class NetworkModule {
     @Singleton
     OctoApiImplDeprecated provideApiImpl(OctoApi api) {
         return new OctoApiImplDeprecated(api);
+    }
+
+    @Provides
+    @Singleton
+    ApiManager provideApiManager(OctoApi api) {
+        return new ApiManagerImpl(api);
     }
 }

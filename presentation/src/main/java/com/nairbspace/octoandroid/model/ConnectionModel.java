@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.data.entity;
+package com.nairbspace.octoandroid.model;
 
 import android.support.annotation.Nullable;
 
@@ -9,17 +9,17 @@ import com.nairbspace.octoandroid.domain.pojo.AutoGson;
 import java.util.List;
 
 @AutoValue
-@AutoGson(autoValueClass = AutoValue_ConnectionEntity.class)
-public abstract class ConnectionEntity {
+@AutoGson(autoValueClass = AutoValue_ConnectionModel.class)
+public abstract class ConnectionModel {
     @SerializedName("current") public abstract Current current();
     @SerializedName("options") public abstract Options options();
 
 //    public static TypeAdapter<Connection> typeAdapter(Gson gson) {
-//        return new AutoValue_Connection.GsonTypeAdapter(gson);
+//        return new AutoValue_ConnectionModel.GsonTypeAdapter(gson);
 //    }
 
     @AutoValue
-    @AutoGson(autoValueClass = AutoValue_ConnectionEntity_Current.class)
+    @AutoGson(autoValueClass = AutoValue_ConnectionModel_Current.class)
     public abstract static class Current {
         @Nullable @SerializedName("baudrate") public abstract Integer baudrate();
         @Nullable @SerializedName("port") public abstract String port();
@@ -27,12 +27,12 @@ public abstract class ConnectionEntity {
         @SerializedName("state") public abstract String state();
 
 //        public static TypeAdapter<Current> typeAdapter(Gson gson) {
-//            return new AutoValue_Connection_Current.GsonTypeAdapter(gson);
+//            return new AutoValue_ConnectionModel_Current.GsonTypeAdapter(gson);
 //        }
     }
 
     @AutoValue
-    @AutoGson(autoValueClass = AutoValue_ConnectionEntity_Options.class)
+    @AutoGson(autoValueClass = AutoValue_ConnectionModel_Options.class)
     public abstract static class Options {
         @SerializedName("baudratePreference") public abstract Integer baudratePreference();
         @SerializedName("baudrates") public abstract List<Integer> baudrates();
@@ -42,18 +42,18 @@ public abstract class ConnectionEntity {
         @SerializedName("printerProfiles") public abstract List<PrinterProfile> printerProfiles();
 
 //        public static TypeAdapter<Options> typeAdapter(Gson gson) {
-//            return new AutoValue_Connection_Options.GsonTypeAdapter(gson);
+//            return new AutoValue_ConnectionModel_Options.GsonTypeAdapter(gson);
 //        }
     }
 
     @AutoValue
-    @AutoGson(autoValueClass = AutoValue_ConnectionEntity_PrinterProfile.class)
+    @AutoGson(autoValueClass = AutoValue_ConnectionModel_PrinterProfile.class)
     public abstract static class PrinterProfile {
         @SerializedName("printerDetails") public abstract String id();
         @SerializedName("name") public abstract String name();
 
 //        public static TypeAdapter<PrinterProfile> typeAdapter(Gson gson) {
-//            return new AutoValue_Connection_PrinterProfile.GsonTypeAdapter(gson);
+//            return new AutoValue_ConnectionModel_PrinterProfile.GsonTypeAdapter(gson);
 //        }
     }
 }

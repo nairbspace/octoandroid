@@ -52,7 +52,7 @@ public class MainPresenter extends UseCasePresenter<MainScreen> {
 
         @Override
         public void onNext(Printer printer) {
-            mModelMapper.transformObservable(printer).subscribe(new Action1<PrinterModel>() {
+            mModelMapper.transformObs(printer).subscribe(new Action1<PrinterModel>() {
                 @Override
                 public void call(PrinterModel printerModel) {
                     mMainScreen.updateNavHeader(printerModel.name(), printerModel.host());

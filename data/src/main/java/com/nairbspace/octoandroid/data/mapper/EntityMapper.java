@@ -1,12 +1,11 @@
 package com.nairbspace.octoandroid.data.mapper;
 
-import android.support.annotation.NonNull;
-
 import com.google.gson.Gson;
 import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
 import com.nairbspace.octoandroid.data.entity.AddPrinterEntity;
 import com.nairbspace.octoandroid.data.entity.ConnectionEntity;
 import com.nairbspace.octoandroid.data.entity.VersionEntity;
+import com.nairbspace.octoandroid.data.exception.EntityMapperException;
 import com.nairbspace.octoandroid.domain.pojo.AddPrinter;
 import com.nairbspace.octoandroid.domain.pojo.Connection;
 import com.nairbspace.octoandroid.domain.pojo.Printer;
@@ -14,6 +13,11 @@ import com.nairbspace.octoandroid.domain.pojo.Version;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import rx.Observable;
+import rx.Subscriber;
+import rx.exceptions.Exceptions;
+import rx.functions.Func1;
 
 @Singleton
 public class EntityMapper {
@@ -26,8 +30,9 @@ public class EntityMapper {
         // TODO clean up mapper
     }
 
-    public Printer transformWithNoId(@NonNull PrinterDbEntity printerDbEntity) {
+    public Printer transform(PrinterDbEntity printerDbEntity)  {
         return Printer.builder()
+                .id(printerDbEntity.getId())
                 .name(printerDbEntity.getName())
                 .apiKey(printerDbEntity.getApiKey())
                 .scheme(printerDbEntity.getScheme())
@@ -36,12 +41,25 @@ public class EntityMapper {
                 .build();
     }
 
+    public Observable<Printer> map(Observable<PrinterDbEntity> inputObservable) {
+        return inputObservable.map(new Func1<PrinterDbEntity, Printer>() {
+            @Override
+            public Printer call(PrinterDbEntity printerDbEntity) {
+                try {
+                    return transform(printerDbEntity);
+                } catch (Exception e) {
+                    throw Exceptions.propagate(new EntityMapperException(e));
+                }
+            }
+        });
+    }
+
     /**
      *
      * @param printer Printer object from domain module
      * @return PrinterDbEntity with no ID
      */
-    public PrinterDbEntity transformToEntity(@NonNull Printer printer) {
+    public PrinterDbEntity transformToEntity(Printer printer) {
         PrinterDbEntity printerDbEntity = new PrinterDbEntity();
         printerDbEntity.setName(printer.name());
         printerDbEntity.setApiKey(printer.apiKey());
@@ -51,11 +69,19 @@ public class EntityMapper {
         return printerDbEntity;
     }
 
-    public Version transform(@NonNull VersionEntity versionEntity) {
-        return Version.builder()
-                .api(versionEntity.api())
-                .server(versionEntity.server())
-                .build();
+    public Observable<PrinterDbEntity> transformToObs(final Printer printer) {
+        return Observable.create(new Observable.OnSubscribe<PrinterDbEntity>() {
+            @Override
+            public void call(Subscriber<? super PrinterDbEntity> subscriber) {
+                try {
+                    PrinterDbEntity printerDbEntity = transformToEntity(printer);
+                    subscriber.onNext(printerDbEntity);
+                    subscriber.onCompleted();
+                } catch (Exception e) {
+                    subscriber.onError(new EntityMapperException(e));
+                }
+            }
+        });
     }
 
     public AddPrinterEntity transform(AddPrinter addPrinter) {
@@ -68,12 +94,63 @@ public class EntityMapper {
                 .build();
     }
 
-    public Connection transform(ConnectionEntity connectionEntity) {
-        String json = mGson.toJson(connectionEntity);
-        return mGson.fromJson(json, Connection.class);
+    public Observable<AddPrinterEntity> transformToObs(final AddPrinter addPrinter) {
+        return Observable.create(new Observable.OnSubscribe<AddPrinterEntity>() {
+            @Override
+            public void call(Subscriber<? super AddPrinterEntity> subscriber) {
+                try {
+                    AddPrinterEntity addPrinterEntity = transform(addPrinter);
+                    subscriber.onNext(addPrinterEntity);
+                    subscriber.onCompleted();
+                } catch (Exception e) {
+                    subscriber.onError(new EntityMapperException());
+                }
+            }
+        });
     }
 
-    public String serialize(VersionEntity versionEntity) {
-        return mGson.toJson(versionEntity, VersionEntity.class);
+    public Observable<Connection> transformObs(Observable<ConnectionEntity> connectionEntityObs) {
+        return connectionEntityObs.map(new Func1<ConnectionEntity, Connection>() {
+            @Override
+            public Connection call(ConnectionEntity connectionEntity) {
+                try {
+                    return transform(connectionEntity, Connection.class);
+                } catch (Exception e) {
+                    throw Exceptions.propagate(new EntityMapperException(e));
+                }
+            }
+        });
+    }
+
+    /**
+     *
+     * @param inputObject Input object
+     * @param outputType Output class
+     * @param <T> Generic output
+     * @return Output object
+     */
+    public <T> T transform(Object inputObject, Class<T> outputType) {
+        String json = mGson.toJson(inputObject);
+        return mGson.fromJson(json, outputType);
+    }
+
+    /**
+     *
+     * @param json String json input
+     * @param inputClass Entity class
+     * @param <T> Entity class
+     * @return Entity object
+     */
+    public <T> T deserialize(String json, Class<T> inputClass) {
+        return mGson.fromJson(json, inputClass);
+    }
+
+    /**
+     *
+     * @param inputObject input Object
+     * @return Json string
+     */
+    public String serialize(Object inputObject) {
+        return mGson.toJson(inputObject);
     }
 }

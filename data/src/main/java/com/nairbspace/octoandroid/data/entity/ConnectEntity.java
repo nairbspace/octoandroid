@@ -4,6 +4,7 @@ import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 import com.google.gson.annotations.SerializedName;
+import com.nairbspace.octoandroid.domain.pojo.AutoGson;
 
 @AutoValue
 @AutoGson(autoValueClass = AutoValue_ConnectEntity.class)

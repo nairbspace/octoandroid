@@ -45,7 +45,7 @@ public class GetConnectionImpl implements GetConnection {
     @Override
     public void getConnection(final GetConnectionFinishedListener listener) {
         if (mPrinterDbEntity != null) {
-            mInterceptor.setInterceptor(mPrinterDbEntity.getScheme(), mPrinterDbEntity.getHost(), mPrinterDbEntity.getPort(), mPrinterDbEntity.getApiKey());
+//            mInterceptor.setInterceptor(mPrinterDbEntity.getScheme(), mPrinterDbEntity.getHost(), mPrinterDbEntity.getPort(), mPrinterDbEntity.getApiKey());
             mApi.getConnectionObservable()
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -89,8 +89,8 @@ public class GetConnectionImpl implements GetConnection {
                     .flatMap(new Func1<Long, Observable<ConnectionEntity>>() {
                         @Override
                         public Observable<ConnectionEntity> call(Long aLong) {
-                            mInterceptor.setInterceptor(mPrinterDbEntity.getScheme(),
-                                    mPrinterDbEntity.getHost(), mPrinterDbEntity.getPort(), mPrinterDbEntity.getApiKey());
+//                            mInterceptor.setInterceptor(mPrinterDbEntity.getScheme(),
+//                                    mPrinterDbEntity.getHost(), mPrinterDbEntity.getPort(), mPrinterDbEntity.getApiKey());
                             return mApi.getConnectionObservable();
                         }
                     })

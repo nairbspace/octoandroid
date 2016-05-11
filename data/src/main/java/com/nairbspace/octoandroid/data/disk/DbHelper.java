@@ -9,11 +9,19 @@ import de.greenrobot.dao.DaoException;
 
 /** Convenience methods for db related info */
 public class DbHelper {
+
     private final PrinterDbEntityDao mPrinterDbEntityDao;
+    private final PrefHelper mPrefHelper;
 
     @Inject
-    public DbHelper(PrinterDbEntityDao printerDbEntityDao) {
+    public DbHelper(PrinterDbEntityDao printerDbEntityDao, PrefHelper prefHelper) {
         mPrinterDbEntityDao = printerDbEntityDao;
+        mPrefHelper = prefHelper;
+    }
+
+    public PrinterDbEntity getActivePrinterDbEntity() {
+        long id = mPrefHelper.getActivePrinter();
+        return getPrinterFromDbById(id);
     }
 
     public PrinterDbEntity getPrinterFromDbByName(String name) {
@@ -49,7 +57,7 @@ public class DbHelper {
         }
     }
 
-    public void addPrinterToDb(PrinterDbEntity printerDbEntity) {
+    public void insertOrReplace(PrinterDbEntity printerDbEntity) {
         mPrinterDbEntityDao.insertOrReplace(printerDbEntity);
     }
 }

@@ -1,6 +1,5 @@
 package com.nairbspace.octoandroid.data.net;
 
-import android.content.Context;
 import android.text.TextUtils;
 
 import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
@@ -13,35 +12,26 @@ import com.nairbspace.octoandroid.data.exception.IncorrectAddPrinterFormattingEx
 import com.nairbspace.octoandroid.data.exception.IpAddressEmptyException;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import okhttp3.HttpUrl;
 import retrofit2.http.Body;
 import rx.Observable;
-import rx.Subscriber;
+import rx.exceptions.Exceptions;
+import rx.functions.Func1;
 
-public class ApiConnection implements OctoApi {
+@Singleton
+public class ApiManagerImpl implements ApiManager {
     private static final String HTTP_SCHEME = "http";
     private static final int HTTP_PORT = 80;
     private static final int HTTPS_PORT = 443;
     private static final String HTTPS_SCHEME = "https";
 
-    private final OctoInterceptor mOctoInterceptor;
-    private final Context mContext;
     private final OctoApi mOctoApi;
 
     @Inject
-    public ApiConnection(OctoInterceptor octoInterceptor, Context context,
-                         OctoApi octoApi) {
-        mOctoInterceptor = octoInterceptor;
-        mContext = context;
+    public ApiManagerImpl(OctoApi octoApi) {
         mOctoApi = octoApi;
-    }
-
-    public void setOctoInterceptor(PrinterDbEntity dbEntity) {
-        mOctoInterceptor.setScheme(dbEntity.getScheme());
-        mOctoInterceptor.setHost(dbEntity.getHost());
-        mOctoInterceptor.setPort(dbEntity.getPort());
-        mOctoInterceptor.setApiKey(dbEntity.getApiKey());
     }
 
     @Override
@@ -64,12 +54,13 @@ public class ApiConnection implements OctoApi {
         return mOctoApi.getPrinter();
     }
 
-    public Observable<PrinterDbEntity> transformAddPrinterEntity(final AddPrinterEntity addPrinterEntity) {
-        return Observable.create(new Observable.OnSubscribe<PrinterDbEntity>() {
+    @Override
+    public Observable<PrinterDbEntity> map(Observable<AddPrinterEntity> addPrinterEntityObs) {
+        return addPrinterEntityObs.map(new Func1<AddPrinterEntity, PrinterDbEntity>() {
             @Override
-            public void call(Subscriber<? super PrinterDbEntity> subscriber) {
+            public PrinterDbEntity call(AddPrinterEntity addPrinterEntity) {
                 if (TextUtils.isEmpty(addPrinterEntity.ipAddress())) {
-                    subscriber.onError(new IpAddressEmptyException());
+                    throw Exceptions.propagate(new IpAddressEmptyException());
                 }
 
                 String ipAddress = extractHost(addPrinterEntity.ipAddress());
@@ -85,10 +76,9 @@ public class ApiConnection implements OctoApi {
                 printerDbEntity.setPort(port);
 
                 if (isUrlValid(printerDbEntity)) {
-                    subscriber.onNext(printerDbEntity);
-                    subscriber.onCompleted();
+                    return printerDbEntity;
                 } else {
-                    subscriber.onError(new IncorrectAddPrinterFormattingException());
+                    throw Exceptions.propagate(new IncorrectAddPrinterFormattingException());
                 }
             }
         });
