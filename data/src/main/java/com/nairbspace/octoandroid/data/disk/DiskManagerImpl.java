@@ -14,6 +14,7 @@ import javax.inject.Singleton;
 import rx.Observable;
 import rx.Subscriber;
 import rx.exceptions.Exceptions;
+import rx.functions.Action1;
 import rx.functions.Func1;
 
 @Singleton
@@ -100,18 +101,17 @@ public class DiskManagerImpl implements DiskManager {
     }
 
     @Override
-    public Observable<Boolean> putPrinterDbEntity(final Observable<PrinterDbEntity> printerDbEntityObs) {
-        return printerDbEntityObs.map(new Func1<PrinterDbEntity, Boolean>() {
+    public Action1<PrinterDbEntity> putPrinterDbEntity() {
+        return new Action1<PrinterDbEntity>() {
             @Override
-            public Boolean call(PrinterDbEntity printerDbEntity) {
+            public void call(PrinterDbEntity printerDbEntity) {
                 try {
                     put(printerDbEntity);
-                    return true;
                 } catch (Exception e) {
-                    throw Exceptions.propagate(new ErrorSavingException(e));
+                    throw Exceptions.propagate(new ErrorSavingException());
                 }
             }
-        });
+        };
     }
 
     @Override
@@ -150,6 +150,19 @@ public class DiskManagerImpl implements DiskManager {
                 return true;
             }
         });
+    }
+
+    @Override
+    public Action1<Throwable> deleteUnverifiedPrinter() {
+        return new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                PrinterDbEntity printerDbEntity = mDbHelper.getActivePrinterDbEntity();
+                mDbHelper.deleteOldPrinterInDb(printerDbEntity);
+                mAccountHelper.removeAccount(printerDbEntity);
+                mPrefHelper.setActivePrinter(PrefHelper.NO_ACTIVE_PRINTER);
+            }
+        };
     }
 
     @Override

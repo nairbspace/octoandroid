@@ -84,6 +84,16 @@ public class ApiManagerImpl implements ApiManager {
         });
     }
 
+    @Override
+    public Func1<PrinterDbEntity, Observable<VersionEntity>> concatGetVersion() {
+        return new Func1<PrinterDbEntity, Observable<VersionEntity>>() {
+            @Override
+            public Observable<VersionEntity> call(PrinterDbEntity printerDbEntity) {
+                return mOctoApi.getVersion();
+            }
+        };
+    }
+
     private String extractHost(String ipAddress) {
         // If user inputted http:// or https:// try to extract only IP Address
         HttpUrl ipAddressUrl = HttpUrl.parse(ipAddress);

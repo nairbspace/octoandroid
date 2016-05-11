@@ -11,7 +11,7 @@ import android.os.Bundle;
 
 import com.fernandocejas.frodo.annotation.RxLogSubscriber;
 import com.nairbspace.octoandroid.app.SetupApplication;
-import com.nairbspace.octoandroid.domain.pojo.Printer;
+import com.nairbspace.octoandroid.domain.model.Printer;
 import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
 import com.nairbspace.octoandroid.domain.interactor.DeletePrinterDetails;
 import com.nairbspace.octoandroid.domain.interactor.GetPrinterDetailsByName;

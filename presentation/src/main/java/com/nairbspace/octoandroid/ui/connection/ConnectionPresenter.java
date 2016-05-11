@@ -3,7 +3,7 @@ package com.nairbspace.octoandroid.ui.connection;
 import com.fernandocejas.frodo.annotation.RxLogSubscriber;
 import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
 import com.nairbspace.octoandroid.domain.interactor.GetConnectionDetails;
-import com.nairbspace.octoandroid.domain.pojo.Connection;
+import com.nairbspace.octoandroid.domain.model.Connection;
 import com.nairbspace.octoandroid.model.ConnectionModel;
 import com.nairbspace.octoandroid.model.ConnectionModel.Current;
 import com.nairbspace.octoandroid.model.ConnectionModel.Options;

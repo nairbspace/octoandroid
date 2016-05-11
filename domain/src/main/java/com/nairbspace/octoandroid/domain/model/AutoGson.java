@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.domain.pojo;
+package com.nairbspace.octoandroid.domain.model;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

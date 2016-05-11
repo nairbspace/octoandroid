@@ -5,6 +5,7 @@ import com.nairbspace.octoandroid.data.entity.ConnectionEntity;
 import com.nairbspace.octoandroid.data.entity.VersionEntity;
 
 import rx.Observable;
+import rx.functions.Action1;
 
 public interface DiskManager {
 
@@ -12,11 +13,13 @@ public interface DiskManager {
 
     Observable<PrinterDbEntity> get(String name);
 
-    Observable<Boolean> putPrinterDbEntity(Observable<PrinterDbEntity> printerDbEntityObs);
+    Action1<PrinterDbEntity> putPrinterDbEntity();
 
     Observable<Boolean> putVersionEntity(Observable<VersionEntity> versionEntityObs);
 
     Observable<Boolean> deleteOldPrinterInDbObs(Observable<PrinterDbEntity> printerDbEntityObs);
+
+    Action1<Throwable> deleteUnverifiedPrinter();
 
     Observable<VersionEntity> getVersion();
 

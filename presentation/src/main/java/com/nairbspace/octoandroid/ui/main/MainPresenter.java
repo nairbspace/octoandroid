@@ -1,7 +1,7 @@
 package com.nairbspace.octoandroid.ui.main;
 
 import com.fernandocejas.frodo.annotation.RxLogSubscriber;
-import com.nairbspace.octoandroid.domain.pojo.Printer;
+import com.nairbspace.octoandroid.domain.model.Printer;
 import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
 import com.nairbspace.octoandroid.domain.interactor.GetPrinterDetails;
 import com.nairbspace.octoandroid.exception.ErrorMessageFactory;

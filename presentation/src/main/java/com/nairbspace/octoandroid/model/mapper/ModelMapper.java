@@ -1,9 +1,9 @@
 package com.nairbspace.octoandroid.model.mapper;
 
 import com.google.gson.Gson;
-import com.nairbspace.octoandroid.domain.pojo.AddPrinter;
-import com.nairbspace.octoandroid.domain.pojo.Connection;
-import com.nairbspace.octoandroid.domain.pojo.Printer;
+import com.nairbspace.octoandroid.domain.model.AddPrinter;
+import com.nairbspace.octoandroid.domain.model.Connection;
+import com.nairbspace.octoandroid.domain.model.Printer;
 import com.nairbspace.octoandroid.exception.TransformErrorException;
 import com.nairbspace.octoandroid.model.AddPrinterModel;
 import com.nairbspace.octoandroid.model.ConnectionModel;

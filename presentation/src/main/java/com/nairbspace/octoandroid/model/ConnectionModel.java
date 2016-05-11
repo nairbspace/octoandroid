@@ -4,7 +4,7 @@ import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 import com.google.gson.annotations.SerializedName;
-import com.nairbspace.octoandroid.domain.pojo.AutoGson;
+import com.nairbspace.octoandroid.domain.model.AutoGson;
 
 import java.util.List;
 

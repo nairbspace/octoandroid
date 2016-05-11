@@ -35,6 +35,11 @@ public class ErrorMessageFactory {
         return (exception instanceof NoActivePrinterException);
     }
 
+    public static boolean isIpAddressError(Exception exception) {
+        return exception instanceof IpAddressEmptyException ||
+                exception instanceof IncorrectAddPrinterFormattingException;
+    }
+
     public static String createIpAddressError(Context context, Exception exception) {
         String message = context.getString(R.string.exception_message_generic);
 
