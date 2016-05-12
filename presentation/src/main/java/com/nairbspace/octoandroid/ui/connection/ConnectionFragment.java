@@ -19,6 +19,7 @@ import android.widget.Spinner;
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
 import com.nairbspace.octoandroid.data.entity.ConnectEntity;
+import com.nairbspace.octoandroid.model.ConnectModel;
 import com.nairbspace.octoandroid.ui.BaseViewPagerFragment;
 import com.nairbspace.octoandroid.ui.Presenter;
 
@@ -52,6 +53,7 @@ public class ConnectionFragment extends BaseViewPagerFragment<ConnectionScreen> 
     @BindView(R.id.auto_connect_checkbox) CheckBox mAutoConnectCheckBox;
 
     private int mDefaultSpinnerId = android.R.layout.simple_spinner_dropdown_item;
+    private boolean mIsNotConnected;
 
     private List<String> mPorts = new ArrayList<>();
     private ArrayAdapter<String> mSerialPortAdapter;
@@ -97,15 +99,25 @@ public class ConnectionFragment extends BaseViewPagerFragment<ConnectionScreen> 
 
     @OnClick(R.id.connect_button)
     void connectButtonPressed() {
-        String connectButtonText = mConnectButton.getText().toString();
-        int portPosition = mSerialPortSpinner.getSelectedItemPosition();
-        int baudRatePosition = mBaudrateSpinner.getSelectedItemPosition();
-        int printerProfileNamePosition = mPrinterProfileSpinner.getSelectedItemPosition();
+        int portId = mSerialPortSpinner.getSelectedItemPosition();
+        int baudrateId = mBaudrateSpinner.getSelectedItemPosition();
+        int printerNameId = mPrinterProfileSpinner.getSelectedItemPosition();
         boolean isSaveConnectionChecked = mSaveConnectionSettingsCheckBox.isChecked();
         boolean isAutoConnectChecked = mAutoConnectCheckBox.isChecked();
 
-        mPresenter.connectButtonClicked(connectButtonText, portPosition, baudRatePosition,
-                printerProfileNamePosition, isSaveConnectionChecked, isAutoConnectChecked);
+        ConnectModel connectModel = ConnectModel.builder()
+                .isNotConnected(mIsNotConnected)
+                .ports(mPorts)
+                .baudrates(mBaudrates)
+                .printerProfileNames(mPrinterProfileNames)
+                .portId(portId)
+                .baudrateId(baudrateId)
+                .printerNameId(printerNameId)
+                .isSaveConnectionChecked(isSaveConnectionChecked)
+                .isAutoConnectChecked(isAutoConnectChecked)
+                .build();
+
+        mPresenter.connectButtonClicked(connectModel);
     }
 
     public void onButtonPressed(Uri uri) {
@@ -150,6 +162,7 @@ public class ConnectionFragment extends BaseViewPagerFragment<ConnectionScreen> 
         updateBaudRateSpinner(baudrates);
         updatePrinterProfileSpinner(printerProfileNames);
 
+        mIsNotConnected = isNotConnected;
         showConnectScreen(isNotConnected);
     }
 

@@ -1,37 +1,38 @@
 package com.nairbspace.octoandroid.ui.connection;
 
 import com.fernandocejas.frodo.annotation.RxLogSubscriber;
+import com.nairbspace.octoandroid.domain.interactor.ConnectToPrinter;
 import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
 import com.nairbspace.octoandroid.domain.interactor.GetConnectionDetails;
+import com.nairbspace.octoandroid.domain.model.Connect;
 import com.nairbspace.octoandroid.domain.model.Connection;
+import com.nairbspace.octoandroid.model.ConnectModel;
 import com.nairbspace.octoandroid.model.ConnectionModel;
-import com.nairbspace.octoandroid.model.ConnectionModel.Current;
-import com.nairbspace.octoandroid.model.ConnectionModel.Options;
 import com.nairbspace.octoandroid.model.mapper.ModelMapper;
 import com.nairbspace.octoandroid.ui.UseCasePresenter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import rx.functions.Action1;
 
-import static com.nairbspace.octoandroid.model.ConnectionModel.PrinterProfile;
-
 public class ConnectionPresenter extends UseCasePresenter<ConnectionScreen> {
 
     private ConnectionScreen mScreen;
     private final GetConnectionDetails mGetConnectionDetails;
     private final ModelMapper mModelMapper;
+    private final ConnectToPrinter mConnectToPrinter;
 
     private boolean mIsFirstTime = true;
 
     @Inject
-    public ConnectionPresenter(GetConnectionDetails getConnectionDetails, ModelMapper modelMapper) {
+    public ConnectionPresenter(GetConnectionDetails getConnectionDetails, ModelMapper modelMapper,
+                               ConnectToPrinter connectToPrinter) {
         super(getConnectionDetails);
         mGetConnectionDetails = getConnectionDetails;
         mModelMapper = modelMapper;
+        mConnectToPrinter = connectToPrinter;
     }
 
     @Override
@@ -42,55 +43,34 @@ public class ConnectionPresenter extends UseCasePresenter<ConnectionScreen> {
 
     private void renderScreen(ConnectionModel connection) {
 
-        Current current = connection.current();
-        String state = current.state();
-        boolean isNotConnected = state.equals("Closed");
+        //TODO need autoconnect status!
+        boolean isNotConnected = connection.isNotConnected();
+        List<String> ports = connection.ports();
+        List<Integer> baudrates = connection.baudrates();
+        List<String> printerProfileNames = connection.printerProfileNames();
 
-        Options options = connection.options();
-        List<String> ports = options.ports();
-
-        List<Integer> baudrates = options.baudrates();
-
-        List<PrinterProfile> printerProfiles = options.printerProfiles();
-        List<String> printerProfileNames = new ArrayList<>();
-        for (PrinterProfile printerProfile : printerProfiles) {
-            printerProfileNames.add(printerProfile.name());
-        }
         mScreen.updateUI(ports, baudrates, printerProfileNames, isNotConnected);
 
-        if (mIsFirstTime) { // TODO need better logic so it doesn't check everytime
-            int defaultPortId = 0;
-            for (int i = 0; i < ports.size(); i++) {
-                if (ports.get(i).equals(options.portPreference())) {
-                    defaultPortId = i;
-                }
-            }
-
-            int defaultBaudrateId = 0;
-            for (int i = 0; i < baudrates.size(); i++) {
-                if (baudrates.get(i).equals(options.baudratePreference())) {
-                    defaultBaudrateId = i;
-                }
-            }
-
-            int defaultPrinterNameId = 0;
-            for (int i = 0; i < printerProfileNames.size(); i++) {
-                if (printerProfileNames.get(i).equals(options.printerProfilePreference())) {
-                    defaultPrinterNameId = i;
-                }
-            }
-
+        if(mIsFirstTime) {
+            mIsFirstTime = false;
+            int defaultPortId = connection.defaultPortId();
+            int defaultBaudrateId = connection.defaultBaudrateId();
+            int defaultPrinterNameId = connection.defaultPrinterNameId();
             mScreen.updateUiWithDefaults(defaultPortId, defaultBaudrateId, defaultPrinterNameId);
-            mIsFirstTime = true;
         }
     }
 
-    public void connectButtonClicked(String connectButtonText, int portPosition,
-                                     int baudratePosition, int printerProfileNamePosition,
-                                     boolean isSaveConnectionSettingsChecked,
-                                     boolean isAutoConnectChecked) {
-
+    public void connectButtonClicked(ConnectModel connectModel) {
+        mModelMapper.transformObs(connectModel).subscribe(mConnectAction);
     }
+
+    private Action1<Connect> mConnectAction = new Action1<Connect>() {
+        @Override
+        public void call(Connect connect) {
+            mConnectToPrinter.setConnect(connect);
+            mConnectToPrinter.execute(new ConnectToPrinterSubscriber());
+        }
+    };
 
     @RxLogSubscriber
     private final class GetConnectionSubscriber extends DefaultSubscriber<Connection> {
@@ -111,9 +91,30 @@ public class ConnectionPresenter extends UseCasePresenter<ConnectionScreen> {
 
         private Action1<ConnectionModel> mRenderScreen = new Action1<ConnectionModel>() {
             @Override
-            public void call(ConnectionModel connectionModel) {
-                renderScreen(connectionModel);
+            public void call(ConnectionModel connectionModel2) {
+                renderScreen(connectionModel2);
             }
         };
+    }
+
+    @RxLogSubscriber
+    private final class ConnectToPrinterSubscriber extends DefaultSubscriber<Boolean> {
+
+        @Override
+        public void onCompleted() {
+            super.onCompleted();
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            e.printStackTrace();
+        }
+
+        @Override
+        public void onNext(Boolean aBoolean) {
+            if (aBoolean) {
+                mGetConnectionDetails.execute(new GetConnectionSubscriber()); // TODO not sure if should create new one
+            }
+        }
     }
 }

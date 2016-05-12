@@ -6,6 +6,7 @@ import com.nairbspace.octoandroid.data.mapper.EntityMapper;
 import com.nairbspace.octoandroid.data.net.ApiManager;
 import com.nairbspace.octoandroid.data.repository.datasource.PrinterDataStoreFactory;
 import com.nairbspace.octoandroid.domain.model.AddPrinter;
+import com.nairbspace.octoandroid.domain.model.Connect;
 import com.nairbspace.octoandroid.domain.model.Connection;
 import com.nairbspace.octoandroid.domain.model.Printer;
 import com.nairbspace.octoandroid.domain.repository.PrinterRepository;
@@ -62,5 +63,11 @@ public class PrinterDataRepository implements PrinterRepository {
         return mPrinterDataStoreFactory.create()
                 .connectionDetails()
                 .map(mEntityMapper.mapToConnection());
+    }
+
+    @Override
+    public Observable<Boolean> connectToPrinter(Connect connect) {
+        // Who should map the connect details?
+        return null;
     }
 }
