@@ -28,87 +28,49 @@ public class EntityMapper {
         // TODO clean up mapper
     }
 
-    public Printer mapPrinterDbEntity(PrinterDbEntity printerDbEntity)  {
-        return Printer.builder()
-                .id(printerDbEntity.getId())
-                .name(printerDbEntity.getName())
-                .apiKey(printerDbEntity.getApiKey())
-                .scheme(printerDbEntity.getScheme())
-                .host(printerDbEntity.getHost())
-                .port(printerDbEntity.getPort())
-                .build();
-    }
-
-    public Observable<Printer> mapPrinterDbEntityObs(Observable<PrinterDbEntity> inputObservable) {
-        return inputObservable.map(new Func1<PrinterDbEntity, Printer>() {
+    public Func1<PrinterDbEntity, Printer> maptoPrinter() {
+        return new Func1<PrinterDbEntity, Printer>() {
             @Override
             public Printer call(PrinterDbEntity printerDbEntity) {
                 try {
-                    return mapPrinterDbEntity(printerDbEntity);
+                    return Printer.builder()
+                            .id(printerDbEntity.getId())
+                            .name(printerDbEntity.getName())
+                            .apiKey(printerDbEntity.getApiKey())
+                            .scheme(printerDbEntity.getScheme())
+                            .host(printerDbEntity.getHost())
+                            .port(printerDbEntity.getPort())
+                            .build();
                 } catch (Exception e) {
                     throw Exceptions.propagate(new EntityMapperException(e));
                 }
             }
-        });
+        };
     }
 
-    /**
-     *
-     * @param printer Printer object from domain module
-     * @return PrinterDbEntity with no ID
-     */
-    public PrinterDbEntity mapPrinter(Printer printer) {
-        PrinterDbEntity printerDbEntity = new PrinterDbEntity();
-        printerDbEntity.setName(printer.name());
-        printerDbEntity.setApiKey(printer.apiKey());
-        printerDbEntity.setScheme(printer.scheme());
-        printerDbEntity.setHost(printer.host());
-        printerDbEntity.setPort(printer.port());
-        return printerDbEntity;
-    }
-
-    public Observable<PrinterDbEntity> mapPrinterToEntityObs(final Printer printer) {
-        return Observable.create(new Observable.OnSubscribe<PrinterDbEntity>() {
-            @Override
-            public void call(Subscriber<? super PrinterDbEntity> subscriber) {
-                try {
-                    PrinterDbEntity printerDbEntity = mapPrinter(printer);
-                    subscriber.onNext(printerDbEntity);
-                    subscriber.onCompleted();
-                } catch (Exception e) {
-                    subscriber.onError(new EntityMapperException(e));
-                }
-            }
-        });
-    }
-
-    public AddPrinterEntity mapAddPrinter(AddPrinter addPrinter) {
-        return AddPrinterEntity.builder()
-                .accountName(addPrinter.accountName())
-                .ipAddress(addPrinter.ipAddress())
-                .port(addPrinter.port())
-                .apiKey(addPrinter.apiKey())
-                .isSslChecked(addPrinter.isSslChecked())
-                .build();
-    }
-
-    public Observable<AddPrinterEntity> mapAddPrinterToEntityObs(final AddPrinter addPrinter) {
-        return Observable.create(new Observable.OnSubscribe<AddPrinterEntity>() {
+    public Observable.OnSubscribe<AddPrinterEntity> mapAddPrinterToEntity(final AddPrinter addPrinter) {
+        return new Observable.OnSubscribe<AddPrinterEntity>() {
             @Override
             public void call(Subscriber<? super AddPrinterEntity> subscriber) {
                 try {
-                    AddPrinterEntity addPrinterEntity = mapAddPrinter(addPrinter);
+                    AddPrinterEntity addPrinterEntity = AddPrinterEntity.builder()
+                            .accountName(addPrinter.accountName())
+                            .ipAddress(addPrinter.ipAddress())
+                            .port(addPrinter.port())
+                            .apiKey(addPrinter.apiKey())
+                            .isSslChecked(addPrinter.isSslChecked())
+                            .build();
                     subscriber.onNext(addPrinterEntity);
                     subscriber.onCompleted();
                 } catch (Exception e) {
                     subscriber.onError(new EntityMapperException());
                 }
             }
-        });
+        };
     }
 
-    public Observable<Connection> mapConnectionEntityObs(Observable<ConnectionEntity> connectionEntityObs) {
-        return connectionEntityObs.map(new Func1<ConnectionEntity, Connection>() {
+    public Func1<ConnectionEntity, Connection> mapToConnection() {
+        return new Func1<ConnectionEntity, Connection>() {
             @Override
             public Connection call(ConnectionEntity connectionEntity) {
                 try {
@@ -117,7 +79,7 @@ public class EntityMapper {
                     throw Exceptions.propagate(new EntityMapperException(e));
                 }
             }
-        });
+        };
     }
 
     /**

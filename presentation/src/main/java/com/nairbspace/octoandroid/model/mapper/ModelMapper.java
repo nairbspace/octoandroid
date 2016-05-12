@@ -1,6 +1,8 @@
 package com.nairbspace.octoandroid.model.mapper;
 
 import com.google.gson.Gson;
+import com.nairbspace.octoandroid.data.executor.JobExecutor;
+import com.nairbspace.octoandroid.domain.executor.PostExecutionThread;
 import com.nairbspace.octoandroid.domain.model.AddPrinter;
 import com.nairbspace.octoandroid.domain.model.Connection;
 import com.nairbspace.octoandroid.domain.model.Printer;
@@ -13,16 +15,19 @@ import javax.inject.Inject;
 
 import rx.Observable;
 import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class ModelMapper {
 
     private final Gson mGson;
+    private final JobExecutor mJobExecutor;
+    private final PostExecutionThread mPostExecutionThread;
 
     @Inject
-    public ModelMapper(Gson gson) {
+    public ModelMapper(Gson gson, JobExecutor jobExecutor, PostExecutionThread postExecutionThread) {
         mGson = gson;
+        mJobExecutor = jobExecutor;
+        mPostExecutionThread = postExecutionThread;
         // TODO Figure out better way to map
     }
 
@@ -100,7 +105,7 @@ public class ModelMapper {
 
     // TODO need to fix threads
     public Observable setThreads(Observable observable) {
-        return observable.subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread());
+        return observable.subscribeOn(Schedulers.from(mJobExecutor))
+                .observeOn(mPostExecutionThread.getScheduler());
     }
 }

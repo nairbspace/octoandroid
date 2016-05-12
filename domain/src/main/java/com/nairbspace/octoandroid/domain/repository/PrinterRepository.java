@@ -12,9 +12,7 @@ public interface PrinterRepository {
 
     Observable<Boolean> addPrinterDetails(AddPrinter addPrinter);
 
-    Observable<Boolean> deletePrinterDetails(Printer printer);
-
-    Observable<Printer> printerDetails(String name);
+    Observable<Boolean> deletePrinterByName(String name);
 
     Observable<Connection> connectionDetails();
 }

@@ -11,10 +11,8 @@ import android.os.Bundle;
 
 import com.fernandocejas.frodo.annotation.RxLogSubscriber;
 import com.nairbspace.octoandroid.app.SetupApplication;
-import com.nairbspace.octoandroid.domain.model.Printer;
 import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
-import com.nairbspace.octoandroid.domain.interactor.DeletePrinterDetails;
-import com.nairbspace.octoandroid.domain.interactor.GetPrinterDetailsByName;
+import com.nairbspace.octoandroid.domain.interactor.DeletePrinterByName;
 import com.nairbspace.octoandroid.ui.add_printer.AddPrinterActivity;
 
 import javax.inject.Inject;
@@ -22,8 +20,7 @@ import javax.inject.Inject;
 public class Authenticator extends AbstractAccountAuthenticator {
 
     private Context mContext;
-    @Inject GetPrinterDetailsByName mPrinterDetailsByName;
-    @Inject DeletePrinterDetails mDeletePrinterDetails;
+    @Inject DeletePrinterByName mPrinterDetailsByName;
 
     public Authenticator(Context context) {
         super(context);
@@ -82,34 +79,17 @@ public class Authenticator extends AbstractAccountAuthenticator {
     }
 
     @RxLogSubscriber
-    private final class GetPrinterDetailsSubscriber extends DefaultSubscriber<Printer> {
+    private final class GetPrinterDetailsSubscriber extends DefaultSubscriber<Boolean> {
 
         @Override
         public void onError(Throwable e) {
-            super.onError(e);
+            e.printStackTrace();
             // TODO should log this somehow in case to try later
         }
 
         @Override
-        public void onNext(Printer printer) {
-            super.onNext(printer);
-            mDeletePrinterDetails.setPrinter(printer);
-            mDeletePrinterDetails.execute(new DeletePrinterDetailsSubscriber());
-        }
-    }
+        public void onNext(Boolean printer) {
 
-    @RxLogSubscriber
-    private final class DeletePrinterDetailsSubscriber extends DefaultSubscriber<Boolean> {
-
-        @Override
-        public void onError(Throwable e) {
-            super.onError(e);
-            // TODO should log this somehow in case to try later
-        }
-
-        @Override
-        public void onNext(Boolean aBoolean) {
-            super.onNext(aBoolean);
         }
     }
 }

@@ -1,7 +1,7 @@
 package com.nairbspace.octoandroid.data.repository.datasource;
 
 import com.nairbspace.octoandroid.data.disk.DiskManager;
-import com.nairbspace.octoandroid.data.net.ApiManagerImpl;
+import com.nairbspace.octoandroid.data.net.ApiManager;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -10,23 +10,23 @@ import javax.inject.Singleton;
 public class PrinterDataStoreFactory {
 
     private final DiskManager mDiskManager;
-    private final ApiManagerImpl mApiManagerImpl;
+    private final ApiManager mApiManager;
 
     @Inject
-    public PrinterDataStoreFactory(DiskManager diskManager, ApiManagerImpl apiManagerImpl) {
+    public PrinterDataStoreFactory(DiskManager diskManager, ApiManager apiManager) {
         mDiskManager = diskManager;
-        mApiManagerImpl = apiManagerImpl;
+        mApiManager = apiManager;
     }
 
     public PrinterDataStore createDiskDataStore() {
         PrinterDataStore printerDataStore;
-        printerDataStore = new DiskPrinterDataStore(mDiskManager);
+        printerDataStore = new DiskPrinterDataStore(mDiskManager, mApiManager);
         return printerDataStore;
     }
 
     public PrinterDataStore createCloudDataStore() {
         PrinterDataStore printerDataStore;
-        printerDataStore = new CloudPrinterDataStore(mApiManagerImpl, mDiskManager);
+        printerDataStore = new CloudPrinterDataStore(mApiManager, mDiskManager);
         return printerDataStore;
     }
 

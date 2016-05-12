@@ -55,8 +55,8 @@ public class ApiManagerImpl implements ApiManager {
     }
 
     @Override
-    public Observable<PrinterDbEntity> map(Observable<AddPrinterEntity> addPrinterEntityObs) {
-        return addPrinterEntityObs.map(new Func1<AddPrinterEntity, PrinterDbEntity>() {
+    public Func1<AddPrinterEntity, PrinterDbEntity> mapAddPrinterToPrinter() {
+        return new Func1<AddPrinterEntity, PrinterDbEntity>() {
             @Override
             public PrinterDbEntity call(AddPrinterEntity addPrinterEntity) {
                 if (TextUtils.isEmpty(addPrinterEntity.ipAddress())) {
@@ -81,15 +81,25 @@ public class ApiManagerImpl implements ApiManager {
                     throw Exceptions.propagate(new IncorrectAddPrinterFormattingException());
                 }
             }
-        });
+        };
     }
 
     @Override
-    public Func1<PrinterDbEntity, Observable<VersionEntity>> concatGetVersion() {
+    public Func1<PrinterDbEntity, Observable<VersionEntity>> funcGetVersion() {
         return new Func1<PrinterDbEntity, Observable<VersionEntity>>() {
             @Override
             public Observable<VersionEntity> call(PrinterDbEntity printerDbEntity) {
                 return mOctoApi.getVersion();
+            }
+        };
+    }
+
+    @Override
+    public Func1<ConnectionEntity, Observable<ConnectionEntity>> funcGetConnection() {
+        return new Func1<ConnectionEntity, Observable<ConnectionEntity>>() {
+            @Override
+            public Observable<ConnectionEntity> call(ConnectionEntity connectionEntity) {
+                return mOctoApi.getConnection();
             }
         };
     }

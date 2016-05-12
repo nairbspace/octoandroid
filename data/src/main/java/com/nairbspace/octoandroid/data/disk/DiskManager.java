@@ -6,26 +6,27 @@ import com.nairbspace.octoandroid.data.entity.VersionEntity;
 
 import rx.Observable;
 import rx.functions.Action1;
+import rx.functions.Func1;
 
 public interface DiskManager {
 
-    Observable<PrinterDbEntity> get();
+    Observable.OnSubscribe<PrinterDbEntity> getPrinterInDb();
 
-    Observable<PrinterDbEntity> get(String name);
+    Observable.OnSubscribe<PrinterDbEntity> getPrinterByName(String name);
 
-    Action1<PrinterDbEntity> putPrinterDbEntity();
+    Action1<PrinterDbEntity> putPrinterInDb();
 
-    Observable<Boolean> putVersionEntity(Observable<VersionEntity> versionEntityObs);
+    Func1<VersionEntity, Boolean> putVersionInDb();
 
-    Observable<Boolean> deleteOldPrinterInDbObs(Observable<PrinterDbEntity> printerDbEntityObs);
+    Action1<ConnectionEntity> putConnectionInDb();
+
+    Func1<PrinterDbEntity, Boolean> deletePrinterByName();
 
     Action1<Throwable> deleteUnverifiedPrinter();
-
-    Observable<VersionEntity> getVersion();
 
     boolean isSaved();
 
     boolean isExpired();
 
-    Observable<ConnectionEntity> getConnection();
+    Func1<PrinterDbEntity, ConnectionEntity> getConnectionInDb();
 }

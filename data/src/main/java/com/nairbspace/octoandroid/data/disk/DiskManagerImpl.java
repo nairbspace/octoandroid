@@ -19,7 +19,7 @@ import rx.functions.Func1;
 
 @Singleton
 public class DiskManagerImpl implements DiskManager {
-    private static final int EXPIRATION_TIME = 10 * 60 * 1000; // in milliseconds
+    private static final int EXPIRATION_TIME = 2 * 60 * 1000; // in milliseconds
 
     private final PrefHelper mPrefHelper;
     private final AccountHelper mAccountHelper;
@@ -36,11 +36,10 @@ public class DiskManagerImpl implements DiskManager {
     }
 
     @Override
-    public Observable<PrinterDbEntity> get() {
-        return Observable.create(new Observable.OnSubscribe<PrinterDbEntity>() {
+    public Observable.OnSubscribe<PrinterDbEntity> getPrinterInDb() {
+        return new Observable.OnSubscribe<PrinterDbEntity>() {
             @Override
             public void call(Subscriber<? super PrinterDbEntity> subscriber) {
-
                 if (!mPrefHelper.doesActivePrinterExist()) {
                     subscriber.onError(new NoActivePrinterException());
                 }
@@ -51,9 +50,9 @@ public class DiskManagerImpl implements DiskManager {
                 }
 
                 // If version info is null that means never verified connection
-                if (printerDbEntity!=null && printerDbEntity.getVersionJson() == null) {
+                if (printerDbEntity != null && printerDbEntity.getVersionJson() == null) {
                     // TODO need better way to delete data
-                    mDbHelper.deleteOldPrinterInDb(printerDbEntity);
+                    mDbHelper.deletePrinterInDb(printerDbEntity);
                     mAccountHelper.removeAccount(printerDbEntity);
                     mPrefHelper.setActivePrinter(PrefHelper.NO_ACTIVE_PRINTER);
                     subscriber.onError(new PrinterDataNotFoundException());
@@ -66,12 +65,12 @@ public class DiskManagerImpl implements DiskManager {
                 subscriber.onNext(printerDbEntity);
                 subscriber.onCompleted();
             }
-        });
+        };
     }
 
     @Override
-    public Observable<PrinterDbEntity> get(final String name) {
-        return Observable.create(new Observable.OnSubscribe<PrinterDbEntity>() {
+    public Observable.OnSubscribe<PrinterDbEntity> getPrinterByName(final String name) {
+        return new Observable.OnSubscribe<PrinterDbEntity>() {
             @Override
             public void call(Subscriber<? super PrinterDbEntity> subscriber) {
                 PrinterDbEntity printerDbEntity = mDbHelper.getPrinterFromDbByName(name);
@@ -81,32 +80,20 @@ public class DiskManagerImpl implements DiskManager {
                 subscriber.onNext(printerDbEntity);
                 subscriber.onCompleted();
             }
-        });
-    }
-
-    private void put(VersionEntity versionEntity) {
-        PrinterDbEntity printerDbEntity = mDbHelper.getActivePrinterDbEntity();
-        String versionJson = mMapper.serialize(versionEntity);
-        printerDbEntity.setVersionJson(versionJson);
-        mDbHelper.insertOrReplace(printerDbEntity);
-        mPrefHelper.setSaveTimeMillis(System.currentTimeMillis());
-    }
-
-    private void put(PrinterDbEntity printerDbEntity) {
-        mDbHelper.deleteOldPrinterInDb(printerDbEntity);
-        mDbHelper.insertOrReplace(printerDbEntity);
-        mPrefHelper.setActivePrinter(printerDbEntity.getId());
-        mPrefHelper.setSaveTimeMillis(System.currentTimeMillis());
-        mAccountHelper.addAccount(printerDbEntity);
+        };
     }
 
     @Override
-    public Action1<PrinterDbEntity> putPrinterDbEntity() {
+    public Action1<PrinterDbEntity> putPrinterInDb() {
         return new Action1<PrinterDbEntity>() {
             @Override
             public void call(PrinterDbEntity printerDbEntity) {
                 try {
-                    put(printerDbEntity);
+                    mDbHelper.deletePrinterInDb(printerDbEntity);
+                    mDbHelper.insertOrReplace(printerDbEntity);
+                    mPrefHelper.setActivePrinter(printerDbEntity.getId());
+                    mPrefHelper.setSaveTimeMillis(System.currentTimeMillis());
+                    mAccountHelper.addAccount(printerDbEntity);
                 } catch (Exception e) {
                     throw Exceptions.propagate(new ErrorSavingException());
                 }
@@ -115,23 +102,43 @@ public class DiskManagerImpl implements DiskManager {
     }
 
     @Override
-    public Observable<Boolean> putVersionEntity(Observable<VersionEntity> versionEntityObs) {
-        return versionEntityObs.map(new Func1<VersionEntity, Boolean>() {
+    public Func1<VersionEntity, Boolean> putVersionInDb() {
+        return new Func1<VersionEntity, Boolean>() {
             @Override
             public Boolean call(VersionEntity versionEntity) {
                 try {
-                    put(versionEntity);
+                    PrinterDbEntity printerDbEntity = mDbHelper.getActivePrinterDbEntity();
+                    String versionJson = mMapper.serialize(versionEntity);
+                    printerDbEntity.setVersionJson(versionJson);
+                    mDbHelper.insertOrReplace(printerDbEntity);
                     return true;
                 } catch (Exception e) {
                     throw Exceptions.propagate(new ErrorSavingException(e));
                 }
             }
-        });
+        };
     }
 
     @Override
-    public Observable<Boolean> deleteOldPrinterInDbObs(Observable<PrinterDbEntity> printerDbEntityObs) {
-        return printerDbEntityObs.map(new Func1<PrinterDbEntity, Boolean>() {
+    public Action1<ConnectionEntity> putConnectionInDb() {
+        return new Action1<ConnectionEntity>() {
+            @Override
+            public void call(ConnectionEntity connectionEntity) {
+                try {
+                    PrinterDbEntity printerDbEntity = mDbHelper.getActivePrinterDbEntity();
+                    String connectionJson = mMapper.serialize(connectionEntity);
+                    printerDbEntity.setConnectionJson(connectionJson);
+                    mDbHelper.insertOrReplace(printerDbEntity);
+                } catch (Exception e) {
+                    throw Exceptions.propagate(new ErrorSavingException());
+                }
+            }
+        };
+    }
+
+    @Override
+    public Func1<PrinterDbEntity, Boolean> deletePrinterByName() {
+        return new Func1<PrinterDbEntity, Boolean>() {
             @Override
             public Boolean call(PrinterDbEntity printerDbEntity) {
                 PrinterDbEntity oldPrinterDbEntity = mDbHelper
@@ -146,10 +153,10 @@ public class DiskManagerImpl implements DiskManager {
                     mPrefHelper.setActivePrinter(PrefHelper.NO_ACTIVE_PRINTER);
                 }
 
-                mDbHelper.deleteOldPrinterInDb(oldPrinterDbEntity);
+                mDbHelper.deletePrinterInDb(oldPrinterDbEntity);
                 return true;
             }
-        });
+        };
     }
 
     @Override
@@ -157,10 +164,14 @@ public class DiskManagerImpl implements DiskManager {
         return new Action1<Throwable>() {
             @Override
             public void call(Throwable throwable) {
-                PrinterDbEntity printerDbEntity = mDbHelper.getActivePrinterDbEntity();
-                mDbHelper.deleteOldPrinterInDb(printerDbEntity);
-                mAccountHelper.removeAccount(printerDbEntity);
-                mPrefHelper.setActivePrinter(PrefHelper.NO_ACTIVE_PRINTER);
+                try {
+                    PrinterDbEntity printerDbEntity = mDbHelper.getActivePrinterDbEntity();
+                    mDbHelper.deletePrinterInDb(printerDbEntity);
+                    mAccountHelper.removeAccount(printerDbEntity);
+                    mPrefHelper.setActivePrinter(PrefHelper.NO_ACTIVE_PRINTER);
+                } catch (Exception e) {
+                    throw Exceptions.propagate(new PrinterDataNotFoundException(e));
+                }
             }
         };
     }
@@ -194,34 +205,22 @@ public class DiskManagerImpl implements DiskManager {
     }
 
     @Override
-    public Observable<ConnectionEntity> getConnection() {
-        return get().map(new Func1<PrinterDbEntity, ConnectionEntity>() {
+    public Func1<PrinterDbEntity, ConnectionEntity> getConnectionInDb() {
+        return new Func1<PrinterDbEntity, ConnectionEntity>() {
             @Override
             public ConnectionEntity call(PrinterDbEntity printerDbEntity) {
                 try {
                     String json = printerDbEntity.getConnectionJson();
-                    return mMapper.deserialize(json, ConnectionEntity.class);
+                    ConnectionEntity connectionEntity = mMapper.deserialize(json, ConnectionEntity.class);
+                    if (connectionEntity != null) {
+                        return connectionEntity;
+                    } else {
+                        throw Exceptions.propagate(new PrinterDataNotFoundException());
+                    }
                 } catch (Exception e) {
                     throw Exceptions.propagate(new PrinterDataNotFoundException(e));
                 }
             }
-        });
-    }
-
-
-
-    @Override
-    public Observable<VersionEntity> getVersion() {
-        return get().map(new Func1<PrinterDbEntity, VersionEntity>() {
-            @Override
-            public VersionEntity call(PrinterDbEntity printerDbEntity) {
-                try {
-                    String json = printerDbEntity.getVersionJson();
-                    return mMapper.deserialize(json, VersionEntity.class);
-                } catch (Exception e) {
-                    throw Exceptions.propagate(new PrinterDataNotFoundException());
-                }
-            }
-        });
+        };
     }
 }

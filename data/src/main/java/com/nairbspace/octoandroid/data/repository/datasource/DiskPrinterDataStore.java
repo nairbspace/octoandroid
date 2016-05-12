@@ -2,25 +2,25 @@ package com.nairbspace.octoandroid.data.repository.datasource;
 
 import com.nairbspace.octoandroid.data.disk.DiskManager;
 import com.nairbspace.octoandroid.data.entity.ConnectionEntity;
-import com.nairbspace.octoandroid.data.entity.VersionEntity;
+import com.nairbspace.octoandroid.data.net.ApiManager;
 
 import rx.Observable;
 
 public class DiskPrinterDataStore implements PrinterDataStore {
 
     private final DiskManager mDiskManager;
-
-    public DiskPrinterDataStore(DiskManager diskManager) {
+    private final ApiManager mApiManager;
+    public DiskPrinterDataStore(DiskManager diskManager, ApiManager apiManager) {
         mDiskManager = diskManager;
+        mApiManager = apiManager;
     }
 
     @Override
-    public Observable<VersionEntity> printerVersionEntity() {
-        return mDiskManager.getVersion();
-    }
-
-    @Override
-    public Observable<ConnectionEntity> connectionEntityDetails() {
-        return mDiskManager.getConnection();
+    public Observable<ConnectionEntity> connectionDetails() {
+        return Observable.create(mDiskManager.getPrinterInDb())
+                .map(mDiskManager.getConnectionInDb())
+                .onExceptionResumeNext(mApiManager.getConnection())
+                .concatMap(mApiManager.funcGetConnection())
+                .doOnNext(mDiskManager.putConnectionInDb());
     }
 }

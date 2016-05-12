@@ -81,7 +81,7 @@ public class ConnectionPresenter extends UseCasePresenter<ConnectionScreen> {
             }
 
             mScreen.updateUiWithDefaults(defaultPortId, defaultBaudrateId, defaultPrinterNameId);
-            mIsFirstTime = false;
+            mIsFirstTime = true;
         }
     }
 
@@ -106,12 +106,14 @@ public class ConnectionPresenter extends UseCasePresenter<ConnectionScreen> {
 
         @Override
         public void onNext(Connection connection) {
-            mModelMapper.transformObs(connection).subscribe(new Action1<ConnectionModel>() {
-                @Override
-                public void call(ConnectionModel connectionModel) {
-                    renderScreen(connectionModel);
-                }
-            });
+            mModelMapper.transformObs(connection).subscribe(mRenderScreen);
         }
+
+        private Action1<ConnectionModel> mRenderScreen = new Action1<ConnectionModel>() {
+            @Override
+            public void call(ConnectionModel connectionModel) {
+                renderScreen(connectionModel);
+            }
+        };
     }
 }

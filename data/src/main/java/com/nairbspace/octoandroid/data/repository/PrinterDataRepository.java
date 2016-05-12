@@ -1,13 +1,9 @@
 package com.nairbspace.octoandroid.data.repository;
 
-import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
+import com.fernandocejas.frodo.annotation.RxLogObservable;
 import com.nairbspace.octoandroid.data.disk.DiskManager;
-import com.nairbspace.octoandroid.data.entity.AddPrinterEntity;
-import com.nairbspace.octoandroid.data.entity.ConnectionEntity;
-import com.nairbspace.octoandroid.data.entity.VersionEntity;
 import com.nairbspace.octoandroid.data.mapper.EntityMapper;
 import com.nairbspace.octoandroid.data.net.ApiManager;
-import com.nairbspace.octoandroid.data.repository.datasource.PrinterDataStore;
 import com.nairbspace.octoandroid.data.repository.datasource.PrinterDataStoreFactory;
 import com.nairbspace.octoandroid.domain.model.AddPrinter;
 import com.nairbspace.octoandroid.domain.model.Connection;
@@ -19,7 +15,6 @@ import javax.inject.Singleton;
 
 import rx.Observable;
 
-@SuppressWarnings("UnnecessaryLocalVariable")
 @Singleton
 public class PrinterDataRepository implements PrinterRepository {
 
@@ -40,45 +35,32 @@ public class PrinterDataRepository implements PrinterRepository {
 
     @Override
     public Observable<Printer> printerDetails() {
-        Observable<PrinterDbEntity> printerDbEntityObs = mDiskManager.get();
-        Observable<Printer> printerObs = mEntityMapper.mapPrinterDbEntityObs(printerDbEntityObs);
-        return printerObs;
+        return Observable.create(mDiskManager.getPrinterInDb())
+                .map(mEntityMapper.maptoPrinter());
     }
 
+    @RxLogObservable
     @Override
     public Observable<Boolean> addPrinterDetails(final AddPrinter addPrinter) {
-        Observable<AddPrinterEntity> addPrinterEntityObs = mEntityMapper.mapAddPrinterToEntityObs(addPrinter);
-        Observable<PrinterDbEntity> printerDbEntityObs = mApiManager.map(addPrinterEntityObs)
-                .doOnNext(mDiskManager.putPrinterDbEntity());
-
-        Observable<VersionEntity> versionEntityObs = printerDbEntityObs
-                .concatMap(mApiManager.concatGetVersion())
-                .doOnError(mDiskManager.deleteUnverifiedPrinter());
-
-        Observable<Boolean> booleanObs = mDiskManager.putVersionEntity(versionEntityObs);
-
-        return booleanObs;
+        return Observable.create(mEntityMapper.mapAddPrinterToEntity(addPrinter))
+                .map(mApiManager.mapAddPrinterToPrinter())
+                .doOnNext(mDiskManager.putPrinterInDb())
+                .concatMap(mApiManager.funcGetVersion())
+                .doOnError(mDiskManager.deleteUnverifiedPrinter())
+                .map(mDiskManager.putVersionInDb());
     }
 
     @Override
-    public Observable<Boolean> deletePrinterDetails(Printer printer) {
-        Observable<PrinterDbEntity> printerDbEntityObs = mEntityMapper.mapPrinterToEntityObs(printer);
-        Observable<Boolean> booleanObs = mDiskManager.deleteOldPrinterInDbObs(printerDbEntityObs);
-        return booleanObs;
+    public Observable<Boolean> deletePrinterByName(String name) {
+        return Observable.create(mDiskManager.getPrinterByName(name))
+                .map(mDiskManager.deletePrinterByName());
     }
 
-    @Override
-    public Observable<Printer> printerDetails(String name) {
-        Observable<PrinterDbEntity> printerDbEntityObs = mDiskManager.get(name);
-        Observable<Printer> printerObs = mEntityMapper.mapPrinterDbEntityObs(printerDbEntityObs);
-        return printerObs;
-    }
-
+    @RxLogObservable
     @Override
     public Observable<Connection> connectionDetails() {
-        PrinterDataStore printerDataStore = mPrinterDataStoreFactory.createCloudDataStore();
-        Observable<ConnectionEntity> connectionEntityObs = printerDataStore.connectionEntityDetails();
-        Observable<Connection> connectionObs = mEntityMapper.mapConnectionEntityObs(connectionEntityObs);
-        return connectionObs;
+        return mPrinterDataStoreFactory.create()
+                .connectionDetails()
+                .map(mEntityMapper.mapToConnection());
     }
 }

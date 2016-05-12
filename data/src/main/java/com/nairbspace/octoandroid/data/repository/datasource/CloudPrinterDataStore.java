@@ -2,7 +2,6 @@ package com.nairbspace.octoandroid.data.repository.datasource;
 
 import com.nairbspace.octoandroid.data.disk.DiskManager;
 import com.nairbspace.octoandroid.data.entity.ConnectionEntity;
-import com.nairbspace.octoandroid.data.entity.VersionEntity;
 import com.nairbspace.octoandroid.data.net.ApiManager;
 
 import rx.Observable;
@@ -18,12 +17,8 @@ public class CloudPrinterDataStore implements PrinterDataStore {
     }
 
     @Override
-    public Observable<VersionEntity> printerVersionEntity() {
-        return mApiManager.getVersion();
-    }
-
-    @Override
-    public Observable<ConnectionEntity> connectionEntityDetails() {
-        return mApiManager.getConnection();
+    public Observable<ConnectionEntity> connectionDetails() {
+        return mApiManager.getConnection()
+                .doOnNext(mDiskManager.putConnectionInDb());
     }
 }

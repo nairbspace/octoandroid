@@ -1,5 +1,6 @@
 package com.nairbspace.octoandroid.ui.add_printer;
 
+import com.fernandocejas.frodo.annotation.RxLogSubscriber;
 import com.nairbspace.octoandroid.domain.interactor.AddPrinterDetails;
 import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
 import com.nairbspace.octoandroid.domain.model.AddPrinter;
@@ -58,6 +59,7 @@ public class AddPrinterPresenter extends UseCasePresenter<AddPrinterScreen> {
         }
     }
 
+    @RxLogSubscriber
     private final class AddPrinterSubscriber extends DefaultSubscriber<Boolean> {
 
         @Override
@@ -71,9 +73,8 @@ public class AddPrinterPresenter extends UseCasePresenter<AddPrinterScreen> {
             e.printStackTrace();
             Exception ex = (Exception) e;
 
-            String errorMessage = ErrorMessageFactory.createGetVersionError(mScreen.context(), e.getMessage());
+            String errorMessage = ErrorMessageFactory.create(mScreen.context(), ex);
             if (ErrorMessageFactory.isIpAddressError(ex)) {
-                errorMessage = ErrorMessageFactory.createIpAddressError(mScreen.context(), (Exception) e);
                 mScreen.showIpAddressError(errorMessage);
             } else if (ErrorMessageFactory.ifSslError(mScreen.context(), e.getMessage())) {
                 String alertTitle = ErrorMessageFactory.getSslTitle(mScreen.context());

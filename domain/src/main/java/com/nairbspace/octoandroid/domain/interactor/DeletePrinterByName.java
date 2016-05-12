@@ -1,6 +1,5 @@
 package com.nairbspace.octoandroid.domain.interactor;
 
-import com.nairbspace.octoandroid.domain.model.Printer;
 import com.nairbspace.octoandroid.domain.exception.NullUseCaseBuilderException;
 import com.nairbspace.octoandroid.domain.executor.PostExecutionThread;
 import com.nairbspace.octoandroid.domain.executor.ThreadExecutor;
@@ -10,28 +9,28 @@ import javax.inject.Inject;
 
 import rx.Observable;
 
-public class DeletePrinterDetails extends UseCase {
+public class DeletePrinterByName extends UseCase {
 
     private final PrinterRepository mPrinterRepository;
-    private Printer mPrinter;
+    private String mName;
 
     @Inject
-    public DeletePrinterDetails(ThreadExecutor threadExecutor,
-                                PostExecutionThread postExecutionThread,
-                                PrinterRepository printerRepository) {
+    public DeletePrinterByName(ThreadExecutor threadExecutor,
+                               PostExecutionThread postExecutionThread,
+                               PrinterRepository printerRepository) {
         super(threadExecutor, postExecutionThread);
         mPrinterRepository = printerRepository;
     }
 
     @Override
     protected Observable buildUseCaseObservable() {
-        if (mPrinter == null) {
-            return Observable.error(new NullUseCaseBuilderException());
+        if (mName == null) {
+            Observable.error(new NullUseCaseBuilderException());
         }
-        return mPrinterRepository.deletePrinterDetails(mPrinter);
+        return mPrinterRepository.deletePrinterByName(mName);
     }
 
-    public void setPrinter(Printer printer) {
-        mPrinter = printer;
+    public void setName(String name) {
+        mName = name;
     }
 }

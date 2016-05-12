@@ -8,6 +8,6 @@
 
     <string name="exception_ssl_error">Trust anchor for certification path not found.</string>
     <string name="ssl_error_title">SSL Error</string>
-    <string name="ssl_error_display_message">SSL Certificate is not signed. If accessing printerDetails locally try unsecure connection.</string>
+    <string name="ssl_error_display_message">SSL Certificate is not signed. If accessing printer locally try unsecure connection.</string>
     <string name="exception_invalid_api_key">Invalid API key</string>
 </resources>

@@ -50,7 +50,7 @@ public class DbHelper {
         return printerDbEntity;
     }
 
-    public void deleteOldPrinterInDb(PrinterDbEntity printerDbEntity) {
+    public void deletePrinterInDb(PrinterDbEntity printerDbEntity) {
         PrinterDbEntity oldPrinterDbEntity = getPrinterFromDbByName(printerDbEntity.getName());
         if (oldPrinterDbEntity != null) {
             mPrinterDbEntityDao.delete(oldPrinterDbEntity);
@@ -59,5 +59,6 @@ public class DbHelper {
 
     public void insertOrReplace(PrinterDbEntity printerDbEntity) {
         mPrinterDbEntityDao.insertOrReplace(printerDbEntity);
+        mPrefHelper.setSaveTimeMillis(System.currentTimeMillis());
     }
 }
