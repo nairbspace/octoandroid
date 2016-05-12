@@ -43,16 +43,22 @@ public class ConnectionPresenter extends UseCasePresenter<ConnectionScreen> {
         mGetConnectionDetails.execute(new GetConnectionSubscriber());
     }
 
-    private void renderScreen(ConnectionModel connection) {
+    public void connectButtonClicked(ConnectModel connectModel) {
+        mScreen.showProgressBar(true);
+        mConnectModelMapper.execute(new TransformSubscriber(), connectModel);
+    }
 
-        //TODO need autoconnect status!
+    private void renderScreen(ConnectionModel connection) {
+        mScreen.showProgressBar(false);
+
+        boolean autoconnect = connection.autoconnect();
         boolean isNotConnected = connection.isNotConnected();
         List<String> ports = connection.ports();
         List<Integer> baudrates = connection.baudrates();
         List<String> printerProfileIds = connection.printerProfileIds();
         List<String> printerProfileNames = connection.printerProfileNames();
 
-        mScreen.updateUI(ports, baudrates, printerProfileIds, printerProfileNames, isNotConnected);
+        mScreen.updateUI(ports, baudrates, printerProfileIds, printerProfileNames, isNotConnected, autoconnect);
 
         if(mIsFirstTime) {
             mIsFirstTime = false;
@@ -63,12 +69,14 @@ public class ConnectionPresenter extends UseCasePresenter<ConnectionScreen> {
         }
     }
 
-    public void connectButtonClicked(ConnectModel connectModel) {
-        mConnectModelMapper.execute(new TransformSubscriber(), connectModel);
-    }
-
     @RxLogSubscriber
     private final class GetConnectionSubscriber extends DefaultSubscriber<Connection> {
+
+        @Override
+        public void onError(Throwable e) {
+            super.onError(e);
+            mScreen.showProgressBar(false);
+        }
 
         @Override
         public void onNext(Connection connection) {
@@ -78,6 +86,13 @@ public class ConnectionPresenter extends UseCasePresenter<ConnectionScreen> {
 
     @RxLogSubscriber
     private final class InputMapperSubscriber extends DefaultSubscriber<ConnectionModel> {
+
+        @Override
+        public void onError(Throwable e) {
+            super.onError(e);
+            mScreen.showProgressBar(false);
+        }
+
         @Override
         public void onNext(ConnectionModel connectionModel) {
             renderScreen(connectionModel);
@@ -86,6 +101,12 @@ public class ConnectionPresenter extends UseCasePresenter<ConnectionScreen> {
 
     @RxLogSubscriber
     private final class TransformSubscriber extends DefaultSubscriber<Connect> {
+
+        @Override
+        public void onError(Throwable e) {
+            super.onError(e);
+            mScreen.showProgressBar(false);
+        }
 
         @Override
         public void onNext(Connect connect) {
@@ -97,10 +118,24 @@ public class ConnectionPresenter extends UseCasePresenter<ConnectionScreen> {
     private final class ConnectToPrinterSubscriber extends DefaultSubscriber<Boolean> {
 
         @Override
+        public void onError(Throwable e) {
+            super.onError(e);
+            mScreen.showProgressBar(false);
+        }
+
+        @Override
         public void onNext(Boolean aBoolean) {
             if (aBoolean) {
                 mGetConnectionDetails.execute(new GetConnectionSubscriber()); // TODO not sure if should create new one
             }
         }
+    }
+
+    @Override
+    protected void onDestroy(ConnectionScreen connectionScreen) {
+        super.onDestroy(connectionScreen);
+        mConnectToPrinter.unsubscribe();
+        mConnectionModelMapper.unsubscribe();
+        mConnectModelMapper.unsubscribe();
     }
 }

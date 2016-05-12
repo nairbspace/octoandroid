@@ -14,6 +14,7 @@ public abstract class ConnectionModel {
     public abstract List<String> printerProfileIds();
     public abstract List<String> printerProfileNames();
     public abstract int defaultPrinterProfileId();
+    public abstract boolean autoconnect();
 
     public static Builder builder() {
         return new AutoValue_ConnectionModel.Builder();
@@ -36,6 +37,8 @@ public abstract class ConnectionModel {
         public abstract Builder printerProfileNames(List<String> printerProfileNames);
 
         public abstract Builder defaultPrinterProfileId(int defaultPrinterProfileId);
+
+        public abstract Builder autoconnect(boolean autoconnect);
 
         public abstract ConnectionModel build();
     }

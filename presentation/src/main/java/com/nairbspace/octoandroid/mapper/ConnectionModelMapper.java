@@ -52,6 +52,7 @@ public class ConnectionModelMapper extends MapperUseCase<Connection, ConnectionM
         boolean isNotConnected = state.equals(closed);
 
         Connection.Options options = connection.options();
+        boolean autoconnect = connection.options().autoconnect();
         List<String> ports = options.ports();
 
         List<Integer> baudrates = options.baudrates();
@@ -94,6 +95,7 @@ public class ConnectionModelMapper extends MapperUseCase<Connection, ConnectionM
                 .defaultPortId(defaultPortId)
                 .defaultBaudrateId(defaultBaudrateId)
                 .defaultPrinterProfileId(defaultPrinterProfileId)
+                .autoconnect(autoconnect)
                 .build();
     }
 }

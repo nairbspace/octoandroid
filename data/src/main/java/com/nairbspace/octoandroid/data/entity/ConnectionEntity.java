@@ -40,6 +40,7 @@ public abstract class ConnectionEntity {
         @SerializedName("ports") public abstract List<String> ports();
         @SerializedName("printerProfilePreference") public abstract String printerProfilePreference();
         @SerializedName("printerProfiles") public abstract List<PrinterProfile> printerProfiles();
+        @SerializedName("autoconnect") public abstract boolean autoconnect();
 
 //        public static TypeAdapter<Options> typeAdapter(Gson gson) {
 //            return new AutoValue_Connection_Options.GsonTypeAdapter(gson);

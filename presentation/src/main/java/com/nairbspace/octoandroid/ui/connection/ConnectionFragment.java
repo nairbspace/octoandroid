@@ -1,6 +1,7 @@
 package com.nairbspace.octoandroid.ui.connection;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,7 +19,6 @@ import android.widget.Spinner;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
-import com.nairbspace.octoandroid.data.entity.ConnectEntity;
 import com.nairbspace.octoandroid.model.ConnectModel;
 import com.nairbspace.octoandroid.ui.BaseViewPagerFragment;
 import com.nairbspace.octoandroid.ui.Presenter;
@@ -33,6 +33,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class ConnectionFragment extends BaseViewPagerFragment<ConnectionScreen> implements ConnectionScreen {
+
+    private String CONNECT;
+    private String DISCONNECT;
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -52,7 +55,7 @@ public class ConnectionFragment extends BaseViewPagerFragment<ConnectionScreen> 
     @BindView(R.id.save_connection_settings_checkbox) CheckBox mSaveConnectionSettingsCheckBox;
     @BindView(R.id.auto_connect_checkbox) CheckBox mAutoConnectCheckBox;
 
-    private int mDefaultSpinnerId = android.R.layout.simple_spinner_dropdown_item;
+    private int mDefaultSpinnerId;
     private boolean mIsNotConnected;
 
     private List<String> mPorts = new ArrayList<>();
@@ -83,6 +86,11 @@ public class ConnectionFragment extends BaseViewPagerFragment<ConnectionScreen> 
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        Resources res = getResources();
+        CONNECT = res.getString(R.string.connect);
+        DISCONNECT = res.getString(R.string.disconnect);
+        mDefaultSpinnerId = android.R.layout.simple_spinner_dropdown_item;
     }
 
     @Override
@@ -94,7 +102,7 @@ public class ConnectionFragment extends BaseViewPagerFragment<ConnectionScreen> 
             actionBar.setTitle("Status");
         }
         ButterKnife.bind(this, view);
-        updateUI(mPorts, mBaudrates, mPrinterProfileIds, mPrinterProfileNames, true);
+        updateUI(mPorts, mBaudrates, mPrinterProfileIds, mPrinterProfileNames, true, false);
         return view;
     }
 
@@ -158,10 +166,12 @@ public class ConnectionFragment extends BaseViewPagerFragment<ConnectionScreen> 
 
     @Override
     public void updateUI(List<String> ports, List<Integer> baudrates,
-                         List<String> printerProfileIds, List<String> printerProfileNames, boolean isNotConnected) {
+                         List<String> printerProfileIds, List<String> printerProfileNames,
+                         boolean isNotConnected, boolean autoconnect) {
         updateSerialPortSpinner(ports);
         updateBaudRateSpinner(baudrates);
         updatePrinterProfileSpinner(printerProfileNames);
+        mAutoConnectCheckBox.setChecked(autoconnect);
 
         mPrinterProfileIds = printerProfileIds;
         mIsNotConnected = isNotConnected;
@@ -180,12 +190,14 @@ public class ConnectionFragment extends BaseViewPagerFragment<ConnectionScreen> 
     public void updateSerialPortSpinner(List<String> ports) {
         mPorts = ports;
         if (mSerialPortAdapter == null) {
-            mSerialPortAdapter = new ArrayAdapter<>(getContext(), mDefaultSpinnerId, mPorts);
+            mSerialPortAdapter = new ArrayAdapter<>(getContext(), mDefaultSpinnerId, ports);
             mSerialPortSpinner.setAdapter(mSerialPortAdapter);
         } else {
+            int position = mSerialPortSpinner.getSelectedItemPosition();
             mSerialPortAdapter.clear();
-            mSerialPortAdapter.addAll(mPorts);
-            mSerialPortAdapter.notifyDataSetChanged();
+            mSerialPortAdapter.addAll(ports);
+            mSerialPortSpinner.setAdapter(mSerialPortAdapter);
+            mSerialPortSpinner.setSelection(position);
         }
     }
 
@@ -193,12 +205,14 @@ public class ConnectionFragment extends BaseViewPagerFragment<ConnectionScreen> 
     public void updateBaudRateSpinner(List<Integer> baudrates) {
         mBaudrates = baudrates;
         if (mBaudrateAdapter == null) {
-            mBaudrateAdapter = new ArrayAdapter<>(getContext(), mDefaultSpinnerId, mBaudrates);
+            mBaudrateAdapter = new ArrayAdapter<>(getContext(), mDefaultSpinnerId, baudrates);
             mBaudrateSpinner.setAdapter(mBaudrateAdapter);
         } else {
+            int position = mBaudrateSpinner.getSelectedItemPosition();
             mBaudrateAdapter.clear();
-            mBaudrateAdapter.addAll(mBaudrates);
-            mBaudrateAdapter.notifyDataSetChanged();
+            mBaudrateAdapter.addAll(baudrates);
+            mBaudrateSpinner.setAdapter(mBaudrateAdapter);
+            mBaudrateSpinner.setSelection(position);
         }
     }
 
@@ -206,12 +220,14 @@ public class ConnectionFragment extends BaseViewPagerFragment<ConnectionScreen> 
     public void updatePrinterProfileSpinner(List<String> printerProfileNames) {
         mPrinterProfileNames = printerProfileNames;
         if (mPrinterProfileAdapter == null) {
-            mPrinterProfileAdapter = new ArrayAdapter<>(getContext(), mDefaultSpinnerId, mPrinterProfileNames);
+            mPrinterProfileAdapter = new ArrayAdapter<>(getContext(), mDefaultSpinnerId, printerProfileNames);
             mPrinterProfileSpinner.setAdapter(mPrinterProfileAdapter);
         } else {
+            int position = mPrinterProfileSpinner.getSelectedItemPosition(); // TODO should save oninstancestate?
             mPrinterProfileAdapter.clear();
-            mPrinterProfileAdapter.addAll(mPrinterProfileNames);
-            mPrinterProfileAdapter.notifyDataSetChanged();
+            mPrinterProfileAdapter.addAll(printerProfileNames);
+            mPrinterProfileSpinner.setAdapter(mPrinterProfileAdapter);
+            mPrinterProfileSpinner.setSelection(position);
         }
     }
 
@@ -228,7 +244,7 @@ public class ConnectionFragment extends BaseViewPagerFragment<ConnectionScreen> 
         mPrinterProfileSpinner.setEnabled(isNotConnected);
         mSaveConnectionSettingsCheckBox.setEnabled(isNotConnected);
         mAutoConnectCheckBox.setEnabled(isNotConnected);
-        mConnectButton.setText(isNotConnected ? ConnectEntity.COMMAND_CONNECT.toUpperCase() : ConnectEntity.COMMAND_DISCONNECT);
+        mConnectButton.setText(isNotConnected ? CONNECT : DISCONNECT);
     }
 
     public interface OnFragmentInteractionListener {

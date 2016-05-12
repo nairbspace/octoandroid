@@ -3,7 +3,7 @@ package com.nairbspace.octoandroid.ui.connection;
 import java.util.List;
 
 public interface ConnectionScreen {
-    void updateUI(List<String> ports, List<Integer> baudrates, List<String> printerProfileIds, List<String> printerProfileNames, boolean isNotConnected);
+    void updateUI(List<String> ports, List<Integer> baudrates, List<String> printerProfileIds, List<String> printerProfileNames, boolean isNotConnected, boolean autoconnect);
 
     void updateUiWithDefaults(int defaultPortId, int defaultBaudrateId, int defaultProfileNameId);
 
