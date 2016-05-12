@@ -11,11 +11,11 @@ import rx.functions.Func1;
 
 public class ConnectionEntityMapper {
 
-    private final JsonSerializer mJsonSerializer;
+    private final EntitySerializer mEntitySerializer;
 
     @Inject
-    public ConnectionEntityMapper(JsonSerializer jsonSerializer) {
-        mJsonSerializer = jsonSerializer;
+    public ConnectionEntityMapper(EntitySerializer entitySerializer) {
+        mEntitySerializer = entitySerializer;
     }
 
     public Func1<ConnectionEntity, Connection> mapToConnection() {
@@ -23,7 +23,7 @@ public class ConnectionEntityMapper {
             @Override
             public Connection call(ConnectionEntity connectionEntity) {
                 try {
-                    return mJsonSerializer.transform(connectionEntity, Connection.class);
+                    return mEntitySerializer.transform(connectionEntity, Connection.class);
                 } catch (Exception e) {
                     throw Exceptions.propagate(new EntityMapperException(e));
                 }

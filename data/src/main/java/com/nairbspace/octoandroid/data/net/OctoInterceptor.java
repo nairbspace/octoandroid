@@ -41,6 +41,7 @@ public class OctoInterceptor implements Interceptor {
                     .build();
             original = original.newBuilder()
                     .url(newUrl)
+                    .header("Content-Type", "application/json")
                     .header("X-Api-Key", printerDbEntity.getApiKey())
                     .build();
         } // TODO need another interceptor for uploading files or different headers

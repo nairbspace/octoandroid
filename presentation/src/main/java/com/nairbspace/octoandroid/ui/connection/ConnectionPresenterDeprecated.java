@@ -116,7 +116,7 @@ public class ConnectionPresenterDeprecated extends Presenter<ConnectionScreen> i
         for (ConnectionEntity.PrinterProfile printerProfile : printerProfiles) {
             printerProfileNames.add(printerProfile.name());
         }
-        mScreen.updateUI(ports, baudrates, printerProfileNames, isNotConnected);
+        mScreen.updateUI(ports, baudrates, printerProfileNames, printerProfileNames, isNotConnected);
 
         if (ifFirstTime) { // TODO need better logic so it doesn't check everytime
             int defaultPortId = 0;
@@ -166,7 +166,7 @@ public class ConnectionPresenterDeprecated extends Presenter<ConnectionScreen> i
             printerProfileNames.add(printerProfile.name());
         }
 
-        mScreen.updateUI(ports, baudrates, printerProfileNames, isNotConnected);
+        mScreen.updateUI(ports, baudrates, printerProfileNames, printerProfileNames, isNotConnected);
 
         int defaultPortId = 0;
         for (int i = 0; i < ports.size(); i++) {

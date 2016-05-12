@@ -19,6 +19,16 @@ public abstract class ConnectEntity {
     @Nullable @SerializedName("save") public abstract Boolean save();
     @Nullable @SerializedName("autoconnect") public abstract Boolean autoconnect();
 
+    public static Builder connect() {
+        return new AutoValue_ConnectEntity.Builder()
+                .command(COMMAND_CONNECT);
+    }
+
+    public static Builder disconnect() {
+        return new AutoValue_ConnectEntity.Builder()
+                .command(COMMAND_DISCONNECT);
+    }
+
 //    public static TypeAdapter<Connect> typeAdapter(Gson gson) {
 //        return new AutoValue_Connect.GsonTypeAdapter(gson);
 //    }

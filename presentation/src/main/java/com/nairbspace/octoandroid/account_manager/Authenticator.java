@@ -70,8 +70,7 @@ public class Authenticator extends AbstractAccountAuthenticator {
     @Override
     public Bundle getAccountRemovalAllowed(AccountAuthenticatorResponse response, Account account) throws NetworkErrorException {
         String name = account.name;
-        mPrinterDetailsByName.setName(name);
-        mPrinterDetailsByName.execute(new GetPrinterDetailsSubscriber());
+        mPrinterDetailsByName.execute(new GetPrinterDetailsSubscriber(), name);
 
         Bundle result = new Bundle();
         result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, true);

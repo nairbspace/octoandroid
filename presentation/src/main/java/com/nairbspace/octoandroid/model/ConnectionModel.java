@@ -11,8 +11,9 @@ public abstract class ConnectionModel {
     public abstract int defaultPortId();
     public abstract List<Integer> baudrates();
     public abstract int defaultBaudrateId();
+    public abstract List<String> printerProfileIds();
     public abstract List<String> printerProfileNames();
-    public abstract int defaultPrinterNameId();
+    public abstract int defaultPrinterProfileId();
 
     public static Builder builder() {
         return new AutoValue_ConnectionModel.Builder();
@@ -30,9 +31,11 @@ public abstract class ConnectionModel {
 
         public abstract Builder defaultBaudrateId(int defaultBaudrateId);
 
+        public abstract Builder printerProfileIds(List<String> printerProfileIds);
+
         public abstract Builder printerProfileNames(List<String> printerProfileNames);
 
-        public abstract Builder defaultPrinterNameId(int defaultPrinterNameId);
+        public abstract Builder defaultPrinterProfileId(int defaultPrinterProfileId);
 
         public abstract ConnectionModel build();
     }

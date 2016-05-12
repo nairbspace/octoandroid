@@ -5,26 +5,24 @@ import com.nairbspace.octoandroid.domain.interactor.AddPrinterDetails;
 import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
 import com.nairbspace.octoandroid.domain.model.AddPrinter;
 import com.nairbspace.octoandroid.exception.ErrorMessageFactory;
+import com.nairbspace.octoandroid.mapper.AddPrinterModelMapper;
 import com.nairbspace.octoandroid.model.AddPrinterModel;
-import com.nairbspace.octoandroid.model.mapper.ModelMapper;
 import com.nairbspace.octoandroid.ui.UseCasePresenter;
 
 import javax.inject.Inject;
 
-import rx.functions.Action1;
-
 public class AddPrinterPresenter extends UseCasePresenter<AddPrinterScreen> {
 
     private AddPrinterScreen mScreen;
-    private final ModelMapper mModelMapper;
     private final AddPrinterDetails mAddPrinterDetails;
+    private final AddPrinterModelMapper mAddPrinterModelMapper;
 
     @Inject
     public AddPrinterPresenter(AddPrinterDetails addPrinterDetails,
-                               ModelMapper modelMapper) {
+                               AddPrinterModelMapper addPrinterModelMapper) {
         super(addPrinterDetails);
         mAddPrinterDetails = addPrinterDetails;
-        mModelMapper = modelMapper;
+        mAddPrinterModelMapper = addPrinterModelMapper;
     }
 
     @Override
@@ -33,21 +31,7 @@ public class AddPrinterPresenter extends UseCasePresenter<AddPrinterScreen> {
     }
 
     public void onAddPrinterClicked(final AddPrinterModel addPrinterModel) {
-        mModelMapper.transformObs(addPrinterModel).subscribe(mAddPrinterAction);
-    }
-
-    private Action1<AddPrinter> mAddPrinterAction = new Action1<AddPrinter>() {
-        @Override
-        public void call(AddPrinter addPrinter) {
-            showLoading(true);
-            mAddPrinterDetails.setAddPrinter(addPrinter);
-            mAddPrinterDetails.execute(new AddPrinterSubscriber());
-        }
-    };
-
-    @Override
-    protected void onDestroy(AddPrinterScreen addPrinterScreen) {
-        super.onDestroy(addPrinterScreen);
+        mAddPrinterModelMapper.execute(new TransformSubscriber(), addPrinterModel);
     }
 
     private void showLoading(boolean shouldShow) {
@@ -56,6 +40,15 @@ public class AddPrinterPresenter extends UseCasePresenter<AddPrinterScreen> {
             mScreen.showProgress(true);
         } else {
             mScreen.showProgress(false);
+        }
+    }
+
+    @RxLogSubscriber
+    private final class TransformSubscriber extends DefaultSubscriber<AddPrinter> {
+        @Override
+        public void onNext(AddPrinter addPrinter) {
+            showLoading(true);
+            mAddPrinterDetails.execute(new AddPrinterSubscriber(), addPrinter);
         }
     }
 

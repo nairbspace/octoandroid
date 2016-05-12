@@ -4,12 +4,12 @@ import com.google.gson.Gson;
 
 import javax.inject.Inject;
 
-public class JsonSerializer {
+public class EntitySerializer {
 
     private final Gson mGson;
 
     @Inject
-    public JsonSerializer(Gson gson) {
+    public EntitySerializer(Gson gson) {
         mGson = gson;
     }
 

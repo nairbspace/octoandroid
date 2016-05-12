@@ -61,4 +61,24 @@ public class ApiManagerImpl implements ApiManager {
             }
         };
     }
+
+    @Override
+    public Func1<ConnectEntity, Observable<ConnectEntity>> connectToPrinter() {
+        return new Func1<ConnectEntity, Observable<ConnectEntity>>() {
+            @Override
+            public Observable<ConnectEntity> call(ConnectEntity connectEntity) {
+                return mOctoApi.postConnect(connectEntity);
+            }
+        };
+    }
+
+    @Override
+    public Func1<ConnectEntity, Boolean> connectPrinterResult() { // TODO have to do this because result object is null?
+        return new Func1<ConnectEntity, Boolean>() {
+            @Override
+            public Boolean call(ConnectEntity connectEntity) {
+                return true;
+            }
+        };
+    }
 }

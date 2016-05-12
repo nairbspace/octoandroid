@@ -61,6 +61,7 @@ public class ConnectionFragment extends BaseViewPagerFragment<ConnectionScreen> 
     private List<Integer> mBaudrates = new ArrayList<>();
     private ArrayAdapter<Integer> mBaudrateAdapter;
 
+    private List<String> mPrinterProfileIds = new ArrayList<>();
     private List<String> mPrinterProfileNames = new ArrayList<>();
     private ArrayAdapter<String> mPrinterProfileAdapter;
 
@@ -93,7 +94,7 @@ public class ConnectionFragment extends BaseViewPagerFragment<ConnectionScreen> 
             actionBar.setTitle("Status");
         }
         ButterKnife.bind(this, view);
-        updateUI(mPorts, mBaudrates, mPrinterProfileNames, true);
+        updateUI(mPorts, mBaudrates, mPrinterProfileIds, mPrinterProfileNames, true);
         return view;
     }
 
@@ -101,7 +102,7 @@ public class ConnectionFragment extends BaseViewPagerFragment<ConnectionScreen> 
     void connectButtonPressed() {
         int portId = mSerialPortSpinner.getSelectedItemPosition();
         int baudrateId = mBaudrateSpinner.getSelectedItemPosition();
-        int printerNameId = mPrinterProfileSpinner.getSelectedItemPosition();
+        int printerProfileId = mPrinterProfileSpinner.getSelectedItemPosition();
         boolean isSaveConnectionChecked = mSaveConnectionSettingsCheckBox.isChecked();
         boolean isAutoConnectChecked = mAutoConnectCheckBox.isChecked();
 
@@ -109,10 +110,10 @@ public class ConnectionFragment extends BaseViewPagerFragment<ConnectionScreen> 
                 .isNotConnected(mIsNotConnected)
                 .ports(mPorts)
                 .baudrates(mBaudrates)
-                .printerProfileNames(mPrinterProfileNames)
+                .printerProfileIds(mPrinterProfileIds)
                 .portId(portId)
                 .baudrateId(baudrateId)
-                .printerNameId(printerNameId)
+                .printerProfileId(printerProfileId)
                 .isSaveConnectionChecked(isSaveConnectionChecked)
                 .isAutoConnectChecked(isAutoConnectChecked)
                 .build();
@@ -157,11 +158,12 @@ public class ConnectionFragment extends BaseViewPagerFragment<ConnectionScreen> 
 
     @Override
     public void updateUI(List<String> ports, List<Integer> baudrates,
-                         List<String> printerProfileNames, boolean isNotConnected) {
+                         List<String> printerProfileIds, List<String> printerProfileNames, boolean isNotConnected) {
         updateSerialPortSpinner(ports);
         updateBaudRateSpinner(baudrates);
         updatePrinterProfileSpinner(printerProfileNames);
 
+        mPrinterProfileIds = printerProfileIds;
         mIsNotConnected = isNotConnected;
         showConnectScreen(isNotConnected);
     }

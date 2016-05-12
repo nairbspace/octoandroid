@@ -5,25 +5,24 @@ import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
 import com.nairbspace.octoandroid.domain.interactor.GetPrinterDetails;
 import com.nairbspace.octoandroid.domain.model.Printer;
 import com.nairbspace.octoandroid.exception.ErrorMessageFactory;
+import com.nairbspace.octoandroid.mapper.PrinterModelMapper;
 import com.nairbspace.octoandroid.model.PrinterModel;
-import com.nairbspace.octoandroid.model.mapper.ModelMapper;
 import com.nairbspace.octoandroid.ui.UseCasePresenter;
 
 import javax.inject.Inject;
-
-import rx.functions.Action1;
 
 public class MainPresenter extends UseCasePresenter<MainScreen> {
 
     private MainScreen mMainScreen;
     private final GetPrinterDetails mUseCase;
-    private final ModelMapper mModelMapper;
+    private final PrinterModelMapper mPrinterModelMapper;
 
     @Inject
-    public MainPresenter(GetPrinterDetails getPrinterDetailsUseCase, ModelMapper modelMapper) {
+    public MainPresenter(GetPrinterDetails getPrinterDetailsUseCase,
+                         PrinterModelMapper printerModelMapper) {
         super(getPrinterDetailsUseCase);
         mUseCase = getPrinterDetailsUseCase;
-        mModelMapper = modelMapper;
+        mPrinterModelMapper = printerModelMapper;
     }
 
     @Override
@@ -52,12 +51,16 @@ public class MainPresenter extends UseCasePresenter<MainScreen> {
 
         @Override
         public void onNext(Printer printer) {
-            mModelMapper.transformObs(printer).subscribe(new Action1<PrinterModel>() {
-                @Override
-                public void call(PrinterModel printerModel) {
-                    mMainScreen.updateNavHeader(printerModel.name(), printerModel.host());
-                }
-            });
+            mPrinterModelMapper.execute(new TransformSubscriber(), printer);
+        }
+    }
+
+    @RxLogSubscriber
+    private final class TransformSubscriber extends DefaultSubscriber<PrinterModel> {
+
+        @Override
+        public void onNext(PrinterModel printerModel) {
+            mMainScreen.updateNavHeader(printerModel.name(), printerModel.host());
         }
     }
 }

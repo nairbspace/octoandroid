@@ -3,9 +3,9 @@ package com.nairbspace.octoandroid.interactor;
 import com.google.gson.Gson;
 import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
 import com.nairbspace.octoandroid.data.db.PrinterDbEntityDao;
+import com.nairbspace.octoandroid.data.disk.PrefHelper;
 import com.nairbspace.octoandroid.data.entity.ConnectEntity;
 import com.nairbspace.octoandroid.data.entity.ConnectionEntity;
-import com.nairbspace.octoandroid.data.disk.PrefHelper;
 import com.nairbspace.octoandroid.data.net.OctoApiImplDeprecated;
 import com.nairbspace.octoandroid.data.net.OctoInterceptor;
 
@@ -14,7 +14,6 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 import rx.Observable;
-import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -123,25 +122,25 @@ public class GetConnectionImpl implements GetConnection {
     @Override
     public void postConnect(final ConnectEntity connectEntity, final GetConnectionFinishedListener listener) {
         listener.onLoading();
-        mApi.postConnectObservable(connectEntity)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<ConnectEntity>() {
-                    @Override
-                    public void onCompleted() {
-                        listener.onPostComplete(connectEntity);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        listener.onFailure();
-                    }
-
-                    @Override
-                    public void onNext(ConnectEntity connectEntity) {
-
-                    }
-                });
+//        mApi.postConnectObservable(connectEntity)
+//                .subscribeOn(Schedulers.newThread())
+//                .observeOn(AndroidSchedulers.mainThread());
+//                .subscribe(new Subscriber<ConnectEntity>() {
+//                    @Override
+//                    public void onCompleted() {
+//                        listener.onPostComplete(connectEntity);
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        listener.onFailure();
+//                    }
+//
+//                    @Override
+//                    public void onNext(ConnectEntity connectEntity) {
+//
+//                    }
+//                });
     }
 
     @Override
