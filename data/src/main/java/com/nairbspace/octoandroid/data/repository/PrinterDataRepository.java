@@ -68,6 +68,6 @@ public class PrinterDataRepository implements PrinterRepository {
     public Observable<Boolean> connectToPrinter(Connect connect) {
         return Observable.create(mMapperHelper.mapToConnectEntity(connect))
                 .flatMap(mApiManager.connectToPrinter())
-                .map(mApiManager.connectPrinterResult());
+                .map(mApiManager.connectToPrinterResult());
     }
 }

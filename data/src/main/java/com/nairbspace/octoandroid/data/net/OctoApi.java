@@ -2,6 +2,7 @@ package com.nairbspace.octoandroid.data.net;
 
 import com.nairbspace.octoandroid.data.entity.ConnectEntity;
 import com.nairbspace.octoandroid.data.entity.ConnectionEntity;
+import com.nairbspace.octoandroid.data.entity.FilesEntity;
 import com.nairbspace.octoandroid.data.entity.PrinterStateEntity;
 import com.nairbspace.octoandroid.data.entity.VersionEntity;
 
@@ -23,4 +24,7 @@ public interface OctoApi {
 
     @GET("/api/printerDetails")
     Observable<PrinterStateEntity> getPrinter();
+
+    @GET("/api/files")
+    Observable<FilesEntity> getAllFiles();
 }

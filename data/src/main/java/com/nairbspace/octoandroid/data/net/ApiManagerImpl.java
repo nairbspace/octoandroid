@@ -3,6 +3,7 @@ package com.nairbspace.octoandroid.data.net;
 import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
 import com.nairbspace.octoandroid.data.entity.ConnectEntity;
 import com.nairbspace.octoandroid.data.entity.ConnectionEntity;
+import com.nairbspace.octoandroid.data.entity.FilesEntity;
 import com.nairbspace.octoandroid.data.entity.PrinterStateEntity;
 import com.nairbspace.octoandroid.data.entity.VersionEntity;
 
@@ -43,6 +44,11 @@ public class ApiManagerImpl implements ApiManager {
     }
 
     @Override
+    public Observable<FilesEntity> getAllFiles() {
+        return mOctoApi.getAllFiles();
+    }
+
+    @Override
     public Func1<PrinterDbEntity, Observable<VersionEntity>> funcGetVersion() {
         return new Func1<PrinterDbEntity, Observable<VersionEntity>>() {
             @Override
@@ -73,7 +79,7 @@ public class ApiManagerImpl implements ApiManager {
     }
 
     @Override
-    public Func1<ConnectEntity, Boolean> connectPrinterResult() { // TODO have to do this because result object is null?
+    public Func1<ConnectEntity, Boolean> connectToPrinterResult() { // TODO have to do this because result object is null?
         return new Func1<ConnectEntity, Boolean>() {
             @Override
             public Boolean call(ConnectEntity connectEntity) {

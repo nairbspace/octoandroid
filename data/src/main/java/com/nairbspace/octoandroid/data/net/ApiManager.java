@@ -16,6 +16,6 @@ public interface ApiManager extends OctoApi {
 
     Func1<ConnectEntity, Observable<ConnectEntity>> connectToPrinter();
 
-    Func1<ConnectEntity, Boolean> connectPrinterResult();
+    Func1<ConnectEntity, Boolean> connectToPrinterResult();
 
 }
