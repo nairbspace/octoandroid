@@ -33,6 +33,6 @@ dependencies {
     // AutoValue
     compile 'com.google.auto.value:auto-value:1.2'
     provided 'com.google.auto.value:auto-value:1.2' //TODO not sure if this should be apt
-    compile 'com.android.support:support-annotations:23.3.0'
+    compile 'com.android.support:support-annotations:23.4.0'
     compile 'com.google.code.gson:gson:2.6.2'
 }

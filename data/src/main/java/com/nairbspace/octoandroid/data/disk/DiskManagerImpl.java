@@ -6,7 +6,7 @@ import com.nairbspace.octoandroid.data.entity.VersionEntity;
 import com.nairbspace.octoandroid.data.exception.ErrorSavingException;
 import com.nairbspace.octoandroid.data.exception.NoActivePrinterException;
 import com.nairbspace.octoandroid.data.exception.PrinterDataNotFoundException;
-import com.nairbspace.octoandroid.data.mapper.EntityMapper;
+import com.nairbspace.octoandroid.data.mapper.JsonSerializer;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -24,15 +24,15 @@ public class DiskManagerImpl implements DiskManager {
     private final PrefHelper mPrefHelper;
     private final AccountHelper mAccountHelper;
     private final DbHelper mDbHelper;
-    private final EntityMapper mMapper;
+    private final JsonSerializer mJsonSerializer;
 
     @Inject
     public DiskManagerImpl(PrefHelper prefHelper, AccountHelper accountHelper,
-                           DbHelper dbHelper, EntityMapper mapper) {
+                           DbHelper dbHelper, JsonSerializer jsonSerializer) {
         mPrefHelper = prefHelper;
         mAccountHelper = accountHelper;
         mDbHelper = dbHelper;
-        mMapper = mapper;
+        mJsonSerializer = jsonSerializer;
     }
 
     @Override
@@ -108,7 +108,7 @@ public class DiskManagerImpl implements DiskManager {
             public Boolean call(VersionEntity versionEntity) {
                 try {
                     PrinterDbEntity printerDbEntity = mDbHelper.getActivePrinterDbEntity();
-                    String versionJson = mMapper.serialize(versionEntity);
+                    String versionJson = mJsonSerializer.serialize(versionEntity);
                     printerDbEntity.setVersionJson(versionJson);
                     mDbHelper.insertOrReplace(printerDbEntity);
                     return true;
@@ -126,7 +126,7 @@ public class DiskManagerImpl implements DiskManager {
             public void call(ConnectionEntity connectionEntity) {
                 try {
                     PrinterDbEntity printerDbEntity = mDbHelper.getActivePrinterDbEntity();
-                    String connectionJson = mMapper.serialize(connectionEntity);
+                    String connectionJson = mJsonSerializer.serialize(connectionEntity);
                     printerDbEntity.setConnectionJson(connectionJson);
                     mDbHelper.insertOrReplace(printerDbEntity);
                 } catch (Exception e) {
@@ -211,7 +211,8 @@ public class DiskManagerImpl implements DiskManager {
             public ConnectionEntity call(PrinterDbEntity printerDbEntity) {
                 try {
                     String json = printerDbEntity.getConnectionJson();
-                    ConnectionEntity connectionEntity = mMapper.deserialize(json, ConnectionEntity.class);
+                    ConnectionEntity connectionEntity = mJsonSerializer
+                            .deserialize(json, ConnectionEntity.class);
                     if (connectionEntity != null) {
                         return connectionEntity;
                     } else {

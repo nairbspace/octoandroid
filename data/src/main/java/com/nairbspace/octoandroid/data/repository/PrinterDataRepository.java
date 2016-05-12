@@ -43,8 +43,7 @@ public class PrinterDataRepository implements PrinterRepository {
     @RxLogObservable
     @Override
     public Observable<Boolean> addPrinterDetails(final AddPrinter addPrinter) {
-        return Observable.create(mEntityMapper.mapAddPrinterToEntity(addPrinter))
-                .map(mApiManager.mapAddPrinterToPrinter())
+        return Observable.create(mEntityMapper.mapAddPrinterToPrinterDbEntity(addPrinter))
                 .doOnNext(mDiskManager.putPrinterInDb())
                 .concatMap(mApiManager.funcGetVersion())
                 .doOnError(mDiskManager.deleteUnverifiedPrinter())
