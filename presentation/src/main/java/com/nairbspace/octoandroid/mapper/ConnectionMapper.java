@@ -7,9 +7,9 @@ import com.nairbspace.octoandroid.domain.executor.PostExecutionThread;
 import com.nairbspace.octoandroid.domain.executor.ThreadExecutor;
 import com.nairbspace.octoandroid.domain.model.Connection;
 import com.nairbspace.octoandroid.exception.TransformErrorException;
-import com.nairbspace.octoandroid.model.ConnectionModel;
+import com.nairbspace.octoandroid.model.ConnectModel;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -17,26 +17,26 @@ import javax.inject.Inject;
 import rx.Observable;
 import rx.Subscriber;
 
-public class ConnectionModelMapper extends MapperUseCase<Connection, ConnectionModel> {
+public class ConnectionMapper extends MapperUseCase<Connection, ConnectModel> {
 
     private final Context mContext;
 
     @Inject
-    public ConnectionModelMapper(ThreadExecutor threadExecutor,
-                                 PostExecutionThread postExecutionThread,
-                                 Context context) {
+    public ConnectionMapper(ThreadExecutor threadExecutor,
+                            PostExecutionThread postExecutionThread,
+                            Context context) {
         super(threadExecutor, postExecutionThread);
-        mContext = context; // TODO not sure where to get context from...
+        mContext = context;
     }
 
     @Override
-    protected Observable<ConnectionModel> buildUseCaseObservable(final Connection connection) {
-        return Observable.create(new Observable.OnSubscribe<ConnectionModel>() {
+    protected Observable<ConnectModel> buildUseCaseObservable(final Connection connection) {
+        return Observable.create(new Observable.OnSubscribe<ConnectModel>() {
             @Override
-            public void call(Subscriber<? super ConnectionModel> subscriber) {
+            public void call(Subscriber<? super ConnectModel> subscriber) {
                 try {
-                    ConnectionModel connectionModel2 = mapConnection(connection);
-                    subscriber.onNext(connectionModel2);
+                    ConnectModel connectModel = mapConnection(connection);
+                    subscriber.onNext(connectModel);
                     subscriber.onCompleted();
                 } catch (Exception e) {
                     subscriber.onError(new TransformErrorException());
@@ -45,7 +45,7 @@ public class ConnectionModelMapper extends MapperUseCase<Connection, ConnectionM
         });
     }
 
-    private ConnectionModel mapConnection(Connection connection) {
+    private ConnectModel mapConnection(Connection connection) {
         Connection.Current current = connection.current();
         String state = current.state();
         String closed = mContext.getString(R.string.printer_state_closed);
@@ -57,12 +57,10 @@ public class ConnectionModelMapper extends MapperUseCase<Connection, ConnectionM
 
         List<Integer> baudrates = options.baudrates();
 
-        List<Connection.PrinterProfile> printerProfiles = options.printerProfiles();
-        List<String> printerProfileIds = new ArrayList<>();
-        List<String> printerProfileNames = new ArrayList<>();
-        for (Connection.PrinterProfile printerProfile : printerProfiles) {
-            printerProfileIds.add(printerProfile.id());
-            printerProfileNames.add(printerProfile.name());
+        List<Connection.PrinterProfile> printerProfileList = options.printerProfiles();
+        HashMap<String, String> printerProfiles = new HashMap<>();
+        for (Connection.PrinterProfile printerProfile : printerProfileList) {
+            printerProfiles.put(printerProfile.id(), printerProfile.name());
         }
 
         int defaultPortId = 0;
@@ -80,22 +78,22 @@ public class ConnectionModelMapper extends MapperUseCase<Connection, ConnectionM
         }
 
         int defaultPrinterProfileId = 0;
-        for (int i = 0; i < printerProfileNames.size(); i++) {
-            if (printerProfileNames.get(i).equals(options.printerProfilePreference())) {
+        for (int i = 0; i < printerProfileList.size(); i++) {
+            if (printerProfileList.get(i).id().equals(options.printerProfilePreference())) {
                 defaultPrinterProfileId = i;
             }
         }
 
-        return ConnectionModel.builder()
+        return ConnectModel.builder()
                 .isNotConnected(isNotConnected)
                 .ports(ports)
                 .baudrates(baudrates)
-                .printerProfileIds(printerProfileIds)
-                .printerProfileNames(printerProfileNames)
-                .defaultPortId(defaultPortId)
-                .defaultBaudrateId(defaultBaudrateId)
-                .defaultPrinterProfileId(defaultPrinterProfileId)
-                .autoconnect(autoconnect)
+                .printerProfiles(printerProfiles)
+                .selectedPortId(defaultPortId)
+                .selectedBaudrateId(defaultBaudrateId)
+                .selectedPrinterProfileId(defaultPrinterProfileId)
+                .isSaveConnectionChecked(false)
+                .isAutoConnectChecked(autoconnect)
                 .build();
     }
 }

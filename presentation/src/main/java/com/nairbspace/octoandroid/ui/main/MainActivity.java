@@ -26,6 +26,8 @@ import com.nairbspace.octoandroid.app.SetupApplication;
 import com.nairbspace.octoandroid.ui.BaseActivity;
 import com.nairbspace.octoandroid.ui.Presenter;
 import com.nairbspace.octoandroid.ui.connection.ConnectionFragment;
+import com.nairbspace.octoandroid.ui.files.FilesFragment;
+import com.nairbspace.octoandroid.ui.files.dummy.DummyContent;
 import com.nairbspace.octoandroid.ui.status.StatusFragment;
 
 import javax.inject.Inject;
@@ -37,7 +39,8 @@ import timber.log.Timber;
 public class MainActivity extends BaseActivity<MainScreen>
         implements NavigationView.OnNavigationItemSelectedListener, MainScreen,
         StatusFragment.OnFragmentInteractionListener,
-        ConnectionFragment.OnFragmentInteractionListener, View.OnClickListener{
+        ConnectionFragment.OnFragmentInteractionListener, View.OnClickListener,
+        FilesFragment.OnListFragmentInteractionListener{
 
     @Inject MainPresenter mPresenter;
 
@@ -296,5 +299,10 @@ public class MainActivity extends BaseActivity<MainScreen>
     @Override
     protected MainScreen setScreen() {
         return this;
+    }
+
+    @Override
+    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+
     }
 }

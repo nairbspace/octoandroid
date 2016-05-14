@@ -38,6 +38,10 @@ public class ErrorMessageFactory {
         return message;
     }
 
+    public static boolean ifNoInternet(Exception e) {
+        return e instanceof NetworkConnectionException || e instanceof ConnectException;
+    }
+
     public static boolean isThereNoActivePrinter(Exception exception) {
         return (exception instanceof NoActivePrinterException);
     }

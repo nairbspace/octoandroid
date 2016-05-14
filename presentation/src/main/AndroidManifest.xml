@@ -9,6 +9,7 @@
 
     <!-- For Retrofit -->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <!-- QR Code -->
     <uses-permission android:name="android.permission.CAMERA"/>

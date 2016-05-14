@@ -1,5 +1,8 @@
 package com.nairbspace.octoandroid.di.modules;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.nairbspace.octoandroid.data.disk.DbHelper;
@@ -103,5 +106,11 @@ public class NetworkModule {
     @Singleton
     ApiManager provideApiManager(OctoApi api) {
         return new ApiManagerImpl(api);
+    }
+
+    @Provides
+    @Singleton
+    ConnectivityManager provideConnectivityManager(Context context) {
+        return (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 }

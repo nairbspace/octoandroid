@@ -17,4 +17,5 @@
     <item name="wrap_content" type="dimen">-2</item>
     <dimen name="nav_width">@dimen/wrap_content</dimen>
     <dimen name="nav_margin">0dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
 </resources>

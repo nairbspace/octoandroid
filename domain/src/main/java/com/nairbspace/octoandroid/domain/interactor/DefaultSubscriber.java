@@ -1,6 +1,6 @@
 package com.nairbspace.octoandroid.domain.interactor;
 
-public class DefaultSubscriber<T> extends rx.Subscriber<T> {
+public abstract class DefaultSubscriber<T> extends rx.Subscriber<T> {
 
     @Override
     public void onCompleted() {

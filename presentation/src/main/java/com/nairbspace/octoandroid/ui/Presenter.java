@@ -2,6 +2,8 @@ package com.nairbspace.octoandroid.ui;
 
 public abstract class Presenter<T> {
 
+    private boolean mNetworkWentInactive;
+
     /**
      * In an activity this is called during onPostCreate to simulate initializing the presenter
      * as the last call of onCreate. Note however in an Activity onPostCreate is called after
@@ -15,6 +17,20 @@ public abstract class Presenter<T> {
      * @param t Screen interface used for the presenter.
      */
     protected abstract void onInitialize(T t);
+
+    protected void networkNowActive() {
+        if (mNetworkWentInactive) {
+            mNetworkWentInactive = false;
+            onNetworkSwitched();
+        }
+    }
+
+    protected void networkNowInactive() {
+        mNetworkWentInactive = true;
+    }
+
+    protected void onNetworkSwitched() {
+    }
 
     protected void onStart() {
     }

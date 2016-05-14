@@ -7,12 +7,9 @@ import com.nairbspace.octoandroid.domain.interactor.GetConnectionDetails;
 import com.nairbspace.octoandroid.domain.model.Connect;
 import com.nairbspace.octoandroid.domain.model.Connection;
 import com.nairbspace.octoandroid.mapper.ConnectModelMapper;
-import com.nairbspace.octoandroid.mapper.ConnectionModelMapper;
+import com.nairbspace.octoandroid.mapper.ConnectionMapper;
 import com.nairbspace.octoandroid.model.ConnectModel;
-import com.nairbspace.octoandroid.model.ConnectionModel;
 import com.nairbspace.octoandroid.ui.UseCasePresenter;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -21,26 +18,38 @@ public class ConnectionPresenter extends UseCasePresenter<ConnectionScreen> {
     private ConnectionScreen mScreen;
     private final GetConnectionDetails mGetConnectionDetails;
     private final ConnectToPrinter mConnectToPrinter;
-    private final ConnectionModelMapper mConnectionModelMapper;
+    private final ConnectionMapper mConnectionMapper;
     private final ConnectModelMapper mConnectModelMapper;
     private boolean mIsFirstTime = true;
 
     @Inject
     public ConnectionPresenter(GetConnectionDetails getConnectionDetails,
                                ConnectToPrinter connectToPrinter,
-                               ConnectionModelMapper connectionModelMapper,
+                               ConnectionMapper connectionMapper,
                                ConnectModelMapper connectModelMapper) {
         super(getConnectionDetails);
         mGetConnectionDetails = getConnectionDetails;
         mConnectToPrinter = connectToPrinter;
-        mConnectionModelMapper = connectionModelMapper;
+        mConnectionMapper = connectionMapper;
         mConnectModelMapper = connectModelMapper;
     }
 
     @Override
     protected void onInitialize(ConnectionScreen connectionScreen) {
         mScreen = connectionScreen;
+        execute();
+    }
+
+    @Override
+    protected void execute() {
+        super.execute();
         mGetConnectionDetails.execute(new GetConnectionSubscriber());
+    }
+
+    @Override
+    protected void onNetworkSwitched() {
+        super.onNetworkSwitched();
+        execute();
     }
 
     public void connectButtonClicked(ConnectModel connectModel) {
@@ -48,24 +57,16 @@ public class ConnectionPresenter extends UseCasePresenter<ConnectionScreen> {
         mConnectModelMapper.execute(new TransformSubscriber(), connectModel);
     }
 
-    private void renderScreen(ConnectionModel connection) {
+    private void renderScreen(ConnectModel connectModel) {
         mScreen.showProgressBar(false);
-
-        boolean autoconnect = connection.autoconnect();
-        boolean isNotConnected = connection.isNotConnected();
-        List<String> ports = connection.ports();
-        List<Integer> baudrates = connection.baudrates();
-        List<String> printerProfileIds = connection.printerProfileIds();
-        List<String> printerProfileNames = connection.printerProfileNames();
-
-        mScreen.updateUI(ports, baudrates, printerProfileIds, printerProfileNames, isNotConnected, autoconnect);
+        mScreen.updateUi(connectModel, true);
 
         if(mIsFirstTime) {
             mIsFirstTime = false;
-            int defaultPortId = connection.defaultPortId();
-            int defaultBaudrateId = connection.defaultBaudrateId();
-            int defaultPrinterNameId = connection.defaultPrinterProfileId();
-            mScreen.updateUiWithDefaults(defaultPortId, defaultBaudrateId, defaultPrinterNameId);
+            int defaultPortId = connectModel.selectedPortId();
+            int defaultBaudrateId = connectModel.selectedBaudrateId();
+            int defaultPrinterProfileId = connectModel.selectedPrinterProfileId();
+            mScreen.updateUiWithDefaults(defaultPortId, defaultBaudrateId, defaultPrinterProfileId);
         }
     }
 
@@ -80,12 +81,12 @@ public class ConnectionPresenter extends UseCasePresenter<ConnectionScreen> {
 
         @Override
         public void onNext(Connection connection) {
-            mConnectionModelMapper.execute(new InputMapperSubscriber(), connection);
+            mConnectionMapper.execute(new InputMapperSubscriber(), connection);
         }
     }
 
     @RxLogSubscriber
-    private final class InputMapperSubscriber extends DefaultSubscriber<ConnectionModel> {
+    private final class InputMapperSubscriber extends DefaultSubscriber<ConnectModel> {
 
         @Override
         public void onError(Throwable e) {
@@ -94,8 +95,8 @@ public class ConnectionPresenter extends UseCasePresenter<ConnectionScreen> {
         }
 
         @Override
-        public void onNext(ConnectionModel connectionModel) {
-            renderScreen(connectionModel);
+        public void onNext(ConnectModel connectModel) {
+            renderScreen(connectModel);
         }
     }
 
@@ -126,7 +127,7 @@ public class ConnectionPresenter extends UseCasePresenter<ConnectionScreen> {
         @Override
         public void onNext(Boolean aBoolean) {
             if (aBoolean) {
-                mGetConnectionDetails.execute(new GetConnectionSubscriber()); // TODO not sure if should create new one
+                mGetConnectionDetails.execute(new GetConnectionSubscriber());
             }
         }
     }
@@ -135,7 +136,7 @@ public class ConnectionPresenter extends UseCasePresenter<ConnectionScreen> {
     protected void onDestroy(ConnectionScreen connectionScreen) {
         super.onDestroy(connectionScreen);
         mConnectToPrinter.unsubscribe();
-        mConnectionModelMapper.unsubscribe();
+        mConnectionMapper.unsubscribe();
         mConnectModelMapper.unsubscribe();
     }
 }
