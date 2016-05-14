@@ -53,6 +53,7 @@ public class MainActivity extends BaseActivity<MainScreen>
     private ActionBarDrawerToggle mToggle;
     private TextView mPrinterNameNavTextView;
     private TextView mPrinterIpAddressNavTextView;
+    private Snackbar mSnackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -201,7 +202,15 @@ public class MainActivity extends BaseActivity<MainScreen>
 
     @Override
     public void displaySnackBar(String message) {
-        Snackbar.make(mFab, message, Snackbar.LENGTH_LONG).show();
+        mSnackbar = Snackbar.make(mFab, message, Snackbar.LENGTH_INDEFINITE);
+        mSnackbar.show();
+    }
+
+    @Override
+    public void hideSnackbar() {
+        if (mSnackbar.isShown()) {
+            mSnackbar.dismiss();
+        }
     }
 
     @Override

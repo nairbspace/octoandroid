@@ -33,26 +33,25 @@ public abstract class BaseActivity<T> extends AppCompatActivity implements Activ
         super.onPostCreate(savedInstanceState);
         setPresenter().onInitialize(setScreen());
         mActiveNetworkReceiver = new ActiveNetworkReceiver(this, mNetworkChecker);
-        registerReceiver(mActiveNetworkReceiver, mActiveNetworkReceiver.getIntentFilter());
     }
 
     protected void onResume() {
         super.onResume();
         setPresenter().onResume();
+        registerReceiver(mActiveNetworkReceiver, mActiveNetworkReceiver.getIntentFilter());
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         setPresenter().onPause();
+        unregisterReceiver(mActiveNetworkReceiver);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         setPresenter().onStop();
-        unregisterReceiver(mActiveNetworkReceiver);
-        mActiveNetworkReceiver = null;
     }
 
     @SuppressWarnings("unchecked")
@@ -60,6 +59,7 @@ public abstract class BaseActivity<T> extends AppCompatActivity implements Activ
     protected void onDestroy() {
         super.onDestroy();
         setPresenter().onDestroy(setScreen());
+        mActiveNetworkReceiver = null;
     }
 
     @Override
@@ -69,7 +69,7 @@ public abstract class BaseActivity<T> extends AppCompatActivity implements Activ
 
     @Override
     public void networkNowInactive() {
-        setPresenter().networkNowActive();
+        setPresenter().networkNowInactive();
     }
 
     public Navigator getNavigator() {

@@ -62,7 +62,7 @@ public class NetworkModule {
     Gson provideGson(AutoValueTypeAdapterFactory typeAdapterFactory) {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapterFactory(typeAdapterFactory);
-//        gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES); // TODO: Change field naming policies
+//        gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES); // TODO-LOW: Change field naming policies
         return gsonBuilder.create();
     }
 

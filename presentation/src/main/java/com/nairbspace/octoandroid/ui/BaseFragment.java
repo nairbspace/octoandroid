@@ -48,6 +48,34 @@ public abstract class BaseFragment<T> extends Fragment implements ActiveNetworkL
         mUnbinder = unbinder;
     }
 
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        setPresenter().onStart();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setPresenter().onResume();
+        getActivity().registerReceiver(mActiveNetworkReceiver,
+                mActiveNetworkReceiver.getIntentFilter());
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        setPresenter().onPause();
+        getActivity().unregisterReceiver(mActiveNetworkReceiver);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        setPresenter().onStop();
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -56,39 +84,12 @@ public abstract class BaseFragment<T> extends Fragment implements ActiveNetworkL
         }
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        setPresenter().onStart();
-        getActivity().registerReceiver(mActiveNetworkReceiver,
-                mActiveNetworkReceiver.getIntentFilter());
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        setPresenter().onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        setPresenter().onPause();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        setPresenter().onStop();
-        getActivity().unregisterReceiver(mActiveNetworkReceiver);
-        mActiveNetworkReceiver = null;
-    }
-
     @SuppressWarnings("unchecked")
     @Override
     public void onDestroy() {
         super.onDestroy();
         setPresenter().onDestroy(setScreen());
+        mActiveNetworkReceiver = null;
     }
 
     @Override

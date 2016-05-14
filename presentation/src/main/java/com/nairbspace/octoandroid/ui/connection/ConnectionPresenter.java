@@ -52,6 +52,12 @@ public class ConnectionPresenter extends UseCasePresenter<ConnectionScreen> {
         execute();
     }
 
+    @Override
+    protected void networkNowInactive() {
+        super.networkNowInactive();
+        mScreen.enableScreen(false);
+    }
+
     public void connectButtonClicked(ConnectModel connectModel) {
         mScreen.showProgressBar(true);
         mConnectModelMapper.execute(new TransformSubscriber(), connectModel);

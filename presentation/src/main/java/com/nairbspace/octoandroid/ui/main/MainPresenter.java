@@ -1,6 +1,7 @@
 package com.nairbspace.octoandroid.ui.main;
 
 import com.fernandocejas.frodo.annotation.RxLogSubscriber;
+import com.nairbspace.octoandroid.data.exception.NetworkConnectionException;
 import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
 import com.nairbspace.octoandroid.domain.interactor.GetPrinterDetails;
 import com.nairbspace.octoandroid.domain.model.Printer;
@@ -13,7 +14,7 @@ import javax.inject.Inject;
 
 public class MainPresenter extends UseCasePresenter<MainScreen> {
 
-    private MainScreen mMainScreen;
+    private MainScreen mScreen;
     private final GetPrinterDetails mUseCase;
     private final PrinterModelMapper mPrinterModelMapper;
 
@@ -27,8 +28,21 @@ public class MainPresenter extends UseCasePresenter<MainScreen> {
 
     @Override
     protected void onInitialize(MainScreen mainScreen) {
-        mMainScreen = mainScreen;
+        mScreen = mainScreen;
         execute();
+    }
+
+    @Override
+    protected void onNetworkSwitched() {
+        super.onNetworkSwitched();
+        mScreen.hideSnackbar();
+    }
+
+    @Override
+    protected void networkNowInactive() {
+        super.networkNowInactive();
+        String message = ErrorMessageFactory.create(mScreen.context(), new NetworkConnectionException());
+        mScreen.displaySnackBar(message);
     }
 
     public void execute() {
@@ -42,10 +56,10 @@ public class MainPresenter extends UseCasePresenter<MainScreen> {
         public void onError(Throwable e) {
             Exception exception = (Exception) e;
             if (ErrorMessageFactory.isThereNoActivePrinter(exception)) {
-                mMainScreen.navigateToAddPrinterActivityForResult();
+                mScreen.navigateToAddPrinterActivityForResult();
             } else {
-                String error = ErrorMessageFactory.create(mMainScreen.context(), exception);
-                mMainScreen.displaySnackBar(error);
+                String error = ErrorMessageFactory.create(mScreen.context(), exception);
+                mScreen.displaySnackBar(error);
             }
         }
 
@@ -60,7 +74,7 @@ public class MainPresenter extends UseCasePresenter<MainScreen> {
 
         @Override
         public void onNext(PrinterModel printerModel) {
-            mMainScreen.updateNavHeader(printerModel.name(), printerModel.host());
+            mScreen.updateNavHeader(printerModel.name(), printerModel.host());
         }
     }
 }

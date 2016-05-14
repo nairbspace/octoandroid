@@ -158,7 +158,7 @@ public class ConnectionFragment extends BaseViewPagerFragment<ConnectionScreen> 
         updateBaudRateSpinner(connectModel.baudrates());
         updatePrinterProfileSpinner(connectModel.printerProfiles());
         mAutoConnectCheckBox.setChecked(connectModel.isAutoConnectChecked());
-        showConnectScreen(connectModel.isNotConnected());
+        enableScreen(connectModel.isNotConnected());
         mConnectButton.setEnabled(isUpdateFromPresenter);
     }
 
@@ -234,11 +234,11 @@ public class ConnectionFragment extends BaseViewPagerFragment<ConnectionScreen> 
     @Override
     public void showProgressBar(boolean isLoading) {
         mConnectProgressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
-        mConnectCardView.setVisibility(isLoading ? View.GONE : View.VISIBLE);
+        enableScreen(!isLoading); // TODO-LOW causes button to show disabled but not big deal
     }
 
     @Override
-    public void showConnectScreen(boolean isNotConnected) {
+    public void enableScreen(boolean isNotConnected) {
         mIsConnectButtonVisible = isNotConnected;
         mConnectButton.setText(isNotConnected ? CONNECT : DISCONNECT);
         ButterKnife.apply(mAllViews, mSetEnableView, isNotConnected);

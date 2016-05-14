@@ -23,6 +23,8 @@ public interface MainScreen {
 
     void displaySnackBar(String message);
 
+    void hideSnackbar();
+
     void selectStatusNav();
 
     void setDrawer();

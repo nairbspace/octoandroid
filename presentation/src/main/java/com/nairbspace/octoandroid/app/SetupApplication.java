@@ -62,7 +62,7 @@ public class SetupApplication extends Application {
             }
 
             if (t != null) {
-                if (priority == Log.WARN) { //TODO Implement crash analytics during run time
+                if (priority == Log.WARN) { //TODO-LOW Implement crash analytics during run time
                     return;
                 }
                 if (priority == Log.ERROR) {
