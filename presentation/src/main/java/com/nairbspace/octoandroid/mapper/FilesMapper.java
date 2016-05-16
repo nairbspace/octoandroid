@@ -74,7 +74,7 @@ public class FilesMapper extends MapperUseCase<Files, FilesModel> {
         String name = file.name();
         String size = "-";
         if (file.size() != null) {
-            size = humanReadableByteCount(file.size(), false);
+            size = humanReadableByteCount(file.size(), true);
         }
         String date = "-" ;
         if (file.date() != null) {

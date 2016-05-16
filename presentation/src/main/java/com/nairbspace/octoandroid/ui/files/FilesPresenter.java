@@ -25,7 +25,24 @@ public class FilesPresenter extends UseCasePresenter<FilesScreen> {
     @Override
     protected void onInitialize(FilesScreen filesScreen) {
         mScreen = filesScreen;
+        execute();
+    }
+
+    @Override
+    protected void execute() {
+        mScreen.showProgressBar();
         mGetFiles.execute(new GetFilesSubsubscriber());
+    }
+
+    @Override
+    protected void networkNowInactive() {
+        super.networkNowInactive();
+        mScreen.showEmptyScreen();
+    }
+
+    @Override
+    protected void onNetworkSwitched() {
+        execute();
     }
 
     private void renderScreen(FilesModel filesModel) {
@@ -36,6 +53,7 @@ public class FilesPresenter extends UseCasePresenter<FilesScreen> {
 
         @Override
         public void onError(Throwable e) {
+            mScreen.showEmptyScreen();
             super.onError(e);
         }
 
@@ -49,6 +67,7 @@ public class FilesPresenter extends UseCasePresenter<FilesScreen> {
     private final class TransformSubscriber extends DefaultSubscriber<FilesModel> {
         @Override
         public void onError(Throwable e) {
+            mScreen.showEmptyScreen();
             super.onError(e);
         }
 
@@ -56,5 +75,11 @@ public class FilesPresenter extends UseCasePresenter<FilesScreen> {
         public void onNext(FilesModel filesModel) {
             renderScreen(filesModel);
         }
+    }
+
+    @Override
+    protected void onDestroy(FilesScreen filesScreen) {
+        super.onDestroy(filesScreen);
+        mFilesMapper.unsubscribe();
     }
 }

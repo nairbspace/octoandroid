@@ -2,11 +2,12 @@ package com.nairbspace.octoandroid.ui.files;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
@@ -30,6 +31,8 @@ public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
     private FilesRvAdapter mAdapter;
 
     @BindView(R.id.file_list_recyclerview) RecyclerView mRecyclerView;
+    @BindView(R.id.empty_files_textview) TextView mEmptyTextView;
+    @BindView(R.id.files_progress_bar) ProgressBar mProgressBar;
 
     public static FilesFragment newInstance() {
         return new FilesFragment();
@@ -46,12 +49,32 @@ public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_files_list, container, false);
         setUnbinder(ButterKnife.bind(this, view));
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        showEmptyScreen();
         if (savedInstanceState != null && savedInstanceState.getParcelable(FILESMODEL_KEY) != null) {
             mFilesModel = savedInstanceState.getParcelable(FILESMODEL_KEY);
             updateUi(mFilesModel);
         }
         return view;
+    }
+
+    @Override
+    public void showEmptyScreen() {
+        mEmptyTextView.setVisibility(View.VISIBLE);
+        mRecyclerView.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.GONE);
+    }
+
+    private void showRecyclerView() {
+        mEmptyTextView.setVisibility(View.GONE);
+        mRecyclerView.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showProgressBar() {
+        mEmptyTextView.setVisibility(View.GONE);
+        mRecyclerView.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -63,6 +86,7 @@ public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
         } else {
             mAdapter.setFilesModel(filesModel);
         }
+        showRecyclerView();
     }
 
     @Override
