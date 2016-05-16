@@ -62,7 +62,6 @@ public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
             mRecyclerView.setAdapter(mAdapter);
         } else {
             mAdapter.setFilesModel(filesModel);
-            mRecyclerView.setAdapter(mAdapter);
         }
     }
 
@@ -70,6 +69,12 @@ public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(FILESMODEL_KEY, mFilesModel); // TODO would be nice to save last clicked item
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mAdapter = null;
     }
 
     @NonNull
