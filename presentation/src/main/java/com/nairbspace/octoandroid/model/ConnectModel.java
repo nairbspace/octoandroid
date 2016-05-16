@@ -4,6 +4,7 @@ import android.os.Parcelable;
 
 import com.google.auto.value.AutoValue;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,6 +22,20 @@ public abstract class ConnectModel implements Parcelable {
 
     public static Builder builder() {
         return new AutoValue_ConnectModel.Builder();
+    }
+
+    public static ConnectModel dummyModel() {
+        return new AutoValue_ConnectModel.Builder()
+                .isNotConnected(false)
+                .ports(new ArrayList<String>())
+                .baudrates(new ArrayList<Integer>())
+                .printerProfiles(new HashMap<String, String>())
+                .selectedPortId(0)
+                .selectedBaudrateId(0)
+                .selectedPrinterProfileId(0)
+                .isSaveConnectionChecked(false)
+                .isAutoConnectChecked(false)
+                .build();
     }
 
     @AutoValue.Builder

@@ -1,5 +1,6 @@
 package com.nairbspace.octoandroid.ui;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,18 +17,27 @@ import javax.inject.Inject;
 
 import butterknife.Unbinder;
 
-@Deprecated
-public abstract class BaseFragment<T> extends Fragment implements ActiveNetworkListener {
+public abstract class BaseFragmentListener<T, L> extends Fragment implements ActiveNetworkListener {
 
+    @Inject NetworkChecker mNetworkChecker;
     private Unbinder mUnbinder;
     private ActiveNetworkReceiver mActiveNetworkReceiver;
-    @Inject NetworkChecker mNetworkChecker;
+    private L mListener;
 
     @NonNull
     protected abstract Presenter setPresenter();
 
     @NonNull
     protected abstract T setScreen();
+
+    @NonNull
+    protected abstract L setListener();
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mListener = setListener();
+    }
 
     @SuppressWarnings("unchecked")
     @Override
@@ -48,7 +58,6 @@ public abstract class BaseFragment<T> extends Fragment implements ActiveNetworkL
     protected void setUnbinder(Unbinder unbinder) {
         mUnbinder = unbinder;
     }
-
 
     @Override
     public void onStart() {
@@ -91,6 +100,14 @@ public abstract class BaseFragment<T> extends Fragment implements ActiveNetworkL
         super.onDestroy();
         setPresenter().onDestroy(setScreen());
         mActiveNetworkReceiver = null;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        if (mListener != null) {
+            mListener = null;
+        }
     }
 
     @Override

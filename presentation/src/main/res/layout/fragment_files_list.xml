@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.RecyclerView
-    android:id="@+id/list"
+    android:id="@+id/file_list_recyclerview"
     android:name="com.nairbspace.octoandroid.ui.files.FilesFragment"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/recycler_view_bottom_margin"
+    android:clipToPadding="false"
     app:layoutManager="LinearLayoutManager"
     tools:context="com.nairbspace.octoandroid.ui.files.FilesFragment"
     tools:listitem="@layout/fragment_files"/>

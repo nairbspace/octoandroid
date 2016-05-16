@@ -2,6 +2,7 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="recycler_view_bottom_margin">8dp</dimen>  <!--half of normal due to cardview margin-->
     <dimen name="fab_margin">16dp</dimen>
 
     <!-- Formatting for match_parent as dimension -->
@@ -18,4 +19,6 @@
     <dimen name="nav_width">@dimen/wrap_content</dimen>
     <dimen name="nav_margin">0dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+
+    <item name="drawable_active_opacity" format="float" type="dimen">0.54</item>
 </resources>

@@ -8,6 +8,7 @@ import com.nairbspace.octoandroid.data.repository.datasource.PrinterDataStoreFac
 import com.nairbspace.octoandroid.domain.model.AddPrinter;
 import com.nairbspace.octoandroid.domain.model.Connect;
 import com.nairbspace.octoandroid.domain.model.Connection;
+import com.nairbspace.octoandroid.domain.model.Files;
 import com.nairbspace.octoandroid.domain.model.Printer;
 import com.nairbspace.octoandroid.domain.repository.PrinterRepository;
 
@@ -69,5 +70,10 @@ public class PrinterDataRepository implements PrinterRepository {
         return Observable.create(mMapperHelper.mapToConnectEntity(connect))
                 .flatMap(mApiManager.connectToPrinter())
                 .map(mApiManager.connectToPrinterResult());
+    }
+
+    @Override
+    public Observable<Files> getAllFiles() {
+        return mApiManager.getAllFiles().map(mMapperHelper.mapToFiles());
     }
 }

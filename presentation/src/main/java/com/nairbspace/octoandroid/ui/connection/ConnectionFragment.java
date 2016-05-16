@@ -1,6 +1,5 @@
 package com.nairbspace.octoandroid.ui.connection;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,7 +17,7 @@ import android.widget.SpinnerAdapter;
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
 import com.nairbspace.octoandroid.model.ConnectModel;
-import com.nairbspace.octoandroid.ui.BaseViewPagerFragment;
+import com.nairbspace.octoandroid.ui.BasePagerFragmentListener;
 import com.nairbspace.octoandroid.ui.Presenter;
 import com.nairbspace.octoandroid.views.SetEnableView;
 
@@ -34,18 +33,13 @@ import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ConnectionFragment extends BaseViewPagerFragment<ConnectionScreen> implements ConnectionScreen {
+public class ConnectionFragment extends BasePagerFragmentListener<ConnectionScreen,
+        ConnectionFragment.ConnectFragmentListener> implements ConnectionScreen {
 
     private static final String CONNECT_MODEL_KEY = "connection_model_key";
     private ConnectModel mConnectModel;
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
+    private ConnectFragmentListener mListener;
     @Inject ConnectionPresenter mPresenter;
     @Inject SetEnableView mSetEnableView;
 
@@ -71,28 +65,14 @@ public class ConnectionFragment extends BaseViewPagerFragment<ConnectionScreen> 
     private ArrayAdapter<String> mPrinterProfileAdapter;
     private HashMap<String, String> mPrinterProfiles;
 
-    public static ConnectionFragment newInstance(String param1, String param2) {
-        ConnectionFragment fragment = new ConnectionFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public static ConnectionFragment newInstance() {
+        return new ConnectionFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SetupApplication.get(getActivity()).getAppComponent().inject(this);
-
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-
-        if (savedInstanceState != null) {
-            mConnectModel = savedInstanceState.getParcelable(CONNECT_MODEL_KEY);
-        }
     }
 
     @Override
@@ -101,29 +81,14 @@ public class ConnectionFragment extends BaseViewPagerFragment<ConnectionScreen> 
         setUnbinder(ButterKnife.bind(this, view));
         setActionBarTitle("Status");
 
-        if (mConnectModel != null) {
+        if (savedInstanceState != null && savedInstanceState.getParcelable(CONNECT_MODEL_KEY) != null) {
+            mConnectModel = savedInstanceState.getParcelable(CONNECT_MODEL_KEY);
             updateUi(mConnectModel, false);
         } else {
-            createInitialView();
+            updateUi(ConnectModel.dummyModel(), false);
         }
+
         return view;
-    }
-
-    @Override
-    public void createInitialView() {
-        ConnectModel dummyModel = ConnectModel.builder()
-                .isNotConnected(false)
-                .ports(new ArrayList<String>())
-                .baudrates(new ArrayList<Integer>())
-                .printerProfiles(new HashMap<String, String>())
-                .selectedPortId(0)
-                .selectedBaudrateId(0)
-                .selectedPrinterProfileId(0)
-                .isSaveConnectionChecked(false)
-                .isAutoConnectChecked(false)
-                .build();
-
-        updateUi(dummyModel, false);
     }
 
     @OnClick(R.id.connect_button)
@@ -165,11 +130,16 @@ public class ConnectionFragment extends BaseViewPagerFragment<ConnectionScreen> 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(CONNECT_MODEL_KEY, getConnectModel());
+        try {
+            outState.putParcelable(CONNECT_MODEL_KEY, getConnectModel());
+        } catch (NullPointerException e) {
+            outState.putParcelable(CONNECT_MODEL_KEY, mConnectModel);
+        }
     }
 
     @Override
-    public void updateUiWithDefaults(int defaultPortId, int defaultBaudrateId, int defaultPrinterProfileId) {
+    public void updateUiWithDefaults(int defaultPortId, int defaultBaudrateId,
+                                     int defaultPrinterProfileId) {
         setSpinnerSelection(mSerialPortSpinner, defaultPortId);
         setSpinnerSelection(mBaudrateSpinner, defaultBaudrateId);
         setSpinnerSelection(mPrinterProfileSpinner, defaultPrinterProfileId);
@@ -234,7 +204,7 @@ public class ConnectionFragment extends BaseViewPagerFragment<ConnectionScreen> 
     @Override
     public void showProgressBar(boolean isLoading) {
         mConnectProgressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
-        enableScreen(!isLoading); // TODO-LOW causes button to show disabled but not big deal
+        enableScreen(!isLoading);
     }
 
     @Override
@@ -250,17 +220,6 @@ public class ConnectionFragment extends BaseViewPagerFragment<ConnectionScreen> 
         }
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
     @NonNull
     @Override
     protected Presenter setPresenter() {
@@ -273,13 +232,13 @@ public class ConnectionFragment extends BaseViewPagerFragment<ConnectionScreen> 
         return this;
     }
 
+    @NonNull
     @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
+    protected ConnectFragmentListener setListener() {
+        return (ConnectFragmentListener) getContext();
     }
 
-    public interface OnFragmentInteractionListener {
+    public interface ConnectFragmentListener {
         void onFragmentInteraction(Uri uri);
     }
 }

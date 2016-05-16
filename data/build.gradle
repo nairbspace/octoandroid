@@ -3,13 +3,18 @@ apply plugin: 'com.neenbedankt.android-apt' // Dagger2
 apply plugin: 'com.fernandocejas.frodo' // Frodo RxLogger
 
 android {
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
 
-    defaultPublishConfig "debug" // TODO DO NOT PUBLISH THIS
+     defaultPublishConfig "debug" // TODO DO NOT PUBLISH THIS
 
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"

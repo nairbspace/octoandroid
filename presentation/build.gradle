@@ -4,6 +4,10 @@ apply plugin: 'com.jakewharton.hugo' // Hugo
 apply plugin: 'com.fernandocejas.frodo' // Frodo RxLogger
 
 android {
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
 
     productFlavors {
         // Define separate dev and prod product flavors.
@@ -25,12 +29,20 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
 
+    dexOptions {
+        maxProcessCount 2
+        javaMaxHeapSize "2g"
+    }
+
     defaultConfig {
         applicationId "com.nairbspace.octoandroid"
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+        resValue "string", "google_app_id", MyGoogleAppId
+        resValue "string", "my_ip_address", MyIpAddress
+        resValue "string", "my_api_key", MyApiKey
     }
     buildTypes {
         release {
@@ -83,10 +95,11 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
 
     // LeakCanary
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+//    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
+//    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+//    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
 
     // AutoValue Parcelable
     apt 'frankiesardo:auto-parcel:1.0.1'
+//    apt 'com.ryanharter.auto.value:auto-value-parcel:0.2.1'
 }

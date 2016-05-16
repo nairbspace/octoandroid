@@ -19,11 +19,11 @@ public class StatusFragmentPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         if (position == 0) {
-            return ConnectionFragment.newInstance(null, null);
+            return ConnectionFragment.newInstance();
         } else if (position == 1) {
             return StatusFragment.newInstance(null, null);
         } else {
-            return FilesFragment.newInstance(1);
+            return FilesFragment.newInstance();
         }
     }
 

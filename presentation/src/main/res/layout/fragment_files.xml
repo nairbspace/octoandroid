@@ -1,20 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:orientation="horizontal">
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:layout_marginEnd="@dimen/activity_vertical_margin"
+    android:layout_marginStart="@dimen/activity_horizontal_margin"
+    card_view:cardElevation="2dp">
 
-    <TextView
-        android:id="@+id/id"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem"/>
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem"/>
-</LinearLayout>
+            <ImageView
+                android:id="@+id/file_type_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:layout_margin="12dp"
+                android:alpha="@dimen/drawable_active_opacity"
+                android:src="@drawable/ic_file_black_24dp"/>
+
+            <TextView
+                android:id="@+id/file_name_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/text_margin"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="@dimen/text_margin"
+                android:layout_toEndOf="@id/file_type_icon"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="16sp"
+                tools:text="test"/>
+
+            <TextView
+                android:id="@+id/file_size_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/file_name_text_view"
+                android:layout_marginBottom="@dimen/text_margin"
+                android:layout_marginEnd="@dimen/text_margin"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="4dp"
+                android:layout_toEndOf="@id/file_type_icon"
+                android:textSize="12sp"
+                tools:text="text"/> <!--TODO these can overflow !!!-->
+
+            <ImageView
+                android:id="@+id/more_file_details_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="12dp"
+                android:alpha="@dimen/drawable_active_opacity"
+                android:src="@drawable/ic_more_vert_black_24dp"/>
+
+        </RelativeLayout>
+        <LinearLayout
+            android:id="@+id/files_list_on_click_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:layout_marginBottom="4dp">
+            <ImageView
+                android:id="@+id/file_download_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_weight="1"
+                android:alpha="@dimen/drawable_active_opacity"
+                android:src="@drawable/ic_file_download_black_24dp"
+                android:contentDescription="@string/download"/>
+            <ImageView
+                android:id="@+id/printer_file_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_weight="1"
+                android:alpha="@dimen/drawable_active_opacity"
+                android:src="@drawable/ic_print_black_24dp"
+                android:contentDescription="@string/print"/>
+        </LinearLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

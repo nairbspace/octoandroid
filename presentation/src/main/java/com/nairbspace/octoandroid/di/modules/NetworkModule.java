@@ -10,7 +10,6 @@ import com.nairbspace.octoandroid.data.entity.AutoValueTypeAdapterFactory;
 import com.nairbspace.octoandroid.data.net.ApiManager;
 import com.nairbspace.octoandroid.data.net.ApiManagerImpl;
 import com.nairbspace.octoandroid.data.net.OctoApi;
-import com.nairbspace.octoandroid.data.net.OctoApiImplDeprecated;
 import com.nairbspace.octoandroid.data.net.OctoInterceptor;
 
 import javax.inject.Singleton;
@@ -94,12 +93,6 @@ public class NetworkModule {
     @Singleton
     OctoApi provideOctoprintApi(Retrofit.Builder builder) {
         return builder.build().create(OctoApi.class);
-    }
-
-    @Provides
-    @Singleton
-    OctoApiImplDeprecated provideApiImpl(OctoApi api) {
-        return new OctoApiImplDeprecated(api);
     }
 
     @Provides

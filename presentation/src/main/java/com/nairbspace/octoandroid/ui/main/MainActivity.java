@@ -23,11 +23,11 @@ import android.widget.TextView;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
+import com.nairbspace.octoandroid.model.FilesModel;
 import com.nairbspace.octoandroid.ui.BaseActivity;
 import com.nairbspace.octoandroid.ui.Presenter;
 import com.nairbspace.octoandroid.ui.connection.ConnectionFragment;
 import com.nairbspace.octoandroid.ui.files.FilesFragment;
-import com.nairbspace.octoandroid.ui.files.dummy.DummyContent;
 import com.nairbspace.octoandroid.ui.status.StatusFragment;
 
 import javax.inject.Inject;
@@ -39,8 +39,8 @@ import timber.log.Timber;
 public class MainActivity extends BaseActivity<MainScreen>
         implements NavigationView.OnNavigationItemSelectedListener, MainScreen,
         StatusFragment.OnFragmentInteractionListener,
-        ConnectionFragment.OnFragmentInteractionListener, View.OnClickListener,
-        FilesFragment.OnListFragmentInteractionListener{
+        ConnectionFragment.ConnectFragmentListener, View.OnClickListener,
+        FilesFragment.ListFragmentListener {
 
     @Inject MainPresenter mPresenter;
 
@@ -311,7 +311,7 @@ public class MainActivity extends BaseActivity<MainScreen>
     }
 
     @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+    public void onListFragmentInteraction(FilesModel.FileModel fileModel) {
 
     }
 }

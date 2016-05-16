@@ -7,8 +7,6 @@ import java.util.List;
 
 public interface ConnectionScreen {
 
-    void createInitialView();
-
     void updateUi(ConnectModel connectModel, boolean isUpdateFromPresenter);
 
     void updateUiWithDefaults(int defaultPortId, int defaultBaudrateId, int defaultPrinterProfileId);

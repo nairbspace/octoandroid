@@ -3,10 +3,9 @@ package com.nairbspace.octoandroid.interactor;
 import com.google.gson.Gson;
 import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
 import com.nairbspace.octoandroid.data.db.PrinterDbEntityDao;
-import com.nairbspace.octoandroid.data.net.OctoApiImplDeprecated;
 import com.nairbspace.octoandroid.data.disk.PrefHelper;
-import com.nairbspace.octoandroid.data.net.OctoInterceptor;
 import com.nairbspace.octoandroid.data.entity.PrinterStateEntity;
+import com.nairbspace.octoandroid.data.net.OctoInterceptor;
 
 import javax.inject.Inject;
 
@@ -18,8 +17,6 @@ public class GetPrinterStateImpl implements GetPrinterState {
     PrinterDbEntityDao mPrinterDbEntityDao;
     @Inject Gson mGson;
     @Inject OctoInterceptor mInterceptor;
-    @Inject
-    OctoApiImplDeprecated mApi;
     private PrinterDbEntity mPrinterDbEntity;
 
     @Inject

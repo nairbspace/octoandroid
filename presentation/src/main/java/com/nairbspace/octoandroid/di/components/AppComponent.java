@@ -7,6 +7,7 @@ import com.nairbspace.octoandroid.di.modules.StorageModule;
 import com.nairbspace.octoandroid.net.websocket.WebsocketService;
 import com.nairbspace.octoandroid.ui.add_printer.AddPrinterActivity;
 import com.nairbspace.octoandroid.ui.connection.ConnectionFragment;
+import com.nairbspace.octoandroid.ui.files.FilesFragment;
 import com.nairbspace.octoandroid.ui.main.MainActivity;
 import com.nairbspace.octoandroid.ui.status.StatusFragment;
 
@@ -28,4 +29,6 @@ public interface AppComponent {
     void inject(StatusFragment statusFragment);
 
     void inject(WebsocketService websocketService);
+
+    void inject(FilesFragment filesFragment);
 }

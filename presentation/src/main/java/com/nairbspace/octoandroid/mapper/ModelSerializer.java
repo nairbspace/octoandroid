@@ -2,11 +2,13 @@ package com.nairbspace.octoandroid.mapper;
 
 import com.google.gson.Gson;
 
+import javax.inject.Inject;
+
 public class ModelSerializer {
 
     private final Gson mGson;
 
-    public ModelSerializer(Gson gson) {
+    @Inject public ModelSerializer(Gson gson) {
         mGson = gson;
     }
 

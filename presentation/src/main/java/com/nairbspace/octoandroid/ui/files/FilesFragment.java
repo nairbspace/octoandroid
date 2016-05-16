@@ -1,9 +1,7 @@
 package com.nairbspace.octoandroid.ui.files;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,102 +9,90 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.nairbspace.octoandroid.R;
-import com.nairbspace.octoandroid.ui.files.dummy.DummyContent;
-import com.nairbspace.octoandroid.ui.files.dummy.DummyContent.DummyItem;
+import com.nairbspace.octoandroid.app.SetupApplication;
+import com.nairbspace.octoandroid.model.FilesModel;
+import com.nairbspace.octoandroid.ui.BasePagerFragmentListener;
+import com.nairbspace.octoandroid.ui.Presenter;
 
-import timber.log.Timber;
+import javax.inject.Inject;
 
-/**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
- * interface.
- */
-public class FilesFragment extends Fragment {
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 1;
-    private OnListFragmentInteractionListener mListener;
+public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
+        FilesFragment.ListFragmentListener> implements FilesScreen {
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
-    public FilesFragment() {
-    }
+    private static final String FILESMODEL_KEY = "filesmodel_key";
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
-    public static FilesFragment newInstance(int columnCount) {
-        FilesFragment fragment = new FilesFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
+    @Inject FilesPresenter mPresenter;
+    private ListFragmentListener mListener;
+    private FilesModel mFilesModel;
+    private FilesRvAdapter mAdapter;
+
+    @BindView(R.id.file_list_recyclerview) RecyclerView mRecyclerView;
+
+    public static FilesFragment newInstance() {
+        return new FilesFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
+        SetupApplication.get(getContext()).getAppComponent().inject(this);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_files_list, container, false);
-
-        Timber.d(DummyContent.ITEMS.get(0).content);
-
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            recyclerView.setAdapter(new FilesRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+        setUnbinder(ButterKnife.bind(this, view));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        if (savedInstanceState != null && savedInstanceState.getParcelable(FILESMODEL_KEY) != null) {
+            mFilesModel = savedInstanceState.getParcelable(FILESMODEL_KEY);
+            updateUi(mFilesModel);
         }
         return view;
     }
 
-
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
+    public void updateUi(FilesModel filesModel) {
+        mFilesModel = filesModel;
+        if (mAdapter == null) {
+            mAdapter = new FilesRvAdapter(filesModel, mListener);
+            mRecyclerView.setAdapter(mAdapter);
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
+            mAdapter.setFilesModel(filesModel);
+            mRecyclerView.setAdapter(mAdapter);
         }
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(FILESMODEL_KEY, mFilesModel); // TODO would be nice to save last clicked item
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnListFragmentInteractionListener {
+    @NonNull
+    @Override
+    protected Presenter setPresenter() {
+        return mPresenter;
+    }
+
+    @NonNull
+    @Override
+    protected FilesScreen setScreen() {
+        return this;
+    }
+
+    @NonNull
+    @Override
+    protected ListFragmentListener setListener() {
+        mListener = (ListFragmentListener) getContext();
+        return mListener;
+    }
+
+    public interface ListFragmentListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(FilesModel.FileModel fileModel);
     }
 }
