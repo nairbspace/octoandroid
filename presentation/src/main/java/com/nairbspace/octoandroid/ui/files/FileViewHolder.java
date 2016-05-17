@@ -7,35 +7,42 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.model.FilesModel;
 
+import butterknife.BindColor;
 import butterknife.BindDrawable;
 import butterknife.BindInt;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-public class FileViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-    private final FilesFragment.ListFragmentListener mListener;
+public class FileViewHolder extends RecyclerView.ViewHolder {
+    private final Listener mListener;
+    private final View mView;
 
     @BindView(R.id.file_name_text_view) TextView mFileNameTextView;
     @BindView(R.id.file_size_text_view) TextView mFileSizeTextView;
+    @BindView(R.id.file_visible_card_view) RelativeLayout mVisibleLayout;
     @BindView(R.id.files_list_on_click_view) LinearLayout mOnClickView;
     @BindView(R.id.file_type_icon) ImageView mFileTypeIcon;
     @BindDrawable(R.drawable.ic_file_black_24dp) Drawable mFileDrawable;
     @BindDrawable(R.drawable.ic_sd_storage_black_24dp) Drawable mSdDrawable;
     @BindString(R.string.file_origin_sdcard) String SDCARD;
     @BindInt(android.R.integer.config_longAnimTime) int mLongAnimTime;
+    @BindColor(R.color.colorPrimaryLight) int mBackgroundColor;
+    @BindColor(android.R.color.white) int mDefaultColor;
 
     private FilesModel.FileModel mFileModel;
 
-    public FileViewHolder(View view, FilesFragment.ListFragmentListener listener) {
+    public FileViewHolder(View view, Listener listener) {
         super(view);
+        mView = view;
         mListener = listener;
-        view.setOnClickListener(this);
         ButterKnife.bind(this, view); // TODO probably need to null this
     }
 
@@ -46,6 +53,11 @@ public class FileViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         setFileTypeIcon(fileModel);
     }
 
+    public void hideOnClickView() {
+        mOnClickView.setVisibility(View.GONE);
+        mView.setBackgroundColor(mDefaultColor);
+    }
+
     private void setFileTypeIcon(FilesModel.FileModel fileModel) {
         if (fileModel.origin().equals(SDCARD)) {
             mFileTypeIcon.setImageDrawable(mSdDrawable);
@@ -54,18 +66,27 @@ public class FileViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        // Notify the active callbacks interface (the activity, if the
-        // fragment is attached to one) that an item has been selected.
-        if (mListener != null) {
-            mListener.onListFragmentInteraction(mFileModel);
-        }
-
-        showOnClickView(mOnClickView.isShown());
+    @OnClick(R.id.file_visible_card_view)
+    void visibleLayoutClicked() {
+        mListener.fileViewClicked(getAdapterPosition());
     }
 
-    private void showOnClickView(final boolean isShown) {
+    @OnClick(R.id.printer_file_icon)
+    void printerButtonClicked() {
+        mListener.printButtonClicked(mFileModel.apiPath());
+    }
+
+    @OnClick(R.id.file_download_icon)
+    void downloadButtonClicked() {
+        mListener.downloadButtonClicked(mFileModel.downloadPath());
+    }
+
+    public void showOnClickView() {
+        mOnClickView.setVisibility(View.VISIBLE);
+        mView.setBackgroundColor(mBackgroundColor);
+    }
+
+    public void updateOnClickView(final boolean isShown) {
         mOnClickView.setVisibility(isShown ? View.GONE : View.VISIBLE);
         mOnClickView.animate().setDuration(mLongAnimTime).alpha(isShown ? 0 : 1)
                 .setListener(new AnimatorListenerAdapter() {
@@ -74,5 +95,11 @@ public class FileViewHolder extends RecyclerView.ViewHolder implements View.OnCl
                 mOnClickView.setVisibility(isShown ? View.GONE : View.VISIBLE);
             }
         });
+    }
+
+    public interface Listener {
+        void fileViewClicked(int position);
+        void printButtonClicked(String apiPath);
+        void downloadButtonClicked(String downloadUrl);
     }
 }

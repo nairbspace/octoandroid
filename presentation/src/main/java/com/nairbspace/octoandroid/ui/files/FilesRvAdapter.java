@@ -7,17 +7,19 @@ import android.view.ViewGroup;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.model.FilesModel;
-import com.nairbspace.octoandroid.ui.files.FilesFragment.ListFragmentListener;
 
-public class FilesRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class FilesRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
+        implements FileViewHolder.Listener {
 
     private static final int VIEW_TYPE_FILE = 1;
     private static final int VIEW_TYPE_FOOTER = 2;
 
-    private final ListFragmentListener mListener;
+    private final Listener mListener;
     private FilesModel mFilesModel;
+    private int mClickedPosition = -1;
+    private int mOldClickedPosition = -1;
 
-    public FilesRvAdapter(FilesModel filesModel, ListFragmentListener listener) {
+    public FilesRvAdapter(FilesModel filesModel, Listener listener) {
         mFilesModel = filesModel;
         mListener = listener;
     }
@@ -27,12 +29,16 @@ public class FilesRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         notifyDataSetChanged();
     }
 
+    public int getClickedPosition() {
+        return mClickedPosition;
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_FILE) {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.fragment_files, parent, false);
-            return new FileViewHolder(view, mListener);
+            return new FileViewHolder(view, this);
         } else {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.fragment_files_list_footer, parent, false);
@@ -46,6 +52,18 @@ public class FilesRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             FilesModel.FileModel fileModel = mFilesModel.fileModels().get(position);
             FileViewHolder fileViewHolder = (FileViewHolder) holder;
             fileViewHolder.bindFileModel(fileModel);
+            fileViewHolder.hideOnClickView();
+
+            if (position == mOldClickedPosition) {
+                fileViewHolder.hideOnClickView();
+                mOldClickedPosition = -1;
+            }
+
+            if (position == mClickedPosition) {
+                fileViewHolder.showOnClickView();
+                mOldClickedPosition = mClickedPosition;
+            }
+
         } else if (holder instanceof FooterViewHolder) {
             FooterViewHolder footerViewHolder = (FooterViewHolder) holder;
             footerViewHolder.bindFooterModel(mFilesModel);
@@ -60,5 +78,35 @@ public class FilesRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public int getItemCount() {
         return mFilesModel.fileModels().size() + 1;
+    }
+
+    @Override
+    public void fileViewClicked(int position) {
+        if (position == mOldClickedPosition) { // If file is clicked again, then close it
+            mClickedPosition = -1;
+            mOldClickedPosition = position;
+        } else {
+            mClickedPosition = position; // If not then open it
+            notifyItemChanged(position);
+        }
+
+        if (mOldClickedPosition != -1) { // Close previous clicked file
+            notifyItemChanged(mOldClickedPosition);
+        }
+    }
+
+    @Override
+    public void printButtonClicked(String apiPath) {
+        mListener.printerButtonClicked(apiPath);
+    }
+
+    @Override
+    public void downloadButtonClicked(String downloadUrl) {
+        mListener.downloadButtonClicked(downloadUrl);
+    }
+
+    public interface Listener {
+        void printerButtonClicked(String apiPath);
+        void downloadButtonClicked(String downloadUrl);
     }
 }

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
@@ -21,12 +22,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
-        FilesFragment.ListFragmentListener> implements FilesScreen {
+        FilesFragment.Listener> implements FilesScreen, FilesRvAdapter.Listener {
 
     private static final String FILESMODEL_KEY = "filesmodel_key";
+    private static final String CLICKED_POSITION_KEY = "clicked_position_key";
 
     @Inject FilesPresenter mPresenter;
-    private ListFragmentListener mListener;
+    private Listener mListener;
     private FilesModel mFilesModel;
     private FilesRvAdapter mAdapter;
 
@@ -53,6 +55,8 @@ public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
         if (savedInstanceState != null && savedInstanceState.getParcelable(FILESMODEL_KEY) != null) {
             mFilesModel = savedInstanceState.getParcelable(FILESMODEL_KEY);
             updateUi(mFilesModel);
+            int clickedPosition = savedInstanceState.getInt(CLICKED_POSITION_KEY, -1);
+            mAdapter.fileViewClicked(clickedPosition);
         }
         return view;
     }
@@ -81,7 +85,7 @@ public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
     public void updateUi(FilesModel filesModel) {
         mFilesModel = filesModel;
         if (mAdapter == null) {
-            mAdapter = new FilesRvAdapter(filesModel, mListener);
+            mAdapter = new FilesRvAdapter(filesModel, this);
             mRecyclerView.setAdapter(mAdapter);
         } else {
             mAdapter.setFilesModel(filesModel);
@@ -93,6 +97,7 @@ public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(FILESMODEL_KEY, mFilesModel); // TODO would be nice to save last clicked item
+        outState.putInt(CLICKED_POSITION_KEY, mAdapter.getClickedPosition());
     }
 
     @Override
@@ -115,13 +120,23 @@ public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
 
     @NonNull
     @Override
-    protected ListFragmentListener setListener() {
-        mListener = (ListFragmentListener) getContext();
+    protected Listener setListener() {
+        mListener = (Listener) getContext();
         return mListener;
     }
 
-    public interface ListFragmentListener {
-        // TODO: Update argument type and name
-        void onListFragmentInteraction(FilesModel.FileModel fileModel);
+    @Override
+    public void printerButtonClicked(String apiPath) {
+        Toast.makeText(getContext(), apiPath, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void downloadButtonClicked(String downloadUrl) {
+        Toast.makeText(getContext(), downloadUrl, Toast.LENGTH_LONG).show();
+        mListener.downloadFile(downloadUrl);
+    }
+
+    public interface Listener {
+        void downloadFile(String url);
     }
 }

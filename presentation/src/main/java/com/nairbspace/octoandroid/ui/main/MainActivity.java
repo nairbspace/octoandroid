@@ -23,7 +23,6 @@ import android.widget.TextView;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
-import com.nairbspace.octoandroid.model.FilesModel;
 import com.nairbspace.octoandroid.ui.BaseActivity;
 import com.nairbspace.octoandroid.ui.Presenter;
 import com.nairbspace.octoandroid.ui.connection.ConnectionFragment;
@@ -38,9 +37,9 @@ import timber.log.Timber;
 
 public class MainActivity extends BaseActivity<MainScreen>
         implements NavigationView.OnNavigationItemSelectedListener, MainScreen,
-        StatusFragment.OnFragmentInteractionListener,
+        StatusFragment.Listener,
         ConnectionFragment.ConnectFragmentListener, View.OnClickListener,
-        FilesFragment.ListFragmentListener {
+        FilesFragment.Listener {
 
     @Inject MainPresenter mPresenter;
 
@@ -311,7 +310,10 @@ public class MainActivity extends BaseActivity<MainScreen>
     }
 
     @Override
-    public void onListFragmentInteraction(FilesModel.FileModel fileModel) {
-
+    public void downloadFile(String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        if ((intent.resolveActivity(getPackageManager()) != null)) {
+            startActivity(intent);
+        }
     }
 }
