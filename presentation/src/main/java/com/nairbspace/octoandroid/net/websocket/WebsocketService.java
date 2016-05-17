@@ -13,8 +13,8 @@ import com.nairbspace.octoandroid.app.SetupApplication;
 import com.nairbspace.octoandroid.data.disk.PrefHelper;
 import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
 import com.nairbspace.octoandroid.data.db.PrinterDbEntityDao;
-import com.nairbspace.octoandroid.net.websocket.model.CurrentHistory;
-import com.nairbspace.octoandroid.net.websocket.model.WebsocketObj;
+import com.nairbspace.octoandroid.data.websocket.CurrentHistoryEntity;
+import com.nairbspace.octoandroid.data.websocket.WebsocketEntity;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -40,7 +40,7 @@ public class WebsocketService extends Service
     private PrinterDbEntity mPrinterDbEntity;
 
     private WebSocket mWebsocket;
-    private WebsocketObj mWebsocketObj;
+    private WebsocketEntity mWebsocketEntity;
 
     public static Intent newService(Context context) {
         return new Intent(context, WebsocketService.class);
@@ -94,17 +94,17 @@ public class WebsocketService extends Service
     @Override
     public void onStringAvailable(String s) {
         try {
-            mWebsocketObj = mGson.fromJson(s, WebsocketObj.class);
+            mWebsocketEntity = mGson.fromJson(s, WebsocketEntity.class);
             // TODO emit data via Eventbus
 
-            CurrentHistory currentHistory = mWebsocketObj.current();
+            CurrentHistoryEntity currentHistoryEntity = mWebsocketEntity.current();
             String[] array = new String[3];
-            if (currentHistory.state().text() != null &&
-                    currentHistory.job().file().name() != null &&
-                    currentHistory.progress().printTime() != null) {
-                array[0] = currentHistory.state().text();
-                array[1] = currentHistory.job().file().name();
-                array[2] = currentHistory.progress().printTime().toString();
+            if (currentHistoryEntity.state().text() != null &&
+                    currentHistoryEntity.job().file().name() != null &&
+                    currentHistoryEntity.progress().printTime() != null) {
+                array[0] = currentHistoryEntity.state().text();
+                array[1] = currentHistoryEntity.job().file().name();
+                array[2] = currentHistoryEntity.progress().printTime().toString();
 
                 Timber.d(array[0]);
                 Timber.d(array[1]);

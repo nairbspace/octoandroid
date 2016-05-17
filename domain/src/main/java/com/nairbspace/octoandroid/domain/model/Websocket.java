@@ -1,11 +1,11 @@
-package com.nairbspace.octoandroid.net.websocket.model;
+package com.nairbspace.octoandroid.domain.model;
 
 import com.google.auto.value.AutoValue;
 import com.google.gson.annotations.SerializedName;
 
 @AutoValue
-public abstract class WebsocketObj {
-
+@AutoGson(autoValueClass = AutoValue_Websocket.class)
+public abstract class Websocket {
     @SerializedName("current") public abstract CurrentHistory current();
     @SerializedName("history") public abstract CurrentHistory history();
     @SerializedName("event") public abstract Event event();

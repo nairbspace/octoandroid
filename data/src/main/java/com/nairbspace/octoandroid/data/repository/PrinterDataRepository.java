@@ -5,11 +5,13 @@ import com.nairbspace.octoandroid.data.disk.DiskManager;
 import com.nairbspace.octoandroid.data.mapper.MapperHelper;
 import com.nairbspace.octoandroid.data.net.ApiManager;
 import com.nairbspace.octoandroid.data.repository.datasource.PrinterDataStoreFactory;
+import com.nairbspace.octoandroid.data.websocket.OctoWebsocket;
 import com.nairbspace.octoandroid.domain.model.AddPrinter;
 import com.nairbspace.octoandroid.domain.model.Connect;
 import com.nairbspace.octoandroid.domain.model.Connection;
 import com.nairbspace.octoandroid.domain.model.Files;
 import com.nairbspace.octoandroid.domain.model.Printer;
+import com.nairbspace.octoandroid.domain.model.Websocket;
 import com.nairbspace.octoandroid.domain.repository.PrinterRepository;
 
 import javax.inject.Inject;
@@ -24,15 +26,18 @@ public class PrinterDataRepository implements PrinterRepository {
     private final MapperHelper mMapperHelper;
     private final DiskManager mDiskManager;
     private final ApiManager mApiManager;
+    private final OctoWebsocket mWebsocket;
 
     @Inject
     public PrinterDataRepository(MapperHelper mapperHelper,
                                  PrinterDataStoreFactory printerDataStoreFactory,
-                                 DiskManager diskManager, ApiManager apiManager) {
+                                 DiskManager diskManager, ApiManager apiManager,
+                                 OctoWebsocket websocket) {
         mMapperHelper = mapperHelper;
         mPrinterDataStoreFactory = printerDataStoreFactory;
         mDiskManager = diskManager;
         mApiManager = apiManager;
+        mWebsocket = websocket;
     }
 
     @Override
@@ -75,5 +80,11 @@ public class PrinterDataRepository implements PrinterRepository {
     @Override
     public Observable<Files> getAllFiles() {
         return mApiManager.getAllFiles().map(mMapperHelper.mapToFiles());
+    }
+
+    @Override
+    public Observable<Websocket> getWebsocket() {
+        return mWebsocket.getWebsocketObservable()
+                .map(mMapperHelper.mapToWebsocket());
     }
 }

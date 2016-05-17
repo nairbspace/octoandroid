@@ -6,7 +6,7 @@ import android.net.ConnectivityManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.nairbspace.octoandroid.data.disk.DbHelper;
-import com.nairbspace.octoandroid.data.entity.AutoValueTypeAdapterFactory;
+import com.nairbspace.octoandroid.data.net.AutoValueTypeAdapterFactory;
 import com.nairbspace.octoandroid.data.net.ApiManager;
 import com.nairbspace.octoandroid.data.net.ApiManagerImpl;
 import com.nairbspace.octoandroid.data.net.OctoApi;

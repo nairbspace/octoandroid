@@ -1,11 +1,8 @@
 package com.nairbspace.octoandroid.ui.status;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +10,7 @@ import android.widget.TextView;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
-import com.nairbspace.octoandroid.ui.BaseViewPagerFragment;
+import com.nairbspace.octoandroid.ui.BasePagerFragmentListener;
 import com.nairbspace.octoandroid.ui.Presenter;
 
 import javax.inject.Inject;
@@ -21,7 +18,9 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class StatusFragment extends BaseViewPagerFragment<StatusScreen> implements StatusScreen {
+public class StatusFragment extends BasePagerFragmentListener<StatusScreen,
+        StatusFragment.Listener> implements StatusScreen {
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -34,7 +33,7 @@ public class StatusFragment extends BaseViewPagerFragment<StatusScreen> implemen
     @BindView(R.id.file_textview) TextView mFileTextview;
     @BindView(R.id.print_time_textview) TextView mPrintTimeTextView;
 
-    private OnFragmentInteractionListener mListener;
+    private Listener mListener;
 
     public static StatusFragment newInstance(String param1, String param2) {
         StatusFragment fragment = new StatusFragment();
@@ -59,12 +58,7 @@ public class StatusFragment extends BaseViewPagerFragment<StatusScreen> implemen
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_status, container, false);
-        AppCompatActivity activity = (AppCompatActivity) getActivity();
-        ActionBar actionBar = activity.getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle("Status");
-        }
-        ButterKnife.bind(this, view);
+        setUnbinder(ButterKnife.bind(this, view));
         return view;
     }
 
@@ -72,23 +66,6 @@ public class StatusFragment extends BaseViewPagerFragment<StatusScreen> implemen
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
     }
 
     @Override
@@ -125,7 +102,14 @@ public class StatusFragment extends BaseViewPagerFragment<StatusScreen> implemen
         return this;
     }
 
-    public interface OnFragmentInteractionListener {
+    @NonNull
+    @Override
+    protected Listener setListener() {
+        mListener = (Listener) getContext();
+        return mListener;
+    }
+
+    public interface Listener {
         void onFragmentInteraction(Uri uri);
     }
 }

@@ -1,51 +1,47 @@
 package com.nairbspace.octoandroid.ui.status;
 
-import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
-import com.nairbspace.octoandroid.data.entity.PrinterStateEntity;
-import com.nairbspace.octoandroid.interactor.GetPrinterState;
-import com.nairbspace.octoandroid.interactor.GetPrinterStateImpl;
-import com.nairbspace.octoandroid.ui.EventPresenter;
+import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
+import com.nairbspace.octoandroid.domain.interactor.GetWebsocket;
+import com.nairbspace.octoandroid.domain.model.Websocket;
+import com.nairbspace.octoandroid.ui.UseCasePresenter;
 
 import javax.inject.Inject;
 
-public class StatusPresenter extends EventPresenter<StatusScreen, String[]>
-        implements GetPrinterState.GetPrinterStateFinishedListener {
+import timber.log.Timber;
 
-    @Inject GetPrinterStateImpl mGetPrinterState;
+public class StatusPresenter extends UseCasePresenter<StatusScreen> {
+
+    private final GetWebsocket mGetWebsocket;
     private StatusScreen mScreen;
 
     @Inject
-    public StatusPresenter() {
+    public StatusPresenter(GetWebsocket getWebsocket) {
+        super(getWebsocket);
+        mGetWebsocket = getWebsocket;
     }
 
     @Override
     protected void onInitialize(StatusScreen statusScreen) {
         mScreen = statusScreen;
-        mGetPrinterState.getDataFromDb(this);
+        execute();
     }
 
     @Override
-    public void onSuccessDb(PrinterDbEntity printerDbEntity) {
-//        if (printerDetails.getVersionJson() != null) {
-//            String versionJson = printerDetails.getVersionJson();
-//            Version version = mGetPrinterState.convertJsonToGson(versionJson, Version.class);
-//            mScreen.updateFileName(version.getServer());
-//            mScreen.updateTime(version.getApi());
-//        }
-        if (printerDbEntity.getPrinterStateJson() != null) {
-            String printerStateJson = printerDbEntity.getPrinterStateJson();
-            PrinterStateEntity printerStateEntity = mGetPrinterState
-                    .convertJsonToGson(printerStateJson, PrinterStateEntity.class);
-            if (printerStateEntity.state() != null) {
-                mScreen.updateMachineState(printerStateEntity.state().text());
-            }
+    protected void execute() {
+        super.execute();
+        mGetWebsocket.execute(new WebsocketSubscriber());
+    }
+
+    private final class WebsocketSubscriber extends DefaultSubscriber<Websocket> {
+        @Override
+        public void onError(Throwable e) {
+            super.onError(e);
         }
-    }
 
-    @Override
-    protected void onEvent(String[] strings) {
-        mScreen.updateMachineState(strings[0]);
-        mScreen.updateFileName(strings[1]);
-        mScreen.updateTime(strings[2]);
+        @Override
+        public void onNext(Websocket websocket) {
+            super.onNext(websocket);
+            Timber.d(websocket.toString());
+        }
     }
 }
