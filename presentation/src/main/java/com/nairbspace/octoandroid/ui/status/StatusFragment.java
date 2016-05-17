@@ -6,10 +6,12 @@ import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
+import com.nairbspace.octoandroid.model.StatusModel;
 import com.nairbspace.octoandroid.ui.BasePagerFragmentListener;
 import com.nairbspace.octoandroid.ui.Presenter;
 
@@ -31,7 +33,12 @@ public class StatusFragment extends BasePagerFragmentListener<StatusScreen,
 
     @BindView(R.id.machine_state_textview) TextView mMachineStateTextView;
     @BindView(R.id.file_textview) TextView mFileTextview;
+    @BindView(R.id.approx_total_print_time_textview) TextView mApproxTotalPrintTimeTextView;
     @BindView(R.id.print_time_textview) TextView mPrintTimeTextView;
+    @BindView(R.id.print_time_left_textview) TextView mPrintTimeLeftTextView;
+    @BindView(R.id.printed_bytes_textview) TextView mPrintedBytesTextView;
+    @BindView(R.id.printed_file_size_textview) TextView mPrintedFileSizeTextView;
+    @BindView(R.id.printing_progressbar) ProgressBar mPrintingProgressBar;
 
     private Listener mListener;
 
@@ -69,25 +76,15 @@ public class StatusFragment extends BasePagerFragmentListener<StatusScreen,
     }
 
     @Override
-    public void updateUI(String machineState, String octoPrintVersion, String apiVersion) {
-        updateMachineState(machineState);
-        updateFileName(octoPrintVersion);
-        updateTime(apiVersion);
-    }
-
-    @Override
-    public void updateMachineState(String machineState) {
-        mMachineStateTextView.setText(machineState);
-    }
-
-    @Override
-    public void updateFileName(String fileName) {
-        mFileTextview.setText(fileName);
-    }
-
-    @Override
-    public void updateTime(String time) {
-        mPrintTimeTextView.setText(time);
+    public void updateUI(StatusModel statusModel) {
+        mMachineStateTextView.setText(statusModel.state());
+        mFileTextview.setText(statusModel.file());
+        mApproxTotalPrintTimeTextView.setText(statusModel.approxTotalPrintTime());
+        mPrintTimeLeftTextView.setText(statusModel.printTimeLeft());
+        mPrintTimeTextView.setText(statusModel.printTime());
+        mPrintedBytesTextView.setText(statusModel.printedBytes());
+        mPrintedFileSizeTextView.setText(statusModel.printedFileSize());
+        mPrintingProgressBar.setProgress(statusModel.completionProgress());
     }
 
     @NonNull

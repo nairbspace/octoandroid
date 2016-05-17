@@ -1,12 +1,8 @@
 package com.nairbspace.octoandroid.ui.status;
 
+import com.nairbspace.octoandroid.model.StatusModel;
+
 public interface StatusScreen {
 
-    void updateUI(String machineState, String octoPrintVersion, String apiVersion);
-
-    void updateMachineState(String machineState);
-
-    void updateFileName(String fileName);
-
-    void updateTime(String time);
+    void updateUI(StatusModel statusModel);
 }

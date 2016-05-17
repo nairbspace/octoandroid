@@ -68,6 +68,23 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="Approx. Total Print Time: "/>
+
+                <TextView
+                    android:id="@+id/approx_total_print_time_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="10:10"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="Print Time: "/>
 
                 <TextView
@@ -105,10 +122,21 @@
                     android:text="Printed: "/>
 
                 <TextView
-                    android:id="@+id/printed_textview"
+                    android:id="@+id/printed_bytes_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="10%"/>
+                    tools:text="10 KB"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" / "/>
+
+                <TextView
+                    android:id="@+id/printed_file_size_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="10 KB"/>
                 <!--TODO check what "Printed" represents -->
             </LinearLayout>
 

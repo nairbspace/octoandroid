@@ -96,8 +96,10 @@ public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(FILESMODEL_KEY, mFilesModel); // TODO would be nice to save last clicked item
-        outState.putInt(CLICKED_POSITION_KEY, mAdapter.getClickedPosition());
+        outState.putParcelable(FILESMODEL_KEY, mFilesModel);
+        if (mAdapter != null) {
+            outState.putInt(CLICKED_POSITION_KEY, mAdapter.getClickedPosition());
+        }
     }
 
     @Override

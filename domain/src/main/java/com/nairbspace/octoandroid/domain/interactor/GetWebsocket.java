@@ -21,6 +21,6 @@ public class GetWebsocket extends UseCase {
 
     @Override
     protected Observable buildUseCaseObservable() {
-        return mPrinterRepository.getWebsocket();
+        return mPrinterRepository.getWebsocket().retry();
     }
 }
