@@ -31,6 +31,17 @@ public class PlaybackPresenter extends UseCasePresenter<PlaybackScreen> {
     }
 
     @Override
+    protected void onNetworkSwitched() {
+        execute();
+    }
+
+    @Override
+    protected void networkNowInactive() {
+        super.networkNowInactive();
+        mGetWebsocket.unsubscribe();
+    }
+
+    @Override
     protected void execute() {
         mGetWebsocket.execute(new WebsocketSubscriber());
     }
