@@ -6,6 +6,11 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:buttonStyle">@style/DefaultButton</item>
+    </style>
+
+    <style name="DefaultButton" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:textColor">@color/disabled_button_text_color</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

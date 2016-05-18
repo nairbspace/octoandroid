@@ -20,6 +20,7 @@ import com.nairbspace.octoandroid.model.ConnectModel;
 import com.nairbspace.octoandroid.ui.BasePagerFragmentListener;
 import com.nairbspace.octoandroid.ui.Presenter;
 import com.nairbspace.octoandroid.views.SetEnableView;
+import com.nairbspace.octoandroid.views.SetShowView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,11 +38,13 @@ public class ConnectionFragment extends BasePagerFragmentListener<ConnectionScre
         ConnectionFragment.ConnectFragmentListener> implements ConnectionScreen {
 
     private static final String CONNECT_MODEL_KEY = "connection_model_key";
+    private static final String SHOW_VIEW_KEY = "show_view_key";
     private ConnectModel mConnectModel;
 
     private ConnectFragmentListener mListener;
     @Inject ConnectionPresenter mPresenter;
     @Inject SetEnableView mSetEnableView;
+    @Inject SetShowView mSetShowView;
 
     @BindView(R.id.connect_progressbar) ProgressBar mConnectProgressBar;
     @BindView(R.id.connect_cardview) CardView mConnectCardView;
@@ -56,6 +59,12 @@ public class ConnectionFragment extends BasePagerFragmentListener<ConnectionScre
     @BindViews({R.id.serial_port_spinner, R.id.baudrate_spinner, R.id.printer_profile_spinner,
     R.id.save_connection_settings_checkbox, R.id.auto_connect_checkbox, R.id. connect_button})
     List<View> mAllViews;
+
+    @BindViews({R.id.serial_port_spinner, R.id.baudrate_spinner, R.id.printer_profile_spinner,
+            R.id.save_connection_settings_checkbox, R.id.auto_connect_checkbox,
+            R.id.serial_port_spinner_title, R.id.baudrate_spinner_title,
+            R.id.printer_profile_spinner_title})
+    List<View> mConnectShowView;
 
     private boolean mIsConnectButtonVisible;
     private List<String> mPorts;
@@ -85,7 +94,7 @@ public class ConnectionFragment extends BasePagerFragmentListener<ConnectionScre
             mConnectModel = savedInstanceState.getParcelable(CONNECT_MODEL_KEY);
             updateUi(mConnectModel, false);
         } else {
-            updateUi(ConnectModel.dummyModel(), false);
+            updateUi(ConnectModel.dummyModel(), false); //TODO fix up start up logic!!!
         }
 
         return view;
@@ -212,6 +221,7 @@ public class ConnectionFragment extends BasePagerFragmentListener<ConnectionScre
         mIsConnectButtonVisible = isNotConnected;
         mConnectButton.setText(isNotConnected ? CONNECT : DISCONNECT);
         ButterKnife.apply(mAllViews, mSetEnableView, isNotConnected);
+        ButterKnife.apply(mConnectShowView, mSetShowView, isNotConnected);
     }
 
     public void onButtonPressed(Uri uri) {
