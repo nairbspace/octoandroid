@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginStart="@dimen/nav_margin"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    app:layout_behavior="com.nairbspace.octoandroid.views.MoveUpBehavior">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -38,8 +39,7 @@
         android:id="@+id/fragment_controls"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:translationZ="20dp"
-        app:layout_behavior="com.nairbspace.octoandroid.views.MoveUpBehavior"/>
+        android:translationZ="20dp"/>
     <!-- Layout behavior needs to be direct child of CoordinatorLayout -->
 
 </LinearLayout>
