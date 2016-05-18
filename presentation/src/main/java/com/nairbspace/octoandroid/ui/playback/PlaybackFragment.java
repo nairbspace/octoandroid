@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
-import com.nairbspace.octoandroid.model.StatusModel;
+import com.nairbspace.octoandroid.model.WebsocketModel;
 import com.nairbspace.octoandroid.ui.BaseFragmentListener;
 import com.nairbspace.octoandroid.ui.Presenter;
 
@@ -26,7 +26,7 @@ public class PlaybackFragment extends BaseFragmentListener<PlaybackScreen,
         PlaybackFragment.Listener> implements PlaybackScreen {
 
     private static final String WEBSOCKET_MODEL_KEY = "websocket_model_key";
-    private StatusModel mStatusModel;
+    private WebsocketModel mWebsocketModel;
 
     @Inject PlaybackPresenter mPresenter;
 
@@ -38,11 +38,11 @@ public class PlaybackFragment extends BaseFragmentListener<PlaybackScreen,
     @BindView(R.id.playback_stop_button) ImageView mStopButton;
 
     @Override
-    public void updateUi(StatusModel statusModel) {
-        mStatusModel = statusModel;
-        mPrintingSeekbar.setProgress(statusModel.completionProgress());
-        mTimeElapsedTextView.setText(statusModel.printTime());
-        mTimeLeftTextView.setText(statusModel.printTimeLeft());
+    public void updateUi(WebsocketModel websocketModel) {
+        mWebsocketModel = websocketModel;
+        mPrintingSeekbar.setProgress(websocketModel.completionProgress());
+        mTimeElapsedTextView.setText(websocketModel.printTime());
+        mTimeLeftTextView.setText(websocketModel.printTimeLeft());
     }
 
     private Listener mListener;
@@ -69,7 +69,7 @@ public class PlaybackFragment extends BaseFragmentListener<PlaybackScreen,
         });
 
         if (savedInstanceState != null && savedInstanceState.getParcelable(WEBSOCKET_MODEL_KEY) != null) {
-            updateUi((StatusModel) savedInstanceState.getParcelable(WEBSOCKET_MODEL_KEY));
+            updateUi((WebsocketModel) savedInstanceState.getParcelable(WEBSOCKET_MODEL_KEY));
         }
         return view;
     }
@@ -77,7 +77,7 @@ public class PlaybackFragment extends BaseFragmentListener<PlaybackScreen,
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(WEBSOCKET_MODEL_KEY, mStatusModel);
+        outState.putParcelable(WEBSOCKET_MODEL_KEY, mWebsocketModel);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

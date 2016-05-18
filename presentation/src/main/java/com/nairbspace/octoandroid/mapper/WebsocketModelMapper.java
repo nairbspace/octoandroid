@@ -5,7 +5,7 @@ import com.nairbspace.octoandroid.domain.executor.ThreadExecutor;
 import com.nairbspace.octoandroid.domain.model.CurrentHistory;
 import com.nairbspace.octoandroid.domain.model.Websocket;
 import com.nairbspace.octoandroid.exception.TransformErrorException;
-import com.nairbspace.octoandroid.model.StatusModel;
+import com.nairbspace.octoandroid.model.WebsocketModel;
 
 import javax.inject.Inject;
 
@@ -13,18 +13,18 @@ import rx.Observable;
 import rx.Subscriber;
 
 @SuppressWarnings("ConstantConditions")
-public class ToStatusModelMapper extends MapperUseCase<Websocket, StatusModel> {
+public class WebsocketModelMapper extends MapperUseCase<Websocket, WebsocketModel> {
 
     private final UglyNullChecker mUglyNullChecker;
     private final ByteConverter mByteConverter;
     private final DateTimeConverter mDateTimeConverter;
 
     @Inject
-    public ToStatusModelMapper(ThreadExecutor threadExecutor,
-                               PostExecutionThread postExecutionThread,
-                               UglyNullChecker uglyNullChecker,
-                               ByteConverter byteConverter,
-                               DateTimeConverter dateTimeConverter) {
+    public WebsocketModelMapper(ThreadExecutor threadExecutor,
+                                PostExecutionThread postExecutionThread,
+                                UglyNullChecker uglyNullChecker,
+                                ByteConverter byteConverter,
+                                DateTimeConverter dateTimeConverter) {
         super(threadExecutor, postExecutionThread);
         mUglyNullChecker = uglyNullChecker;
         mByteConverter = byteConverter;
@@ -32,14 +32,14 @@ public class ToStatusModelMapper extends MapperUseCase<Websocket, StatusModel> {
     }
 
     @Override
-    protected Observable<StatusModel> buildUseCaseObservable(final Websocket websocket) {
-        return Observable.create(new Observable.OnSubscribe<StatusModel>() {
+    protected Observable<WebsocketModel> buildUseCaseObservable(final Websocket websocket) {
+        return Observable.create(new Observable.OnSubscribe<WebsocketModel>() {
             @Override
-            public void call(Subscriber<? super StatusModel> subscriber) {
+            public void call(Subscriber<? super WebsocketModel> subscriber) {
                 try {
                     if (mUglyNullChecker.isCurrentNotNull(websocket)) {
-                        StatusModel statusModel = mapToStatusModel(websocket, websocket.current());
-                        subscriber.onNext(statusModel);
+                        WebsocketModel websocketModel = mapToStatusModel(websocket, websocket.current());
+                        subscriber.onNext(websocketModel);
                         subscriber.onCompleted();
                     }
                 } catch (Exception e) {
@@ -49,7 +49,7 @@ public class ToStatusModelMapper extends MapperUseCase<Websocket, StatusModel> {
         });
     }
 
-    private StatusModel mapToStatusModel(Websocket websocket, CurrentHistory current) {
+    private WebsocketModel mapToStatusModel(Websocket websocket, CurrentHistory current) {
         String state = "-";
         if (mUglyNullChecker.ifStateTextNotNull(websocket)) {
             state = current.state().text();
@@ -93,7 +93,7 @@ public class ToStatusModelMapper extends MapperUseCase<Websocket, StatusModel> {
             completionProgress = formatCompletion(current.progress().completion());
         }
 
-        return StatusModel.builder()
+        return WebsocketModel.builder()
                 .state(state)
                 .file(file)
                 .approxTotalPrintTime(approxTotalPrintTime)

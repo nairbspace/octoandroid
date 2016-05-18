@@ -3,8 +3,8 @@ package com.nairbspace.octoandroid.ui.status;
 import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
 import com.nairbspace.octoandroid.domain.interactor.GetWebsocket;
 import com.nairbspace.octoandroid.domain.model.Websocket;
-import com.nairbspace.octoandroid.mapper.ToStatusModelMapper;
-import com.nairbspace.octoandroid.model.StatusModel;
+import com.nairbspace.octoandroid.mapper.WebsocketModelMapper;
+import com.nairbspace.octoandroid.model.WebsocketModel;
 import com.nairbspace.octoandroid.ui.UseCasePresenter;
 
 import javax.inject.Inject;
@@ -14,11 +14,11 @@ import timber.log.Timber;
 public class StatusPresenter extends UseCasePresenter<StatusScreen> {
 
     private final GetWebsocket mGetWebsocket;
-    private final ToStatusModelMapper mMapper;
+    private final WebsocketModelMapper mMapper;
     private StatusScreen mScreen;
 
     @Inject
-    public StatusPresenter(GetWebsocket getWebsocket, ToStatusModelMapper mapper) {
+    public StatusPresenter(GetWebsocket getWebsocket, WebsocketModelMapper mapper) {
         super(getWebsocket);
         mGetWebsocket = getWebsocket;
         mMapper = mapper;
@@ -62,16 +62,16 @@ public class StatusPresenter extends UseCasePresenter<StatusScreen> {
         }
     }
 
-    private final class TransformSubscriber extends DefaultSubscriber<StatusModel> {
+    private final class TransformSubscriber extends DefaultSubscriber<WebsocketModel> {
         @Override
         public void onError(Throwable e) {
             super.onError(e);
         }
 
         @Override
-        public void onNext(StatusModel statusModel) {
-            super.onNext(statusModel);
-            mScreen.updateUI(statusModel);
+        public void onNext(WebsocketModel websocketModel) {
+            super.onNext(websocketModel);
+            mScreen.updateUI(websocketModel);
         }
     }
 

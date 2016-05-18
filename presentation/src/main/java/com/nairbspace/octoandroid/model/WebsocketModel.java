@@ -5,7 +5,7 @@ import android.os.Parcelable;
 import com.google.auto.value.AutoValue;
 
 @AutoValue
-public abstract class StatusModel implements Parcelable {
+public abstract class WebsocketModel implements Parcelable {
     public abstract String state();
     public abstract String file();
     public abstract String approxTotalPrintTime();
@@ -15,7 +15,7 @@ public abstract class StatusModel implements Parcelable {
     public abstract String printedFileSize();
     public abstract int completionProgress();
     public static Builder builder() {
-        return new AutoValue_StatusModel.Builder();
+        return new AutoValue_WebsocketModel.Builder();
     }
 
     @AutoValue.Builder
@@ -28,6 +28,6 @@ public abstract class StatusModel implements Parcelable {
         public abstract Builder printedBytes(String printedBytes);
         public abstract Builder printedFileSize(String printedFileSize);
         public abstract Builder completionProgress(int completionProgress);
-        public abstract StatusModel build();
+        public abstract WebsocketModel build();
     }
 }

@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
-import com.nairbspace.octoandroid.model.StatusModel;
+import com.nairbspace.octoandroid.model.WebsocketModel;
 import com.nairbspace.octoandroid.ui.BasePagerFragmentListener;
 import com.nairbspace.octoandroid.ui.Presenter;
 
@@ -37,7 +37,7 @@ public class StatusFragment extends BasePagerFragmentListener<StatusScreen,
     @BindView(R.id.printed_file_size_textview) TextView mPrintedFileSizeTextView;
 
     private Listener mListener;
-    private StatusModel mStatusModel;
+    private WebsocketModel mWebsocketModel;
 
     public static StatusFragment newInstance() {
         return new StatusFragment();
@@ -55,7 +55,7 @@ public class StatusFragment extends BasePagerFragmentListener<StatusScreen,
         View view = inflater.inflate(R.layout.fragment_status, container, false);
         setUnbinder(ButterKnife.bind(this, view));
         if (savedInstanceState != null && savedInstanceState.getParcelable(STATUS_MODEL_KEY) != null) {
-            updateUI((StatusModel) savedInstanceState.getParcelable(STATUS_MODEL_KEY));
+            updateUI((WebsocketModel) savedInstanceState.getParcelable(STATUS_MODEL_KEY));
         }
         return view;
     }
@@ -67,21 +67,21 @@ public class StatusFragment extends BasePagerFragmentListener<StatusScreen,
     }
 
     @Override
-    public void updateUI(StatusModel statusModel) {
-        mStatusModel = statusModel;
-        mMachineStateTextView.setText(statusModel.state());
-        mFileTextview.setText(statusModel.file());
-        mApproxTotalPrintTimeTextView.setText(statusModel.approxTotalPrintTime());
-        mPrintTimeLeftTextView.setText(statusModel.printTimeLeft());
-        mPrintTimeTextView.setText(statusModel.printTime());
-        mPrintedBytesTextView.setText(statusModel.printedBytes());
-        mPrintedFileSizeTextView.setText(statusModel.printedFileSize());
+    public void updateUI(WebsocketModel websocketModel) {
+        mWebsocketModel = websocketModel;
+        mMachineStateTextView.setText(websocketModel.state());
+        mFileTextview.setText(websocketModel.file());
+        mApproxTotalPrintTimeTextView.setText(websocketModel.approxTotalPrintTime());
+        mPrintTimeLeftTextView.setText(websocketModel.printTimeLeft());
+        mPrintTimeTextView.setText(websocketModel.printTime());
+        mPrintedBytesTextView.setText(websocketModel.printedBytes());
+        mPrintedFileSizeTextView.setText(websocketModel.printedFileSize());
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(STATUS_MODEL_KEY, mStatusModel);
+        outState.putParcelable(STATUS_MODEL_KEY, mWebsocketModel);
     }
 
     @NonNull
