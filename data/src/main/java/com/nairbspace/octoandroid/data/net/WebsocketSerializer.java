@@ -1,30 +1,28 @@
-package com.nairbspace.octoandroid.data.websocket;
+package com.nairbspace.octoandroid.data.net;
 
 import com.appunite.websocket.rx.object.ObjectParseException;
 import com.appunite.websocket.rx.object.ObjectSerializer;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
-
-import java.lang.reflect.Type;
+import com.nairbspace.octoandroid.data.entity.WebsocketEntity;
 
 import javax.annotation.Nonnull;
+import javax.inject.Inject;
 
-public class GsonObjectSerializer implements ObjectSerializer {
+public class WebsocketSerializer implements ObjectSerializer {
 
     private final Gson mGson;
-    private final Type mType;
 
-    public GsonObjectSerializer(Gson gson, Type type) {
+    @Inject
+    public WebsocketSerializer(Gson gson) {
         mGson = gson;
-        mType = type;
     }
 
     @Nonnull
     @Override
-
     public Object serialize(@Nonnull String message) throws ObjectParseException {
         try {
-            return mGson.fromJson(message, mType);
+            return mGson.fromJson(message, WebsocketEntity.class); // Take note of WebsocketEntity.class if want to change!
         } catch (JsonParseException e) {
             throw new ObjectParseException("Could not parse", e);
         }

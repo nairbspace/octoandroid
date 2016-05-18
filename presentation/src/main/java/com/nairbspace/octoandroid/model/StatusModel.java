@@ -1,9 +1,11 @@
 package com.nairbspace.octoandroid.model;
 
+import android.os.Parcelable;
+
 import com.google.auto.value.AutoValue;
 
 @AutoValue
-public abstract class StatusModel {
+public abstract class StatusModel implements Parcelable {
     public abstract String state();
     public abstract String file();
     public abstract String approxTotalPrintTime();

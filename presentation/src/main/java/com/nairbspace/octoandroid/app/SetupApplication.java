@@ -9,7 +9,9 @@ import com.nairbspace.octoandroid.di.components.AppComponent;
 import com.nairbspace.octoandroid.di.components.DaggerAppComponent;
 import com.nairbspace.octoandroid.di.modules.AppModule;
 import com.nairbspace.octoandroid.di.modules.NetworkModule;
+import com.nairbspace.octoandroid.di.modules.RestModule;
 import com.nairbspace.octoandroid.di.modules.StorageModule;
+import com.nairbspace.octoandroid.di.modules.WebsocketModule;
 
 import timber.log.Timber;
 
@@ -45,6 +47,8 @@ public class SetupApplication extends Application {
         mAppComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
                 .networkModule(new NetworkModule())
+                .restModule(new RestModule())
+                .websocketModule(new WebsocketModule())
                 .storageModule(new StorageModule())
                 .build();
     }

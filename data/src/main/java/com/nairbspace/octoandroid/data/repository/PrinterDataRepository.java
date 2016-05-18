@@ -4,8 +4,8 @@ import com.fernandocejas.frodo.annotation.RxLogObservable;
 import com.nairbspace.octoandroid.data.disk.DiskManager;
 import com.nairbspace.octoandroid.data.mapper.MapperHelper;
 import com.nairbspace.octoandroid.data.net.ApiManager;
+import com.nairbspace.octoandroid.data.net.WebsocketManager;
 import com.nairbspace.octoandroid.data.repository.datasource.PrinterDataStoreFactory;
-import com.nairbspace.octoandroid.data.websocket.OctoWebsocket;
 import com.nairbspace.octoandroid.domain.model.AddPrinter;
 import com.nairbspace.octoandroid.domain.model.Connect;
 import com.nairbspace.octoandroid.domain.model.Connection;
@@ -26,13 +26,13 @@ public class PrinterDataRepository implements PrinterRepository {
     private final MapperHelper mMapperHelper;
     private final DiskManager mDiskManager;
     private final ApiManager mApiManager;
-    private final OctoWebsocket mWebsocket;
+    private final WebsocketManager mWebsocket;
 
     @Inject
     public PrinterDataRepository(MapperHelper mapperHelper,
                                  PrinterDataStoreFactory printerDataStoreFactory,
                                  DiskManager diskManager, ApiManager apiManager,
-                                 OctoWebsocket websocket) {
+                                 WebsocketManager websocket) {
         mMapperHelper = mapperHelper;
         mPrinterDataStoreFactory = printerDataStoreFactory;
         mDiskManager = diskManager;

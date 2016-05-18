@@ -1,6 +1,6 @@
 package com.nairbspace.octoandroid.data.mapper;
 
-import com.nairbspace.octoandroid.data.websocket.WebsocketEntity;
+import com.nairbspace.octoandroid.data.entity.WebsocketEntity;
 import com.nairbspace.octoandroid.domain.model.Websocket;
 
 import javax.inject.Inject;

@@ -74,4 +74,10 @@ public class StatusPresenter extends UseCasePresenter<StatusScreen> {
             mScreen.updateUI(statusModel);
         }
     }
+
+    @Override
+    protected void onDestroy(StatusScreen statusScreen) {
+        super.onDestroy(statusScreen);
+        mMapper.unsubscribe();
+    }
 }

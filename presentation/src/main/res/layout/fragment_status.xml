@@ -140,12 +140,10 @@
                 <!--TODO check what "Printed" represents -->
             </LinearLayout>
 
-            <ProgressBar
-                android:id="@+id/printing_progressbar"
+            <SeekBar
+                android:id="@+id/printing_seekbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
-                style="@android:style/Widget.ProgressBar.Horizontal"
                 tools:progress="50"/>
             <!--TODO should separate this into fragment that is visible all the time-->
 

@@ -86,20 +86,17 @@ public abstract class BaseFragmentListener<T, L> extends Fragment implements Act
         setPresenter().onStop();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        setPresenter().onDestroy(setScreen());
         if (mUnbinder != null) {
             mUnbinder.unbind();
         }
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        setPresenter().onDestroy(setScreen());
-        mActiveNetworkReceiver = null;
+        if (mActiveNetworkReceiver != null) {
+            mActiveNetworkReceiver = null;
+        }
     }
 
     @Override

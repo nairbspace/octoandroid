@@ -4,7 +4,7 @@ import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
 import com.nairbspace.octoandroid.data.entity.ConnectEntity;
 import com.nairbspace.octoandroid.data.entity.ConnectionEntity;
 import com.nairbspace.octoandroid.data.entity.FilesEntity;
-import com.nairbspace.octoandroid.data.websocket.WebsocketEntity;
+import com.nairbspace.octoandroid.data.entity.WebsocketEntity;
 import com.nairbspace.octoandroid.domain.model.AddPrinter;
 import com.nairbspace.octoandroid.domain.model.Connect;
 import com.nairbspace.octoandroid.domain.model.Connection;

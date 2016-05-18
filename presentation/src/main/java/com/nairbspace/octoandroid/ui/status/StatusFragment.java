@@ -4,11 +4,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
 import com.nairbspace.octoandroid.model.StatusModel;
@@ -23,13 +25,10 @@ import butterknife.ButterKnife;
 public class StatusFragment extends BasePagerFragmentListener<StatusScreen,
         StatusFragment.Listener> implements StatusScreen {
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private String mParam1;
-    private String mParam2;
+    private static final String STATUS_MODEL_KEY = "status_model_key";
 
     @Inject StatusPresenter mPresenter;
+    @Inject Gson mGson;
 
     @BindView(R.id.machine_state_textview) TextView mMachineStateTextView;
     @BindView(R.id.file_textview) TextView mFileTextview;
@@ -38,27 +37,19 @@ public class StatusFragment extends BasePagerFragmentListener<StatusScreen,
     @BindView(R.id.print_time_left_textview) TextView mPrintTimeLeftTextView;
     @BindView(R.id.printed_bytes_textview) TextView mPrintedBytesTextView;
     @BindView(R.id.printed_file_size_textview) TextView mPrintedFileSizeTextView;
-    @BindView(R.id.printing_progressbar) ProgressBar mPrintingProgressBar;
+    @BindView(R.id.printing_seekbar) SeekBar mPrintingSeekBar;
 
     private Listener mListener;
+    private StatusModel mStatusModel;
 
-    public static StatusFragment newInstance(String param1, String param2) {
-        StatusFragment fragment = new StatusFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public static StatusFragment newInstance() {
+        return new StatusFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SetupApplication.get(getActivity()).getAppComponent().inject(this);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -66,6 +57,15 @@ public class StatusFragment extends BasePagerFragmentListener<StatusScreen,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_status, container, false);
         setUnbinder(ButterKnife.bind(this, view));
+        mPrintingSeekBar.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
+        if (savedInstanceState != null && savedInstanceState.getParcelable(STATUS_MODEL_KEY) != null) {
+            updateUI((StatusModel) savedInstanceState.getParcelable(STATUS_MODEL_KEY));
+        }
         return view;
     }
 
@@ -77,6 +77,7 @@ public class StatusFragment extends BasePagerFragmentListener<StatusScreen,
 
     @Override
     public void updateUI(StatusModel statusModel) {
+        mStatusModel = statusModel;
         mMachineStateTextView.setText(statusModel.state());
         mFileTextview.setText(statusModel.file());
         mApproxTotalPrintTimeTextView.setText(statusModel.approxTotalPrintTime());
@@ -84,7 +85,13 @@ public class StatusFragment extends BasePagerFragmentListener<StatusScreen,
         mPrintTimeTextView.setText(statusModel.printTime());
         mPrintedBytesTextView.setText(statusModel.printedBytes());
         mPrintedFileSizeTextView.setText(statusModel.printedFileSize());
-        mPrintingProgressBar.setProgress(statusModel.completionProgress());
+        mPrintingSeekBar.setProgress(statusModel.completionProgress());
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(STATUS_MODEL_KEY, mStatusModel);
     }
 
     @NonNull

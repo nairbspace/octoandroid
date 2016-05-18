@@ -144,5 +144,6 @@ public class ConnectionPresenter extends UseCasePresenter<ConnectionScreen> {
         mConnectToPrinter.unsubscribe();
         mConnectionMapper.unsubscribe();
         mConnectModelMapper.unsubscribe();
+        mIsFirstTime = true;
     }
 }

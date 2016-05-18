@@ -21,7 +21,7 @@ public class StatusFragmentPagerAdapter extends FragmentPagerAdapter {
         if (position == 0) {
             return ConnectionFragment.newInstance();
         } else if (position == 1) {
-            return StatusFragment.newInstance(null, null);
+            return StatusFragment.newInstance();
         } else {
             return FilesFragment.newInstance();
         }
