@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.ui.status;
+package com.nairbspace.octoandroid.ui.playback;
 
 import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
 import com.nairbspace.octoandroid.domain.interactor.GetWebsocket;
@@ -11,33 +11,22 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-public class StatusPresenter extends UseCasePresenter<StatusScreen> {
+public class PlaybackPresenter extends UseCasePresenter<PlaybackScreen> {
 
+    private PlaybackScreen mScreen;
     private final GetWebsocket mGetWebsocket;
     private final ToStatusModelMapper mMapper;
-    private StatusScreen mScreen;
 
     @Inject
-    public StatusPresenter(GetWebsocket getWebsocket, ToStatusModelMapper mapper) {
+    public PlaybackPresenter(GetWebsocket getWebsocket, ToStatusModelMapper mapper) {
         super(getWebsocket);
         mGetWebsocket = getWebsocket;
         mMapper = mapper;
     }
 
     @Override
-    protected void onInitialize(StatusScreen statusScreen) {
-        mScreen = statusScreen;
-//        execute();
-    }
-
-    @Override
-    protected void networkNowInactive() {
-        super.networkNowInactive();
-        mGetWebsocket.unsubscribe();
-    }
-
-    @Override
-    protected void onNetworkSwitched() {
+    protected void onInitialize(PlaybackScreen playbackScreen) {
+        mScreen = playbackScreen;
         execute();
     }
 
@@ -47,6 +36,7 @@ public class StatusPresenter extends UseCasePresenter<StatusScreen> {
     }
 
     private final class WebsocketSubscriber extends DefaultSubscriber<Websocket> {
+
         @Override
         public void onError(Throwable e) {
             super.onError(e);
@@ -71,13 +61,7 @@ public class StatusPresenter extends UseCasePresenter<StatusScreen> {
         @Override
         public void onNext(StatusModel statusModel) {
             super.onNext(statusModel);
-            mScreen.updateUI(statusModel);
+            mScreen.updateUi(statusModel);
         }
-    }
-
-    @Override
-    protected void onDestroy(StatusScreen statusScreen) {
-        super.onDestroy(statusScreen);
-        mMapper.unsubscribe();
     }
 }

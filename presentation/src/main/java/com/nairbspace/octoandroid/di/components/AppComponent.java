@@ -10,6 +10,7 @@ import com.nairbspace.octoandroid.ui.add_printer.AddPrinterActivity;
 import com.nairbspace.octoandroid.ui.connection.ConnectionFragment;
 import com.nairbspace.octoandroid.ui.files.FilesFragment;
 import com.nairbspace.octoandroid.ui.main.MainActivity;
+import com.nairbspace.octoandroid.ui.playback.PlaybackFragment;
 import com.nairbspace.octoandroid.ui.status.StatusFragment;
 
 import javax.inject.Singleton;
@@ -31,4 +32,6 @@ public interface AppComponent {
     void inject(StatusFragment statusFragment);
 
     void inject(FilesFragment filesFragment);
+
+    void inject(PlaybackFragment playbackFragment);
 }

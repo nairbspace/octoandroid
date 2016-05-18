@@ -4,10 +4,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -37,7 +35,6 @@ public class StatusFragment extends BasePagerFragmentListener<StatusScreen,
     @BindView(R.id.print_time_left_textview) TextView mPrintTimeLeftTextView;
     @BindView(R.id.printed_bytes_textview) TextView mPrintedBytesTextView;
     @BindView(R.id.printed_file_size_textview) TextView mPrintedFileSizeTextView;
-    @BindView(R.id.printing_seekbar) SeekBar mPrintingSeekBar;
 
     private Listener mListener;
     private StatusModel mStatusModel;
@@ -57,12 +54,6 @@ public class StatusFragment extends BasePagerFragmentListener<StatusScreen,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_status, container, false);
         setUnbinder(ButterKnife.bind(this, view));
-        mPrintingSeekBar.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return true;
-            }
-        });
         if (savedInstanceState != null && savedInstanceState.getParcelable(STATUS_MODEL_KEY) != null) {
             updateUI((StatusModel) savedInstanceState.getParcelable(STATUS_MODEL_KEY));
         }
@@ -85,7 +76,6 @@ public class StatusFragment extends BasePagerFragmentListener<StatusScreen,
         mPrintTimeTextView.setText(statusModel.printTime());
         mPrintedBytesTextView.setText(statusModel.printedBytes());
         mPrintedFileSizeTextView.setText(statusModel.printedFileSize());
-        mPrintingSeekBar.setProgress(statusModel.completionProgress());
     }
 
     @Override

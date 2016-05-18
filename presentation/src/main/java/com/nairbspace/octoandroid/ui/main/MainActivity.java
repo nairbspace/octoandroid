@@ -10,6 +10,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -27,6 +29,7 @@ import com.nairbspace.octoandroid.ui.BaseActivity;
 import com.nairbspace.octoandroid.ui.Presenter;
 import com.nairbspace.octoandroid.ui.connection.ConnectionFragment;
 import com.nairbspace.octoandroid.ui.files.FilesFragment;
+import com.nairbspace.octoandroid.ui.playback.PlaybackFragment;
 import com.nairbspace.octoandroid.ui.status.StatusFragment;
 
 import javax.inject.Inject;
@@ -39,7 +42,7 @@ public class MainActivity extends BaseActivity<MainScreen>
         implements NavigationView.OnNavigationItemSelectedListener, MainScreen,
         StatusFragment.Listener,
         ConnectionFragment.ConnectFragmentListener, View.OnClickListener,
-        FilesFragment.Listener {
+        FilesFragment.Listener, PlaybackFragment.Listener {
 
     @Inject MainPresenter mPresenter;
 
@@ -70,6 +73,16 @@ public class MainActivity extends BaseActivity<MainScreen>
         mDrawer.addDrawerListener(mToggle);
         setDrawer();
         inflateStatusAdapter();
+
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment fragment = fm.findFragmentById(R.id.fragment_controls);
+
+        if (fragment == null) {
+            fragment = PlaybackFragment.newInstance();
+            fm.beginTransaction()
+                    .add(R.id.fragment_controls, fragment)
+                    .commit();
+        }
 //        getNavigator().startWebsocketService(this);
     }
 

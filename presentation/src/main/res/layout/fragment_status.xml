@@ -137,33 +137,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="10 KB"/>
-                <!--TODO check what "Printed" represents -->
-            </LinearLayout>
-
-            <SeekBar
-                android:id="@+id/printing_seekbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:progress="50"/>
-            <!--TODO should separate this into fragment that is visible all the time-->
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center">
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableStart="@android:drawable/ic_media_pause"
-                    android:text="Pause"/>
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Cancel"
-                    android:drawableStart="@android:drawable/ic_menu_close_clear_cancel"/>
             </LinearLayout>
 
         </LinearLayout>
