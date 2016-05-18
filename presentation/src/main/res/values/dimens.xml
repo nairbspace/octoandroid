@@ -21,4 +21,6 @@
     <dimen name="text_margin">16dp</dimen>
 
     <item name="drawable_active_opacity" format="float" type="dimen">0.54</item>
+
+    <dimen name="playback_fragment_height">74dp</dimen>
 </resources>

@@ -11,9 +11,11 @@
         android:id="@+id/file_list_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingBottom="@dimen/recycler_view_bottom_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        android:clipToPadding="false"
         app:layoutManager="LinearLayoutManager"
         tools:listitem="@layout/fragment_files"/>
 

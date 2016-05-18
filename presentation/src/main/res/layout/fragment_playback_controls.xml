@@ -19,7 +19,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@id/playback_seekbar"
-        android:layout_marginStart="8dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
         tools:text="01:55:22"/>
 
     <TextView
@@ -28,7 +29,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_below="@id/playback_seekbar"
-        android:layout_marginEnd="8dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
         tools:text="01:44:77"/>
 
     <LinearLayout
