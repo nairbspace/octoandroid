@@ -89,9 +89,29 @@ public class WebsocketModelMapper extends MapperUseCase<Websocket, WebsocketMode
         }
 
         int completionProgress = 0;
-        if (mUglyNullChecker.isProgressNotNull(websocket)) {
+        if (mUglyNullChecker.isCompletionNotNull(websocket)) {
             completionProgress = formatCompletion(current.progress().completion());
         }
+
+        boolean operational = false;
+        boolean paused = false;
+        boolean printing = false;
+        boolean sdReady = false;
+        boolean error = false;
+        boolean ready = false;
+        boolean closedorError = false;
+        if (mUglyNullChecker.isStateFlagsNotNull(websocket)) {
+            CurrentHistory.State.Flags flags = current.state().flags();
+            operational = flags.operational();
+            paused = flags.paused();
+            printing = flags.printing();
+            sdReady = flags.sdReady();
+            error = flags.error();
+            ready = flags.ready();
+            closedorError = flags.closedOrError();
+        }
+
+        boolean fileLoaded = mUglyNullChecker.isFileNameNotNull(websocket);
 
         return WebsocketModel.builder()
                 .state(state)
@@ -102,6 +122,14 @@ public class WebsocketModelMapper extends MapperUseCase<Websocket, WebsocketMode
                 .printedBytes(printedBytes)
                 .printedFileSize(printedFileSize)
                 .completionProgress(completionProgress)
+                .operational(operational)
+                .paused(paused)
+                .printing(printing)
+                .sdReady(sdReady)
+                .error(error)
+                .ready(ready)
+                .closedOrError(closedorError)
+                .fileLoaded(fileLoaded)
                 .build();
     }
 

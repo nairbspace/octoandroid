@@ -1,5 +1,6 @@
 package com.nairbspace.octoandroid.ui.playback;
 
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,6 +20,8 @@ import com.nairbspace.octoandroid.ui.Presenter;
 
 import javax.inject.Inject;
 
+import butterknife.BindDimen;
+import butterknife.BindDrawable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -37,12 +40,55 @@ public class PlaybackFragment extends BaseFragmentListener<PlaybackScreen,
     @BindView(R.id.playback_pause_play_button) ImageView mPausePlayButton;
     @BindView(R.id.playback_stop_button) ImageView mStopButton;
 
+    @BindDrawable(R.drawable.ic_pause_circle_filled_black_24dp) Drawable mPauseDrawable;
+    @BindDrawable(R.drawable.ic_play_circle_filled_black_24dp) Drawable mPlayDrawable;
+    @BindDimen(R.dimen.playback_enabled_alpha_float) float mEnabledAlpha;
+    @BindDimen(R.dimen.playback_disabled_alpha_float) float mDisabledAlpha;
+
     @Override
     public void updateUi(WebsocketModel websocketModel) {
         mWebsocketModel = websocketModel;
         mPrintingSeekbar.setProgress(websocketModel.completionProgress());
         mTimeElapsedTextView.setText(websocketModel.printTime());
         mTimeLeftTextView.setText(websocketModel.printTimeLeft());
+
+        setPauseOrPlayButton(websocketModel);
+        setStopButton(websocketModel);
+        setPrintButton(websocketModel);
+    }
+
+    private void setPauseOrPlayButton(WebsocketModel websocketModel) {
+        boolean isPausedOrPrinting = isPausedOrPrinting(websocketModel);
+        mPausePlayButton.setEnabled(isPausedOrPrinting);
+        mPausePlayButton.setAlpha(isPausedOrPrinting ? mEnabledAlpha : mDisabledAlpha);
+
+        if (websocketModel.paused()) {
+            mPausePlayButton.setImageDrawable(mPlayDrawable);
+        }
+
+        if (websocketModel.printing()) {
+            mPausePlayButton.setImageDrawable(mPauseDrawable);
+        }
+    }
+
+    private void setStopButton(WebsocketModel websocketModel) {
+        boolean isPausedOrPrinting = isPausedOrPrinting(websocketModel);
+        mStopButton.setEnabled(isPausedOrPrinting);
+        mStopButton.setAlpha(isPausedOrPrinting ? mEnabledAlpha : mDisabledAlpha);
+    }
+
+    private void setPrintButton(WebsocketModel websocketModel) {
+        boolean isFileLoaded = isFileLoaded(websocketModel);
+        mPrintButton.setEnabled(isFileLoaded);
+        mPrintButton.setAlpha(isFileLoaded ? mEnabledAlpha : mDisabledAlpha);
+    }
+
+    private boolean isFileLoaded(WebsocketModel websocketModel) {
+        return websocketModel.fileLoaded();
+    }
+
+    private boolean isPausedOrPrinting(WebsocketModel websocketModel) {
+        return websocketModel.paused() || websocketModel.printing();
     }
 
     private Listener mListener;

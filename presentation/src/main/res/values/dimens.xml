@@ -23,4 +23,6 @@
     <item name="drawable_active_opacity" format="float" type="dimen">0.54</item>
 
     <dimen name="playback_fragment_height">74dp</dimen>
+    <dimen name="playback_enabled_alpha_float">1px</dimen>
+    <dimen name="playback_disabled_alpha_float">.12px</dimen>
 </resources>

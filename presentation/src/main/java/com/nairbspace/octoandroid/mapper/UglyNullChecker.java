@@ -48,6 +48,10 @@ public class UglyNullChecker {
         return isCurrentNotNull(websocket) && websocket.current().progress() != null;
     }
 
+    public boolean isCompletionNotNull(Websocket websocket) {
+        return isProgressNotNull(websocket) && websocket.current().progress().completion() != null;
+    }
+
     public boolean isPrintTimeIsNotNull(Websocket websocket) {
         return isProgressNotNull(websocket) && websocket.current().progress().printTime() != null;
     }
@@ -62,5 +66,9 @@ public class UglyNullChecker {
 
     public boolean isPrintedFileSizeIsNotNull(Websocket websocket) {
         return isFileNotNull(websocket) && websocket.current().job().file().size() != null;
+    }
+
+    public boolean isStateFlagsNotNull(Websocket websocket) {
+        return isStateNotNull(websocket) && websocket.current().state().flags() != null;
     }
 }
