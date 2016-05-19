@@ -4,8 +4,6 @@ import com.appunite.websocket.rx.RxWebSockets;
 import com.appunite.websocket.rx.object.ObjectSerializer;
 import com.appunite.websocket.rx.object.RxObjectWebSockets;
 import com.google.gson.Gson;
-import com.nairbspace.octoandroid.data.disk.DbHelper;
-import com.nairbspace.octoandroid.data.net.RequestBuilder;
 import com.nairbspace.octoandroid.data.net.WebsocketManager;
 import com.nairbspace.octoandroid.data.net.WebsocketManagerImpl;
 import com.nairbspace.octoandroid.data.net.WebsocketSerializer;
@@ -16,9 +14,11 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 
 @Module
 public class WebsocketModule {
+    private static final String DUMMY_WEBSOCKET = "ws://localhost";
 
     @Provides
     @Singleton
@@ -28,15 +28,18 @@ public class WebsocketModule {
 
     @Provides
     @Singleton
-    RequestBuilder provideRequestBuilder(DbHelper dbHelper) {
-        return new RequestBuilder(dbHelper);
+    Request provideWebsocketRequest() {
+        return new Request.Builder()
+                .get()
+                .url(DUMMY_WEBSOCKET) // Gets changed from interceptor
+                .build();
     }
 
     @Provides
     @Singleton
-    RxWebSockets provideRxWebsockets(@Named("regular") OkHttpClient okHttpClient,
-                                     RequestBuilder requestBuilder) {
-        return new RxWebSockets(okHttpClient, requestBuilder.getRequest());
+    RxWebSockets provideRxWebsockets(@Named("websocket") OkHttpClient okHttpClient,
+                                     Request request) {
+        return new RxWebSockets(okHttpClient, request);
     }
 
     @Provides

@@ -4,7 +4,6 @@ import com.fernandocejas.frodo.annotation.RxLogObservable;
 import com.nairbspace.octoandroid.data.disk.DiskManager;
 import com.nairbspace.octoandroid.data.mapper.MapperHelper;
 import com.nairbspace.octoandroid.data.net.ApiManager;
-import com.nairbspace.octoandroid.data.net.RequestBuilder;
 import com.nairbspace.octoandroid.data.net.WebsocketManager;
 import com.nairbspace.octoandroid.data.repository.datasource.PrinterDataStoreFactory;
 import com.nairbspace.octoandroid.domain.model.AddPrinter;
@@ -22,7 +21,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import rx.Observable;
-import rx.functions.Action1;
 
 @Singleton
 public class PrinterDataRepository implements PrinterRepository {
@@ -32,19 +30,17 @@ public class PrinterDataRepository implements PrinterRepository {
     private final DiskManager mDiskManager;
     private final ApiManager mApiManager;
     private final WebsocketManager mWebsocket;
-    private final RequestBuilder mRequestBuilder;
 
     @Inject
     public PrinterDataRepository(MapperHelper mapperHelper,
                                  PrinterDataStoreFactory printerDataStoreFactory,
                                  DiskManager diskManager, ApiManager apiManager,
-                                 WebsocketManager websocket, RequestBuilder requestBuilder) {
+                                 WebsocketManager websocket) {
         mMapperHelper = mapperHelper;
         mPrinterDataStoreFactory = printerDataStoreFactory;
         mDiskManager = diskManager;
         mApiManager = apiManager;
         mWebsocket = websocket;
-        mRequestBuilder = requestBuilder;
     }
 
     @Override
@@ -60,13 +56,7 @@ public class PrinterDataRepository implements PrinterRepository {
                 .doOnNext(mDiskManager.putPrinterInDb())
                 .concatMap(mApiManager.funcGetVersion())
                 .doOnError(mDiskManager.deleteUnverifiedPrinter())
-                .map(mDiskManager.putVersionInDb())
-                .doOnNext(new Action1<Boolean>() {
-                    @Override
-                    public void call(Boolean aBoolean) {
-                        mRequestBuilder.renewRequest();
-                    }
-                });
+                .map(mDiskManager.putVersionInDb());
     }
 
     @Override

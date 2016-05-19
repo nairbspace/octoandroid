@@ -8,12 +8,14 @@ import com.google.gson.GsonBuilder;
 import com.nairbspace.octoandroid.data.disk.DbHelper;
 import com.nairbspace.octoandroid.data.mapper.AutoValueTypeAdapterFactory;
 import com.nairbspace.octoandroid.data.net.OctoInterceptor;
+import com.nairbspace.octoandroid.data.net.WebsocketInterceptor;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
@@ -22,7 +24,8 @@ public class NetworkModule {
 
     @Singleton
     @Provides
-    OctoInterceptor provideInterceptor(DbHelper dbHelper) {
+    @Named("rest")
+    Interceptor provideInterceptor(DbHelper dbHelper) {
         return new OctoInterceptor(dbHelper);
     }
 
@@ -34,20 +37,10 @@ public class NetworkModule {
         return loggingInterceptor;
     }
 
-    // This crashes if use same builder to build different OkHttpClient instances and have
-    // one with interceptor and one without due to same builder at the end being used
-    // to create different instances. The one without the interceptor ends up
-    // getting the interceptor since same builder duh....
-//    @Provides
-//    @Singleton
-//    OkHttpClient.Builder builder() {
-//        return new OkHttpClient.Builder();
-//    }
-
     @Provides
     @Singleton
     @Named("rest")
-    OkHttpClient provideRestOkHttpClient(OctoInterceptor interceptor,
+    OkHttpClient provideRestOkHttpClient(@Named("rest") Interceptor interceptor,
                                      HttpLoggingInterceptor loggingInterceptor) {
         return new OkHttpClient.Builder()
                 .addInterceptor(interceptor)
@@ -58,9 +51,18 @@ public class NetworkModule {
 
     @Provides
     @Singleton
-    @Named("regular")
-    OkHttpClient provideRegularOkHttpClient() {
-        return new OkHttpClient();
+    @Named("websocket")
+    Interceptor provideWebsocketInterceptor(DbHelper dbHelper) {
+        return new WebsocketInterceptor(dbHelper);
+    }
+
+    @Provides
+    @Singleton
+    @Named("websocket")
+    OkHttpClient provideRegularOkHttpClient(@Named("websocket") Interceptor websocketInterceptor) {
+        return new OkHttpClient.Builder()
+                .addInterceptor(websocketInterceptor)
+                .build();
     }
 
     @Provides
