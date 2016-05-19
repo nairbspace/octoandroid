@@ -1,17 +1,16 @@
 package com.nairbspace.octoandroid.ui;
 
+import com.nairbspace.octoandroid.domain.interactor.UseCase;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-/**
- * @param <T> Screen object
- * @param <U> Event object
- */
-public abstract class EventPresenter<T, U> extends Presenter<T> {
+public abstract class UseCaseEventPresenter<T, U> extends UseCasePresenter<T> {
 
     private final EventBus mEventBus;
 
-    public EventPresenter(EventBus eventBus) {
+    public UseCaseEventPresenter(UseCase useCase, EventBus eventBus) {
+        super(useCase);
         mEventBus = eventBus;
     }
 

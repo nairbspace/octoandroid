@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
 import com.nairbspace.octoandroid.model.WebsocketModel;
@@ -26,7 +25,6 @@ public class StatusFragment extends BasePagerFragmentListener<StatusScreen,
     private static final String STATUS_MODEL_KEY = "status_model_key";
 
     @Inject StatusPresenter mPresenter;
-    @Inject Gson mGson;
 
     @BindView(R.id.machine_state_textview) TextView mMachineStateTextView;
     @BindView(R.id.file_textview) TextView mFileTextview;

@@ -9,6 +9,8 @@ import com.nairbspace.octoandroid.model.JobCommandModel;
 import com.nairbspace.octoandroid.model.WebsocketModel;
 import com.nairbspace.octoandroid.ui.UseCasePresenter;
 
+import org.greenrobot.eventbus.EventBus;
+
 import javax.inject.Inject;
 
 import timber.log.Timber;
@@ -20,14 +22,16 @@ public class PlaybackPresenter extends UseCasePresenter<PlaybackScreen> {
     private final GetWebsocket mGetWebsocket;
     private final WebsocketModelMapper mMapper;
     private final SendJobCommand mSendJobCommand;
+    private final EventBus mEventBus;
 
     @Inject
     public PlaybackPresenter(GetWebsocket getWebsocket, WebsocketModelMapper mapper,
-                             SendJobCommand sendJobCommand) {
+                             SendJobCommand sendJobCommand, EventBus eventBus) {
         super(getWebsocket);
         mGetWebsocket = getWebsocket;
         mMapper = mapper;
         mSendJobCommand = sendJobCommand;
+        mEventBus = eventBus;
     }
 
     @Override
@@ -79,6 +83,7 @@ public class PlaybackPresenter extends UseCasePresenter<PlaybackScreen> {
         public void onNext(WebsocketModel websocketModel) {
             super.onNext(websocketModel);
             renderScreen(websocketModel);
+            mEventBus.post(websocketModel);
         }
     }
 
