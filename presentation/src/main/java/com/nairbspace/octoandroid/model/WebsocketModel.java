@@ -17,6 +17,7 @@ public abstract class WebsocketModel implements Parcelable {
     public abstract boolean operational();
     public abstract boolean paused();
     public abstract boolean printing();
+    public abstract boolean pausedOrPrinting();
     public abstract boolean sdReady();
     public abstract boolean error();
     public abstract boolean ready();
@@ -39,6 +40,7 @@ public abstract class WebsocketModel implements Parcelable {
         public abstract Builder operational(boolean operational);
         public abstract Builder paused(boolean paused);
         public abstract Builder printing(boolean printing);
+        public abstract Builder pausedOrPrinting(boolean pausedOrPrinting);
         public abstract Builder sdReady(boolean sdReady);
         public abstract Builder error(boolean error);
         public abstract Builder ready(boolean ready);

@@ -14,6 +14,8 @@ import com.nairbspace.octoandroid.domain.model.Printer;
 import com.nairbspace.octoandroid.domain.model.Websocket;
 import com.nairbspace.octoandroid.domain.repository.PrinterRepository;
 
+import java.util.HashMap;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -86,5 +88,11 @@ public class PrinterDataRepository implements PrinterRepository {
     public Observable<Websocket> getWebsocket() {
         return mWebsocket.getWebsocketObservable()
                 .map(mMapperHelper.mapToWebsocket());
+    }
+
+    @Override
+    public Observable<Boolean> sendJobCommand(HashMap<String, String> command) {
+        return mApiManager.sendJobCommand(command)
+                .map(mApiManager.jobCommandResult());
     }
 }

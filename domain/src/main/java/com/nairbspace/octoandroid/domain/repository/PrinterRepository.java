@@ -7,6 +7,8 @@ import com.nairbspace.octoandroid.domain.model.Files;
 import com.nairbspace.octoandroid.domain.model.Printer;
 import com.nairbspace.octoandroid.domain.model.Websocket;
 
+import java.util.HashMap;
+
 import rx.Observable;
 
 public interface PrinterRepository {
@@ -24,4 +26,6 @@ public interface PrinterRepository {
     Observable<Files> getAllFiles();
 
     Observable<Websocket> getWebsocket();
+
+    Observable<Boolean> sendJobCommand(HashMap<String, String> command);
 }

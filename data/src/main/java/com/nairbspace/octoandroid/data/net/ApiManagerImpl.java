@@ -7,6 +7,8 @@ import com.nairbspace.octoandroid.data.entity.FilesEntity;
 import com.nairbspace.octoandroid.data.entity.PrinterStateEntity;
 import com.nairbspace.octoandroid.data.entity.VersionEntity;
 
+import java.util.HashMap;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -49,6 +51,11 @@ public class ApiManagerImpl implements ApiManager {
     }
 
     @Override
+    public Observable<Object> sendJobCommand(@Body HashMap<String, String> command) {
+        return mOctoApi.sendJobCommand(command);
+    }
+
+    @Override
     public Func1<PrinterDbEntity, Observable<VersionEntity>> funcGetVersion() {
         return new Func1<PrinterDbEntity, Observable<VersionEntity>>() {
             @Override
@@ -87,4 +94,16 @@ public class ApiManagerImpl implements ApiManager {
             }
         };
     }
+
+    @Override
+    public Func1<Object, Boolean> jobCommandResult() {
+        return new Func1<Object, Boolean>() {
+            @Override
+            public Boolean call(Object o) {
+                return true;
+            }
+        };
+    }
+
+
 }

@@ -96,6 +96,7 @@ public class WebsocketModelMapper extends MapperUseCase<Websocket, WebsocketMode
         boolean operational = false;
         boolean paused = false;
         boolean printing = false;
+        boolean pausedOrPrinting = false;
         boolean sdReady = false;
         boolean error = false;
         boolean ready = false;
@@ -105,6 +106,7 @@ public class WebsocketModelMapper extends MapperUseCase<Websocket, WebsocketMode
             operational = flags.operational();
             paused = flags.paused();
             printing = flags.printing();
+            pausedOrPrinting = flags.paused() || flags.printing();
             sdReady = flags.sdReady();
             error = flags.error();
             ready = flags.ready();
@@ -125,6 +127,7 @@ public class WebsocketModelMapper extends MapperUseCase<Websocket, WebsocketMode
                 .operational(operational)
                 .paused(paused)
                 .printing(printing)
+                .pausedOrPrinting(pausedOrPrinting)
                 .sdReady(sdReady)
                 .error(error)
                 .ready(ready)

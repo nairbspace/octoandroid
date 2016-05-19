@@ -18,4 +18,6 @@ public interface ApiManager extends OctoApi {
 
     Func1<ConnectEntity, Boolean> connectToPrinterResult();
 
+    Func1<Object, Boolean> jobCommandResult();
+
 }

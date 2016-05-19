@@ -6,6 +6,8 @@ import com.nairbspace.octoandroid.data.entity.FilesEntity;
 import com.nairbspace.octoandroid.data.entity.PrinterStateEntity;
 import com.nairbspace.octoandroid.data.entity.VersionEntity;
 
+import java.util.HashMap;
+
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -27,4 +29,7 @@ public interface OctoApi {
 
     @GET("/api/files")
     Observable<FilesEntity> getAllFiles();
+
+    @POST("/api/job")
+    Observable<Object> sendJobCommand(@Body HashMap<String, String> command);
 }

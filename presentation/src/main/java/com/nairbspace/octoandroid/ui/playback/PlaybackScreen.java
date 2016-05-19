@@ -4,5 +4,19 @@ import com.nairbspace.octoandroid.model.WebsocketModel;
 
 public interface PlaybackScreen {
 
-    void updateUi(WebsocketModel websocketModel);
+    void updateSeekbar(WebsocketModel websocketModel);
+
+    void showPrintingScreen();
+
+    void showPausedScreen();
+
+    void showFileLoadedScreen();
+
+    void showNoFileLoadedScreen();
+
+    int getPrintRestartId();
+
+    int getPausePlayId();
+
+    int getStopId();
 }

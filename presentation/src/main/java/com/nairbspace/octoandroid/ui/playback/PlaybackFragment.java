@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,13 +21,14 @@ import com.nairbspace.octoandroid.ui.Presenter;
 
 import javax.inject.Inject;
 
+import butterknife.BindColor;
 import butterknife.BindDimen;
 import butterknife.BindDrawable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class PlaybackFragment extends BaseFragmentListener<PlaybackScreen,
-        PlaybackFragment.Listener> implements PlaybackScreen {
+        PlaybackFragment.Listener> implements PlaybackScreen, View.OnClickListener {
 
     private static final String WEBSOCKET_MODEL_KEY = "websocket_model_key";
     private WebsocketModel mWebsocketModel;
@@ -36,60 +38,18 @@ public class PlaybackFragment extends BaseFragmentListener<PlaybackScreen,
     @BindView(R.id.playback_seekbar) SeekBar mPrintingSeekbar;
     @BindView(R.id.playback_print_time_textview) TextView mTimeElapsedTextView;
     @BindView(R.id.playback_print_time_left_textview) TextView mTimeLeftTextView;
-    @BindView(R.id.playback_print_button) ImageView mPrintButton;
+    @BindView(R.id.playback_print_restart_button) ImageView mPrintRestartButton;
     @BindView(R.id.playback_pause_play_button) ImageView mPausePlayButton;
     @BindView(R.id.playback_stop_button) ImageView mStopButton;
 
     @BindDrawable(R.drawable.ic_pause_circle_filled_black_24dp) Drawable mPauseDrawable;
     @BindDrawable(R.drawable.ic_play_circle_filled_black_24dp) Drawable mPlayDrawable;
+    @BindDrawable(R.drawable.ic_print_black_24dp) Drawable mPrintDrawable;
+    @BindDrawable(R.drawable.ic_replay_black_24dp) Drawable mRestartDrawable;
     @BindDimen(R.dimen.playback_enabled_alpha_float) float mEnabledAlpha;
     @BindDimen(R.dimen.playback_disabled_alpha_float) float mDisabledAlpha;
-
-    @Override
-    public void updateUi(WebsocketModel websocketModel) {
-        mWebsocketModel = websocketModel;
-        mPrintingSeekbar.setProgress(websocketModel.completionProgress());
-        mTimeElapsedTextView.setText(websocketModel.printTime());
-        mTimeLeftTextView.setText(websocketModel.printTimeLeft());
-
-        setPauseOrPlayButton(websocketModel);
-        setStopButton(websocketModel);
-        setPrintButton(websocketModel);
-    }
-
-    private void setPauseOrPlayButton(WebsocketModel websocketModel) {
-        boolean isPausedOrPrinting = isPausedOrPrinting(websocketModel);
-        mPausePlayButton.setEnabled(isPausedOrPrinting);
-        mPausePlayButton.setAlpha(isPausedOrPrinting ? mEnabledAlpha : mDisabledAlpha);
-
-        if (websocketModel.paused()) {
-            mPausePlayButton.setImageDrawable(mPlayDrawable);
-        }
-
-        if (websocketModel.printing()) {
-            mPausePlayButton.setImageDrawable(mPauseDrawable);
-        }
-    }
-
-    private void setStopButton(WebsocketModel websocketModel) {
-        boolean isPausedOrPrinting = isPausedOrPrinting(websocketModel);
-        mStopButton.setEnabled(isPausedOrPrinting);
-        mStopButton.setAlpha(isPausedOrPrinting ? mEnabledAlpha : mDisabledAlpha);
-    }
-
-    private void setPrintButton(WebsocketModel websocketModel) {
-        boolean isFileLoaded = isFileLoaded(websocketModel);
-        mPrintButton.setEnabled(isFileLoaded);
-        mPrintButton.setAlpha(isFileLoaded ? mEnabledAlpha : mDisabledAlpha);
-    }
-
-    private boolean isFileLoaded(WebsocketModel websocketModel) {
-        return websocketModel.fileLoaded();
-    }
-
-    private boolean isPausedOrPrinting(WebsocketModel websocketModel) {
-        return websocketModel.paused() || websocketModel.printing();
-    }
+    @BindColor(android.R.color.holo_red_dark) int mRedColor;
+    @BindColor(android.R.color.black) int mBlackColor;
 
     private Listener mListener;
 
@@ -114,10 +74,97 @@ public class PlaybackFragment extends BaseFragmentListener<PlaybackScreen,
             }
         });
 
-        if (savedInstanceState != null && savedInstanceState.getParcelable(WEBSOCKET_MODEL_KEY) != null) {
-            updateUi((WebsocketModel) savedInstanceState.getParcelable(WEBSOCKET_MODEL_KEY));
-        }
+        mPrintRestartButton.setOnClickListener(this);
+        mPausePlayButton.setOnClickListener(this);
+        mStopButton.setOnClickListener(this);
+
+        setEnableView(mPrintRestartButton, false);
+        setEnableView(mPausePlayButton, false);
+        setEnableView(mStopButton, false);
+
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (savedInstanceState != null && savedInstanceState.getParcelable(WEBSOCKET_MODEL_KEY) != null) {
+            mPresenter.renderScreen((WebsocketModel) savedInstanceState.getParcelable(WEBSOCKET_MODEL_KEY));
+        }
+    }
+
+    @Override
+    public void updateSeekbar(WebsocketModel websocketModel) {
+        mWebsocketModel = websocketModel;
+        mPrintingSeekbar.setProgress(websocketModel.completionProgress());
+        mTimeElapsedTextView.setText(websocketModel.printTime());
+        mTimeLeftTextView.setText(websocketModel.printTimeLeft());
+    }
+
+    @Override
+    public void onClick(View v) {
+        mPresenter.onClickPressed(v.getId(), mWebsocketModel);
+    }
+
+    @Override
+    public void showPrintingScreen() {
+        setEnableView(mPrintRestartButton, false);
+        mPrintRestartButton.setImageDrawable(mPrintDrawable);
+        mPrintRestartButton.setColorFilter(mBlackColor);
+
+        setEnableView(mPausePlayButton, true);
+        mPausePlayButton.setImageDrawable(mPauseDrawable);
+
+        setEnableView(mStopButton, true);
+    }
+
+    @Override
+    public void showPausedScreen() {
+        setEnableView(mPrintRestartButton, true);
+        mPrintRestartButton.setImageDrawable(mRestartDrawable);
+        mPrintRestartButton.setColorFilter(mRedColor);
+
+        setEnableView(mPausePlayButton, true);
+        mPausePlayButton.setImageDrawable(mPlayDrawable);
+
+        setEnableView(mStopButton, true);
+    }
+
+    @Override
+    public void showFileLoadedScreen() {
+        setEnableView(mPrintRestartButton, true);
+        mPrintRestartButton.setImageDrawable(mPrintDrawable);
+        mPrintRestartButton.setColorFilter(mBlackColor);
+
+        setEnableView(mPausePlayButton, false);
+        setEnableView(mStopButton, false);
+    }
+
+    @Override
+    public void showNoFileLoadedScreen() {
+        setEnableView(mPrintRestartButton,false);
+        setEnableView(mPausePlayButton,false);
+        setEnableView(mStopButton,false);
+    }
+
+    @Override
+    public int getPrintRestartId() {
+        return mPrintRestartButton.getId();
+    }
+
+    @Override
+    public int getPausePlayId() {
+        return mPausePlayButton.getId();
+    }
+
+    @Override
+    public int getStopId() {
+        return mStopButton.getId();
+    }
+
+    private void setEnableView(View view, boolean setEnabled) {
+        view.setEnabled(setEnabled);
+        view.setAlpha(setEnabled ? mEnabledAlpha : mDisabledAlpha);
     }
 
     @Override
