@@ -64,12 +64,12 @@ public abstract class BaseActivity<T> extends AppCompatActivity implements Activ
 
     @Override
     public void networkNowActive() {
-        setPresenter().networkNowActive();
+        setPresenter().networkNowActiveReceived();
     }
 
     @Override
     public void networkNowInactive() {
-        setPresenter().networkNowInactive();
+        setPresenter().networkNowInactiveReceived();
     }
 
     public Navigator getNavigator() {

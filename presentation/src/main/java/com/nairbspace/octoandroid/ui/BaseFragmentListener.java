@@ -109,11 +109,11 @@ public abstract class BaseFragmentListener<T, L> extends Fragment implements Act
 
     @Override
     public void networkNowActive() {
-        setPresenter().networkNowActive();
+        setPresenter().networkNowActiveReceived();
     }
 
     @Override
     public void networkNowInactive() {
-        setPresenter().networkNowInactive();
+        setPresenter().networkNowInactiveReceived();
     }
 }

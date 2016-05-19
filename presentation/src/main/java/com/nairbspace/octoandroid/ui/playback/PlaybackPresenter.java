@@ -48,6 +48,7 @@ public class PlaybackPresenter extends UseCasePresenter<PlaybackScreen> {
     @Override
     protected void networkNowInactive() {
         super.networkNowInactive();
+        mScreen.showNoFileLoadedScreen();
         mGetWebsocket.unsubscribe();
     }
 

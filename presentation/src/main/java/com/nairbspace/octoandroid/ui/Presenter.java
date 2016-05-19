@@ -18,15 +18,33 @@ public abstract class Presenter<T> {
      */
     protected abstract void onInitialize(T t);
 
-    protected void networkNowActive() {
+    /**
+     * Used to receive network active broadcasts. Do not use this class.Might accidently
+     * exclude super and forget count for when internet is switched.
+     * Use {@link #networkNowActive()} instead.
+     */
+    protected void networkNowActiveReceived() {
+        networkNowActive();
         if (mNetworkWentInactive) {
             mNetworkWentInactive = false;
             onNetworkSwitched();
         }
     }
 
-    protected void networkNowInactive() {
+    /**
+     * Used to receive network inactive broadcasts. Do not use this class. Might accidently
+     * exclude super and forget count for when internet is switched.
+     * Use {@link #networkNowInactive()} instead.
+     */
+    protected void networkNowInactiveReceived() {
         mNetworkWentInactive = true;
+        networkNowInactive();
+    }
+
+    protected void networkNowActive() {
+    }
+
+    protected void networkNowInactive() {
     }
 
     protected void onNetworkSwitched() {
