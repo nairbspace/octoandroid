@@ -121,8 +121,7 @@ public class ConnectionPresenter extends UseCasePresenter<ConnectionScreen> {
         }
     }
 
-    @RxLogSubscriber
-    private final class ConnectToPrinterSubscriber extends DefaultSubscriber<Boolean> {
+    private final class ConnectToPrinterSubscriber extends DefaultSubscriber {
 
         @Override
         public void onError(Throwable e) {
@@ -131,10 +130,8 @@ public class ConnectionPresenter extends UseCasePresenter<ConnectionScreen> {
         }
 
         @Override
-        public void onNext(Boolean aBoolean) {
-            if (aBoolean) {
-                mGetConnectionDetails.execute(new GetConnectionSubscriber());
-            }
+        public void onNext(Object o) {
+            mGetConnectionDetails.execute(new GetConnectionSubscriber());
         }
     }
 

@@ -8,8 +8,6 @@ import com.nairbspace.octoandroid.exception.TransformErrorException;
 import com.nairbspace.octoandroid.model.FilesModel;
 import com.nairbspace.octoandroid.model.FilesModel.FileModel;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +15,6 @@ import javax.inject.Inject;
 
 import rx.Observable;
 import rx.Subscriber;
-import rx.exceptions.Exceptions;
 
 public class FilesMapper extends MapperUseCase<Files, FilesModel> {
     private static final String FOLDER = "folder";
@@ -88,11 +85,11 @@ public class FilesMapper extends MapperUseCase<Files, FilesModel> {
 
         String origin = file.origin();
 
-        String apiPath = urlPath(file.refs().resource());
+        String apiUrl = file.refs().resource();
 
-        String downloadPath = "-";
+        String downloadUrl = "-";
         if (file.refs().download() != null) {
-            downloadPath = file.refs().download();
+            downloadUrl = file.refs().download();
         }
 
         String estimatedPrintTime = "-";
@@ -111,8 +108,8 @@ public class FilesMapper extends MapperUseCase<Files, FilesModel> {
                 .size(size)
                 .date(date)
                 .origin(origin)
-                .apiPath(apiPath)
-                .downloadPath(downloadPath)
+                .apiUrl(apiUrl)
+                .downloadUrl(downloadUrl)
                 .estimatedPrintTime(estimatedPrintTime)
                 .type(type)
                 .build();
@@ -131,12 +128,4 @@ public class FilesMapper extends MapperUseCase<Files, FilesModel> {
         return !file.type().contains(FOLDER);
     }
 
-    public String urlPath(String url) {
-        try {
-            URI uri = new URI(url);
-            return uri.getPath();
-        } catch (URISyntaxException e) {
-            throw Exceptions.propagate(new TransformErrorException(e));
-        }
-    }
 }

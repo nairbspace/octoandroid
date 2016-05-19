@@ -131,16 +131,11 @@ public class PlaybackPresenter extends UseCasePresenter<PlaybackScreen> {
         mSendJobCommand.execute(new SendJobSubscriber(), JobCommandModel.getCommand(type));
     }
 
-    private final class SendJobSubscriber extends DefaultSubscriber<Boolean> {
+    private final class SendJobSubscriber extends DefaultSubscriber {
 
         @Override
         public void onError(Throwable e) {
             super.onError(e);
-        }
-
-        @Override
-        public void onNext(Boolean aBoolean) {
-            super.onNext(aBoolean);
         }
     }
 

@@ -3,6 +3,7 @@ package com.nairbspace.octoandroid.data.net;
 import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
 import com.nairbspace.octoandroid.data.entity.ConnectEntity;
 import com.nairbspace.octoandroid.data.entity.ConnectionEntity;
+import com.nairbspace.octoandroid.data.entity.FileCommandEntity;
 import com.nairbspace.octoandroid.data.entity.FilesEntity;
 import com.nairbspace.octoandroid.data.entity.PrinterStateEntity;
 import com.nairbspace.octoandroid.data.entity.VersionEntity;
@@ -13,6 +14,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import retrofit2.http.Body;
+import retrofit2.http.Url;
 import rx.Observable;
 import rx.functions.Func1;
 
@@ -36,7 +38,7 @@ public class ApiManagerImpl implements ApiManager {
     }
 
     @Override
-    public Observable<ConnectEntity> postConnect(@Body ConnectEntity connectEntity) {
+    public Observable<Object> postConnect(@Body ConnectEntity connectEntity) {
         return mOctoApi.postConnect(connectEntity);
     }
 
@@ -56,11 +58,16 @@ public class ApiManagerImpl implements ApiManager {
     }
 
     @Override
+    public Observable<Object> startFilePrint(@Url String url, @Body FileCommandEntity fileCommandEntity) {
+        return mOctoApi.startFilePrint(url, fileCommandEntity);
+    }
+
+    @Override
     public Func1<PrinterDbEntity, Observable<VersionEntity>> funcGetVersion() {
         return new Func1<PrinterDbEntity, Observable<VersionEntity>>() {
             @Override
             public Observable<VersionEntity> call(PrinterDbEntity printerDbEntity) {
-                return mOctoApi.getVersion();
+                return getVersion();
             }
         };
     }
@@ -70,40 +77,27 @@ public class ApiManagerImpl implements ApiManager {
         return new Func1<ConnectionEntity, Observable<ConnectionEntity>>() {
             @Override
             public Observable<ConnectionEntity> call(ConnectionEntity connectionEntity) {
-                return mOctoApi.getConnection();
+                return getConnection();
             }
         };
     }
 
     @Override
-    public Func1<ConnectEntity, Observable<ConnectEntity>> connectToPrinter() {
-        return new Func1<ConnectEntity, Observable<ConnectEntity>>() {
+    public Func1<ConnectEntity, Observable<?>> connectToPrinter() {
+        return new Func1<ConnectEntity, Observable<?>>() {
             @Override
-            public Observable<ConnectEntity> call(ConnectEntity connectEntity) {
-                return mOctoApi.postConnect(connectEntity);
+            public Observable<?> call(ConnectEntity connectEntity) {
+                return postConnect(connectEntity);
             }
         };
     }
 
     @Override
-    public Func1<ConnectEntity, Boolean> connectToPrinterResult() { // TODO have to do this because result object is null?
-        return new Func1<ConnectEntity, Boolean>() {
+    public Func1<FileCommandEntity, Observable<?>> funcStartFilePrint(final String apiUrl) {
+        return new Func1<FileCommandEntity, Observable<?>>() {
             @Override
-            public Boolean call(ConnectEntity connectEntity) {
-                return true;
+            public Observable<?> call(FileCommandEntity fileCommandEntity) {return startFilePrint(apiUrl, fileCommandEntity);
             }
         };
     }
-
-    @Override
-    public Func1<Object, Boolean> jobCommandResult() {
-        return new Func1<Object, Boolean>() {
-            @Override
-            public Boolean call(Object o) {
-                return true;
-            }
-        };
-    }
-
-
 }

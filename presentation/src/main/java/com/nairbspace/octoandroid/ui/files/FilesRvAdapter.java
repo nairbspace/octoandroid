@@ -96,8 +96,8 @@ public class FilesRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     @Override
-    public void printButtonClicked(String apiPath) {
-        mListener.printerButtonClicked(apiPath);
+    public void printButtonClicked(String apiUrl) {
+        mListener.printerButtonClicked(apiUrl);
     }
 
     @Override
@@ -106,7 +106,7 @@ public class FilesRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public interface Listener {
-        void printerButtonClicked(String apiPath);
+        void printerButtonClicked(String apiUrl);
         void downloadButtonClicked(String downloadUrl);
     }
 }

@@ -3,6 +3,7 @@ package com.nairbspace.octoandroid.domain.repository;
 import com.nairbspace.octoandroid.domain.model.AddPrinter;
 import com.nairbspace.octoandroid.domain.model.Connect;
 import com.nairbspace.octoandroid.domain.model.Connection;
+import com.nairbspace.octoandroid.domain.model.FileCommand;
 import com.nairbspace.octoandroid.domain.model.Files;
 import com.nairbspace.octoandroid.domain.model.Printer;
 import com.nairbspace.octoandroid.domain.model.Websocket;
@@ -21,11 +22,13 @@ public interface PrinterRepository {
 
     Observable<Connection> connectionDetails();
 
-    Observable<Boolean> connectToPrinter(Connect connect);
+    Observable connectToPrinter(Connect connect);
 
     Observable<Files> getAllFiles();
 
     Observable<Websocket> getWebsocket();
 
-    Observable<Boolean> sendJobCommand(HashMap<String, String> command);
+    Observable sendJobCommand(HashMap<String, String> command);
+
+    Observable sendFileCommand(FileCommand fileCommand);
 }

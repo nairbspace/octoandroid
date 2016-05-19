@@ -3,11 +3,13 @@ package com.nairbspace.octoandroid.data.mapper;
 import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
 import com.nairbspace.octoandroid.data.entity.ConnectEntity;
 import com.nairbspace.octoandroid.data.entity.ConnectionEntity;
+import com.nairbspace.octoandroid.data.entity.FileCommandEntity;
 import com.nairbspace.octoandroid.data.entity.FilesEntity;
 import com.nairbspace.octoandroid.data.entity.WebsocketEntity;
 import com.nairbspace.octoandroid.domain.model.AddPrinter;
 import com.nairbspace.octoandroid.domain.model.Connect;
 import com.nairbspace.octoandroid.domain.model.Connection;
+import com.nairbspace.octoandroid.domain.model.FileCommand;
 import com.nairbspace.octoandroid.domain.model.Files;
 import com.nairbspace.octoandroid.domain.model.Printer;
 import com.nairbspace.octoandroid.domain.model.Websocket;
@@ -26,18 +28,21 @@ public class MapperHelper {
     private final ConnectEntityMapper mConnectEntityMapper;
     private final FilesEntityMapper mFilesEntityMapper;
     private final WebsocketEntityMapper mWebsocketEntityMapper;
+    private final FileCommandEntityMapper mFileCommandEntityMapper;
 
     @Inject
     public MapperHelper(PrinterDbEntityMapper printerDbEntityMapper,
                         ConnectionEntityMapper connectionEntityMapper,
                         ConnectEntityMapper connectEntityMapper,
                         FilesEntityMapper filesEntityMapper,
-                        WebsocketEntityMapper websocketEntityMapper) {
+                        WebsocketEntityMapper websocketEntityMapper,
+                        FileCommandEntityMapper fileCommandEntityMapper) {
         mPrinterDbEntityMapper = printerDbEntityMapper;
         mConnectionEntityMapper = connectionEntityMapper;
         mConnectEntityMapper = connectEntityMapper;
         mFilesEntityMapper = filesEntityMapper;
         mWebsocketEntityMapper = websocketEntityMapper;
+        mFileCommandEntityMapper = fileCommandEntityMapper;
     }
 
     public Func1<PrinterDbEntity, Printer> maptoPrinter() {
@@ -62,5 +67,9 @@ public class MapperHelper {
 
     public Func1<WebsocketEntity, Websocket> mapToWebsocket() {
         return mWebsocketEntityMapper.maptoWebsocket();
+    }
+
+    public Observable.OnSubscribe<FileCommandEntity> mapToFileCommandEntity(final FileCommand fileCommand) {
+        return mFileCommandEntityMapper.mapToFileCommandEntity(fileCommand);
     }
 }

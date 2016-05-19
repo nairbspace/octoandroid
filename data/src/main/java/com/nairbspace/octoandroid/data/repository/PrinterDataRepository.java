@@ -4,11 +4,13 @@ import com.fernandocejas.frodo.annotation.RxLogObservable;
 import com.nairbspace.octoandroid.data.disk.DiskManager;
 import com.nairbspace.octoandroid.data.mapper.MapperHelper;
 import com.nairbspace.octoandroid.data.net.ApiManager;
+import com.nairbspace.octoandroid.data.net.RequestBuilder;
 import com.nairbspace.octoandroid.data.net.WebsocketManager;
 import com.nairbspace.octoandroid.data.repository.datasource.PrinterDataStoreFactory;
 import com.nairbspace.octoandroid.domain.model.AddPrinter;
 import com.nairbspace.octoandroid.domain.model.Connect;
 import com.nairbspace.octoandroid.domain.model.Connection;
+import com.nairbspace.octoandroid.domain.model.FileCommand;
 import com.nairbspace.octoandroid.domain.model.Files;
 import com.nairbspace.octoandroid.domain.model.Printer;
 import com.nairbspace.octoandroid.domain.model.Websocket;
@@ -20,6 +22,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import rx.Observable;
+import rx.functions.Action1;
 
 @Singleton
 public class PrinterDataRepository implements PrinterRepository {
@@ -29,17 +32,19 @@ public class PrinterDataRepository implements PrinterRepository {
     private final DiskManager mDiskManager;
     private final ApiManager mApiManager;
     private final WebsocketManager mWebsocket;
+    private final RequestBuilder mRequestBuilder;
 
     @Inject
     public PrinterDataRepository(MapperHelper mapperHelper,
                                  PrinterDataStoreFactory printerDataStoreFactory,
                                  DiskManager diskManager, ApiManager apiManager,
-                                 WebsocketManager websocket) {
+                                 WebsocketManager websocket, RequestBuilder requestBuilder) {
         mMapperHelper = mapperHelper;
         mPrinterDataStoreFactory = printerDataStoreFactory;
         mDiskManager = diskManager;
         mApiManager = apiManager;
         mWebsocket = websocket;
+        mRequestBuilder = requestBuilder;
     }
 
     @Override
@@ -55,7 +60,13 @@ public class PrinterDataRepository implements PrinterRepository {
                 .doOnNext(mDiskManager.putPrinterInDb())
                 .concatMap(mApiManager.funcGetVersion())
                 .doOnError(mDiskManager.deleteUnverifiedPrinter())
-                .map(mDiskManager.putVersionInDb());
+                .map(mDiskManager.putVersionInDb())
+                .doOnNext(new Action1<Boolean>() {
+                    @Override
+                    public void call(Boolean aBoolean) {
+                        mRequestBuilder.renewRequest();
+                    }
+                });
     }
 
     @Override
@@ -73,10 +84,9 @@ public class PrinterDataRepository implements PrinterRepository {
     }
 
     @Override
-    public Observable<Boolean> connectToPrinter(Connect connect) {
+    public Observable connectToPrinter(Connect connect) {
         return Observable.create(mMapperHelper.mapToConnectEntity(connect))
-                .flatMap(mApiManager.connectToPrinter())
-                .map(mApiManager.connectToPrinterResult());
+                .flatMap(mApiManager.connectToPrinter());
     }
 
     @Override
@@ -91,8 +101,14 @@ public class PrinterDataRepository implements PrinterRepository {
     }
 
     @Override
-    public Observable<Boolean> sendJobCommand(HashMap<String, String> command) {
-        return mApiManager.sendJobCommand(command)
-                .map(mApiManager.jobCommandResult());
+    public Observable sendJobCommand(HashMap<String, String> command) {
+        return mApiManager.sendJobCommand(command);
+    }
+
+    @Override
+    public Observable sendFileCommand(final FileCommand fileCommand) {
+        final String apiUrl = fileCommand.apiUrl();
+        return Observable.create(mMapperHelper.mapToFileCommandEntity(fileCommand))
+                .concatMap(mApiManager.funcStartFilePrint(apiUrl));
     }
 }

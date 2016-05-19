@@ -128,8 +128,9 @@ public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
     }
 
     @Override
-    public void printerButtonClicked(String apiPath) {
-        Toast.makeText(getContext(), apiPath, Toast.LENGTH_LONG).show();
+    public void printerButtonClicked(String apiUrl) {
+        mPresenter.executePrint(apiUrl);
+        Toast.makeText(getContext(), apiUrl, Toast.LENGTH_LONG).show();
     }
 
     @Override

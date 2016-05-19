@@ -30,8 +30,8 @@ public abstract class FilesModel implements Parcelable {
         public abstract String size(); // Need to format to human readable
         public abstract String date();
         public abstract String origin();
-        public abstract String apiPath();
-        public abstract String downloadPath();
+        public abstract String apiUrl();
+        public abstract String downloadUrl();
         public abstract String estimatedPrintTime(); // Should format this
         public abstract String type(); // if its a folder then have to ignore
         public static Builder builder() {
@@ -44,8 +44,8 @@ public abstract class FilesModel implements Parcelable {
             public abstract Builder size(String size);
             public abstract Builder date(String date);
             public abstract Builder origin(String origin);
-            public abstract Builder apiPath(String apiPath);
-            public abstract Builder downloadPath(String downloadPath);
+            public abstract Builder apiUrl(String apiUrl);
+            public abstract Builder downloadUrl(String downloadUrl);
             public abstract Builder estimatedPrintTime(String estimatedPrintTime);
             public abstract Builder type(String type);
             public abstract FileModel build();

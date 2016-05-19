@@ -73,12 +73,12 @@ public class FileViewHolder extends RecyclerView.ViewHolder {
 
     @OnClick(R.id.printer_file_icon)
     void printerButtonClicked() {
-        mListener.printButtonClicked(mFileModel.apiPath());
+        mListener.printButtonClicked(mFileModel.apiUrl());
     }
 
     @OnClick(R.id.file_download_icon)
     void downloadButtonClicked() {
-        mListener.downloadButtonClicked(mFileModel.downloadPath());
+        mListener.downloadButtonClicked(mFileModel.downloadUrl());
     }
 
     public void showOnClickView() {
@@ -99,7 +99,7 @@ public class FileViewHolder extends RecyclerView.ViewHolder {
 
     public interface Listener {
         void fileViewClicked(int position);
-        void printButtonClicked(String apiPath);
+        void printButtonClicked(String apiUrl);
         void downloadButtonClicked(String downloadUrl);
     }
 }
