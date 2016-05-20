@@ -63,6 +63,11 @@ public class ApiManagerImpl implements ApiManager {
     }
 
     @Override
+    public Observable<Object> deleteFile(@Url String url) {
+        return mOctoApi.deleteFile(url);
+    }
+
+    @Override
     public Func1<PrinterDbEntity, Observable<VersionEntity>> funcGetVersion() {
         return new Func1<PrinterDbEntity, Observable<VersionEntity>>() {
             @Override

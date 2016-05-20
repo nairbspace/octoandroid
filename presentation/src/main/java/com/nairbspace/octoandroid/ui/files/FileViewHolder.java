@@ -76,6 +76,16 @@ public class FileViewHolder extends RecyclerView.ViewHolder {
         mListener.printButtonClicked(mFileModel.apiUrl());
     }
 
+    @OnClick(R.id.file_delete_icon)
+    void deleteButtonClicked() {
+        mListener.deleteButtonClicked(mFileModel.apiUrl(), getAdapterPosition());
+    }
+
+    @OnClick(R.id.load_file_icon)
+    void loadButtonClicked() {
+        mListener.loadButtonClicked(mFileModel.apiUrl());
+    }
+
     @OnClick(R.id.file_download_icon)
     void downloadButtonClicked() {
         mListener.downloadButtonClicked(mFileModel.downloadUrl());
@@ -99,7 +109,9 @@ public class FileViewHolder extends RecyclerView.ViewHolder {
 
     public interface Listener {
         void fileViewClicked(int position);
-        void printButtonClicked(String apiUrl);
         void downloadButtonClicked(String downloadUrl);
+        void deleteButtonClicked(String apiPath, int adapterPosition);
+        void loadButtonClicked(String apiUrl);
+        void printButtonClicked(String apiUrl);
     }
 }

@@ -29,6 +29,11 @@ public class FilesRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         notifyDataSetChanged();
     }
 
+    public void deleteFile(int removedPosition) {
+        mFilesModel.fileModels().remove(removedPosition);
+        notifyItemRemoved(removedPosition);
+    }
+
     public int getClickedPosition() {
         return mClickedPosition;
     }
@@ -105,8 +110,22 @@ public class FilesRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         mListener.downloadButtonClicked(downloadUrl);
     }
 
+    @Override
+    public void deleteButtonClicked(String apiPath, int adapterPosition) {
+        mClickedPosition = -1;
+        mOldClickedPosition = -1;
+        mListener.deleteButtonClicked(apiPath, adapterPosition);
+    }
+
+    @Override
+    public void loadButtonClicked(String apiUrl) {
+        mListener.loadButtonClicked(apiUrl);
+    }
+
     public interface Listener {
         void printerButtonClicked(String apiUrl);
+        void deleteButtonClicked(String apiUrl, int adapterPosition);
         void downloadButtonClicked(String downloadUrl);
+        void loadButtonClicked(String apiUrl);
     }
 }

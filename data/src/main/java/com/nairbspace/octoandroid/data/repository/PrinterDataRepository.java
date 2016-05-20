@@ -101,4 +101,9 @@ public class PrinterDataRepository implements PrinterRepository {
         return Observable.create(mMapperHelper.mapToFileCommandEntity(fileCommand))
                 .concatMap(mApiManager.funcStartFilePrint(apiUrl));
     }
+
+    @Override
+    public Observable deleteFile(String url) {
+        return mApiManager.deleteFile(url);
+    }
 }

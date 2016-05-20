@@ -18,6 +18,7 @@ import com.nairbspace.octoandroid.ui.Presenter;
 
 import javax.inject.Inject;
 
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -35,6 +36,7 @@ public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
     @BindView(R.id.file_list_recyclerview) RecyclerView mRecyclerView;
     @BindView(R.id.empty_files_textview) TextView mEmptyTextView;
     @BindView(R.id.files_progress_bar) ProgressBar mProgressBar;
+    @BindString(R.string.status) String STATUS;
 
     public static FilesFragment newInstance() {
         return new FilesFragment();
@@ -51,6 +53,7 @@ public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_files_list, container, false);
         setUnbinder(ButterKnife.bind(this, view));
+        setActionBarTitle(STATUS);
         showEmptyScreen();
         if (savedInstanceState != null && savedInstanceState.getParcelable(FILESMODEL_KEY) != null) {
             mFilesModel = savedInstanceState.getParcelable(FILESMODEL_KEY);
@@ -66,6 +69,13 @@ public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
         mEmptyTextView.setVisibility(View.VISIBLE);
         mRecyclerView.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void deleteFileFromAdapter(int adapterPosition) {
+        if (mAdapter != null) {
+            mAdapter.deleteFile(adapterPosition);
+        }
     }
 
     private void showRecyclerView() {
@@ -134,9 +144,19 @@ public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
     }
 
     @Override
+    public void deleteButtonClicked(String apiUrl, int adapterPosition) {
+        mPresenter.executeDelete(apiUrl, adapterPosition);
+    }
+
+    @Override
     public void downloadButtonClicked(String downloadUrl) {
         Toast.makeText(getContext(), downloadUrl, Toast.LENGTH_LONG).show();
         mListener.downloadFile(downloadUrl);
+    }
+
+    @Override
+    public void loadButtonClicked(String apiUrl) {
+        mPresenter.executeLoad(apiUrl);
     }
 
     public interface Listener {

@@ -31,4 +31,6 @@ public interface PrinterRepository {
     Observable sendJobCommand(HashMap<String, String> command);
 
     Observable sendFileCommand(FileCommand fileCommand);
+
+    Observable deleteFile(String url);
 }

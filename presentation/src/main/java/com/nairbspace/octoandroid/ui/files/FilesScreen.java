@@ -9,4 +9,6 @@ public interface FilesScreen {
     void showProgressBar();
 
     void showEmptyScreen();
+
+    void deleteFileFromAdapter(int adapterPosition);
 }

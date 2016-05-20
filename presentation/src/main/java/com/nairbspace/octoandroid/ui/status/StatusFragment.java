@@ -16,6 +16,7 @@ import com.nairbspace.octoandroid.ui.Presenter;
 
 import javax.inject.Inject;
 
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -33,6 +34,7 @@ public class StatusFragment extends BasePagerFragmentListener<StatusScreen,
     @BindView(R.id.print_time_left_textview) TextView mPrintTimeLeftTextView;
     @BindView(R.id.printed_bytes_textview) TextView mPrintedBytesTextView;
     @BindView(R.id.printed_file_size_textview) TextView mPrintedFileSizeTextView;
+    @BindString(R.string.status) String STATUS;
 
     private Listener mListener;
     private WebsocketModel mWebsocketModel;
@@ -52,6 +54,7 @@ public class StatusFragment extends BasePagerFragmentListener<StatusScreen,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_status, container, false);
         setUnbinder(ButterKnife.bind(this, view));
+        setActionBarTitle(STATUS);
         if (savedInstanceState != null && savedInstanceState.getParcelable(STATUS_MODEL_KEY) != null) {
             updateUI((WebsocketModel) savedInstanceState.getParcelable(STATUS_MODEL_KEY));
         }

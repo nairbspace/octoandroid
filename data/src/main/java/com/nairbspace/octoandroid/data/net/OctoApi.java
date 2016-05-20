@@ -10,6 +10,7 @@ import com.nairbspace.octoandroid.data.entity.VersionEntity;
 import java.util.HashMap;
 
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Url;
@@ -37,4 +38,7 @@ public interface OctoApi {
 
     @POST
     Observable<Object> startFilePrint(@Url String url, @Body FileCommandEntity fileCommandEntity);
+
+    @DELETE
+    Observable<Object> deleteFile(@Url String url);
 }

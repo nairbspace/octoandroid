@@ -1,6 +1,7 @@
 package com.nairbspace.octoandroid.ui.files;
 
 import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
+import com.nairbspace.octoandroid.domain.interactor.DeleteFile;
 import com.nairbspace.octoandroid.domain.interactor.GetFiles;
 import com.nairbspace.octoandroid.domain.interactor.SendFileCommand;
 import com.nairbspace.octoandroid.domain.model.FileCommand;
@@ -19,17 +20,19 @@ public class FilesPresenter extends UseCasePresenter<FilesScreen> {
     private final FilesMapper mFilesMapper;
     private final FileCommandModelMapper mFileCommandModelMapper;
     private final SendFileCommand mSendFileCommand;
+    private final DeleteFile mDeleteFile;
     private FilesScreen mScreen;
 
     @Inject
     public FilesPresenter(GetFiles getFiles, FilesMapper filesMapper,
                           FileCommandModelMapper fileCommandModelMapper,
-                          SendFileCommand sendFileCommand) {
+                          SendFileCommand sendFileCommand, DeleteFile deleteFile) {
         super(getFiles);
         mGetFiles = getFiles;
         mFilesMapper = filesMapper;
         mFileCommandModelMapper = fileCommandModelMapper;
         mSendFileCommand = sendFileCommand;
+        mDeleteFile = deleteFile;
     }
 
     @Override
@@ -68,6 +71,15 @@ public class FilesPresenter extends UseCasePresenter<FilesScreen> {
     public void executePrint(String apiUrl) {
         FileCommandModel model = FileCommandModel.startPrint(apiUrl);
         mFileCommandModelMapper.execute(new FileCommandMapperSubscriber(), model);
+    }
+
+    public void executeLoad(String apiUrl) {
+        FileCommandModel model = FileCommandModel.loadPrint(apiUrl);
+        mFileCommandModelMapper.execute(new FileCommandMapperSubscriber(), model);
+    }
+
+    public void executeDelete(String apiUrl, int adapterPosition) {
+        mDeleteFile.execute(new DeleteFileSubscriber(adapterPosition), apiUrl);
     }
 
     private final class GetFilesSubsubscriber extends DefaultSubscriber<Files> {
@@ -116,6 +128,20 @@ public class FilesPresenter extends UseCasePresenter<FilesScreen> {
         @Override
         public void onError(Throwable e) {
             super.onError(e);
+        }
+    }
+
+    private final class DeleteFileSubscriber extends DefaultSubscriber {
+
+        private final int mAdapterPosition;
+
+        public DeleteFileSubscriber(int adapterPosition) {
+            mAdapterPosition = adapterPosition;
+        }
+
+        @Override
+        public void onNext(Object o) {
+            mScreen.deleteFileFromAdapter(mAdapterPosition);
         }
     }
 }
