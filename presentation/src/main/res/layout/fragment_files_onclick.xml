@@ -16,31 +16,43 @@
         android:layout_height="24dp"
         android:layout_weight="1"
         android:alpha="@dimen/drawable_active_opacity"
-        android:src="@drawable/ic_file_download_black_24dp"
-        android:contentDescription="@string/download"/>
+        android:contentDescription="@string/download"
+        android:src="@drawable/ic_file_download_black_24dp"/>
+
     <com.nairbspace.octoandroid.views.HintedImageView
         android:id="@+id/file_delete_icon"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_weight="1"
         android:alpha="@dimen/drawable_active_opacity"
-        android:src="@drawable/ic_delete_black_24dp"
-        android:contentDescription="@string/delete_file"/>
+        android:contentDescription="@string/delete_file"
+        android:src="@drawable/ic_delete_black_24dp"/>
+
+    <com.nairbspace.octoandroid.views.HintedImageView
+        android:id="@+id/file_details_icon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_weight="1"
+        android:alpha="@dimen/drawable_active_opacity"
+        android:contentDescription="@string/file_details"
+        android:src="@drawable/ic_more_vert_black_24dp"/>
+
     <com.nairbspace.octoandroid.views.HintedImageView
         android:id="@+id/load_file_icon"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_weight="1"
         android:alpha="@dimen/drawable_active_opacity"
-        android:src="@drawable/ic_folder_black_24dp"
-        android:contentDescription="@string/load"/>
+        android:contentDescription="@string/load"
+        android:src="@drawable/ic_folder_black_24dp"/>
+
     <com.nairbspace.octoandroid.views.HintedImageView
         android:id="@+id/printer_file_icon"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_weight="1"
         android:alpha="@dimen/drawable_active_opacity"
-        android:src="@drawable/ic_print_black_24dp"
-        android:contentDescription="@string/print"/>
+        android:contentDescription="@string/print"
+        android:src="@drawable/ic_print_black_24dp"/>
 
 </LinearLayout>

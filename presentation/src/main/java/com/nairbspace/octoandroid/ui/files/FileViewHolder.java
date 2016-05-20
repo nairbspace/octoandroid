@@ -1,13 +1,10 @@
 package com.nairbspace.octoandroid.ui.files;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nairbspace.octoandroid.R;
@@ -27,14 +24,15 @@ public class FileViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.file_name_text_view) TextView mFileNameTextView;
     @BindView(R.id.file_size_text_view) TextView mFileSizeTextView;
-    @BindView(R.id.file_visible_card_view) RelativeLayout mVisibleLayout;
     @BindView(R.id.files_list_on_click_view) LinearLayout mOnClickView;
     @BindView(R.id.file_type_icon) ImageView mFileTypeIcon;
+    @BindView(R.id.file_date_text_view) TextView mDateTextView;
+    @BindView(R.id.file_time_text_view) TextView mTimeTextView;
     @BindDrawable(R.drawable.ic_file_black_24dp) Drawable mFileDrawable;
     @BindDrawable(R.drawable.ic_sd_storage_black_24dp) Drawable mSdDrawable;
     @BindString(R.string.file_origin_sdcard) String SDCARD;
     @BindInt(android.R.integer.config_longAnimTime) int mLongAnimTime;
-    @BindColor(R.color.colorPrimaryLight) int mBackgroundColor;
+    @BindColor(R.color.fileSelected) int mBackgroundColor;
     @BindColor(android.R.color.white) int mDefaultColor;
 
     private FilesModel.FileModel mFileModel;
@@ -50,6 +48,8 @@ public class FileViewHolder extends RecyclerView.ViewHolder {
         mFileModel = fileModel;
         mFileNameTextView.setText(fileModel.name());
         mFileSizeTextView.setText(fileModel.size());
+        mDateTextView.setText(fileModel.date());
+        mTimeTextView.setText(fileModel.time());
         setFileTypeIcon(fileModel);
     }
 
@@ -93,18 +93,7 @@ public class FileViewHolder extends RecyclerView.ViewHolder {
 
     public void showOnClickView() {
         mOnClickView.setVisibility(View.VISIBLE);
-        mView.setBackgroundColor(mBackgroundColor);
-    }
-
-    public void updateOnClickView(final boolean isShown) {
-        mOnClickView.setVisibility(isShown ? View.GONE : View.VISIBLE);
-        mOnClickView.animate().setDuration(mLongAnimTime).alpha(isShown ? 0 : 1)
-                .setListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                mOnClickView.setVisibility(isShown ? View.GONE : View.VISIBLE);
-            }
-        });
+        mView.setBackgroundColor(mBackgroundColor); // TODO not sure what color to set when clicked
     }
 
     public interface Listener {

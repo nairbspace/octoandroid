@@ -29,6 +29,7 @@ public abstract class FilesModel implements Parcelable {
         public abstract String name();
         public abstract String size(); // Need to format to human readable
         public abstract String date();
+        public abstract String time();
         public abstract String origin();
         public abstract String apiUrl();
         public abstract String downloadUrl();
@@ -43,6 +44,7 @@ public abstract class FilesModel implements Parcelable {
             public abstract Builder name(String name);
             public abstract Builder size(String size);
             public abstract Builder date(String date);
+            public abstract Builder time(String time);
             public abstract Builder origin(String origin);
             public abstract Builder apiUrl(String apiUrl);
             public abstract Builder downloadUrl(String downloadUrl);

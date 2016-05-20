@@ -50,40 +50,40 @@ public class WebsocketModelMapper extends MapperUseCase<Websocket, WebsocketMode
     }
 
     private WebsocketModel mapToStatusModel(Websocket websocket, CurrentHistory current) {
-        String state = "-";
+        String state = "";
         if (mUglyNullChecker.ifStateTextNotNull(websocket)) {
             state = current.state().text();
         }
 
-        String file = "-";
+        String file = "";
         if (mUglyNullChecker.isFileNameNotNull(websocket)) {
             file = current.job().file().name();
         }
 
-        String approxTotalPrintTime = "-";
+        String approxTotalPrintTime = "";
         if (mUglyNullChecker.isApproxTotalPrintTimeIsNotNull(websocket)) {
             Double time = current.job().estimatedPrintTime();
             approxTotalPrintTime = mDateTimeConverter.secondsToHHmmss(time);
         }
 
-        String printTime = "-";
+        String printTime = "";
         if (mUglyNullChecker.isPrintTimeIsNotNull(websocket)) {
             printTime = mDateTimeConverter.secondsToHHmmss(current.progress().printTime());
         }
 
-        String printTimeLeft = "-";
+        String printTimeLeft = "";
         if (mUglyNullChecker.isPrintTimeLeftIsNotNull(websocket)) {
             if (current.progress().printTimeLeft() > 0) {
                 printTimeLeft = mDateTimeConverter.secondsToHHmmss(current.progress().printTimeLeft());
             }
         }
 
-        String printedBytes = "-";
+        String printedBytes = "";
         if (mUglyNullChecker.isPrintedBytesIsNotNull(websocket)) {
             printedBytes = mByteConverter.toReadableString(current.progress().filepos());
         }
 
-        String printedFileSize = "-";
+        String printedFileSize = "";
         if (mUglyNullChecker.isPrintedFileSizeIsNotNull(websocket)) {
             printedFileSize = mByteConverter.toReadableString(current.job().file().size());
         }

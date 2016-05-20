@@ -73,32 +73,34 @@ public class FilesMapper extends MapperUseCase<Files, FilesModel> {
     private FileModel mapToFileModel(File file) {
         String name = file.name();
 
-        String size = "-";
+        String size = "";
         if (file.size() != null) {
             size = mByteConverter.toReadableString(file.size());
         }
 
-        String date = "-" ;
+        String date = "";
+        String time = "";
         if (file.date() != null) {
-            date = mDateTimeConverter.secondsToDateTimeString(file.date());
+            date = mDateTimeConverter.secondsToShortDateString(file.date());
+            time = mDateTimeConverter.secondsToShortTimeString(file.date());
         }
 
         String origin = file.origin();
 
         String apiUrl = file.refs().resource();
 
-        String downloadUrl = "-";
+        String downloadUrl = "";
         if (file.refs().download() != null) {
             downloadUrl = file.refs().download();
         }
 
-        String estimatedPrintTime = "-";
+        String estimatedPrintTime = "";
         if (isEstimatedPrintTimeNotNull(file)) {
             Double estPrintTime = file.gcodeAnalysis().estimatedPrintTime();
             estimatedPrintTime = mDateTimeConverter.secondsToHHmmss(estPrintTime);
         }
 
-        String type = "-";
+        String type = "";
         if (!file.type().contains(FOLDER)) {
             type = file.type();
         }
@@ -107,6 +109,7 @@ public class FilesMapper extends MapperUseCase<Files, FilesModel> {
                 .name(name)
                 .size(size)
                 .date(date)
+                .time(time)
                 .origin(origin)
                 .apiUrl(apiUrl)
                 .downloadUrl(downloadUrl)

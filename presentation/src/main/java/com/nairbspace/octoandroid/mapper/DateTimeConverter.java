@@ -32,6 +32,26 @@ public class DateTimeConverter {
         return secondsToDateTimeString(seconds.longValue());
     }
 
+    public String millisecondsToShortDateString(long milliseconds) {
+        Date date = new Date(milliseconds);
+        DateFormat df = SimpleDateFormat.getDateInstance(DateFormat.SHORT);
+        return df.format(date);
+    }
+
+    public String secondsToShortDateString(long seconds) {
+        return millisecondsToShortDateString(seconds * 1000);
+    }
+
+    public String millisecondsToShortTimeString(long milliseconds) {
+        Date date = new Date(milliseconds);
+        DateFormat df = SimpleDateFormat.getTimeInstance(DateFormat.SHORT);
+        return df.format(date);
+    }
+
+    public String secondsToShortTimeString(long seconds) {
+        return millisecondsToShortTimeString(seconds * 1000);
+    }
+
     public String secondsToHHmmss(long inputSeconds) {
         long absSeconds = Math.abs(inputSeconds);
         long hours = absSeconds / 3600;
