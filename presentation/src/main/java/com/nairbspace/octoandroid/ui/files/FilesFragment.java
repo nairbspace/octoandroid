@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -46,6 +49,7 @@ public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SetupApplication.get(getContext()).getAppComponent().inject(this);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -62,6 +66,25 @@ public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
             mAdapter.fileViewClicked(clickedPosition);
         }
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_file, menu);
+    }
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.upload_file_menu_item:
+                Toast.makeText(getContext(), "upload file", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
