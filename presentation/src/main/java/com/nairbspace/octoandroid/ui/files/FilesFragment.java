@@ -1,7 +1,11 @@
 package com.nairbspace.octoandroid.ui.files;
 
+import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -75,12 +79,54 @@ public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
     }
 
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == getNavigator().getPickFileRequestCode()) {
+            if (resultCode == Activity.RESULT_OK) {
+                showLocalOrSdAlertDialog(data.getDataString());
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void showLocalOrSdAlertDialog(final String uriString) {
+        new AlertDialog.Builder(getContext())
+                .setTitle("Storage Location")
+                .setMessage("Local or SD?")
+//                .setIcon(R.drawable.exclamation_triangle)
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .setNeutralButton("SD", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mPresenter.uploadFile("sdcard", uriString);
+                    }
+                })
+                .setPositiveButton("Local", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mPresenter.uploadFile("local", uriString);
+
+                    }
+                })
+                .create()
+                .show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        getNavigator().checkReadGrantedAndTryAgain(requestCode, grantResults, this);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.upload_file_menu_item:
-                Toast.makeText(getContext(), "upload file", Toast.LENGTH_SHORT).show();
+                getNavigator().tryToNavigateToFileManagerForResult(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -174,7 +220,7 @@ public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
     @Override
     public void downloadButtonClicked(String downloadUrl) {
         Toast.makeText(getContext(), downloadUrl, Toast.LENGTH_LONG).show();
-        mListener.downloadFile(downloadUrl);
+        getNavigator().navigateToDownloadFile(this, downloadUrl);
     }
 
     @Override
@@ -183,6 +229,6 @@ public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
     }
 
     public interface Listener {
-        void downloadFile(String url);
+
     }
 }

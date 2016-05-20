@@ -13,8 +13,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import javax.inject.Inject;
 
-import timber.log.Timber;
-
 public class PlaybackPresenter extends UseCasePresenter<PlaybackScreen> {
 
     private PlaybackScreen mScreen;
@@ -61,7 +59,7 @@ public class PlaybackPresenter extends UseCasePresenter<PlaybackScreen> {
 
         @Override
         public void onError(Throwable e) {
-            super.onError(e);
+//            super.onError(e);
         }
 
         @Override
@@ -69,7 +67,7 @@ public class PlaybackPresenter extends UseCasePresenter<PlaybackScreen> {
             super.onNext(websocket);
             mMapper.execute(new TransformSubscriber(), websocket);
             if (websocket != null) {
-                Timber.d(websocket.toString());
+//                Timber.d(websocket.toString());
             }
         }
     }

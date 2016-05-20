@@ -13,7 +13,10 @@ import java.util.HashMap;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import okhttp3.MultipartBody;
 import retrofit2.http.Body;
+import retrofit2.http.Part;
+import retrofit2.http.Path;
 import retrofit2.http.Url;
 import rx.Observable;
 import rx.functions.Func1;
@@ -65,6 +68,11 @@ public class ApiManagerImpl implements ApiManager {
     @Override
     public Observable<Object> deleteFile(@Url String url) {
         return mOctoApi.deleteFile(url);
+    }
+
+    @Override
+    public Observable<Object> uploadFile(@Path("location") String location, @Part MultipartBody.Part file) {
+        return null;
     }
 
     @Override

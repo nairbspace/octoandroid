@@ -107,6 +107,15 @@ public abstract class BaseFragmentListener<T, L> extends Fragment implements Act
         }
     }
 
+    public Navigator getNavigator() {
+        try {
+            return ((BaseActivity) getActivity()).getNavigator();
+        } catch (ClassCastException e) {
+            throw new ClassCastException(getActivity().toString() +
+                    " should extend from BaseActivity");
+        }
+    }
+
     @Override
     public void networkNowActive() {
         setPresenter().networkNowActiveReceived();

@@ -9,10 +9,14 @@ import com.nairbspace.octoandroid.data.entity.VersionEntity;
 
 import java.util.HashMap;
 
+import okhttp3.MultipartBody;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
+import retrofit2.http.Path;
 import retrofit2.http.Url;
 import rx.Observable;
 
@@ -41,4 +45,8 @@ public interface OctoApi {
 
     @DELETE
     Observable<Object> deleteFile(@Url String url);
+
+    @Multipart
+    @POST("/api/files/{location}")
+    Observable<Object> uploadFile(@Path("location") String location, @Part MultipartBody.Part file);
 }
