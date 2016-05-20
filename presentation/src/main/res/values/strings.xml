@@ -29,4 +29,8 @@
     <string name="load">Load</string>
     <string name="file_location">File Location</string>
     <string name="delete_file">Delete File</string>
+    <string name="no_files_found">No files found</string>
+    <string name="print_restart">Print/Restart</string>
+    <string name="resume_pause">Resume/Pause</string>
+    <string name="stop">Stop</string>
 </resources>

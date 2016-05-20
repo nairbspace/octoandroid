@@ -27,7 +27,7 @@
         android:layout_centerInParent="true"
         android:textSize="24sp"
         android:textStyle="italic"
-        android:text="No files found"/>
+        android:text="@string/no_files_found"/>
 
     <ProgressBar
         android:id="@+id/files_progress_bar"

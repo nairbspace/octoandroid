@@ -41,25 +41,28 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <ImageView
+        <com.nairbspace.octoandroid.views.HintedImageView
             android:id="@+id/playback_print_restart_button"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/ic_print_black_24dp"/>
+            android:src="@drawable/ic_print_black_24dp"
+            android:contentDescription="@string/print_restart"/>
 
-        <ImageView
+        <com.nairbspace.octoandroid.views.HintedImageView
             android:id="@+id/playback_pause_play_button"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginEnd="24dp"
             android:layout_marginStart="24dp"
             android:src="@drawable/ic_pause_circle_filled_black_24dp"
-            android:tint="@color/colorAccent"/>
+            android:tint="@color/colorAccent"
+            android:contentDescription="@string/resume_pause"/>
 
-        <ImageView
+        <com.nairbspace.octoandroid.views.HintedImageView
             android:id="@+id/playback_stop_button"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/ic_stop_black_24dp"/>
+            android:src="@drawable/ic_stop_black_24dp"
+            android:contentDescription="@string/stop"/>
     </LinearLayout>
 </RelativeLayout>
