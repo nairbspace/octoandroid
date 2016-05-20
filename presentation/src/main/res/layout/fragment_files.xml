@@ -23,6 +23,7 @@
                 android:id="@+id/file_type_icon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:layout_margin="12dp"
                 android:alpha="@dimen/drawable_active_opacity"
@@ -37,9 +38,12 @@
                 android:layout_marginStart="6dp"
                 android:layout_marginTop="@dimen/text_margin"
                 android:layout_toEndOf="@id/file_type_icon"
+                android:layout_toStartOf="@id/more_file_details_icon"
                 android:textAppearance="?attr/textAppearanceListItem"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:textSize="16sp"
-                tools:text="test"/>
+                tools:text="test.gcode"/>
 
             <TextView
                 android:id="@+id/file_size_text_view"
@@ -50,11 +54,13 @@
                 android:layout_marginEnd="@dimen/text_margin"
                 android:layout_marginStart="6dp"
                 android:layout_marginTop="4dp"
+                android:maxLines="1"
                 android:layout_toEndOf="@id/file_type_icon"
+                android:layout_toStartOf="@id/more_file_details_icon"
                 android:textSize="12sp"
-                tools:text="text"/> <!--TODO these can overflow !!!-->
+                tools:text="text"/>
 
-            <ImageView
+            <com.nairbspace.octoandroid.views.HintedImageView
                 android:id="@+id/more_file_details_icon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -62,7 +68,8 @@
                 android:layout_centerVertical="true"
                 android:layout_margin="12dp"
                 android:alpha="@dimen/drawable_active_opacity"
-                android:src="@drawable/ic_more_vert_black_24dp"/>
+                android:src="@drawable/ic_more_vert_black_24dp"
+                android:contentDescription="@string/file_details"/>
 
         </RelativeLayout>
         <include layout="@layout/fragment_files_onclick"/>
