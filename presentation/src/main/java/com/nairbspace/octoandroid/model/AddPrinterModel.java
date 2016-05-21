@@ -1,11 +1,12 @@
 package com.nairbspace.octoandroid.model;
 
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 
 @AutoValue
-public abstract class AddPrinterModel {
+public abstract class AddPrinterModel implements Parcelable {
 
     @Nullable public abstract String accountName();
 

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.DialogFragment;
@@ -35,6 +36,7 @@ import timber.log.Timber;
 
 public class AddPrinterActivity extends BaseActivity<AddPrinterScreen>
         implements AddPrinterScreen, QrDialogFragment.Listener, SslErrorDialogFragment.Listener {
+    private static final String ADD_PRINTER_MODEL_KEY = "add_printer_model_key";
 
     @Inject AddPrinterPresenter mPresenter;
 
@@ -63,6 +65,24 @@ public class AddPrinterActivity extends BaseActivity<AddPrinterScreen>
         mApiKeyEditText.setOnEditorActionListener(mApiEditorListener);
     }
 
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        if (savedInstanceState != null &&
+                savedInstanceState.getParcelable(ADD_PRINTER_MODEL_KEY) != null) {
+            AddPrinterModel model = savedInstanceState.getParcelable(ADD_PRINTER_MODEL_KEY);
+            updateUi(model);
+        }
+    }
+
+    private void updateUi(AddPrinterModel addPrinterModel) {
+        mPrinterNameEditText.setText(addPrinterModel.accountName());
+        mIpAddressEditText.setText(addPrinterModel.ipAddress());
+        mPortEditText.setText(addPrinterModel.port());
+        mApiKeyEditText.setText(addPrinterModel.apiKey());
+        mSslCheckBox.setChecked(addPrinterModel.isSslChecked());
+    }
+
     private TextView.OnEditorActionListener mApiEditorListener = new TextView.OnEditorActionListener() {
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -81,14 +101,24 @@ public class AddPrinterActivity extends BaseActivity<AddPrinterScreen>
 
     @OnClick(R.id.add_printer_button)
     public void onAddPrinterButtonClicked() {
-        AddPrinterModel model = AddPrinterModel.builder()
+        AddPrinterModel model = getAddPrinterModel();
+        mPresenter.onAddPrinterClicked(model);
+    }
+
+    private AddPrinterModel getAddPrinterModel() {
+        return AddPrinterModel.builder()
                 .accountName(mPrinterNameEditText.getText().toString())
                 .ipAddress(mIpAddressEditText.getText().toString())
                 .port(mPortEditText.getText().toString())
                 .apiKey(mApiKeyEditText.getText().toString())
                 .isSslChecked(mSslCheckBox.isChecked())
                 .build();
-        mPresenter.onAddPrinterClicked(model);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(ADD_PRINTER_MODEL_KEY, getAddPrinterModel());
     }
 
     @Override
