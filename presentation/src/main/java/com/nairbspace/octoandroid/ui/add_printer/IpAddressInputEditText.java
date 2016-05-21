@@ -9,8 +9,6 @@ import com.nairbspace.octoandroid.R;
 
 public class IpAddressInputEditText extends TextInputEditText implements View.OnFocusChangeListener {
 
-    private OnFocusChangeListener mOnFocusChangeListener;
-
     public IpAddressInputEditText(Context context) {
         super(context);
         setOnFocusChangeListener(this);
@@ -26,23 +24,23 @@ public class IpAddressInputEditText extends TextInputEditText implements View.On
         setOnFocusChangeListener(this);
     }
 
+    /**
+     * Overrides the OnFocusChangeListener to always be the one implemented here.
+     * @param l Gets ignored if set outside of this class.
+     */
     @Override
     public void setOnFocusChangeListener(OnFocusChangeListener l) {
-        if (l == this) {
-            super.setOnFocusChangeListener(l);
-            return;
+        if (l != this) {
+            l = this;
         }
-        mOnFocusChangeListener = l;
+
+        super.setOnFocusChangeListener(l);
     }
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
-        if (mOnFocusChangeListener == null) {
-            return;
-        }
-
-        if (v instanceof TextInputEditText) {
-            TextInputEditText ipAddressEditText = (TextInputEditText) v;
+        if (v instanceof IpAddressInputEditText) {
+            IpAddressInputEditText ipAddressEditText = (IpAddressInputEditText) v;
 
             if (hasFocus) {
                 ipAddressEditText.setHint(R.string.ip_address_edit_text_hint);

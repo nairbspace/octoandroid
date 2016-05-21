@@ -5,13 +5,10 @@ import android.support.design.widget.TextInputEditText;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.EditText;
 
 import com.nairbspace.octoandroid.R;
 
 public class PortInputEditText extends TextInputEditText implements View.OnFocusChangeListener {
-
-    private OnFocusChangeListener mOnFocusChangeListener;
 
     public PortInputEditText(Context context) {
         super(context);
@@ -28,21 +25,21 @@ public class PortInputEditText extends TextInputEditText implements View.OnFocus
         setOnFocusChangeListener(this);
     }
 
+    /**
+     * Overrides the OnFocusChangeListener to always be the one implemented here.
+     * @param l Gets ignored if set outside of this class.
+     */
     @Override
     public void setOnFocusChangeListener(OnFocusChangeListener l) {
-        if (l == this) {
-            super.setOnFocusChangeListener(l);
-            return;
+        if (l != this) {
+            l = this;
         }
-        mOnFocusChangeListener = l;
+
+        super.setOnFocusChangeListener(l);
     }
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
-        if (mOnFocusChangeListener == null) {
-            return;
-        }
-
         View rootView = v.getRootView();
         CheckBox sslCheckBox = null;
         if (rootView != null) {
@@ -53,8 +50,8 @@ public class PortInputEditText extends TextInputEditText implements View.OnFocus
             return;
         }
 
-        if (v instanceof EditText) {
-            EditText portEditText = (EditText) v;
+        if (v instanceof PortInputEditText) {
+            PortInputEditText portEditText = (PortInputEditText) v;
 
             if (hasFocus) {
                 if (sslCheckBox.isChecked()) {
