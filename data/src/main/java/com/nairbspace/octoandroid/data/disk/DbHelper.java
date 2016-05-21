@@ -30,7 +30,7 @@ public class DbHelper {
             printerDbEntity = mPrinterDbEntityDao.queryBuilder()
                     .where(PrinterDbEntityDao.Properties.Name.eq(name))
                     .unique();
-        } catch (DaoException e) {
+        } catch (Exception e) {
             printerDbEntity = null;
         }
 
@@ -43,7 +43,7 @@ public class DbHelper {
             printerDbEntity = mPrinterDbEntityDao.queryBuilder()
                     .where(PrinterDbEntityDao.Properties.Id.eq(printerId))
                     .unique();
-        } catch (DaoException e) {
+        } catch (Exception e) {
             printerDbEntity = null;
         }
 

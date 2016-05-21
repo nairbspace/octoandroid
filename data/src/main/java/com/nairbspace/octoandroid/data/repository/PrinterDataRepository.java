@@ -1,6 +1,5 @@
 package com.nairbspace.octoandroid.data.repository;
 
-import com.fernandocejas.frodo.annotation.RxLogObservable;
 import com.nairbspace.octoandroid.data.disk.DiskManager;
 import com.nairbspace.octoandroid.data.mapper.MapperHelper;
 import com.nairbspace.octoandroid.data.net.ApiManager;
@@ -50,22 +49,16 @@ public class PrinterDataRepository implements PrinterRepository {
     }
 
     @Override
-    public Observable verifyPrinterDetails(AddPrinter addPrinter) {
+    public Observable addPrinterDetails(AddPrinter addPrinter) {
         return Observable.create(mMapperHelper.mapAddPrinterToPrinterDbEntity(addPrinter))
                 .doOnNext(mDiskManager.putPrinterInDb());
     }
 
-    @RxLogObservable
     @Override
-    public Observable addPrinterDetails(final AddPrinter addPrinter) {
+    public Observable verifyPrinterDetails() {
         return mApiManager.getVersion()
                 .doOnNext(mDiskManager.putVersionInDb())
                 .doOnError(mDiskManager.deleteUnverifiedPrinter());
-
-//        return Observable.create(mMapperHelper.mapAddPrinterToPrinterDbEntity(addPrinter))
-//                .concatMap(mApiManager.funcGetVersion())
-//                .doOnError(mDiskManager.deleteUnverifiedPrinter())
-//                .map(mDiskManager.putVersionInDb());
     }
 
     @Override
@@ -74,7 +67,6 @@ public class PrinterDataRepository implements PrinterRepository {
                 .map(mDiskManager.deletePrinterByName());
     }
 
-    @RxLogObservable
     @Override
     public Observable<Connection> connectionDetails() {
         return mPrinterDataStoreFactory.create()

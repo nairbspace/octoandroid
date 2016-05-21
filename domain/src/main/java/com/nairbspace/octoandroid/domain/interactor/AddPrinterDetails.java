@@ -10,7 +10,6 @@ import javax.inject.Inject;
 import rx.Observable;
 
 public class AddPrinterDetails extends UseCaseInput<AddPrinter> {
-
     private final PrinterRepository mPrinterRepository;
 
     @Inject

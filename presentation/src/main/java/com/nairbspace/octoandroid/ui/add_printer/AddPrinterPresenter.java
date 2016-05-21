@@ -1,9 +1,9 @@
 package com.nairbspace.octoandroid.ui.add_printer;
 
 import com.fernandocejas.frodo.annotation.RxLogSubscriber;
-import com.nairbspace.octoandroid.domain.interactor.AddPrinterDetails;
-import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
 import com.nairbspace.octoandroid.domain.interactor.VerifyPrinterDetails;
+import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
+import com.nairbspace.octoandroid.domain.interactor.AddPrinterDetails;
 import com.nairbspace.octoandroid.domain.model.AddPrinter;
 import com.nairbspace.octoandroid.exception.ErrorMessageFactory;
 import com.nairbspace.octoandroid.mapper.AddPrinterModelMapper;
@@ -14,18 +14,19 @@ import javax.inject.Inject;
 
 public class AddPrinterPresenter extends UseCasePresenter<AddPrinterScreen> {
 
-    private AddPrinterScreen mScreen;
-    private final AddPrinterDetails mAddPrinterDetails;
-    private final AddPrinterModelMapper mAddPrinterModelMapper;
     private final VerifyPrinterDetails mVerifyPrinterDetails;
+    private final AddPrinterModelMapper mAddPrinterModelMapper;
+    private final AddPrinterDetails mAddPrinterDetails;
+    private AddPrinterScreen mScreen;
 
     @Inject
-    public AddPrinterPresenter(AddPrinterDetails addPrinterDetails,
-                               AddPrinterModelMapper addPrinterModelMapper, VerifyPrinterDetails verifyPrinterDetails) {
-        super(addPrinterDetails);
-        mAddPrinterDetails = addPrinterDetails;
-        mAddPrinterModelMapper = addPrinterModelMapper;
+    public AddPrinterPresenter(VerifyPrinterDetails verifyPrinterDetails,
+                               AddPrinterModelMapper addPrinterModelMapper,
+                               AddPrinterDetails addPrinterDetails) {
+        super(verifyPrinterDetails);
         mVerifyPrinterDetails = verifyPrinterDetails;
+        mAddPrinterModelMapper = addPrinterModelMapper;
+        mAddPrinterDetails = addPrinterDetails;
     }
 
     @Override
@@ -51,17 +52,11 @@ public class AddPrinterPresenter extends UseCasePresenter<AddPrinterScreen> {
         @Override
         public void onNext(AddPrinter addPrinter) {
             showLoading(true);
-            mVerifyPrinterDetails.execute(new VerifyPrinterSubscriber(addPrinter), addPrinter);
-//            mAddPrinterDetails.execute(new AddPrinterSubscriber(), addPrinter);
+            mAddPrinterDetails.execute(new AddPrinterSubscriber(), addPrinter);
         }
     }
 
-    private final class VerifyPrinterSubscriber extends DefaultSubscriber {
-        private final AddPrinter mAddPrinter;
-
-        private VerifyPrinterSubscriber(AddPrinter addPrinter) {
-            mAddPrinter = addPrinter;
-        }
+    private final class AddPrinterSubscriber extends DefaultSubscriber {
 
         @Override
         public void onError(Throwable e) {
@@ -72,8 +67,6 @@ public class AddPrinterPresenter extends UseCasePresenter<AddPrinterScreen> {
             String errorMessage = ErrorMessageFactory.create(mScreen.context(), ex);
             if (ErrorMessageFactory.isIpAddressError(ex)) {
                 mScreen.showIpAddressError(errorMessage);
-            } else if (ErrorMessageFactory.ifSslError(mScreen.context(), e.getMessage())) {
-                mScreen.showAlertDialog();
             } else {
                 mScreen.showSnackbar(errorMessage);
             }
@@ -81,42 +74,31 @@ public class AddPrinterPresenter extends UseCasePresenter<AddPrinterScreen> {
 
         @Override
         public void onCompleted() {
-            mAddPrinterDetails.execute(new AddPrinterSubscriber(), mAddPrinter);
+            mVerifyPrinterDetails.execute(new VerifyPrinterSubscriber());
         }
     }
 
 
-
-
-
     @RxLogSubscriber
-    private final class AddPrinterSubscriber extends DefaultSubscriber<Boolean> {
+    private final class VerifyPrinterSubscriber extends DefaultSubscriber {
 
         @Override
         public void onCompleted() {
             showLoading(false);
+            mScreen.navigateToPreviousScreen();
         }
 
         @Override
         public void onError(Throwable e) {
+            super.onError(e);
             showLoading(false);
-            e.printStackTrace();
             Exception ex = (Exception) e;
 
             String errorMessage = ErrorMessageFactory.create(mScreen.context(), ex);
-            if (ErrorMessageFactory.isIpAddressError(ex)) {
-                mScreen.showIpAddressError(errorMessage);
-            } else if (ErrorMessageFactory.ifSslError(mScreen.context(), e.getMessage())) {
+            if (ErrorMessageFactory.ifSslError(mScreen.context(), e.getMessage())) {
                 mScreen.showAlertDialog();
             } else {
                 mScreen.showSnackbar(errorMessage);
-            }
-        }
-
-        @Override
-        public void onNext(Boolean aBoolean) {
-            if (aBoolean) {
-                mScreen.navigateToPreviousScreen();
             }
         }
     }
