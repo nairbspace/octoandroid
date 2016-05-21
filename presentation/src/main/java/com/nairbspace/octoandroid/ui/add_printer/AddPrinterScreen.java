@@ -12,7 +12,7 @@ public interface AddPrinterScreen {
 
     void showSnackbar(String message);
 
-    void showAlertDialog(String title, String message);
+    void showAlertDialog();
 
     void hideSoftKeyboard(boolean show);
 

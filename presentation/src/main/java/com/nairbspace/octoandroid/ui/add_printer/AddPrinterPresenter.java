@@ -70,8 +70,7 @@ public class AddPrinterPresenter extends UseCasePresenter<AddPrinterScreen> {
             if (ErrorMessageFactory.isIpAddressError(ex)) {
                 mScreen.showIpAddressError(errorMessage);
             } else if (ErrorMessageFactory.ifSslError(mScreen.context(), e.getMessage())) {
-                String alertTitle = ErrorMessageFactory.getSslTitle(mScreen.context());
-                mScreen.showAlertDialog(alertTitle, errorMessage);
+                mScreen.showAlertDialog();
             } else {
                 mScreen.showSnackbar(errorMessage);
             }

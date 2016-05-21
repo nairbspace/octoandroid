@@ -54,8 +54,4 @@ public class ErrorMessageFactory {
     public static boolean ifSslError(Context context, String error) {
         return error.contains(context.getResources().getString(R.string.exception_ssl_error));
     }
-
-    public static String getSslTitle(Context context) {
-        return context.getResources().getString(R.string.ssl_error_title);
-    }
 }

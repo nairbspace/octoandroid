@@ -4,14 +4,12 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.View;
@@ -35,10 +33,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import timber.log.Timber;
 
-public class AddPrinterActivity extends BaseActivity<AddPrinterScreen> implements AddPrinterScreen,
-        TextView.OnEditorActionListener, DialogInterface.OnClickListener,
-        View.OnFocusChangeListener, View.OnClickListener,
-        QrDialogFragment.Listener {
+public class AddPrinterActivity extends BaseActivity<AddPrinterScreen>
+        implements AddPrinterScreen, QrDialogFragment.Listener, SslErrorDialogFragment.Listener {
 
     @Inject AddPrinterPresenter mPresenter;
 
@@ -64,42 +60,19 @@ public class AddPrinterActivity extends BaseActivity<AddPrinterScreen> implement
         setContentView(R.layout.activity_add_printer);
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
-        mApiKeyEditText.setOnEditorActionListener(this);
-        mIpAddressEditText.setOnFocusChangeListener(this);
-        mPortEditText.setOnFocusChangeListener(this);
+        mApiKeyEditText.setOnEditorActionListener(mApiEditorListener);
     }
 
-    @Override
-    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-        if (actionId == R.id.add_printer || actionId == EditorInfo.IME_NULL) {
-            onAddPrinterButtonClicked();
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public void onFocusChange(View v, boolean hasFocus) {
-        if (v == mIpAddressEditText) {
-            if (hasFocus) {
-                mIpAddressEditText.setHint("octopi.local");
-            } else {
-                mIpAddressEditText.setHint("");
+    private TextView.OnEditorActionListener mApiEditorListener = new TextView.OnEditorActionListener() {
+        @Override
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            if (actionId == R.id.add_printer || actionId == EditorInfo.IME_NULL) {
+                onAddPrinterButtonClicked();
+                return true;
             }
+            return false;
         }
-
-        if (v == mPortEditText) {
-            if (hasFocus) {
-                if (mSslCheckBox.isChecked()) {
-                    mPortEditText.setHint("443");
-                } else {
-                    mPortEditText.setHint("80");
-                }
-            } else {
-                mPortEditText.setHint("");
-            }
-        }
-    }
+    };
 
     @OnClick(R.id.qr_button)
     public void onQrButtonClicked() {
@@ -156,29 +129,21 @@ public class AddPrinterActivity extends BaseActivity<AddPrinterScreen> implement
     @Override
     public void showSnackbar(String message) {
         Snackbar.make(mScrollView, message, Snackbar.LENGTH_INDEFINITE)
-                .setAction("Ok", this).show();
+                .setAction("Ok", mSnackBarOnClickListener).show();
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case android.support.design.R.id.snackbar_action:
-                Timber.d("This is a snackbar");
-                break;
+    private View.OnClickListener mSnackBarOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Timber.d("This is a snackbar");
         }
-    }
+    };
 
     @Override
-    public void showAlertDialog(String title, String message) {
-        new AlertDialog.Builder(this)
-                .setTitle(title)
-                .setMessage(message)
-                .setIcon(R.drawable.exclamation_triangle)
-                .setNegativeButton("Cancel", this)
-                .setNeutralButton("Info", this)
-                .setPositiveButton("Ok", this)
-                .create()
-                .show();
+    public void showAlertDialog() {
+        SslErrorDialogFragment sslDialog = SslErrorDialogFragment.newInstance();
+        sslDialog.setCancelable(true);
+        sslDialog.show(getSupportFragmentManager(), null);
     }
 
     @Override
@@ -202,19 +167,6 @@ public class AddPrinterActivity extends BaseActivity<AddPrinterScreen> implement
         return this;
     }
 
-    @Override
-    public void onClick(DialogInterface dialog, int which) {
-        switch (which) {
-            case DialogInterface.BUTTON_NEGATIVE: // TODO need to implement info on SSL error
-                break;
-            case DialogInterface.BUTTON_NEUTRAL:
-                break;
-            case DialogInterface.BUTTON_POSITIVE:
-                mSslCheckBox.setChecked(false);
-                onAddPrinterButtonClicked();
-                break;
-        }
-    }
 
     @Override
     public void onQrSuccess(String apiKey) {
@@ -231,5 +183,11 @@ public class AddPrinterActivity extends BaseActivity<AddPrinterScreen> implement
     @Override
     protected AddPrinterScreen setScreen() {
         return this;
+    }
+
+    @Override
+    public void tryUnsecureConnection() {
+        mSslCheckBox.setChecked(false);
+        onAddPrinterButtonClicked();
     }
 }
