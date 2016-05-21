@@ -20,8 +20,10 @@ public class Navigator {
     private static final int ADD_PRINTER_REQUEST_CODE = 0;
     private static final int PICK_FILE_REQUEST_CODE = 1;
     private static final int READ_EXTERNAL_STORAGE_REQUEST_CODE = 2;
+    private static final int CAMERA_REQUEST_CODE = 3;
 
     private static final String READ_EXTERNAL_STORAGE_PERMISSION = Manifest.permission.READ_EXTERNAL_STORAGE;
+    private static final String CAMERA_PERMISSION = Manifest.permission.CAMERA;
 
     private static final int PERMISSION_GRANTED = PackageManager.PERMISSION_GRANTED;
 
@@ -84,9 +86,21 @@ public class Navigator {
         }
     }
 
+    public boolean haveCameraPermission(Fragment fragment) {
+        return havePermission(fragment, CAMERA_PERMISSION);
+    }
+
+    public void requestCameraPermission(Fragment fragment) {
+        requestPermission(fragment, CAMERA_PERMISSION, CAMERA_REQUEST_CODE);
+    }
+
+    public boolean checkCameraPermissionGranted(int requestCode, int[] grantResults) {
+        return checkPermissionGranted(requestCode, CAMERA_REQUEST_CODE, grantResults);
+    }
+
     private boolean havePermission(Fragment fragment, String permission) {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.M ||
-                ActivityCompat.checkSelfPermission(fragment.getContext(), permission) ==PERMISSION_GRANTED;
+                ActivityCompat.checkSelfPermission(fragment.getContext(), permission) == PERMISSION_GRANTED;
     }
 
     private void requestPermission(Fragment fragment, String permission, int requestCode) {

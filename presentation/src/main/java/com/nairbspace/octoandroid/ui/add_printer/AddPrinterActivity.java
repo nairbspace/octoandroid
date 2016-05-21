@@ -38,7 +38,7 @@ import timber.log.Timber;
 public class AddPrinterActivity extends BaseActivity<AddPrinterScreen> implements AddPrinterScreen,
         TextView.OnEditorActionListener, DialogInterface.OnClickListener,
         View.OnFocusChangeListener, View.OnClickListener,
-        QrDialogFragment.OnFragmentInteractionListener {
+        QrDialogFragment.Listener {
 
     @Inject AddPrinterPresenter mPresenter;
 

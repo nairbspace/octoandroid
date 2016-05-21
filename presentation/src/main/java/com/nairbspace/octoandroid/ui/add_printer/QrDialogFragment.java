@@ -1,14 +1,10 @@
 package com.nairbspace.octoandroid.ui.add_printer;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
@@ -29,16 +25,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link QrDialogFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link QrDialogFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class QrDialogFragment extends DialogFragment implements SurfaceHolder.Callback, Detector.Processor<Barcode>, Runnable {
-    private static final int CAMERA_REQUEST_CODE = 0;
+public class QrDialogFragment extends BaseDialogFragment<QrDialogFragment.Listener> {
 
     private BarcodeDetector mBarcodeDetector;
     private CameraSource mCameraSource;
@@ -49,11 +36,10 @@ public class QrDialogFragment extends DialogFragment implements SurfaceHolder.Ca
     @BindView(R.id.qr_close) ImageView mCloseButton;
     @BindView(R.id.qr_frame) ImageView mQrFrame;
 
-    private OnFragmentInteractionListener mListener;
+    private Listener mListener;
 
-    public interface OnFragmentInteractionListener {
+    public interface Listener {
         void onQrSuccess(String apiKey);
-
     }
 
     public static QrDialogFragment newInstance() {
@@ -74,14 +60,15 @@ public class QrDialogFragment extends DialogFragment implements SurfaceHolder.Ca
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frament_qr_dialog, container, false);
-        ButterKnife.bind(this, view);
+        setUnbinder(ButterKnife.bind(this, view));
 
-        if (haveCameraAccess()) {
+        if (getNavigator().haveCameraPermission(this)) {
             populateSurfaceView(true);
         } else {
             populateSurfaceView(false);
-            requestionCameraPermission();
+            getNavigator().requestCameraPermission(this);
         }
+
         return view;
     }
 
@@ -90,56 +77,10 @@ public class QrDialogFragment extends DialogFragment implements SurfaceHolder.Ca
         mCameraView.setVisibility(shouldPopulate ? View.VISIBLE : View.GONE);
         mCloseButton.setVisibility(shouldPopulate ? View.VISIBLE : View.GONE);
         mQrFrame.setVisibility(shouldPopulate ? View.VISIBLE : View.GONE);
-        mCameraView.getHolder().addCallback(this);
-        mBarcodeDetector.setProcessor(this);
-    }
-
-    /** SurfaceHolder Callback **/
-    @Override
-    public void surfaceCreated(SurfaceHolder holder) {
-        try {
-            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                requestionCameraPermission();
-                return;
-            }
-            mCameraSource.start(mCameraView.getHolder());
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (shouldPopulate) {
+            mCameraView.getHolder().addCallback(new Callback());
+            mBarcodeDetector.setProcessor(new QrProcessor());
         }
-    }
-
-    @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
-    }
-
-    @Override
-    public void surfaceDestroyed(SurfaceHolder holder) {
-        mCameraSource.stop();
-    }
-    /** End SurfaceHolder Callback **/
-
-    /** Barcode Detector Processor **/
-    @Override
-    public void release() {
-
-    }
-
-    @Override
-    public void receiveDetections(Detector.Detections<Barcode> detections) {
-        final SparseArray<Barcode> barcodes = detections.getDetectedItems();
-
-        if (barcodes.size() != 0) {
-            mApiKey = barcodes.valueAt(0).displayValue;
-            getActivity().runOnUiThread(this);
-        }
-    }
-    /** End Barcode Detector Processor **/
-
-    /** Runnable since Barcode Detector is on separate thread */
-    @Override
-    public void run() {
-        triggerQrFinishedListener(mApiKey);
     }
 
     @OnClick(R.id.qr_close)
@@ -147,30 +88,13 @@ public class QrDialogFragment extends DialogFragment implements SurfaceHolder.Ca
         dismiss();
     }
 
-    private boolean haveCameraAccess() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true;
-        }
-
-        if (getActivity().checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    private void requestionCameraPermission() {
-        requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
-    }
-
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == CAMERA_REQUEST_CODE) {
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                populateSurfaceView(true);
-            } else {
-                isPermissionDenied = true; // Cannot dismiss fragment until onResume
-            }
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (getNavigator().checkCameraPermissionGranted(requestCode, grantResults)) {
+            populateSurfaceView(true);
+        } else {
+            isPermissionDenied = true; // Cannot dismiss fragment until onResume
         }
     }
 
@@ -189,20 +113,50 @@ public class QrDialogFragment extends DialogFragment implements SurfaceHolder.Ca
         }
     }
 
+    @NonNull
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+    protected Listener setListener() {
+        mListener = (Listener) getContext();
+        return mListener;
+    }
+
+    private final class Callback extends SurfaceHolderCallback {
+
+        @Override
+        public void surfaceCreated(SurfaceHolder holder) {
+            try {
+                if (ActivityCompat.checkSelfPermission(getActivity(),
+                        Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    getNavigator().requestCameraPermission(QrDialogFragment.this);
+                    return;
+                }
+                mCameraSource.start(mCameraView.getHolder());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void surfaceDestroyed(SurfaceHolder holder) {
+            mCameraSource.stop();
         }
     }
 
-    @Override
-    public void onDetach() {
-        mListener = null;
-        super.onDetach();
+    private final class QrProcessor extends BarcodeProcessor implements Runnable {
+
+        @Override
+        public void receiveDetections(Detector.Detections<Barcode> detections) {
+            final SparseArray<Barcode> barcodes = detections.getDetectedItems();
+
+            if (barcodes.size() != 0) {
+                mApiKey = barcodes.valueAt(0).displayValue;
+                getActivity().runOnUiThread(this);
+            }
+        }
+
+        @Override
+        public void run() {
+            triggerQrFinishedListener(mApiKey);
+        }
     }
 }
