@@ -95,6 +95,7 @@ public class FilesPresenter extends UseCasePresenter<FilesScreen> {
         mUploadFile.execute(new UploadSubscriber(), uriString);
     }
 
+    // TODO need better error handling.
     private final class GetFilesSubsubscriber extends DefaultSubscriber<Files> {
 
         @Override
@@ -127,7 +128,6 @@ public class FilesPresenter extends UseCasePresenter<FilesScreen> {
         @Override
         public void onError(Throwable e) {
             super.onError(e);
-            mScreen.showEmptyScreen();
         }
 
         @Override
@@ -142,7 +142,6 @@ public class FilesPresenter extends UseCasePresenter<FilesScreen> {
         @Override
         public void onError(Throwable e) {
             super.onError(e);
-            mScreen.showEmptyScreen();
         }
     }
 
@@ -157,7 +156,6 @@ public class FilesPresenter extends UseCasePresenter<FilesScreen> {
         @Override
         public void onError(Throwable e) {
             super.onError(e);
-            mScreen.showEmptyScreen();
         }
 
         @Override
@@ -171,7 +169,6 @@ public class FilesPresenter extends UseCasePresenter<FilesScreen> {
         @Override
         public void onError(Throwable e) {
             super.onError(e);
-            mScreen.showEmptyScreen();
         }
 
         @Override
