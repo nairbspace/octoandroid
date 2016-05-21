@@ -1,6 +1,7 @@
 package com.nairbspace.octoandroid.data.net;
 
 import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
+import com.nairbspace.octoandroid.data.disk.PrefHelper;
 import com.nairbspace.octoandroid.data.entity.ConnectEntity;
 import com.nairbspace.octoandroid.data.entity.ConnectionEntity;
 import com.nairbspace.octoandroid.data.entity.FileCommandEntity;
@@ -23,11 +24,14 @@ import rx.functions.Func1;
 
 @Singleton
 public class ApiManagerImpl implements ApiManager {
+
     private final OctoApi mOctoApi;
+    private final PrefHelper mPrefHelper;
 
     @Inject
-    public ApiManagerImpl(OctoApi octoApi) {
+    public ApiManagerImpl(OctoApi octoApi, PrefHelper prefHelper) {
         mOctoApi = octoApi;
+        mPrefHelper = prefHelper;
     }
 
     @Override
@@ -72,7 +76,7 @@ public class ApiManagerImpl implements ApiManager {
 
     @Override
     public Observable<Object> uploadFile(@Path("location") String location, @Part MultipartBody.Part file) {
-        return null;
+        return mOctoApi.uploadFile(location, file);
     }
 
     @Override
@@ -110,6 +114,17 @@ public class ApiManagerImpl implements ApiManager {
         return new Func1<FileCommandEntity, Observable<?>>() {
             @Override
             public Observable<?> call(FileCommandEntity fileCommandEntity) {return startFilePrint(apiUrl, fileCommandEntity);
+            }
+        };
+    }
+
+    @Override
+    public Func1<MultipartBody.Part, Observable<?>> funcUploadFile() {
+        final String location = mPrefHelper.getUploadLocation();
+        return new Func1<MultipartBody.Part, Observable<?>>() {
+            @Override
+            public Observable call(MultipartBody.Part part) {
+                return uploadFile(location, part);
             }
         };
     }

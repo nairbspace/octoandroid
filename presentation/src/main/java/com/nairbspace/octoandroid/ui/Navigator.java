@@ -10,6 +10,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 
 import com.nairbspace.octoandroid.ui.add_printer.AddPrinterActivity;
+import com.nairbspace.octoandroid.ui.settings.SettingsActivity;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -42,6 +43,11 @@ public class Navigator {
     public void navigateToAddPrinterActivityForResult(Activity activity) {
         Intent intentToLaunch = AddPrinterActivity.newIntent(activity);
         activity.startActivityForResult(intentToLaunch, ADD_PRINTER_REQUEST_CODE);
+    }
+
+    public void navigateToSettingsActivity(Activity activity) {
+        Intent i = SettingsActivity.newIntent(activity);
+        activity.startActivity(i);
     }
 
     public void navigateToDownloadFile(Fragment fragment, String url) {

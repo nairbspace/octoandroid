@@ -1,10 +1,10 @@
 package com.nairbspace.octoandroid.ui.files;
 
-import com.nairbspace.octoandroid.data.net.OctoApi;
 import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
 import com.nairbspace.octoandroid.domain.interactor.DeleteFile;
 import com.nairbspace.octoandroid.domain.interactor.GetFiles;
 import com.nairbspace.octoandroid.domain.interactor.SendFileCommand;
+import com.nairbspace.octoandroid.domain.interactor.UploadFile;
 import com.nairbspace.octoandroid.domain.model.FileCommand;
 import com.nairbspace.octoandroid.domain.model.Files;
 import com.nairbspace.octoandroid.mapper.FileCommandModelMapper;
@@ -13,17 +13,7 @@ import com.nairbspace.octoandroid.model.FileCommandModel;
 import com.nairbspace.octoandroid.model.FilesModel;
 import com.nairbspace.octoandroid.ui.UseCasePresenter;
 
-import java.io.File;
-
 import javax.inject.Inject;
-
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import timber.log.Timber;
 
 public class FilesPresenter extends UseCasePresenter<FilesScreen> {
 
@@ -33,19 +23,20 @@ public class FilesPresenter extends UseCasePresenter<FilesScreen> {
     private final SendFileCommand mSendFileCommand;
     private final DeleteFile mDeleteFile;
     private FilesScreen mScreen;
-    private final OctoApi mOctoApi;
+    private final UploadFile mUploadFile;
 
     @Inject
     public FilesPresenter(GetFiles getFiles, FilesMapper filesMapper,
                           FileCommandModelMapper fileCommandModelMapper,
-                          SendFileCommand sendFileCommand, DeleteFile deleteFile, OctoApi octoApi) {
+                          SendFileCommand sendFileCommand, DeleteFile deleteFile,
+                          UploadFile uploadFile) {
         super(getFiles);
         mGetFiles = getFiles;
         mFilesMapper = filesMapper;
         mFileCommandModelMapper = fileCommandModelMapper;
         mSendFileCommand = sendFileCommand;
         mDeleteFile = deleteFile;
-        mOctoApi = octoApi;
+        mUploadFile = uploadFile;
     }
 
     @Override
@@ -158,32 +149,20 @@ public class FilesPresenter extends UseCasePresenter<FilesScreen> {
         }
     }
 
-    public void uploadFile(String location, String uriString) {
-        File file = new File(uriString); // Won't work anymore because need path!!!
-        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+    public void executeUpload(String uriString) {
+        mUploadFile.execute(new UploadSubscriber(), uriString);
+    }
 
-        MultipartBody.Part body =
-                MultipartBody.Part.createFormData("file", file.getName(), requestFile);
+    private final class UploadSubscriber extends DefaultSubscriber {
 
-        // TODO don't forget to remove from constructor when finished
-        mOctoApi.uploadFile("local", body)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Object>() {
-                    @Override
-                    public void onCompleted() {
+        @Override
+        public void onError(Throwable e) {
+            super.onError(e);
+        }
 
-                    }
+        @Override
+        public void onNext(Object o) {
 
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onNext(Object o) {
-                        Timber.d(o.toString());
-                    }
-                });
+        }
     }
 }

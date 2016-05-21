@@ -106,4 +106,10 @@ public class PrinterDataRepository implements PrinterRepository {
     public Observable deleteFile(String url) {
         return mApiManager.deleteFile(url);
     }
+
+    @Override
+    public Observable uploadFile(String uriString) {
+        return Observable.create(mMapperHelper.mapToMultiPartBodyPart(uriString))
+                .concatMap(mApiManager.funcUploadFile());
+    }
 }

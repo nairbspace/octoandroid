@@ -83,7 +83,6 @@ public class MainActivity extends BaseActivity<MainScreen>
                     .add(R.id.fragment_controls, fragment)
                     .commit();
         }
-//        getNavigator().startWebsocketService(this);
     }
 
     @Override
@@ -111,13 +110,9 @@ public class MainActivity extends BaseActivity<MainScreen>
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            getNavigator().navigateToSettingsActivity(this);
             return true;
         }
 
@@ -185,7 +180,6 @@ public class MainActivity extends BaseActivity<MainScreen>
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == getNavigator().getAddPrinterRequestCode()) {
             if (resultCode == RESULT_OK) {
                 mPresenter.execute();
@@ -194,6 +188,7 @@ public class MainActivity extends BaseActivity<MainScreen>
                 displaySnackBarAddPrinterFailure();
             }
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -322,11 +317,4 @@ public class MainActivity extends BaseActivity<MainScreen>
         return this;
     }
 
-    @Override
-    public void downloadFile(String url) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        if ((intent.resolveActivity(getPackageManager()) != null)) {
-            startActivity(intent);
-        }
-    }
 }

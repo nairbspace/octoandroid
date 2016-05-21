@@ -25,14 +25,17 @@ public class DiskManagerImpl implements DiskManager {
     private final AccountHelper mAccountHelper;
     private final DbHelper mDbHelper;
     private final EntitySerializer mEntitySerializer;
+    private final ResManager mResManager;
 
     @Inject
     public DiskManagerImpl(PrefHelper prefHelper, AccountHelper accountHelper,
-                           DbHelper dbHelper, EntitySerializer entitySerializer) {
+                           DbHelper dbHelper, EntitySerializer entitySerializer,
+                           ResManager resManager) {
         mPrefHelper = prefHelper;
         mAccountHelper = accountHelper;
         mDbHelper = dbHelper;
         mEntitySerializer = entitySerializer;
+        mResManager = resManager;
     }
 
     @Override
@@ -54,7 +57,7 @@ public class DiskManagerImpl implements DiskManager {
                     // TODO need better way to delete data
                     mDbHelper.deletePrinterInDb(printerDbEntity);
                     mAccountHelper.removeAccount(printerDbEntity);
-                    mPrefHelper.setActivePrinter(PrefHelper.NO_ACTIVE_PRINTER);
+                    mPrefHelper.setActivePrinter(mResManager.getNoActivePrinterValue());
                     subscriber.onError(new PrinterDataNotFoundException());
                 }
 
@@ -150,7 +153,7 @@ public class DiskManagerImpl implements DiskManager {
 
                 if (mPrefHelper.isPrinterActive(oldPrinterDbEntity)) {
                     //TODO need to handle this when there's multiple printers!!
-                    mPrefHelper.setActivePrinter(PrefHelper.NO_ACTIVE_PRINTER);
+                    mPrefHelper.setActivePrinter(mResManager.getNoActivePrinterValue());
                 }
 
                 mDbHelper.deletePrinterInDb(oldPrinterDbEntity);
@@ -168,7 +171,7 @@ public class DiskManagerImpl implements DiskManager {
                     PrinterDbEntity printerDbEntity = mDbHelper.getActivePrinterDbEntity();
                     mDbHelper.deletePrinterInDb(printerDbEntity);
                     mAccountHelper.removeAccount(printerDbEntity);
-                    mPrefHelper.setActivePrinter(PrefHelper.NO_ACTIVE_PRINTER);
+                    mPrefHelper.setActivePrinter(mResManager.getNoActivePrinterValue());
                 } catch (Exception e) {
                     throw Exceptions.propagate(new PrinterDataNotFoundException(e));
                 }

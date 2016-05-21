@@ -7,11 +7,12 @@ import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.preference.PreferenceManager;
 
-import com.nairbspace.octoandroid.data.disk.PrefHelper;
 import com.nairbspace.octoandroid.data.db.DaoMaster;
 import com.nairbspace.octoandroid.data.db.DaoSession;
 import com.nairbspace.octoandroid.data.db.PrinterDbEntityDao;
 import com.nairbspace.octoandroid.data.db.helper.DbOpenHelper;
+import com.nairbspace.octoandroid.data.disk.PrefHelper;
+import com.nairbspace.octoandroid.data.disk.ResManager;
 
 import javax.inject.Singleton;
 
@@ -30,8 +31,8 @@ public class StorageModule {
 
     @Provides
     @Singleton
-    PrefHelper providePrefManager(SharedPreferences sp) {
-        return new PrefHelper(sp);
+    PrefHelper providePrefManager(SharedPreferences sp, ResManager res) {
+        return new PrefHelper(sp, res);
     }
 
     @Provides

@@ -1,8 +1,6 @@
 package com.nairbspace.octoandroid.mapper;
 
-import android.content.Context;
-
-import com.nairbspace.octoandroid.R;
+import com.nairbspace.octoandroid.data.disk.ResManager;
 import com.nairbspace.octoandroid.domain.executor.PostExecutionThread;
 import com.nairbspace.octoandroid.domain.executor.ThreadExecutor;
 import com.nairbspace.octoandroid.domain.model.Connection;
@@ -19,14 +17,14 @@ import rx.Subscriber;
 
 public class ConnectionMapper extends MapperUseCase<Connection, ConnectModel> {
 
-    private final Context mContext;
+    private final ResManager mResManager;
 
     @Inject
     public ConnectionMapper(ThreadExecutor threadExecutor,
                             PostExecutionThread postExecutionThread,
-                            Context context) {
+                            ResManager resManager) {
         super(threadExecutor, postExecutionThread);
-        mContext = context;
+        mResManager = resManager;
     }
 
     @Override
@@ -48,7 +46,7 @@ public class ConnectionMapper extends MapperUseCase<Connection, ConnectModel> {
     private ConnectModel mapConnection(Connection connection) {
         Connection.Current current = connection.current();
         String state = current.state();
-        String closed = mContext.getString(R.string.printer_state_closed);
+        String closed = mResManager.getPrinterStateClosedString();
         boolean isNotConnected = state.equals(closed);
 
         Connection.Options options = connection.options();

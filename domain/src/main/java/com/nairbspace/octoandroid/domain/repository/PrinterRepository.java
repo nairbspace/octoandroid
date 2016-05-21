@@ -33,4 +33,6 @@ public interface PrinterRepository {
     Observable sendFileCommand(FileCommand fileCommand);
 
     Observable deleteFile(String url);
+
+    Observable uploadFile(String uriString);
 }

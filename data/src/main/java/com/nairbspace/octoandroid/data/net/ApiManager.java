@@ -6,6 +6,7 @@ import com.nairbspace.octoandroid.data.entity.ConnectionEntity;
 import com.nairbspace.octoandroid.data.entity.FileCommandEntity;
 import com.nairbspace.octoandroid.data.entity.VersionEntity;
 
+import okhttp3.MultipartBody;
 import rx.Observable;
 import rx.functions.Func1;
 
@@ -18,5 +19,7 @@ public interface ApiManager extends OctoApi {
     Func1<ConnectEntity, Observable<?>> connectToPrinter();
 
     Func1<FileCommandEntity, Observable<?>> funcStartFilePrint(String apiUrl);
+
+    Func1<MultipartBody.Part, Observable<?>> funcUploadFile();
 
 }

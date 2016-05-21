@@ -28,11 +28,13 @@
             android:name=".ui.add_printer.AddPrinterActivity"
             android:label="@string/add_printer"
             android:theme="@style/AppTheme.NoActionBar">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN"/>-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER"/>-->
-            <!--</intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN"/> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER"/> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".ui.main.MainActivity"
@@ -44,7 +46,14 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
+        <activity
+            android:name=".ui.settings.SettingsActivity"
+            android:theme="@style/AppTheme"
+            android:label="@string/title_activity_settings">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.main.MainActivity"/>
+        </activity>
 
         <!-- Services -->
         <!-- Service needed for Account Manager -->

@@ -2,6 +2,7 @@ package com.nairbspace.octoandroid.di.modules;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.res.Resources;
 
 import com.nairbspace.octoandroid.data.disk.DiskManager;
 import com.nairbspace.octoandroid.data.disk.DiskManagerImpl;
@@ -37,6 +38,12 @@ public class AppModule {
     @Singleton
     Context provideContext(Application application) {
         return application.getApplicationContext();
+    }
+
+    @Provides
+    @Singleton
+    Resources provideResources(Context context) {
+        return context.getResources();
     }
 
     @Provides

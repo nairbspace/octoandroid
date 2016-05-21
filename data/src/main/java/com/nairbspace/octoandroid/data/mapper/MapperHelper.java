@@ -17,6 +17,7 @@ import com.nairbspace.octoandroid.domain.model.Websocket;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import okhttp3.MultipartBody;
 import rx.Observable;
 import rx.functions.Func1;
 
@@ -29,6 +30,7 @@ public class MapperHelper {
     private final FilesEntityMapper mFilesEntityMapper;
     private final WebsocketEntityMapper mWebsocketEntityMapper;
     private final FileCommandEntityMapper mFileCommandEntityMapper;
+    private final MultipartBodyPartMapper mMultipartBodyPartMapper;
 
     @Inject
     public MapperHelper(PrinterDbEntityMapper printerDbEntityMapper,
@@ -36,13 +38,15 @@ public class MapperHelper {
                         ConnectEntityMapper connectEntityMapper,
                         FilesEntityMapper filesEntityMapper,
                         WebsocketEntityMapper websocketEntityMapper,
-                        FileCommandEntityMapper fileCommandEntityMapper) {
+                        FileCommandEntityMapper fileCommandEntityMapper,
+                        MultipartBodyPartMapper multipartBodyPartMapper) {
         mPrinterDbEntityMapper = printerDbEntityMapper;
         mConnectionEntityMapper = connectionEntityMapper;
         mConnectEntityMapper = connectEntityMapper;
         mFilesEntityMapper = filesEntityMapper;
         mWebsocketEntityMapper = websocketEntityMapper;
         mFileCommandEntityMapper = fileCommandEntityMapper;
+        mMultipartBodyPartMapper = multipartBodyPartMapper;
     }
 
     public Func1<PrinterDbEntity, Printer> maptoPrinter() {
@@ -71,5 +75,9 @@ public class MapperHelper {
 
     public Observable.OnSubscribe<FileCommandEntity> mapToFileCommandEntity(final FileCommand fileCommand) {
         return mFileCommandEntityMapper.mapToFileCommandEntity(fileCommand);
+    }
+
+    public Observable.OnSubscribe<MultipartBody.Part> mapToMultiPartBodyPart(final String uriString) {
+        return mMultipartBodyPartMapper.mapToMultiPartBodyPart(uriString);
     }
 }

@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="printer_state_closed">Closed</string>
-    <string name="file_origin_sdcard">sdcard</string>
-    <string name="file_type_folder">folder</string>
-</resources>
