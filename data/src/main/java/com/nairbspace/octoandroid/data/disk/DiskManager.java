@@ -16,7 +16,7 @@ public interface DiskManager {
 
     Action1<PrinterDbEntity> putPrinterInDb();
 
-    Func1<VersionEntity, Boolean> putVersionInDb();
+    Action1<VersionEntity> putVersionInDb();
 
     Action1<ConnectionEntity> putConnectionInDb();
 

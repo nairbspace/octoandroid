@@ -105,16 +105,15 @@ public class DiskManagerImpl implements DiskManager {
     }
 
     @Override
-    public Func1<VersionEntity, Boolean> putVersionInDb() {
-        return new Func1<VersionEntity, Boolean>() {
+    public Action1<VersionEntity> putVersionInDb() {
+        return new Action1<VersionEntity>() {
             @Override
-            public Boolean call(VersionEntity versionEntity) {
+            public void call(VersionEntity versionEntity) {
                 try {
                     PrinterDbEntity printerDbEntity = mDbHelper.getActivePrinterDbEntity();
                     String versionJson = mEntitySerializer.serialize(versionEntity);
                     printerDbEntity.setVersionJson(versionJson);
                     mDbHelper.insertOrReplace(printerDbEntity);
-                    return true;
                 } catch (Exception e) {
                     throw Exceptions.propagate(new ErrorSavingException(e));
                 }

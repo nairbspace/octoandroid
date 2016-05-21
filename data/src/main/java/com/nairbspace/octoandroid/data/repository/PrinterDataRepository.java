@@ -49,14 +49,23 @@ public class PrinterDataRepository implements PrinterRepository {
                 .map(mMapperHelper.maptoPrinter());
     }
 
+    @Override
+    public Observable verifyPrinterDetails(AddPrinter addPrinter) {
+        return Observable.create(mMapperHelper.mapAddPrinterToPrinterDbEntity(addPrinter))
+                .doOnNext(mDiskManager.putPrinterInDb());
+    }
+
     @RxLogObservable
     @Override
-    public Observable<Boolean> addPrinterDetails(final AddPrinter addPrinter) {
-        return Observable.create(mMapperHelper.mapAddPrinterToPrinterDbEntity(addPrinter))
-                .doOnNext(mDiskManager.putPrinterInDb())
-                .concatMap(mApiManager.funcGetVersion())
-                .doOnError(mDiskManager.deleteUnverifiedPrinter())
-                .map(mDiskManager.putVersionInDb());
+    public Observable addPrinterDetails(final AddPrinter addPrinter) {
+        return mApiManager.getVersion()
+                .doOnNext(mDiskManager.putVersionInDb())
+                .doOnError(mDiskManager.deleteUnverifiedPrinter());
+
+//        return Observable.create(mMapperHelper.mapAddPrinterToPrinterDbEntity(addPrinter))
+//                .concatMap(mApiManager.funcGetVersion())
+//                .doOnError(mDiskManager.deleteUnverifiedPrinter())
+//                .map(mDiskManager.putVersionInDb());
     }
 
     @Override

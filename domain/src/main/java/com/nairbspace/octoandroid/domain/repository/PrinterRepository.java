@@ -16,7 +16,9 @@ public interface PrinterRepository {
 
     Observable<Printer> printerDetails();
 
-    Observable<Boolean> addPrinterDetails(AddPrinter addPrinter);
+    Observable verifyPrinterDetails(AddPrinter addPrinter);
+
+    Observable addPrinterDetails(AddPrinter addPrinter);
 
     Observable<Boolean> deletePrinterByName(String name);
 
