@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<com.nairbspace.octoandroid.views.RainbowRefresh
+    android:id="@+id/files_swipe_refresh_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,34 +9,41 @@
     tools:context="com.nairbspace.octoandroid.ui.files.FilesFragment"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <TextView
-        android:id="@+id/empty_files_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:textSize="24sp"
-        android:textStyle="italic"
-        android:text="@string/no_files_found"/>
-
-    <ProgressBar
-        android:id="@+id/files_progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_height="wrap_content"/>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/file_list_recyclerview"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingStart="@dimen/activity_horizontal_margin"
-        android:paddingEnd="@dimen/activity_horizontal_margin"
-        android:clipToPadding="false"
-        app:layoutManager="LinearLayoutManager"
-        tools:listitem="@layout/fragment_files"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-</RelativeLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/file_list_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            android:clipToPadding="false"
+            app:layoutManager="LinearLayoutManager"
+            tools:listitem="@layout/fragment_files"/>
+
+        <TextView
+            android:id="@+id/empty_files_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textSize="24sp"
+            android:textStyle="italic"
+            android:text="@string/no_files_found"/>
+
+        <ProgressBar
+            android:id="@+id/files_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_height="wrap_content"/>
+
+    </RelativeLayout>
+
+</com.nairbspace.octoandroid.views.RainbowRefresh>
     <!--<android.support.v7.widget.RecyclerView-->
     <!--android:id="@+id/file_list_recyclerview"-->
     <!--android:name="com.nairbspace.octoandroid.ui.files.FilesFragment"-->

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,7 +28,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
-        FilesFragment.Listener> implements FilesScreen, FilesRvAdapter.Listener {
+        FilesFragment.Listener> implements FilesScreen, FilesRvAdapter.Listener,
+        SwipeRefreshLayout.OnRefreshListener{
 
     private static final String FILESMODEL_KEY = "filesmodel_key";
     private static final String CLICKED_POSITION_KEY = "clicked_position_key";
@@ -37,6 +39,7 @@ public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
     private FilesModel mFilesModel;
     private FilesRvAdapter mAdapter;
 
+    @BindView(R.id.files_swipe_refresh_layout) SwipeRefreshLayout mRefreshLayout;
     @BindView(R.id.file_list_recyclerview) RecyclerView mRecyclerView;
     @BindView(R.id.empty_files_textview) TextView mEmptyTextView;
     @BindView(R.id.files_progress_bar) ProgressBar mProgressBar;
@@ -60,6 +63,7 @@ public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
         setUnbinder(ButterKnife.bind(this, view));
         setActionBarTitle(STATUS);
         showEmptyScreen();
+        mRefreshLayout.setOnRefreshListener(this);
         if (savedInstanceState != null && savedInstanceState.getParcelable(FILESMODEL_KEY) != null) {
             mFilesModel = savedInstanceState.getParcelable(FILESMODEL_KEY);
             updateUi(mFilesModel);
@@ -75,13 +79,10 @@ public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
         inflater.inflate(R.menu.fragment_file, menu);
     }
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == getNavigator().getPickFileRequestCode()) {
-            if (resultCode == Activity.RESULT_OK) {
-                mPresenter.executeUpload(data.getDataString()); // TODO should probably have upload preference default alert
-            }
+        if (requestCode == getNavigator().getPickFileRequestCode() && resultCode == Activity.RESULT_OK) {
+            mPresenter.executeUpload(data.getDataString()); // TODO should probably have upload preference default alert
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -120,6 +121,7 @@ public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
     }
 
     private void showRecyclerView() {
+        mRefreshLayout.setRefreshing(false);
         mEmptyTextView.setVisibility(View.GONE);
         mRecyclerView.setVisibility(View.VISIBLE);
         mProgressBar.setVisibility(View.GONE);
@@ -196,6 +198,11 @@ public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
     @Override
     public void loadButtonClicked(String apiUrl) {
         mPresenter.executeLoad(apiUrl);
+    }
+
+    @Override
+    public void onRefresh() {
+        mPresenter.execute();
     }
 
     public interface Listener {
