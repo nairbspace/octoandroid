@@ -22,8 +22,8 @@ public class FilesPresenter extends UseCasePresenter<FilesScreen> {
     private final FileCommandModelMapper mFileCommandModelMapper;
     private final SendFileCommand mSendFileCommand;
     private final DeleteFile mDeleteFile;
-    private FilesScreen mScreen;
     private final UploadFile mUploadFile;
+    private FilesScreen mScreen;
 
     @Inject
     public FilesPresenter(GetFiles getFiles, FilesMapper filesMapper,
@@ -70,6 +70,10 @@ public class FilesPresenter extends UseCasePresenter<FilesScreen> {
     protected void onDestroy(FilesScreen filesScreen) {
         super.onDestroy(filesScreen);
         mFilesMapper.unsubscribe();
+        mFileCommandModelMapper.unsubscribe();
+        mSendFileCommand.unsubscribe();
+        mDeleteFile.unsubscribe();
+        mUploadFile.unsubscribe();
     }
 
     public void executePrint(String apiUrl) {
@@ -86,12 +90,17 @@ public class FilesPresenter extends UseCasePresenter<FilesScreen> {
         mDeleteFile.execute(new DeleteFileSubscriber(adapterPosition), apiUrl);
     }
 
+    public void executeUpload(String uriString) {
+        mScreen.showProgressBar();
+        mUploadFile.execute(new UploadSubscriber(), uriString);
+    }
+
     private final class GetFilesSubsubscriber extends DefaultSubscriber<Files> {
 
         @Override
         public void onError(Throwable e) {
-            mScreen.showEmptyScreen();
             super.onError(e);
+            mScreen.showEmptyScreen();
         }
 
         @Override
@@ -104,8 +113,8 @@ public class FilesPresenter extends UseCasePresenter<FilesScreen> {
     private final class TransformSubscriber extends DefaultSubscriber<FilesModel> {
         @Override
         public void onError(Throwable e) {
-            mScreen.showEmptyScreen();
             super.onError(e);
+            mScreen.showEmptyScreen();
         }
 
         @Override
@@ -118,6 +127,7 @@ public class FilesPresenter extends UseCasePresenter<FilesScreen> {
         @Override
         public void onError(Throwable e) {
             super.onError(e);
+            mScreen.showEmptyScreen();
         }
 
         @Override
@@ -132,6 +142,7 @@ public class FilesPresenter extends UseCasePresenter<FilesScreen> {
         @Override
         public void onError(Throwable e) {
             super.onError(e);
+            mScreen.showEmptyScreen();
         }
     }
 
@@ -144,13 +155,15 @@ public class FilesPresenter extends UseCasePresenter<FilesScreen> {
         }
 
         @Override
+        public void onError(Throwable e) {
+            super.onError(e);
+            mScreen.showEmptyScreen();
+        }
+
+        @Override
         public void onNext(Object o) {
             mScreen.deleteFileFromAdapter(mAdapterPosition);
         }
-    }
-
-    public void executeUpload(String uriString) {
-        mUploadFile.execute(new UploadSubscriber(), uriString);
     }
 
     private final class UploadSubscriber extends DefaultSubscriber {
@@ -158,11 +171,12 @@ public class FilesPresenter extends UseCasePresenter<FilesScreen> {
         @Override
         public void onError(Throwable e) {
             super.onError(e);
+            mScreen.showEmptyScreen();
         }
 
         @Override
         public void onNext(Object o) {
-
+            execute();
         }
     }
 }

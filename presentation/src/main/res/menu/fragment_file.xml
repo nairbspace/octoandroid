@@ -7,6 +7,11 @@
         android:icon="@drawable/ic_file_upload_white_24dp"
         android:title="@string/upload"
         app:showAsAction="ifRoom|withText"/>
+    <item
+        android:id="@+id/refresh_file_menu_item"
+        android:icon="@drawable/ic_refresh_white_24dp"
+        android:title="@string/refresh"
+        app:showAsAction="ifRoom|withText"/>
 
     <!--TODO not able to tint icon currently-->
 

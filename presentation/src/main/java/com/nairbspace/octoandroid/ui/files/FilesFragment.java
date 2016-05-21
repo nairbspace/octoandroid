@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
@@ -99,6 +98,8 @@ public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
             case R.id.upload_file_menu_item:
                 getNavigator().tryToNavigateToFileManagerForResult(this);
                 return true;
+            case R.id.refresh_file_menu_item:
+                mPresenter.execute();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -180,7 +181,6 @@ public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
     @Override
     public void printerButtonClicked(String apiUrl) {
         mPresenter.executePrint(apiUrl);
-        Toast.makeText(getContext(), apiUrl, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -190,7 +190,6 @@ public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
 
     @Override
     public void downloadButtonClicked(String downloadUrl) {
-        Toast.makeText(getContext(), downloadUrl, Toast.LENGTH_LONG).show();
         getNavigator().navigateToDownloadFile(this, downloadUrl);
     }
 
