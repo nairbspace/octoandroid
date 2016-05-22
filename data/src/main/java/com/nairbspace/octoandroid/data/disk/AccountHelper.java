@@ -8,15 +8,19 @@ import android.text.TextUtils;
 import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 /** Convenience methods for AccountManager related info */
+@Singleton
 public class AccountHelper {
 
     private final AccountManager mAccountManager;
+    private final ResManager mResManager;
 
     @Inject
-    public AccountHelper(AccountManager accountManager) {
+    public AccountHelper(AccountManager accountManager, ResManager resManager) {
         mAccountManager = accountManager;
+        mResManager = resManager;
     }
 
     public boolean doesPrinterExistInAccountManager(PrinterDbEntity printerDbEntity) {
@@ -40,11 +44,18 @@ public class AccountHelper {
 
     private String validateAccountType(String accountType) {
         if (TextUtils.isEmpty(accountType)) {
-            return "com.nairbspace.actoandroid"; // TODO should add in data res folder
+            return mResManager.getAccountTypeString();
         }
         return accountType;
     }
 
+    /**
+     * Calling this will also call
+     * {@link android.accounts.AbstractAccountAuthenticator
+     * #getAccountRemovalAllowed(AccountAuthenticatorResponse, Account)}
+     *
+     * @param printerDbEntity the printer to delete
+     */
     public void removeAccount(PrinterDbEntity printerDbEntity) {
         Account account = findPrinterAccount(printerDbEntity);
         if (account != null) {
@@ -64,9 +75,6 @@ public class AccountHelper {
     public void addAccount(PrinterDbEntity printerDbEntity) {
         String accountType = "";
         Account account = new Account(printerDbEntity.getName(), validateAccountType(accountType));
-
-        removeAccount(account); // Cannot overwrite, must delete first
-
         mAccountManager.addAccountExplicitly(account, null, null);
     }
 }

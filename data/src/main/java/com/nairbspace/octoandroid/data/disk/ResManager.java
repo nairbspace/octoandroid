@@ -45,4 +45,8 @@ public class ResManager {
     public String getPrinterStateClosedString() {
         return mResources.getString(R.string.printer_state_closed);
     }
+
+    public String getAccountTypeString() {
+        return mResources.getString(R.string.account_type);
+    }
 }

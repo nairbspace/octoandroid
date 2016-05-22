@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="account_type">com.nairbspace.actoandroid</string>
+
     <string name="prefs_upload_location_title">Upload Location</string>
     <string name="prefs_upload_location_local_option">Local</string>
     <string name="prefs_upload_location_sdcard_option">SD Card</string>
