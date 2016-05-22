@@ -64,6 +64,8 @@ public class QrDialogFragment extends BaseDialogFragment<QrDialogFragment.Listen
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frament_qr_dialog, container, false);
         setUnbinder(ButterKnife.bind(this, view));
+        getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         if (getNavigator().haveCameraPermission(this)) {
             populateSurfaceView(true);
@@ -77,9 +79,6 @@ public class QrDialogFragment extends BaseDialogFragment<QrDialogFragment.Listen
 
     /** Layout initially inflated as GONE since SurfaceView doesn't update after Camera permission */
     private void populateSurfaceView(boolean shouldPopulate) {
-        getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
         mCameraView.setVisibility(shouldPopulate ? View.VISIBLE : View.GONE);
         mCloseButton.setVisibility(shouldPopulate ? View.VISIBLE : View.GONE);
         mQrFrame.setVisibility(shouldPopulate ? View.VISIBLE : View.GONE);

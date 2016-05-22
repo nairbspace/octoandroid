@@ -81,6 +81,10 @@ public class FileViewHolder extends RecyclerView.ViewHolder {
         mListener.deleteButtonClicked(mFileModel.apiUrl(), getAdapterPosition());
     }
 
+    @OnClick(R.id.file_details_icon)
+    void onDetailsClicked() {
+    }
+
     @OnClick(R.id.load_file_icon)
     void loadButtonClicked() {
         mListener.loadButtonClicked(mFileModel.apiUrl());

@@ -65,7 +65,6 @@
         android:layout_marginLeft="@dimen/nav_margin"
         android:layout_marginStart="@dimen/nav_margin"
         android:layout_gravity="bottom|center"
-        app:cardUseCompatPadding="true"
         app:layout_behavior="com.nairbspace.octoandroid.views.MoveUpBehavior"/>
     <!--TODO snackbar doesn't look nice on tablet view-->
 

@@ -20,19 +20,19 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@id/playback_seekbar"
-        android:paddingStart="8dp"
         android:paddingEnd="8dp"
+        android:paddingStart="8dp"
         tools:text="01:55:22"/>
 
     <TextView
         android:id="@+id/playback_print_time_left_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_below="@id/playback_seekbar"
-        android:paddingStart="8dp"
         android:paddingEnd="8dp"
+        android:paddingStart="8dp"
         tools:text="01:44:77"/>
 
     <LinearLayout
@@ -47,8 +47,9 @@
             android:id="@+id/playback_print_restart_button"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/ic_print_black_24dp"
-            android:contentDescription="@string/print_restart"/>
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/print_restart"
+            android:src="@drawable/ic_print_black_24dp"/>
 
         <com.nairbspace.octoandroid.views.HintedImageView
             android:id="@+id/playback_pause_play_button"
@@ -56,15 +57,17 @@
             android:layout_height="48dp"
             android:layout_marginEnd="24dp"
             android:layout_marginStart="24dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/resume_pause"
             android:src="@drawable/ic_pause_circle_filled_black_24dp"
-            android:tint="@color/colorAccent"
-            android:contentDescription="@string/resume_pause"/>
+            android:tint="@color/colorAccent"/>
 
         <com.nairbspace.octoandroid.views.HintedImageView
             android:id="@+id/playback_stop_button"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/ic_stop_black_24dp"
-            android:contentDescription="@string/stop"/>
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/stop"
+            android:src="@drawable/ic_stop_black_24dp"/>
     </LinearLayout>
 </RelativeLayout>

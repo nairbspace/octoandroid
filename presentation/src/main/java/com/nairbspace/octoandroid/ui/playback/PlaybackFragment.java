@@ -9,8 +9,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -26,6 +24,7 @@ import javax.inject.Inject;
 import butterknife.BindColor;
 import butterknife.BindDimen;
 import butterknife.BindDrawable;
+import butterknife.BindInt;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -50,12 +49,11 @@ public class PlaybackFragment extends BaseFragmentListener<PlaybackScreen,
     @BindDrawable(R.drawable.ic_replay_black_24dp) Drawable mRestartDrawable;
     @BindDimen(R.dimen.playback_enabled_alpha_float) float mEnabledAlpha;
     @BindDimen(R.dimen.playback_disabled_alpha_float) float mDisabledAlpha;
+    @BindInt(android.R.integer.config_longAnimTime) int mLongAnimTime;
     @BindColor(android.R.color.holo_red_dark) int mRedColor;
     @BindColor(android.R.color.black) int mBlackColor;
 
     private Listener mListener;
-    private Animation mToEnableAnim;
-    private Animation mToDisableAnim;
 
     public static PlaybackFragment newInstance() {
         return new PlaybackFragment();
@@ -65,9 +63,6 @@ public class PlaybackFragment extends BaseFragmentListener<PlaybackScreen,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SetupApplication.get(getContext()).getAppComponent().inject(this);
-
-        mToEnableAnim = AnimationUtils.loadAnimation(getContext(), R.anim.to_enable);
-        mToDisableAnim = AnimationUtils.loadAnimation(getContext(), R.anim.to_disable);
     }
 
     @Override
@@ -171,8 +166,7 @@ public class PlaybackFragment extends BaseFragmentListener<PlaybackScreen,
 
     private void setEnableView(View view, boolean setEnabled) {
         view.setEnabled(setEnabled);
-//        view.startAnimation(setEnabled ? mToEnableAnim : mToDisableAnim); // TODO need to work on logic for this
-        view.setAlpha(setEnabled ? mEnabledAlpha : mDisabledAlpha);
+        view.animate().setDuration(mLongAnimTime).alpha(setEnabled ? mEnabledAlpha : mDisabledAlpha);
     }
 
     @Override

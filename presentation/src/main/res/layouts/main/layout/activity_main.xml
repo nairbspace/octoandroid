@@ -52,7 +52,6 @@
             android:layout_marginLeft="@dimen/nav_margin"
             android:layout_marginStart="@dimen/nav_margin"
             android:layout_gravity="bottom"
-            app:cardUseCompatPadding="true"
             app:layout_behavior="com.nairbspace.octoandroid.views.MoveUpBehavior"/>
 
         <android.support.design.widget.FloatingActionButton
