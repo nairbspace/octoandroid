@@ -34,6 +34,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginRight="12dp"
                 android:layout_marginEnd="12dp"
                 android:layout_weight="1"
                 android:orientation="vertical">
@@ -42,6 +43,7 @@
                     android:id="@+id/file_name_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
                     android:layout_marginStart="6dp"
                     android:ellipsize="end"
                     android:maxLines="1"
@@ -53,6 +55,7 @@
                     android:id="@+id/file_size_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
                     android:layout_marginStart="6dp"
                     android:layout_marginTop="4dp"
                     android:maxLines="1"
@@ -65,6 +68,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginRight="@dimen/text_margin"
                 android:layout_marginEnd="@dimen/text_margin"
                 android:gravity="end"
                 android:orientation="vertical">
@@ -74,7 +78,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
-                    android:textAlignment="textEnd"
+                    android:layout_gravity="end"
                     android:textSize="12sp"
                     tools:text="10/24/2015"/>
 
@@ -84,7 +88,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
                     android:maxLines="1"
-                    android:textAlignment="textEnd"
+                    android:layout_gravity="end"
                     android:textSize="12sp"
                     tools:text="10:14:10"/>
             </LinearLayout>

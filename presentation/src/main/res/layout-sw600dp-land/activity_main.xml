@@ -31,6 +31,7 @@
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/nav_margin"
         android:layout_marginStart="@dimen/nav_margin"
         android:theme="@style/AppTheme.AppBarOverlay">
 
@@ -53,6 +54,7 @@
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/nav_margin"
         android:layout_marginStart="@dimen/nav_margin"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
@@ -60,6 +62,7 @@
         android:id="@+id/fragment_controls"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/nav_margin"
         android:layout_marginStart="@dimen/nav_margin"
         android:layout_gravity="bottom|center"
         app:cardUseCompatPadding="true"

@@ -27,6 +27,7 @@
         android:id="@+id/qr_close"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignRight="@id/camera_view"
         android:layout_alignEnd="@+id/camera_view"
         android:layout_alignTop="@+id/camera_view"
         android:alpha=".1"
