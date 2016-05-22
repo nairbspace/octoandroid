@@ -2,6 +2,8 @@ package com.nairbspace.octoandroid.ui.add_printer;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -11,6 +13,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
 
 import com.google.android.gms.vision.CameraSource;
@@ -74,6 +77,9 @@ public class QrDialogFragment extends BaseDialogFragment<QrDialogFragment.Listen
 
     /** Layout initially inflated as GONE since SurfaceView doesn't update after Camera permission */
     private void populateSurfaceView(boolean shouldPopulate) {
+        getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
         mCameraView.setVisibility(shouldPopulate ? View.VISIBLE : View.GONE);
         mCloseButton.setVisibility(shouldPopulate ? View.VISIBLE : View.GONE);
         mQrFrame.setVisibility(shouldPopulate ? View.VISIBLE : View.GONE);
