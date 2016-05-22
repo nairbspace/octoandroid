@@ -25,4 +25,6 @@
     <dimen name="playback_fragment_height">74dp</dimen>
     <dimen name="playback_enabled_alpha_float">1px</dimen>
     <dimen name="playback_disabled_alpha_float">.12px</dimen>
+    <item name="playback_enabled_alpha" format="float" type="dimen">1.0</item>
+    <item name="playback_disabled_alpha" format="float" type="dimen">0.12</item>
 </resources>

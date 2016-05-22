@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -52,6 +54,8 @@ public class PlaybackFragment extends BaseFragmentListener<PlaybackScreen,
     @BindColor(android.R.color.black) int mBlackColor;
 
     private Listener mListener;
+    private Animation mToEnableAnim;
+    private Animation mToDisableAnim;
 
     public static PlaybackFragment newInstance() {
         return new PlaybackFragment();
@@ -61,6 +65,9 @@ public class PlaybackFragment extends BaseFragmentListener<PlaybackScreen,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SetupApplication.get(getContext()).getAppComponent().inject(this);
+
+        mToEnableAnim = AnimationUtils.loadAnimation(getContext(), R.anim.to_enable);
+        mToDisableAnim = AnimationUtils.loadAnimation(getContext(), R.anim.to_disable);
     }
 
     @Override
@@ -164,6 +171,7 @@ public class PlaybackFragment extends BaseFragmentListener<PlaybackScreen,
 
     private void setEnableView(View view, boolean setEnabled) {
         view.setEnabled(setEnabled);
+//        view.startAnimation(setEnabled ? mToEnableAnim : mToDisableAnim); // TODO need to work on logic for this
         view.setAlpha(setEnabled ? mEnabledAlpha : mDisabledAlpha);
     }
 
