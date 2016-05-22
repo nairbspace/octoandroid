@@ -16,9 +16,6 @@ android {
             // to pre-dex each module and produce an APK that can be tested on
             // Android Lollipop without time consuming dex merging processes.
             minSdkVersion 21
-            resValue "string", "google_app_id", MyGoogleAppId
-            resValue "string", "my_ip_address", MyIpAddress
-            resValue "string", "my_api_key", MyApiKey
         }
         prod {
             // The actual minSdkVersion for the application.
@@ -41,13 +38,17 @@ android {
         versionCode 1
         versionName "1.0"
         resValue "string", "google_app_id", MyGoogleAppId
-        resValue "string", "my_ip_address", MyIpAddress
-        resValue "string", "my_api_key", MyApiKey
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            resValue "string", "my_ip_address", BlankIpAddress
+            resValue "string", "my_api_key", BlankApiKey
+        }
+        debug {
+            resValue "string", "my_ip_address", MyIpAddress
+            resValue "string", "my_api_key", MyApiKey
         }
     }
 }
@@ -67,7 +68,7 @@ dependencies {
     compile 'com.android.support:percent:23.4.0'
 
     // QR Decoder
-    compile 'com.google.android.gms:play-services-vision:8.4.0'
+    compile 'com.google.android.gms:play-services-vision:9.0.0'
 
     // Butterknife
     compile 'com.jakewharton:butterknife:8.0.1'
