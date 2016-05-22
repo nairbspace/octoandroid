@@ -14,7 +14,7 @@ public interface AddPrinterScreen {
 
     void showAlertDialog();
 
-    void hideSoftKeyboard(boolean show);
+    void hideSoftKeyboard();
 
     void navigateToPreviousScreen();
 

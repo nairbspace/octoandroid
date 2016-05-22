@@ -39,7 +39,7 @@ public class AddPrinterPresenter extends UseCasePresenter<AddPrinterScreen> {
 
     private void showLoading(boolean shouldShow) {
         if (shouldShow) {
-            mScreen.hideSoftKeyboard(true);
+            mScreen.hideSoftKeyboard();
             mScreen.showProgress(true);
         } else {
             mScreen.showProgress(false);

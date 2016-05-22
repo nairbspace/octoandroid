@@ -14,6 +14,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
@@ -177,13 +178,8 @@ public class AddPrinterActivity extends BaseActivity<AddPrinterScreen>
     }
 
     @Override
-    public void hideSoftKeyboard(boolean show) {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-        if (show) {
-            imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-        } else {
-            imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
-        }
+    public void hideSoftKeyboard() {
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     @Override
