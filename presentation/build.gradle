@@ -39,6 +39,7 @@ android {
         versionName "1.0"
         resValue "string", "google_app_id", MyGoogleAppId
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -49,6 +50,21 @@ android {
         debug {
             resValue "string", "my_ip_address", MyIpAddress
             resValue "string", "my_api_key", MyApiKey
+        }
+    }
+
+    sourceSets {
+        main {
+            res.srcDirs = [
+                    'src/main/res/layouts/main',
+                    'src/main/res/layouts/playback_controls',
+                    'src/main/res/layouts/connection',
+                    'src/main/res/layouts/status',
+                    'src/main/res/layouts/files',
+                    'src/main/res/layouts/add_printer',
+                    'src/main/res/layouts',
+                    'src/main/res'
+            ]
         }
     }
 }
