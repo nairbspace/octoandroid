@@ -6,7 +6,7 @@ package com.nairbspace.octoandroid.data.db;
  */
 public class PrinterDbEntity {
 
-    private Long id;
+    private long id;
     /** Not-null value. */
     private String name;
     /** Not-null value. */
@@ -19,15 +19,16 @@ public class PrinterDbEntity {
     private String versionJson;
     private String connectionJson;
     private String printerStateJson;
+    private String filesJson;
 
     public PrinterDbEntity() {
     }
 
-    public PrinterDbEntity(Long id) {
+    public PrinterDbEntity(long id) {
         this.id = id;
     }
 
-    public PrinterDbEntity(Long id, String name, String apiKey, String scheme, String host, int port, String versionJson, String connectionJson, String printerStateJson) {
+    public PrinterDbEntity(long id, String name, String apiKey, String scheme, String host, int port, String versionJson, String connectionJson, String printerStateJson, String filesJson) {
         this.id = id;
         this.name = name;
         this.apiKey = apiKey;
@@ -37,13 +38,14 @@ public class PrinterDbEntity {
         this.versionJson = versionJson;
         this.connectionJson = connectionJson;
         this.printerStateJson = printerStateJson;
+        this.filesJson = filesJson;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -117,6 +119,14 @@ public class PrinterDbEntity {
 
     public void setPrinterStateJson(String printerStateJson) {
         this.printerStateJson = printerStateJson;
+    }
+
+    public String getFilesJson() {
+        return filesJson;
+    }
+
+    public void setFilesJson(String filesJson) {
+        this.filesJson = filesJson;
     }
 
 }

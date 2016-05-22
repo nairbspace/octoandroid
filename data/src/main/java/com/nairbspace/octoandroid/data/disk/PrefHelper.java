@@ -38,9 +38,7 @@ public class PrefHelper {
     }
 
     public boolean isPrinterActive(PrinterDbEntity printerDbEntity) {
-        return printerDbEntity != null &&
-                printerDbEntity.getId() != null &&
-                isPrinterActive(printerDbEntity.getId());
+        return printerDbEntity != null && isPrinterActive(printerDbEntity.getId());
     }
 
     public boolean doesActivePrinterExist() {

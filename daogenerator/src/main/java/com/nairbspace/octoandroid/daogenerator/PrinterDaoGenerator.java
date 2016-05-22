@@ -35,7 +35,7 @@ public class PrinterDaoGenerator {
     private static Entity addPrinter(Schema schema) {
         Entity printer = schema.addEntity("PrinterDbEntity");
         printer.setTableName("PRINTER");
-        printer.addIdProperty().primaryKey();
+        printer.addIdProperty().primaryKey().notNull().unique();
         printer.addStringProperty("name").notNull().unique();
         printer.addStringProperty("apiKey").columnName("api_key").notNull();
         printer.addStringProperty("scheme").notNull();
@@ -44,6 +44,7 @@ public class PrinterDaoGenerator {
         printer.addStringProperty("versionJson").columnName("version_json");
         printer.addStringProperty("connectionJson").columnName("connection_json");
         printer.addStringProperty("printerStateJson").columnName("printer_state_json");
+        printer.addStringProperty("filesJson").columnName("files_json");
         return printer;
     }
 

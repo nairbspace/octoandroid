@@ -2,6 +2,7 @@
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- TODO this won't work with multiple printers -->
     <ListPreference
         android:title="@string/prefs_upload_location_title"
         android:key="@string/prefs_upload_location_key"
