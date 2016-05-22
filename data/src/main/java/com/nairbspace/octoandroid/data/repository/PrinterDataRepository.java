@@ -51,13 +51,13 @@ public class PrinterDataRepository implements PrinterRepository {
     @Override
     public Observable addPrinterDetails(AddPrinter addPrinter) {
         return Observable.create(mMapperHelper.mapAddPrinterToPrinterDbEntity(addPrinter))
-                .doOnNext(mDiskManager.putPrinterInDb());
+                .map(mDiskManager.putPrinterInDb());
     }
 
     @Override
     public Observable verifyPrinterDetails() {
         return mApiManager.getVersion()
-                .doOnNext(mDiskManager.putVersionInDb())
+                .map(mDiskManager.putVersionInDb())
                 .doOnError(mDiskManager.deleteUnverifiedPrinter());
     }
 

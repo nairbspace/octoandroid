@@ -4,10 +4,10 @@ import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
 import com.nairbspace.octoandroid.data.db.PrinterDbEntityDao;
 
 import javax.inject.Inject;
-
-import de.greenrobot.dao.DaoException;
+import javax.inject.Singleton;
 
 /** Convenience methods for db related info */
+@Singleton
 public class DbHelper {
 
     private final PrinterDbEntityDao mPrinterDbEntityDao;

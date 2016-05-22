@@ -14,9 +14,9 @@ public interface DiskManager {
 
     Observable.OnSubscribe<PrinterDbEntity> getPrinterByName(String name);
 
-    Action1<PrinterDbEntity> putPrinterInDb();
+    Func1<PrinterDbEntity, PrinterDbEntity> putPrinterInDb();
 
-    Action1<VersionEntity> putVersionInDb();
+    Func1<VersionEntity, VersionEntity> putVersionInDb();
 
     Action1<ConnectionEntity> putConnectionInDb();
 

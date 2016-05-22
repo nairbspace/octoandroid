@@ -87,16 +87,22 @@ public class DiskManagerImpl implements DiskManager {
     }
 
     @Override
-    public Action1<PrinterDbEntity> putPrinterInDb() {
-        return new Action1<PrinterDbEntity>() {
+    public Func1<PrinterDbEntity, PrinterDbEntity> putPrinterInDb() {
+        return new Func1<PrinterDbEntity, PrinterDbEntity>() {
             @Override
-            public void call(PrinterDbEntity printerDbEntity) {
+            public PrinterDbEntity call(PrinterDbEntity printerDbEntity) {
                 try {
                     mDbHelper.deletePrinterInDb(printerDbEntity);
                     mDbHelper.insertOrReplace(printerDbEntity);
+
+                    // Need to fetch printer from db which has id
+                    printerDbEntity = mDbHelper.getPrinterFromDbByName(printerDbEntity.getName());
+
                     mPrefHelper.setActivePrinter(printerDbEntity.getId());
                     mPrefHelper.setSaveTimeMillis(System.currentTimeMillis());
+
                     mAccountHelper.addAccount(printerDbEntity);
+                    return printerDbEntity;
                 } catch (Exception e) {
                     throw Exceptions.propagate(new ErrorSavingException());
                 }
@@ -105,15 +111,16 @@ public class DiskManagerImpl implements DiskManager {
     }
 
     @Override
-    public Action1<VersionEntity> putVersionInDb() {
-        return new Action1<VersionEntity>() {
+    public Func1<VersionEntity, VersionEntity> putVersionInDb() {
+        return new Func1<VersionEntity, VersionEntity>() {
             @Override
-            public void call(VersionEntity versionEntity) {
+            public VersionEntity call(VersionEntity versionEntity) {
                 try {
                     PrinterDbEntity printerDbEntity = mDbHelper.getActivePrinterDbEntity();
                     String versionJson = mEntitySerializer.serialize(versionEntity);
                     printerDbEntity.setVersionJson(versionJson);
                     mDbHelper.insertOrReplace(printerDbEntity);
+                    return versionEntity;
                 } catch (Exception e) {
                     throw Exceptions.propagate(new ErrorSavingException(e));
                 }
