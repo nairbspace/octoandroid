@@ -1,9 +1,8 @@
 package com.nairbspace.octoandroid.ui.add_printer;
 
-import com.fernandocejas.frodo.annotation.RxLogSubscriber;
-import com.nairbspace.octoandroid.domain.interactor.VerifyPrinterDetails;
-import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
 import com.nairbspace.octoandroid.domain.interactor.AddPrinterDetails;
+import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
+import com.nairbspace.octoandroid.domain.interactor.VerifyPrinterDetails;
 import com.nairbspace.octoandroid.domain.model.AddPrinter;
 import com.nairbspace.octoandroid.exception.ErrorMessageFactory;
 import com.nairbspace.octoandroid.mapper.AddPrinterModelMapper;
@@ -47,7 +46,6 @@ public class AddPrinterPresenter extends UseCasePresenter<AddPrinterScreen> {
         }
     }
 
-    @RxLogSubscriber
     private final class TransformSubscriber extends DefaultSubscriber<AddPrinter> {
         @Override
         public void onNext(AddPrinter addPrinter) {
@@ -79,7 +77,6 @@ public class AddPrinterPresenter extends UseCasePresenter<AddPrinterScreen> {
     }
 
 
-    @RxLogSubscriber
     private final class VerifyPrinterSubscriber extends DefaultSubscriber {
 
         @Override

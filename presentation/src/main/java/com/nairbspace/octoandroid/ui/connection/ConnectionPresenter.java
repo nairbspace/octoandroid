@@ -1,6 +1,5 @@
 package com.nairbspace.octoandroid.ui.connection;
 
-import com.fernandocejas.frodo.annotation.RxLogSubscriber;
 import com.nairbspace.octoandroid.domain.interactor.ConnectToPrinter;
 import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
 import com.nairbspace.octoandroid.domain.interactor.GetConnectionDetails;
@@ -76,7 +75,6 @@ public class ConnectionPresenter extends UseCasePresenter<ConnectionScreen> {
         }
     }
 
-    @RxLogSubscriber
     private final class GetConnectionSubscriber extends DefaultSubscriber<Connection> {
 
         @Override
@@ -91,7 +89,6 @@ public class ConnectionPresenter extends UseCasePresenter<ConnectionScreen> {
         }
     }
 
-    @RxLogSubscriber
     private final class InputMapperSubscriber extends DefaultSubscriber<ConnectModel> {
 
         @Override
@@ -106,7 +103,6 @@ public class ConnectionPresenter extends UseCasePresenter<ConnectionScreen> {
         }
     }
 
-    @RxLogSubscriber
     private final class TransformSubscriber extends DefaultSubscriber<Connect> {
 
         @Override

@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.fernandocejas.frodo.annotation.RxLogSubscriber;
 import com.nairbspace.octoandroid.app.SetupApplication;
 import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
 import com.nairbspace.octoandroid.domain.interactor.DeletePrinterByName;
@@ -77,7 +76,6 @@ public class Authenticator extends AbstractAccountAuthenticator {
         return result;
     }
 
-    @RxLogSubscriber
     private final class GetPrinterDetailsSubscriber extends DefaultSubscriber<Boolean> {
 
         @Override

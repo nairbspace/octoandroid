@@ -1,6 +1,5 @@
 package com.nairbspace.octoandroid.ui.main;
 
-import com.fernandocejas.frodo.annotation.RxLogSubscriber;
 import com.nairbspace.octoandroid.data.exception.NetworkConnectionException;
 import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
 import com.nairbspace.octoandroid.domain.interactor.GetPrinterDetails;
@@ -49,7 +48,6 @@ public class MainPresenter extends UseCasePresenter<MainScreen> {
         mUseCase.execute(new PrinterDetailsSubscriber());
     }
 
-    @RxLogSubscriber
     protected final class PrinterDetailsSubscriber extends DefaultSubscriber<Printer> {
 
         @Override
@@ -69,7 +67,6 @@ public class MainPresenter extends UseCasePresenter<MainScreen> {
         }
     }
 
-    @RxLogSubscriber
     private final class TransformSubscriber extends DefaultSubscriber<PrinterModel> {
 
         @Override
