@@ -3,6 +3,7 @@ package com.nairbspace.octoandroid.ui.connection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,7 +36,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class ConnectionFragment extends BasePagerFragmentListener<ConnectionScreen,
-        ConnectionFragment.ConnectFragmentListener> implements ConnectionScreen {
+        ConnectionFragment.ConnectFragmentListener> implements ConnectionScreen,
+        SwipeRefreshLayout.OnRefreshListener {
 
     private static final String CONNECT_MODEL_KEY = "connection_model_key";
     private static final String SHOW_VIEW_KEY = "show_view_key";
@@ -46,6 +48,7 @@ public class ConnectionFragment extends BasePagerFragmentListener<ConnectionScre
     @Inject SetEnableView mSetEnableView;
     @Inject SetShowView mSetShowView;
 
+    @BindView(R.id.connection_refresh_layout) SwipeRefreshLayout mRefreshLayout;
     @BindView(R.id.connect_progressbar) ProgressBar mConnectProgressBar;
     @BindView(R.id.connect_cardview) CardView mConnectCardView;
     @BindView(R.id.serial_port_spinner) Spinner mSerialPortSpinner;
@@ -89,6 +92,7 @@ public class ConnectionFragment extends BasePagerFragmentListener<ConnectionScre
         View view = inflater.inflate(R.layout.fragment_connection, container, false);
         setUnbinder(ButterKnife.bind(this, view));
         setActionBarTitle("Status");
+        mRefreshLayout.setOnRefreshListener(this);
 
         if (savedInstanceState != null && savedInstanceState.getParcelable(CONNECT_MODEL_KEY) != null) {
             mConnectModel = savedInstanceState.getParcelable(CONNECT_MODEL_KEY);
@@ -134,6 +138,7 @@ public class ConnectionFragment extends BasePagerFragmentListener<ConnectionScre
         mAutoConnectCheckBox.setChecked(connectModel.isAutoConnectChecked());
         enableScreen(connectModel.isNotConnected());
         mConnectButton.setEnabled(isUpdateFromPresenter);
+        mRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -212,7 +217,9 @@ public class ConnectionFragment extends BasePagerFragmentListener<ConnectionScre
 
     @Override
     public void showProgressBar(boolean isLoading) {
-        mConnectProgressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
+        if (!mRefreshLayout.isRefreshing()) {
+            mConnectProgressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
+        }
         enableScreen(!isLoading);
     }
 
@@ -246,6 +253,11 @@ public class ConnectionFragment extends BasePagerFragmentListener<ConnectionScre
     @Override
     protected ConnectFragmentListener setListener() {
         return (ConnectFragmentListener) getContext();
+    }
+
+    @Override
+    public void onRefresh() {
+        mPresenter.execute();
     }
 
     public interface ConnectFragmentListener {
