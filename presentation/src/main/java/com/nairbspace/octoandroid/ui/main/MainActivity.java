@@ -3,6 +3,7 @@ package com.nairbspace.octoandroid.ui.main;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,10 +18,12 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.nairbspace.octoandroid.R;
@@ -52,6 +55,7 @@ public class MainActivity extends BaseActivity<MainScreen>
     @BindView(R.id.nav_view) NavigationView mNavView;
     @BindView(R.id.view_pager) ViewPager mViewPager;
     @BindView(R.id.tab_layout) TabLayout mTabLayout;
+    @BindView(R.id.fragment_controls) CardView mPlaybackView;
     private ActionBarDrawerToggle mToggle;
     private TextView mPrinterNameNavTextView;
     private TextView mPrinterIpAddressNavTextView;
@@ -83,6 +87,16 @@ public class MainActivity extends BaseActivity<MainScreen>
                     .add(R.id.fragment_controls, fragment)
                     .commit();
         }
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        // TODO not sure if should implement margin this way...
+        int bottomMargin = mPlaybackView.getHeight();
+        ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) mViewPager.getLayoutParams();
+        p.setMargins(p.leftMargin, p.topMargin, p.rightMargin, bottomMargin);
+        mViewPager.setLayoutParams(p);
     }
 
     @Override
