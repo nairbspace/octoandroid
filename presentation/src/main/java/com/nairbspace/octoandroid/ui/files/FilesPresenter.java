@@ -142,6 +142,7 @@ public class FilesPresenter extends UseCasePresenter<FilesScreen> {
         @Override
         public void onError(Throwable e) {
             super.onError(e);
+            execute();
         }
     }
 
@@ -167,12 +168,14 @@ public class FilesPresenter extends UseCasePresenter<FilesScreen> {
     private final class UploadSubscriber extends DefaultSubscriber {
 
         @Override
-        public void onError(Throwable e) {
-            super.onError(e);
+        public void onCompleted() {
+            super.onCompleted();
+            execute();
         }
 
         @Override
-        public void onNext(Object o) {
+        public void onError(Throwable e) {
+            super.onError(e);
             execute();
         }
     }
