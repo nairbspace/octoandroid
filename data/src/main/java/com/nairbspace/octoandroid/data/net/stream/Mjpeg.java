@@ -39,7 +39,7 @@ public class Mjpeg {
                     subscriber.onError(e);
                 }
             }
-        });
+        }).retry();
     }
 
     private String getStreamUrl(PrinterDbEntity printerDbEntity) {

@@ -12,8 +12,6 @@ import android.graphics.Typeface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import java.io.IOException;
-
 public class MjpegViewDefault extends AbstractMjpegView {
 
     private SurfaceHolder.Callback mSurfaceHolderCallback;
@@ -140,8 +138,8 @@ public class MjpegViewDefault extends AbstractMjpegView {
                                         ovl = makeFpsOverlay(overlayPaint, fps);
                                     }
                                 }
-                            } catch (IOException e) {
-
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
                         }
                     } finally {
