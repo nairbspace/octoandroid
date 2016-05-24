@@ -36,11 +36,6 @@ public class HintedImageView extends ImageView implements View.OnLongClickListen
         setOnLongClickListener(this);
     }
 
-    public HintedImageView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        setOnLongClickListener(this);
-    }
-
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
         if (l == this) {
