@@ -59,13 +59,4 @@ public class MjpegSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         return mMjpegView.isStreaming();
     }
 
-    @Override
-    public void setResolution(int width, int height) {
-        mMjpegView.setResolution(width, height);
-    }
-
-    @Override
-    public void freeCameraMemory() {
-        mMjpegView.freeCameraMemory();
-    }
 }

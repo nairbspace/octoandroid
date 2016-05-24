@@ -13,8 +13,4 @@ public interface MjpegView {
     void resumePlayback();
 
     boolean isStreaming();
-
-    void setResolution(int width, int height);
-
-    void freeCameraMemory();
 }

@@ -15,12 +15,21 @@ import android.view.SurfaceView;
  * Need to go over this copy pasta code and understand what's going on!!
  * Doesn't seem thread safe!
  */
-public class MjpegViewDefault extends AbstractMjpegView {
+public class MjpegViewDefault extends AbstractMjpegView  {
+
+    protected final static int POSITION_UPPER_LEFT = 9;
+    protected final static int POSITION_UPPER_RIGHT = 3;
+    protected final static int POSITION_LOWER_LEFT = 12;
+    protected final static int POSITION_LOWER_RIGHT = 6;
+
+    protected final static int SIZE_STANDARD = 1;
+    protected final static int SIZE_BEST_FIT = 4;
+    protected final static int SIZE_FULLSCREEN = 8;
 
     private static MjpegViewThread thread;
     private SurfaceHolder.Callback mSurfaceHolderCallback;
     private SurfaceView mSurfaceView;
-    private MjpegInputStreamDefault mIn = null;
+    private MjpegInputStream mIn = null;
     private boolean showFps = false;
     private boolean mRun = false;
     private boolean surfaceDone = false;
@@ -119,7 +128,7 @@ public class MjpegViewDefault extends AbstractMjpegView {
         showFps = b;
     }
 
-    void _setSource(MjpegInputStreamDefault source) {
+    void _setSource(MjpegInputStream source) {
         mIn = source;
         _startPlayback();
     }
@@ -163,7 +172,7 @@ public class MjpegViewDefault extends AbstractMjpegView {
 
     @Override
     public void setSource(MjpegInputStream stream) {
-        _setSource((MjpegInputStreamDefault) stream);
+        _setSource(stream);
     }
 
     @Override
@@ -189,16 +198,6 @@ public class MjpegViewDefault extends AbstractMjpegView {
     @Override
     public boolean isStreaming() {
         return mRun;
-    }
-
-    @Override
-    public void setResolution(int width, int height) {
-        throw new UnsupportedOperationException("not implemented");
-    }
-
-    @Override
-    public void freeCameraMemory() {
-        throw new UnsupportedOperationException("not implemented");
     }
 
     // no more accessible

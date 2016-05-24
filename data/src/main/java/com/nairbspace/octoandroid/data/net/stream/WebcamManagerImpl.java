@@ -35,7 +35,7 @@ public class WebcamManagerImpl implements WebcamManager {
                     URL url = new URL(getStreamUrl(printerDbEntity));
                     HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                     InputStream inputStream = urlConnection.getInputStream();
-                    subscriber.onNext(new MjpegInputStreamDefault(inputStream));
+                    subscriber.onNext(new MjpegInputStream(inputStream));
                     subscriber.onCompleted();
                 } catch (Exception e) {
                     subscriber.onError(e);
