@@ -70,16 +70,8 @@ public class WebcamActivity extends BaseActivity<WebcamScreen> implements Webcam
     @OnClick(R.id.webcam_refresh)
     void refreshWebcam() {
         mContentView.setVisibility(View.GONE);
-        mContentView.stopPlayback();
-        mContentView.resumePlayback();
         mContentView.setVisibility(View.VISIBLE);
         mPresenter.execute();
-    }
-
-    @Override
-    public void onBackPressed() {
-        mContentView.stopPlayback();
-        super.onBackPressed();
     }
 
     private final Handler mHideHandler = new Handler();

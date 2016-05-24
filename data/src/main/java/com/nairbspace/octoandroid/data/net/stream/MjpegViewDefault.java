@@ -17,10 +17,9 @@ import android.view.SurfaceView;
  */
 public class MjpegViewDefault extends AbstractMjpegView {
 
+    private static MjpegViewThread thread;
     private SurfaceHolder.Callback mSurfaceHolderCallback;
     private SurfaceView mSurfaceView;
-
-    private static MjpegViewThread thread;
     private MjpegInputStreamDefault mIn = null;
     private boolean showFps = false;
     private boolean mRun = false;
@@ -35,6 +34,172 @@ public class MjpegViewDefault extends AbstractMjpegView {
     private boolean resume = false;
 
     private long delay;
+
+    MjpegViewDefault(SurfaceView surfaceView, SurfaceHolder.Callback callback) {
+        this.mSurfaceView = surfaceView;
+        this.mSurfaceHolderCallback = callback;
+        init();
+    }
+
+    private void init() {
+
+        SurfaceHolder holder = mSurfaceView.getHolder();
+        holder.addCallback(mSurfaceHolderCallback);
+        thread = new MjpegViewThread(holder);
+        mSurfaceView.setFocusable(true);
+        if (!resume) {
+            resume = true;
+            overlayPaint = new Paint();
+            overlayPaint.setTextAlign(Paint.Align.LEFT);
+            overlayPaint.setTextSize(12);
+            overlayPaint.setTypeface(Typeface.DEFAULT);
+            overlayTextColor = Color.WHITE;
+            overlayBackgroundColor = Color.BLACK;
+            ovlPos = MjpegViewDefault.POSITION_LOWER_RIGHT;
+            displayMode = MjpegViewDefault.SIZE_STANDARD;
+            dispWidth = mSurfaceView.getWidth();
+            dispHeight = mSurfaceView.getHeight();
+        }
+    }
+
+    /* all methods/constructors below are no more accessible */
+
+    void _startPlayback() {
+        if (mIn != null) {
+            mRun = true;
+            if (thread == null) {
+                init();
+                thread.start();
+            } else if (!thread.isAlive()){
+                thread.start();
+            }
+        }
+    }
+
+    void _resumePlayback() {
+        mRun = true;
+        init();
+        thread.start();
+    }
+
+    void _stopPlayback() {
+        mRun = false;
+        boolean retry = true;
+        while (retry) {
+            try {
+                if (thread != null) {
+                    thread.join();
+                }
+                retry = false;
+            } catch (InterruptedException e) {
+                // Should always cause interruption...
+            }
+        }
+    }
+
+    void _surfaceChanged(SurfaceHolder holder, int f, int w, int h) {
+        if (thread != null) {
+            thread.setSurfaceSize(w, h);
+        }
+    }
+
+    void _surfaceDestroyed(SurfaceHolder holder) {
+        surfaceDone = false;
+        _stopPlayback();
+        if (thread != null) {
+            thread = null;
+        }
+    }
+
+    void _surfaceCreated(SurfaceHolder holder) {
+        surfaceDone = true;
+    }
+
+    void _showFps(boolean b) {
+        showFps = b;
+    }
+
+    void _setSource(MjpegInputStreamDefault source) {
+        mIn = source;
+        _startPlayback();
+    }
+
+    void _setOverlayPaint(Paint p) {
+        overlayPaint = p;
+    }
+
+    void _setOverlayTextColor(int c) {
+        overlayTextColor = c;
+    }
+
+    void _setOverlayBackgroundColor(int c) {
+        overlayBackgroundColor = c;
+    }
+
+    void _setOverlayPosition(int p) {
+        ovlPos = p;
+    }
+
+    void _setDisplayMode(int s) {
+        displayMode = s;
+    }
+
+    @Override
+    public void onSurfaceCreated(SurfaceHolder holder) {
+        _surfaceCreated(holder);
+    }
+
+    /* override methods */
+
+    @Override
+    public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+        _surfaceChanged(holder, format, width, height);
+    }
+
+    @Override
+    public void onSurfaceDestroyed(SurfaceHolder holder) {
+        _surfaceDestroyed(holder);
+    }
+
+    @Override
+    public void setSource(MjpegInputStream stream) {
+        _setSource((MjpegInputStreamDefault) stream);
+    }
+
+    @Override
+    public void setDisplayMode(DisplayMode mode) {
+        _setDisplayMode(mode.getValue());
+    }
+
+    @Override
+    public void showFps(boolean show) {
+        _showFps(show);
+    }
+
+    @Override
+    public void stopPlayback() {
+        _stopPlayback();
+    }
+
+    @Override
+    public void resumePlayback() {
+        _resumePlayback();
+    }
+
+    @Override
+    public boolean isStreaming() {
+        return mRun;
+    }
+
+    @Override
+    public void setResolution(int width, int height) {
+        throw new UnsupportedOperationException("not implemented");
+    }
+
+    @Override
+    public void freeCameraMemory() {
+        throw new UnsupportedOperationException("not implemented");
+    }
 
     // no more accessible
     class MjpegViewThread extends Thread {
@@ -153,161 +318,5 @@ public class MjpegViewDefault extends AbstractMjpegView {
                 }
             }
         }
-    }
-
-    private void init() {
-
-        SurfaceHolder holder = mSurfaceView.getHolder();
-        holder.addCallback(mSurfaceHolderCallback);
-        thread = new MjpegViewThread(holder);
-        mSurfaceView.setFocusable(true);
-        if (!resume) {
-            resume = true;
-            overlayPaint = new Paint();
-            overlayPaint.setTextAlign(Paint.Align.LEFT);
-            overlayPaint.setTextSize(12);
-            overlayPaint.setTypeface(Typeface.DEFAULT);
-            overlayTextColor = Color.WHITE;
-            overlayBackgroundColor = Color.BLACK;
-            ovlPos = MjpegViewDefault.POSITION_LOWER_RIGHT;
-            displayMode = MjpegViewDefault.SIZE_STANDARD;
-            dispWidth = mSurfaceView.getWidth();
-            dispHeight = mSurfaceView.getHeight();
-        }
-    }
-
-    /* all methods/constructors below are no more accessible */
-
-    void _startPlayback() {
-        if (mIn != null) {
-            mRun = true;
-            if (!thread.isAlive()) {
-                thread.start();
-            }
-        }
-    }
-
-    void _resumePlayback() {
-        mRun = true;
-        init();
-        thread.start();
-    }
-
-    void _stopPlayback() {
-        mRun = false;
-        boolean retry = true;
-        while (retry) {
-            try {
-                thread.join();
-                retry = false;
-            } catch (InterruptedException e) {
-                // Should always cause interruption...
-            }
-        }
-    }
-
-    void _surfaceChanged(SurfaceHolder holder, int f, int w, int h) {
-        thread.setSurfaceSize(w, h);
-    }
-
-    void _surfaceDestroyed(SurfaceHolder holder) {
-        surfaceDone = false;
-        _stopPlayback();
-    }
-
-    MjpegViewDefault(SurfaceView surfaceView, SurfaceHolder.Callback callback) {
-        this.mSurfaceView = surfaceView;
-        this.mSurfaceHolderCallback = callback;
-        init();
-    }
-
-    void _surfaceCreated(SurfaceHolder holder) {
-        surfaceDone = true;
-    }
-
-    void _showFps(boolean b) {
-        showFps = b;
-    }
-
-    void _setSource(MjpegInputStreamDefault source) {
-        mIn = source;
-        _startPlayback();
-    }
-
-    void _setOverlayPaint(Paint p) {
-        overlayPaint = p;
-    }
-
-    void _setOverlayTextColor(int c) {
-        overlayTextColor = c;
-    }
-
-    void _setOverlayBackgroundColor(int c) {
-        overlayBackgroundColor = c;
-    }
-
-    void _setOverlayPosition(int p) {
-        ovlPos = p;
-    }
-
-    void _setDisplayMode(int s) {
-        displayMode = s;
-    }
-
-    /* override methods */
-
-    @Override
-    public void onSurfaceCreated(SurfaceHolder holder) {
-        _surfaceCreated(holder);
-    }
-
-    @Override
-    public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        _surfaceChanged(holder, format, width, height);
-    }
-
-    @Override
-    public void onSurfaceDestroyed(SurfaceHolder holder) {
-        _surfaceDestroyed(holder);
-    }
-
-    @Override
-    public void setSource(MjpegInputStream stream) {
-        _setSource((MjpegInputStreamDefault) stream);
-    }
-
-    @Override
-    public void setDisplayMode(DisplayMode mode) {
-        _setDisplayMode(mode.getValue());
-    }
-
-    @Override
-    public void showFps(boolean show) {
-        _showFps(show);
-    }
-
-    @Override
-    public void stopPlayback() {
-        _stopPlayback();
-    }
-
-    @Override
-    public void resumePlayback() {
-        _resumePlayback();
-    }
-
-    @Override
-    public boolean isStreaming() {
-        return mRun;
-    }
-
-    @Override
-    public void setResolution(int width, int height) {
-        throw new UnsupportedOperationException("not implemented");
-    }
-
-    @Override
-    public void freeCameraMemory() {
-        throw new UnsupportedOperationException("not implemented");
     }
 }

@@ -24,11 +24,13 @@
             style="?metaButtonBarStyle"
             android:layout_gravity="bottom|center_horizontal"
             android:orientation="horizontal"
-            android:background="#10FFFFFF">
+            android:background="#10FFFFFF"
+            tools:ignore="UselessParent">
 
             <Button
                 android:id="@+id/webcam_refresh"
                 style="?metaButtonBarButtonStyle"
+                android:background="@drawable/webcam_refresh_button_ripple"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
