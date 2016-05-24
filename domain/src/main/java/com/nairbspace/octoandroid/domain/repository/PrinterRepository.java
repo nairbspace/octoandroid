@@ -37,4 +37,6 @@ public interface PrinterRepository {
     Observable deleteFile(String url);
 
     Observable uploadFile(String uriString);
+
+    Observable connectToWebcam();
 }

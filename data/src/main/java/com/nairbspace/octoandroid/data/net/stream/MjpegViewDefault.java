@@ -1,6 +1,5 @@
 package com.nairbspace.octoandroid.data.net.stream;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -12,6 +11,10 @@ import android.graphics.Typeface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+/**
+ * Need to go over this copy pasta code and understand what's going on!!
+ * Doesn't seem thread safe!
+ */
 public class MjpegViewDefault extends AbstractMjpegView {
 
     private SurfaceHolder.Callback mSurfaceHolderCallback;
@@ -31,12 +34,11 @@ public class MjpegViewDefault extends AbstractMjpegView {
     private int displayMode;
     private boolean resume = false;
 
-    private Context context;
     private long delay;
 
     // no more accessible
     class MjpegViewThread extends Thread {
-        private SurfaceHolder mSurfaceHolder;
+        private final SurfaceHolder mSurfaceHolder;
         private int frameCounter = 0;
         private long start;
         private Bitmap ovl;
@@ -105,7 +107,7 @@ public class MjpegViewDefault extends AbstractMjpegView {
             Rect destRect;
             Canvas c = null;
             Paint p = new Paint();
-            String fps = "";
+            String fps;
             while (mRun) {
                 if (surfaceDone) {
                     try {
@@ -115,27 +117,29 @@ public class MjpegViewDefault extends AbstractMjpegView {
                                 bm = mIn.readMjpegFrame();
                                 destRect = destRect(bm.getWidth(),
                                         bm.getHeight());
-                                c.drawColor(Color.BLACK);
-                                c.drawBitmap(bm, null, destRect, p);
-                                if (showFps) {
-                                    p.setXfermode(mode);
-                                    if (ovl != null) {
-                                        height = ((ovlPos & 1) == 1) ? destRect.top
-                                                : destRect.bottom
-                                                - ovl.getHeight();
-                                        width = ((ovlPos & 8) == 8) ? destRect.left
-                                                : destRect.right
-                                                - ovl.getWidth();
-                                        c.drawBitmap(ovl, width, height, null);
-                                    }
-                                    p.setXfermode(null);
-                                    frameCounter++;
-                                    if ((System.currentTimeMillis() - start) >= 1000) {
-                                        fps = String.valueOf(frameCounter)
-                                                + "fps";
-                                        frameCounter = 0;
-                                        start = System.currentTimeMillis();
-                                        ovl = makeFpsOverlay(overlayPaint, fps);
+                                if (c != null && destRect != null) {
+                                    c.drawColor(Color.BLACK);
+                                    c.drawBitmap(bm, null, destRect, p);
+                                    if (showFps) {
+                                        p.setXfermode(mode);
+                                        if (ovl != null) {
+                                            height = ((ovlPos & 1) == 1) ? destRect.top
+                                                    : destRect.bottom
+                                                    - ovl.getHeight();
+                                            width = ((ovlPos & 8) == 8) ? destRect.left
+                                                    : destRect.right
+                                                    - ovl.getWidth();
+                                            c.drawBitmap(ovl, width, height, null);
+                                        }
+                                        p.setXfermode(null);
+                                        frameCounter++;
+                                        if ((System.currentTimeMillis() - start) >= 1000) {
+                                            fps = String.valueOf(frameCounter)
+                                                    + "fps";
+                                            frameCounter = 0;
+                                            start = System.currentTimeMillis();
+                                            ovl = makeFpsOverlay(overlayPaint, fps);
+                                        }
                                     }
                                 }
                             } catch (Exception e) {
@@ -151,9 +155,8 @@ public class MjpegViewDefault extends AbstractMjpegView {
         }
     }
 
-    private void init(Context context) {
+    private void init() {
 
-        this.context = context;
         SurfaceHolder holder = mSurfaceView.getHolder();
         holder.addCallback(mSurfaceHolderCallback);
         thread = new MjpegViewThread(holder);
@@ -178,13 +181,15 @@ public class MjpegViewDefault extends AbstractMjpegView {
     void _startPlayback() {
         if (mIn != null) {
             mRun = true;
-            thread.start();
+            if (!thread.isAlive()) {
+                thread.start();
+            }
         }
     }
 
     void _resumePlayback() {
         mRun = true;
-        init(context);
+        init();
         thread.start();
     }
 
@@ -196,6 +201,7 @@ public class MjpegViewDefault extends AbstractMjpegView {
                 thread.join();
                 retry = false;
             } catch (InterruptedException e) {
+                // Should always cause interruption...
             }
         }
     }
@@ -209,10 +215,10 @@ public class MjpegViewDefault extends AbstractMjpegView {
         _stopPlayback();
     }
 
-    MjpegViewDefault(Context context, SurfaceView surfaceView, SurfaceHolder.Callback callback) {
+    MjpegViewDefault(SurfaceView surfaceView, SurfaceHolder.Callback callback) {
         this.mSurfaceView = surfaceView;
         this.mSurfaceHolderCallback = callback;
-        init(context);
+        init();
     }
 
     void _surfaceCreated(SurfaceHolder holder) {
@@ -283,6 +289,11 @@ public class MjpegViewDefault extends AbstractMjpegView {
     @Override
     public void stopPlayback() {
         _stopPlayback();
+    }
+
+    @Override
+    public void resumePlayback() {
+        _resumePlayback();
     }
 
     @Override

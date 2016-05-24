@@ -1,7 +1,6 @@
 package com.nairbspace.octoandroid.di.modules;
 
 import com.google.gson.Gson;
-import com.nairbspace.octoandroid.data.disk.PrefHelper;
 import com.nairbspace.octoandroid.data.net.ApiManager;
 import com.nairbspace.octoandroid.data.net.ApiManagerImpl;
 import com.nairbspace.octoandroid.data.net.OctoApi;
@@ -52,7 +51,7 @@ public class RestModule {
 
     @Provides
     @Singleton
-    ApiManager provideApiManager(OctoApi api, PrefHelper prefHelper) {
-        return new ApiManagerImpl(api, prefHelper);
+    ApiManager provideApiManager(ApiManagerImpl apiManager) {
+        return apiManager;
     }
 }

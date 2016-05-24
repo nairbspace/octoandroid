@@ -4,6 +4,7 @@ import com.nairbspace.octoandroid.data.disk.DiskManager;
 import com.nairbspace.octoandroid.data.mapper.MapperHelper;
 import com.nairbspace.octoandroid.data.net.ApiManager;
 import com.nairbspace.octoandroid.data.net.WebsocketManager;
+import com.nairbspace.octoandroid.data.net.stream.WebcamManager;
 import com.nairbspace.octoandroid.data.repository.datasource.PrinterDataStoreFactory;
 import com.nairbspace.octoandroid.domain.model.AddPrinter;
 import com.nairbspace.octoandroid.domain.model.Connect;
@@ -29,17 +30,19 @@ public class PrinterDataRepository implements PrinterRepository {
     private final DiskManager mDiskManager;
     private final ApiManager mApiManager;
     private final WebsocketManager mWebsocket;
+    private final WebcamManager mWebcamManager;
 
     @Inject
     public PrinterDataRepository(MapperHelper mapperHelper,
                                  PrinterDataStoreFactory printerDataStoreFactory,
                                  DiskManager diskManager, ApiManager apiManager,
-                                 WebsocketManager websocket) {
+                                 WebsocketManager websocket, WebcamManager webcamManager) {
         mMapperHelper = mapperHelper;
         mPrinterDataStoreFactory = printerDataStoreFactory;
         mDiskManager = diskManager;
         mApiManager = apiManager;
         mWebsocket = websocket;
+        mWebcamManager = webcamManager;
     }
 
     @Override
@@ -112,5 +115,10 @@ public class PrinterDataRepository implements PrinterRepository {
     public Observable uploadFile(String uriString) {
         return Observable.create(mMapperHelper.mapToMultiPartBodyPart(uriString))
                 .concatMap(mApiManager.funcUploadFile());
+    }
+
+    @Override
+    public Observable connectToWebcam() {
+        return mWebcamManager.connect();
     }
 }

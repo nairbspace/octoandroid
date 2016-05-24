@@ -5,10 +5,11 @@ import android.net.ConnectivityManager;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.nairbspace.octoandroid.data.disk.DbHelper;
 import com.nairbspace.octoandroid.data.mapper.AutoValueTypeAdapterFactory;
 import com.nairbspace.octoandroid.data.net.OctoInterceptor;
 import com.nairbspace.octoandroid.data.net.WebsocketInterceptor;
+import com.nairbspace.octoandroid.data.net.stream.WebcamManager;
+import com.nairbspace.octoandroid.data.net.stream.WebcamManagerImpl;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -25,8 +26,8 @@ public class NetworkModule {
     @Singleton
     @Provides
     @Named("rest")
-    Interceptor provideInterceptor(DbHelper dbHelper) {
-        return new OctoInterceptor(dbHelper);
+    Interceptor provideInterceptor(OctoInterceptor octoInterceptor) {
+        return octoInterceptor;
     }
 
     @Singleton
@@ -52,8 +53,8 @@ public class NetworkModule {
     @Provides
     @Singleton
     @Named("websocket")
-    Interceptor provideWebsocketInterceptor(DbHelper dbHelper) {
-        return new WebsocketInterceptor(dbHelper);
+    Interceptor provideWebsocketInterceptor(WebsocketInterceptor websocketInterceptor) {
+        return websocketInterceptor;
     }
 
     @Provides
@@ -80,11 +81,15 @@ public class NetworkModule {
         return gsonBuilder.create();
     }
 
-
-
     @Provides
     @Singleton
     ConnectivityManager provideConnectivityManager(Context context) {
         return (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+    }
+
+    @Provides
+    @Singleton
+    WebcamManager provideWebcamManager(WebcamManagerImpl webcamManager) {
+        return webcamManager;
     }
 }

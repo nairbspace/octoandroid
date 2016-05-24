@@ -12,7 +12,7 @@ import com.nairbspace.octoandroid.ui.files.FilesFragment;
 import com.nairbspace.octoandroid.ui.main.MainActivity;
 import com.nairbspace.octoandroid.ui.playback.PlaybackFragment;
 import com.nairbspace.octoandroid.ui.status.StatusFragment;
-import com.nairbspace.octoandroid.ui.stream.WebcamActivity;
+import com.nairbspace.octoandroid.ui.webcam.WebcamActivity;
 
 import javax.inject.Singleton;
 
@@ -36,5 +36,5 @@ public interface AppComponent {
 
     void inject(PlaybackFragment playbackFragment);
 
-    void inject(WebcamActivity streamActivity);
+    void inject(WebcamActivity webcamActivity);
 }

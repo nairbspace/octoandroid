@@ -10,17 +10,19 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import rx.Observable;
 import rx.Subscriber;
 import rx.exceptions.Exceptions;
 
-public class Mjpeg {
+@Singleton
+public class WebcamManagerImpl implements WebcamManager {
 
     private final DbHelper mDbHelper;
 
     @Inject
-    public Mjpeg(DbHelper dbHelper) {
+    public WebcamManagerImpl(DbHelper dbHelper) {
         mDbHelper = dbHelper;
     }
 

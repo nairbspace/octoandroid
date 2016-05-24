@@ -10,6 +10,8 @@ public interface MjpegView {
 
     void stopPlayback();
 
+    void resumePlayback();
+
     boolean isStreaming();
 
     void setResolution(int width, int height);

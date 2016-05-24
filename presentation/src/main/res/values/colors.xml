@@ -5,4 +5,5 @@
     <color name="colorAccent">#FF5722</color>
     <color name="colorPrimaryLight">#C8E6C9</color>
     <color name="fileSelected">#FFFDE7</color>
+    <color name="black_overlay">#66000000</color>
 </resources>

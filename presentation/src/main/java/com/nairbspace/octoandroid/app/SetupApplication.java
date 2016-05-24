@@ -12,6 +12,7 @@ import com.nairbspace.octoandroid.di.modules.NetworkModule;
 import com.nairbspace.octoandroid.di.modules.RestModule;
 import com.nairbspace.octoandroid.di.modules.StorageModule;
 import com.nairbspace.octoandroid.di.modules.WebsocketModule;
+import com.squareup.leakcanary.LeakCanary;
 
 import timber.log.Timber;
 
@@ -40,7 +41,7 @@ public class SetupApplication extends Application {
     }
 
     private void initializeLeakCanary() {
-//        LeakCanary.install(this);
+        LeakCanary.install(this);
     }
 
     private void initializeInjector() {

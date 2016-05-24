@@ -1,12 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".ui.webcam.WebcamActivity">
 
     <com.nairbspace.octoandroid.data.net.stream.MjpegSurfaceView
-        android:id="@+id/stream_surface_view"
+        android:id="@+id/webcam_surface_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:keepScreenOn="true"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <LinearLayout
+            android:id="@+id/webcam_controls_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="?metaButtonBarStyle"
+            android:layout_gravity="bottom|center_horizontal"
+            android:orientation="horizontal"
+            android:background="#10FFFFFF">
+
+            <Button
+                android:id="@+id/webcam_refresh"
+                style="?metaButtonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/refresh"/>
+
+        </LinearLayout>
+
+    </FrameLayout>
 
 </FrameLayout>

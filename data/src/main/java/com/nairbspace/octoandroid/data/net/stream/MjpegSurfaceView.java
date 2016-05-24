@@ -11,7 +11,7 @@ public class MjpegSurfaceView extends SurfaceView implements SurfaceHolder.Callb
 
     public MjpegSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mMjpegView = new MjpegViewDefault(context, this, this);
+        mMjpegView = new MjpegViewDefault(this, this);
     }
 
     @Override
@@ -47,6 +47,11 @@ public class MjpegSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     @Override
     public void stopPlayback() {
         mMjpegView.stopPlayback();
+    }
+
+    @Override
+    public void resumePlayback() {
+        mMjpegView.resumePlayback();
     }
 
     @Override

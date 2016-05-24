@@ -66,8 +66,8 @@ public class AppModule {
 
     @Provides
     @Singleton
-    DiskManager providePrinterCache(DiskManagerImpl printerCache) {
-        return printerCache;
+    DiskManager provideDiskManager(DiskManagerImpl diskManager) {
+        return diskManager;
     }
 
     @Provides
