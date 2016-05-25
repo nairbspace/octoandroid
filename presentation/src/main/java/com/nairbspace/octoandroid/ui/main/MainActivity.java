@@ -139,16 +139,17 @@ public class MainActivity extends BaseActivity<MainScreen>
             case R.id.nav_status:
                 inflateStatusAdapter();
                 break;
-            case R.id.nav_gallery:
+            case R.id.nav_webcam:
+                getNavigator().navigateToWebcam(this);
                 break;
-            case R.id.nav_slideshow:
-                break;
-            case R.id.nav_manage:
-                break;
-            case R.id.nav_share:
-                break;
-            case R.id.nav_send:
-                break;
+//            case R.id.nav_slideshow:
+//                break;
+//            case R.id.nav_manage:
+//                break;
+//            case R.id.nav_share:
+//                break;
+//            case R.id.nav_send:
+//                break;
         }
 
         closeDrawer();

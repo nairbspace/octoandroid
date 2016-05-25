@@ -3,6 +3,8 @@
     <string name="title_activity_settings">Settings</string>
     <string name="status">Status</string>
     <string name="webcam">Webcam</string>
+    <string name="warning">Warning</string>
+    <string name="warning_webcam_message">Webcam is currently experimental. Try at your own risk!</string>
     <string name="ip_address">IP Address</string>
     <string name="api_key">API Key</string>
     <string name="qr_code">QR Code</string>

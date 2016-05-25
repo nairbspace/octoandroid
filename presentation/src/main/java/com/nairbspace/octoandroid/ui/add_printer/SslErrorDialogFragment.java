@@ -23,7 +23,7 @@ public class SslErrorDialogFragment extends BaseDialogFragment<SslErrorDialogFra
         return new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.ssl_error_title)
                 .setMessage(R.string.ssl_error_display_message)
-                .setIcon(R.drawable.exclamation_triangle)
+                .setIcon(R.drawable.ic_warning_black_24dp)
                 .setNegativeButton(android.R.string.cancel, this)
                 .setNeutralButton(R.string.info, this)
                 .setPositiveButton(android.R.string.ok, this)

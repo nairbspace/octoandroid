@@ -1,6 +1,8 @@
 package com.nairbspace.octoandroid.ui.webcam;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -34,6 +36,10 @@ public class WebcamActivity extends BaseActivity<WebcamScreen> implements Webcam
     @BindView(R.id.webcam_controls_view) View mControlsView;
 
     private boolean mVisible;
+
+    public static Intent newIntent(Context context) {
+        return new Intent(context, WebcamActivity.class);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,6 +78,12 @@ public class WebcamActivity extends BaseActivity<WebcamScreen> implements Webcam
         mContentView.setVisibility(View.GONE);
         mContentView.setVisibility(View.VISIBLE);
         mPresenter.execute();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mContentView.setVisibility(View.GONE); // Calls setSurfaceDestroyed which kills thread.
+        super.onDestroy();
     }
 
     private final Handler mHideHandler = new Handler();

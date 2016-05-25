@@ -2,15 +2,20 @@ package com.nairbspace.octoandroid.ui;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 
+import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.ui.add_printer.AddPrinterActivity;
 import com.nairbspace.octoandroid.ui.settings.SettingsActivity;
+import com.nairbspace.octoandroid.ui.webcam.WebcamActivity;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -66,6 +71,32 @@ public class Navigator {
             requestPermission(fragment, READ_EXTERNAL_STORAGE_PERMISSION,
                     READ_EXTERNAL_STORAGE_REQUEST_CODE);
         }
+    }
+
+    public void navigateToWebcam(final Activity activity) {
+        Resources res = activity.getResources();
+        String warning = res.getString(R.string.warning);
+        String message = res.getString(R.string.warning_webcam_message);
+        new AlertDialog.Builder(activity)
+                .setTitle(warning)
+                .setMessage(message)
+                .setIcon(R.drawable.ic_warning_black_24dp)
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = WebcamActivity.newIntent(activity);
+                        activity.startActivity(intent);
+                    }
+                })
+                .setCancelable(true)
+                .create()
+                .show();
     }
 
     private void navigateToFileManagerForResult(Fragment fragment) {
