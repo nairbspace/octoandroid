@@ -1,7 +1,7 @@
 package com.nairbspace.octoandroid.ui.status;
 
 import com.nairbspace.octoandroid.model.WebsocketModel;
-import com.nairbspace.octoandroid.ui.EventPresenter;
+import com.nairbspace.octoandroid.ui.templates.EventPresenter;
 
 import org.greenrobot.eventbus.EventBus;
 

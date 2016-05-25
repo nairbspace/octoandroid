@@ -1,6 +1,5 @@
-package com.nairbspace.octoandroid.ui;
+package com.nairbspace.octoandroid.ui.templates;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,27 +16,18 @@ import javax.inject.Inject;
 
 import butterknife.Unbinder;
 
-public abstract class BaseFragmentListener<T, L> extends Fragment implements ActiveNetworkListener {
+@Deprecated
+public abstract class BaseFragment<T> extends Fragment implements ActiveNetworkListener {
 
-    @Inject NetworkChecker mNetworkChecker;
     private Unbinder mUnbinder;
     private ActiveNetworkReceiver mActiveNetworkReceiver;
-    private L mListener;
+    @Inject NetworkChecker mNetworkChecker;
 
     @NonNull
     protected abstract Presenter setPresenter();
 
     @NonNull
     protected abstract T setScreen();
-
-    @NonNull
-    protected abstract L setListener();
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mListener = setListener();
-    }
 
     @SuppressWarnings("unchecked")
     @Override
@@ -58,6 +48,7 @@ public abstract class BaseFragmentListener<T, L> extends Fragment implements Act
     protected void setUnbinder(Unbinder unbinder) {
         mUnbinder = unbinder;
     }
+
 
     @Override
     public void onStart() {
@@ -86,43 +77,29 @@ public abstract class BaseFragmentListener<T, L> extends Fragment implements Act
         setPresenter().onStop();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        setPresenter().onDestroy(setScreen());
         if (mUnbinder != null) {
             mUnbinder.unbind();
         }
-        if (mActiveNetworkReceiver != null) {
-            mActiveNetworkReceiver = null;
-        }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public void onDetach() {
-        super.onDetach();
-        if (mListener != null) {
-            mListener = null;
-        }
-    }
-
-    public Navigator getNavigator() {
-        try {
-            return ((BaseActivity) getActivity()).getNavigator();
-        } catch (ClassCastException e) {
-            throw new ClassCastException(getActivity().toString() +
-                    " should extend from BaseActivity");
-        }
+    public void onDestroy() {
+        super.onDestroy();
+        setPresenter().onDestroy(setScreen());
+        mActiveNetworkReceiver = null;
     }
 
     @Override
     public void networkNowActive() {
-        setPresenter().networkNowActiveReceived();
+        setPresenter().networkNowActive();
     }
 
     @Override
     public void networkNowInactive() {
-        setPresenter().networkNowInactiveReceived();
+        setPresenter().networkNowInactive();
     }
 }

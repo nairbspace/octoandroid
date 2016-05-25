@@ -27,8 +27,8 @@ import android.widget.TextView;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
-import com.nairbspace.octoandroid.ui.BaseActivity;
-import com.nairbspace.octoandroid.ui.Presenter;
+import com.nairbspace.octoandroid.ui.templates.BaseActivity;
+import com.nairbspace.octoandroid.ui.templates.Presenter;
 import com.nairbspace.octoandroid.ui.connection.ConnectionFragment;
 import com.nairbspace.octoandroid.ui.files.FilesFragment;
 import com.nairbspace.octoandroid.ui.playback.PlaybackFragment;

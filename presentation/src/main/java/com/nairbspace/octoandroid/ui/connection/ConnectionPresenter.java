@@ -8,7 +8,7 @@ import com.nairbspace.octoandroid.domain.model.Connection;
 import com.nairbspace.octoandroid.mapper.ConnectModelMapper;
 import com.nairbspace.octoandroid.mapper.ConnectionMapper;
 import com.nairbspace.octoandroid.model.ConnectModel;
-import com.nairbspace.octoandroid.ui.UseCasePresenter;
+import com.nairbspace.octoandroid.ui.templates.UseCasePresenter;
 
 import javax.inject.Inject;
 

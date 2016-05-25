@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.ui;
+package com.nairbspace.octoandroid.ui.templates;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

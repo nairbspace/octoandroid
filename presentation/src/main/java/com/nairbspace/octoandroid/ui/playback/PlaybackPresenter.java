@@ -7,7 +7,7 @@ import com.nairbspace.octoandroid.domain.model.Websocket;
 import com.nairbspace.octoandroid.mapper.WebsocketModelMapper;
 import com.nairbspace.octoandroid.model.JobCommandModel;
 import com.nairbspace.octoandroid.model.WebsocketModel;
-import com.nairbspace.octoandroid.ui.UseCasePresenter;
+import com.nairbspace.octoandroid.ui.templates.UseCasePresenter;
 
 import org.greenrobot.eventbus.EventBus;
 

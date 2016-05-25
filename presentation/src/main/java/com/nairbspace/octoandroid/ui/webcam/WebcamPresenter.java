@@ -3,7 +3,7 @@ package com.nairbspace.octoandroid.ui.webcam;
 import com.nairbspace.octoandroid.data.net.stream.MjpegInputStream;
 import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
 import com.nairbspace.octoandroid.domain.interactor.GetWebcam;
-import com.nairbspace.octoandroid.ui.UseCasePresenter;
+import com.nairbspace.octoandroid.ui.templates.UseCasePresenter;
 
 import javax.inject.Inject;
 

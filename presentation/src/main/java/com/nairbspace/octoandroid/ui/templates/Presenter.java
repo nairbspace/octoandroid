@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.ui;
+package com.nairbspace.octoandroid.ui.templates;
 
 public abstract class Presenter<T> {
 

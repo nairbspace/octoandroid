@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 
-import com.nairbspace.octoandroid.ui.BaseActivity;
+import com.nairbspace.octoandroid.ui.templates.BaseActivity;
 import com.nairbspace.octoandroid.ui.Navigator;
 
 import butterknife.Unbinder;

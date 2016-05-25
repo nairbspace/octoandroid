@@ -18,8 +18,8 @@ import android.widget.TextView;
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
 import com.nairbspace.octoandroid.model.FilesModel;
-import com.nairbspace.octoandroid.ui.BasePagerFragmentListener;
-import com.nairbspace.octoandroid.ui.Presenter;
+import com.nairbspace.octoandroid.ui.templates.BasePagerFragmentListener;
+import com.nairbspace.octoandroid.ui.templates.Presenter;
 
 import javax.inject.Inject;
 

@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.ui;
+package com.nairbspace.octoandroid.ui.templates;
 
 import com.nairbspace.octoandroid.domain.interactor.UseCase;
 

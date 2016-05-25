@@ -14,8 +14,8 @@ import com.nairbspace.octoandroid.app.SetupApplication;
 import com.nairbspace.octoandroid.data.net.stream.DisplayMode;
 import com.nairbspace.octoandroid.data.net.stream.MjpegInputStream;
 import com.nairbspace.octoandroid.data.net.stream.MjpegSurfaceView;
-import com.nairbspace.octoandroid.ui.BaseActivity;
-import com.nairbspace.octoandroid.ui.Presenter;
+import com.nairbspace.octoandroid.ui.templates.BaseActivity;
+import com.nairbspace.octoandroid.ui.templates.Presenter;
 
 import javax.inject.Inject;
 

@@ -11,7 +11,7 @@ import com.nairbspace.octoandroid.mapper.FileCommandModelMapper;
 import com.nairbspace.octoandroid.mapper.FilesMapper;
 import com.nairbspace.octoandroid.model.FileCommandModel;
 import com.nairbspace.octoandroid.model.FilesModel;
-import com.nairbspace.octoandroid.ui.UseCasePresenter;
+import com.nairbspace.octoandroid.ui.templates.UseCasePresenter;
 
 import javax.inject.Inject;
 

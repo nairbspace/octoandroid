@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.ui;
+package com.nairbspace.octoandroid.ui.templates;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.nairbspace.octoandroid.data.net.NetworkChecker;
 import com.nairbspace.octoandroid.receiver.ActiveNetworkReceiver;
 import com.nairbspace.octoandroid.receiver.ActiveNetworkReceiver.ActiveNetworkListener;
+import com.nairbspace.octoandroid.ui.Navigator;
 
 import javax.inject.Inject;
 

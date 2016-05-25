@@ -1,7 +1,6 @@
-package com.nairbspace.octoandroid.ui;
+package com.nairbspace.octoandroid.ui.templates;
 
-@Deprecated
-public abstract class BaseViewPagerFragment<T> extends BaseFragment<T> {
+public abstract class BasePagerFragmentListener<T, L> extends BaseFragmentListener<T, L> {
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {

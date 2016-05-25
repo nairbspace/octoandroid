@@ -2,7 +2,6 @@ package com.nairbspace.octoandroid.ui.add_printer;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,7 +15,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
@@ -25,8 +23,8 @@ import android.widget.TextView;
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
 import com.nairbspace.octoandroid.model.AddPrinterModel;
-import com.nairbspace.octoandroid.ui.BaseActivity;
-import com.nairbspace.octoandroid.ui.Presenter;
+import com.nairbspace.octoandroid.ui.templates.BaseActivity;
+import com.nairbspace.octoandroid.ui.templates.Presenter;
 
 import javax.inject.Inject;
 

@@ -7,7 +7,7 @@ import com.nairbspace.octoandroid.domain.model.AddPrinter;
 import com.nairbspace.octoandroid.exception.ErrorMessageFactory;
 import com.nairbspace.octoandroid.mapper.AddPrinterModelMapper;
 import com.nairbspace.octoandroid.model.AddPrinterModel;
-import com.nairbspace.octoandroid.ui.UseCasePresenter;
+import com.nairbspace.octoandroid.ui.templates.UseCasePresenter;
 
 import javax.inject.Inject;
 
