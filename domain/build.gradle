@@ -1,20 +1,21 @@
 apply plugin: 'java'
+apply plugin: "net.ltgt.apt"
+
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "net.ltgt.gradle:gradle-apt-plugin:0.6" // Java annotation processing
+    }
+}
 
 //noinspection GroovyUnusedAssignment
 sourceCompatibility = 1.7
 //noinspection GroovyUnusedAssignment
 targetCompatibility = 1.7
-
-configurations {
-    provided
-}
-
-//noinspection GroovyAssignabilityCheck
-sourceSets {
-    main {
-        compileClasspath += configurations.provided //TODO don't know how this works
-    }
-}
 
 repositories {
     maven { url SdkRepoDir } // For android support annotations
@@ -25,14 +26,14 @@ dependencies {
 
     // Dagger2
     compile 'javax.inject:javax.inject:1'
-    provided 'javax.annotation:jsr250-api:1.0'
+    apt 'javax.annotation:jsr250-api:1.0'
 
     // RxJava
     compile 'io.reactivex:rxjava:1.1.3'
 
     // AutoValue
     compile 'com.google.auto.value:auto-value:1.2'
-    provided 'com.google.auto.value:auto-value:1.2' //TODO not sure if this should be apt
-    compile 'com.android.support:support-annotations:23.4.0'
+    apt 'com.google.auto.value:auto-value:1.2'
+    compile 'com.android.support:support-annotations:23.4.0' // TODO switch to intellij annotation
     compile 'com.google.code.gson:gson:2.6.2'
 }

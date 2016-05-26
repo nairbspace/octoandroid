@@ -1,7 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt' // Dagger2
 apply plugin: 'com.jakewharton.hugo' // Hugo
-apply plugin: 'com.fernandocejas.frodo' // Frodo RxLogger
 
 android {
     lintOptions {
@@ -101,22 +100,14 @@ dependencies {
     // Timber
     compile 'com.jakewharton.timber:timber:3.1.0'
 
-    // RxJava and RxAndroid
-    compile 'io.reactivex:rxandroid:1.1.0'
-    compile 'io.reactivex:rxjava:1.1.3'
-
-    // Websocket
-    compile 'com.koushikdutta.async:androidasync:2.1.7'
-
     // EventBus
     compile 'org.greenrobot:eventbus:3.0.0'
 
     // LeakCanary
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-SNAPSHOT'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-SNAPSHOT'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-SNAPSHOT'
 
     // AutoValue Parcelable
-    apt 'frankiesardo:auto-parcel:1.0.1'
-//    apt 'com.ryanharter.auto.value:auto-value-parcel:0.2.1'
+    apt 'com.ryanharter.auto.value:auto-value-parcel:0.2.1'
 }
