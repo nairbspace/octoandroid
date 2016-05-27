@@ -35,7 +35,6 @@ public class PlaybackPresenter extends UseCasePresenter<PlaybackScreen> {
     @Override
     protected void onInitialize(PlaybackScreen playbackScreen) {
         mScreen = playbackScreen;
-        execute();
     }
 
     @Override
@@ -48,6 +47,16 @@ public class PlaybackPresenter extends UseCasePresenter<PlaybackScreen> {
         super.networkNowInactive();
         mScreen.showNoFileLoadedScreen();
         mGetWebsocket.unsubscribe();
+    }
+
+    @Override
+    protected void onResume() {
+        execute();
+    }
+
+    @Override
+    protected void onPause() {
+        mGetWebsocket.unsubscribe(); // TODO might be best to have websocket on separate thread.
     }
 
     @Override
