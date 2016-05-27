@@ -1,15 +1,16 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+apply from: 'dependencies.gradle'
 
 buildscript {
     repositories {
         jcenter()
+        maven {
+            url "https://plugins.gradle.org/m2/" // For Java annotation processing plugin
+        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.1.0'
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
-
+        classpath "net.ltgt.gradle:gradle-apt-plugin:0.6" // Java annotation processing
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8' // Android annotation processing
         classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1' // Hugo
         classpath "com.fernandocejas.frodo:frodo-plugin:0.8.2" // Frodo (RxLogger)
@@ -17,11 +18,14 @@ buildscript {
 }
 
 allprojects {
-    repositories {
-        jcenter()
-        maven {
-            url 'https://oss.sonatype.org/content/repositories/snapshots/'
-        }
+    ext {
+        androidApplicationId = "com.nairbspace.octoandroid"
+        androidVersionCode = 1
+        androidVersionName = "1.0"
+        androidBuildToolsVersion = "23.0.3"
+        androidCompileSdkVersion = 23
+        androidMinSdkVersion = 16
+        androidTargetSdkVersion = 23
     }
 }
 

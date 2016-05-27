@@ -3,27 +3,24 @@ apply plugin: 'com.neenbedankt.android-apt' // Dagger2
 apply plugin: 'com.jakewharton.hugo' // Hugo
 
 android {
+    def globalConfiguration = rootProject.extensions.getByName("ext")
+
     lintOptions {
         checkReleaseBuilds false
         abortOnError false
     }
 
     productFlavors {
-        // Define separate dev and prod product flavors.
         dev {
-            // dev utilizes minSDKVersion = 21 to allow the Android gradle plugin
-            // to pre-dex each module and produce an APK that can be tested on
-            // Android Lollipop without time consuming dex merging processes.
-            minSdkVersion 21
+            minSdkVersion 21 // Prevents time consuming dex merging processes
         }
         prod {
-            // The actual minSdkVersion for the application.
-            minSdkVersion 16
+            minSdkVersion globalConfiguration.getAt("androidMinSdkVersion")
         }
     }
 
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion globalConfiguration.getAt("androidCompileSdkVersion")
+    buildToolsVersion globalConfiguration.getAt("androidBuildToolsVersion")
 
     dexOptions {
         maxProcessCount 2
@@ -31,11 +28,11 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.nairbspace.octoandroid"
-        minSdkVersion 16
-        targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        applicationId globalConfiguration.getAt("androidApplicationId")
+        minSdkVersion globalConfiguration.getAt("androidMinSdkVersion")
+        targetSdkVersion globalConfiguration.getAt("androidTargetSdkVersion")
+        versionCode globalConfiguration.getAt("androidVersionCode")
+        versionName globalConfiguration.getAt("androidVersionName")
         resValue "string", "google_app_id", MyGoogleAppId
     }
 
@@ -69,44 +66,34 @@ android {
 }
 
 dependencies {
+    def presentationDependencies = rootProject.ext.presentationDependencies
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
 
     compile project(':data')
     compile project(':domain')
 
-    // Support Library
-    compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.android.support:design:23.4.0'
-    compile 'com.android.support:cardview-v7:23.4.0'
-    compile 'com.android.support:support-v4:23.4.0'
-    compile 'com.android.support:percent:23.4.0'
+    compile presentationDependencies.appcompat_v7
+    compile presentationDependencies.design
+    compile presentationDependencies.cardview_v7
+    compile presentationDependencies.support_v4
+    compile presentationDependencies.percent
 
-    // QR Decoder
-    compile 'com.google.android.gms:play-services-vision:9.0.0'
+    compile presentationDependencies.playServicesVision // QR Decoder
 
-    // Butterknife
-    compile 'com.jakewharton:butterknife:8.0.1'
-    apt 'com.jakewharton:butterknife-compiler:8.0.1'
+    compile presentationDependencies.butterknife
+    apt presentationDependencies.butterknifeCompiler
 
-    // RxJava WebSockets
-    compile 'com.appunite:websockets-rxjava:4.0.1'
+    compile presentationDependencies.dagger
+    apt presentationDependencies.daggerCompiler
 
-    // Dagger2
-    compile 'com.google.dagger:dagger:2.4'
-    apt 'com.google.dagger:dagger-compiler:2.4'
+    compile presentationDependencies.timber
 
-    // Timber
-    compile 'com.jakewharton.timber:timber:3.1.0'
+    compile presentationDependencies.eventBus
 
-    // EventBus
-    compile 'org.greenrobot:eventbus:3.0.0'
+    debugCompile presentationDependencies.leakCanary
+    releaseCompile presentationDependencies.leakCanaryNoOp
+    testCompile presentationDependencies.leakCanaryNoOp
 
-    // LeakCanary
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-SNAPSHOT'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-SNAPSHOT'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-SNAPSHOT'
-
-    // AutoValue Parcelable
-    apt 'com.ryanharter.auto.value:auto-value-parcel:0.2.1'
+    apt presentationDependencies.autoValueParcel // AutoValue Parcelable
 }

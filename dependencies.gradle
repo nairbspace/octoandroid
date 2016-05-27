@@ -1,0 +1,70 @@
+allprojects {
+    repositories {
+        jcenter()
+        maven {
+            url 'https://oss.sonatype.org/content/repositories/snapshots/'
+        }
+    }
+}
+
+ext {
+    // Libraries
+    javaxInjectVersion = "1"
+    rxJavaVersion = '1.1.3'
+    rxAndroidVersion = '1.1.0'
+    websocketsRxJavaVersion = "4.0.1"
+    autoValueVersion = "1.2"
+    autoValueParcelVersion = "0.2.1"
+    androidSupportVersion = "23.4.0"
+    gsonVersion = "2.6.2"
+    greenDaoVersion = "2.1.0"
+    retrofitVersion = "2.0.0"
+    okHttpVersion = "3.2.0"
+    playServicesVersion = "9.0.0"
+    butterknifeVersion = "8.0.1"
+    dagger2Version = "2.4"
+    timberVersion = "3.1.0"
+    eventBusVersion = "3.0.0"
+    leakcanaryVersion = "1.4-SNAPSHOT"
+
+    daoGeneratorDependencies = [
+            greenDaoGenerator:          "de.greenrobot:greendao-generator:${greenDaoVersion}",
+    ]
+
+    domainDependencies = [
+            javaxInject:                "javax.inject:javax.inject:${javaxInjectVersion}",
+            rxJava:                     "io.reactivex:rxjava:${rxJavaVersion}",
+            autoValue:                  "com.google.auto.value:auto-value:${autoValueVersion}",
+            androidSupportAnnotations:  "com.android.support:support-annotations:${androidSupportVersion}",
+            gson:                       "com.google.code.gson:gson:${gsonVersion}"
+    ]
+
+    dataDependencies = [
+            greenDao:                   "de.greenrobot:greendao:${greenDaoVersion}",
+            rxAndroid:                  "io.reactivex:rxandroid:${rxAndroidVersion}",
+            websocketsRxJava:           "com.appunite:websockets-rxjava:${websocketsRxJavaVersion}",
+            retrofit:                   "com.squareup.retrofit2:retrofit:${retrofitVersion}",
+            retrofitGsonConverter:      "com.squareup.retrofit2:converter-gson:${retrofitVersion}",
+            retrofitRxJavaAdapter:      "com.squareup.retrofit2:adapter-rxjava:${retrofitVersion}",
+            okHttpLoggingInterceptor:   "com.squareup.okhttp3:logging-interceptor:${okHttpVersion}",
+            autoValue:                  "com.google.auto.value:auto-value:${autoValueVersion}",
+    ]
+
+    presentationDependencies = [
+            appcompat_v7:               "com.android.support:appcompat-v7:${androidSupportVersion}",
+            design:                     "com.android.support:design:${androidSupportVersion}",
+            cardview_v7:                "com.android.support:cardview-v7:${androidSupportVersion}",
+            support_v4:                 "com.android.support:support-v4:${androidSupportVersion}",
+            percent:                    "com.android.support:percent:${androidSupportVersion}",
+            playServicesVision:         "com.google.android.gms:play-services-vision:${playServicesVersion}",
+            butterknife:                "com.jakewharton:butterknife:${butterknifeVersion}",
+            butterknifeCompiler:        "com.jakewharton:butterknife-compiler:${butterknifeVersion}",
+            dagger:                     "com.google.dagger:dagger:${dagger2Version}",
+            daggerCompiler:             "com.google.dagger:dagger-compiler:${dagger2Version}",
+            timber:                     "com.jakewharton.timber:timber:${timberVersion}",
+            eventBus:                   "org.greenrobot:eventbus:${eventBusVersion}",
+            leakCanary:                 "com.squareup.leakcanary:leakcanary-android:${leakcanaryVersion}",
+            leakCanaryNoOp:             "com.squareup.leakcanary:leakcanary-android-no-op:${leakcanaryVersion}",
+            autoValueParcel:            "com.ryanharter.auto.value:auto-value-parcel:${autoValueParcelVersion}",
+    ]
+}

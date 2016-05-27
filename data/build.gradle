@@ -3,21 +3,23 @@ apply plugin: 'com.neenbedankt.android-apt' // Dagger2
 apply plugin: 'com.fernandocejas.frodo' // Frodo RxLogger
 
 android {
+    def globalConfiguration = rootProject.extensions.getByName("ext")
+
     lintOptions {
         checkReleaseBuilds false
         abortOnError false
     }
 
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
-
     defaultPublishConfig "debug" // TODO DO NOT PUBLISH THIS
 
+    compileSdkVersion globalConfiguration.getAt("androidCompileSdkVersion")
+    buildToolsVersion globalConfiguration.getAt("androidBuildToolsVersion")
+
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion globalConfiguration.getAt("androidMinSdkVersion")
+        targetSdkVersion globalConfiguration.getAt("androidTargetSdkVersion")
+        versionCode globalConfiguration.getAt("androidVersionCode")
+        versionName globalConfiguration.getAt("androidVersionName")
     }
     buildTypes {
         release {
@@ -28,21 +30,17 @@ android {
 }
 
 dependencies {
+    def dataDependencies = rootProject.ext.dataDependencies
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile project(':domain')
-    // GreenDAO
-    compile 'de.greenrobot:greendao:2.1.0'
-    // RxAndroid
-    compile 'io.reactivex:rxandroid:1.1.0'
-    compile 'com.appunite:websockets-rxjava:4.0.1'
-    // Retrofit
-    compile 'com.squareup.retrofit2:retrofit:2.0.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.0.0'
-    // Retrofit RxJava Callback adapter
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0'
-    // OkHttp Logs
-    compile 'com.squareup.okhttp3:logging-interceptor:3.2.0'
-    // AutoValue
-    apt 'com.google.auto.value:auto-value:1.2' // TODO Apt needed?
+
+    compile dataDependencies.greenDao
+    compile dataDependencies.rxAndroid
+    compile dataDependencies.websocketsRxJava
+    compile dataDependencies.retrofit
+    compile dataDependencies.retrofitGsonConverter
+    compile dataDependencies.retrofitRxJavaAdapter
+    compile dataDependencies.okHttpLoggingInterceptor
+    apt dataDependencies.autoValue
 }
