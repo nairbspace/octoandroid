@@ -8,11 +8,14 @@ import com.nairbspace.octoandroid.domain.model.Connection;
 import com.nairbspace.octoandroid.mapper.ConnectModelMapper;
 import com.nairbspace.octoandroid.mapper.ConnectionMapper;
 import com.nairbspace.octoandroid.model.ConnectModel;
-import com.nairbspace.octoandroid.ui.templates.UseCasePresenter;
+import com.nairbspace.octoandroid.model.WebsocketModel;
+import com.nairbspace.octoandroid.ui.templates.UseCaseEventPresenter;
+
+import org.greenrobot.eventbus.EventBus;
 
 import javax.inject.Inject;
 
-public class ConnectionPresenter extends UseCasePresenter<ConnectionScreen> {
+public class ConnectionPresenter extends UseCaseEventPresenter<ConnectionScreen, WebsocketModel> {
 
     private ConnectionScreen mScreen;
     private final GetConnectionDetails mGetConnectionDetails;
@@ -20,13 +23,15 @@ public class ConnectionPresenter extends UseCasePresenter<ConnectionScreen> {
     private final ConnectionMapper mConnectionMapper;
     private final ConnectModelMapper mConnectModelMapper;
     private boolean mIsFirstTime = true;
+    private Boolean mOldClosedOrError;
 
     @Inject
     public ConnectionPresenter(GetConnectionDetails getConnectionDetails,
                                ConnectToPrinter connectToPrinter,
                                ConnectionMapper connectionMapper,
-                               ConnectModelMapper connectModelMapper) {
-        super(getConnectionDetails);
+                               ConnectModelMapper connectModelMapper,
+                               EventBus eventBus) {
+        super(getConnectionDetails, eventBus);
         mGetConnectionDetails = getConnectionDetails;
         mConnectToPrinter = connectToPrinter;
         mConnectionMapper = connectionMapper;
@@ -72,6 +77,20 @@ public class ConnectionPresenter extends UseCasePresenter<ConnectionScreen> {
             int defaultBaudrateId = connectModel.selectedBaudrateId();
             int defaultPrinterProfileId = connectModel.selectedPrinterProfileId();
             mScreen.updateUiWithDefaults(defaultPortId, defaultBaudrateId, defaultPrinterProfileId);
+        }
+    }
+
+    @Override
+    protected void onEvent(WebsocketModel websocketModel) {
+        if (mOldClosedOrError == null) { // Initializes Boolean
+            mOldClosedOrError = websocketModel.closedOrError();
+            return;
+        }
+
+        // If doesn't equal old closedOrError value, that means it changed.
+        if (mOldClosedOrError != websocketModel.closedOrError()) {
+            mOldClosedOrError = websocketModel.closedOrError();
+            execute();
         }
     }
 
@@ -127,7 +146,8 @@ public class ConnectionPresenter extends UseCasePresenter<ConnectionScreen> {
 
         @Override
         public void onNext(Object o) {
-            mGetConnectionDetails.execute(new GetConnectionSubscriber());
+            // Should update automatically now with EventBus
+//            execute();
         }
     }
 

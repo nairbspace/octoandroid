@@ -5,6 +5,7 @@ import android.net.ConnectivityManager;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.nairbspace.octoandroid.BuildConfig;
 import com.nairbspace.octoandroid.data.mapper.AutoValueTypeAdapterFactory;
 import com.nairbspace.octoandroid.data.net.OctoInterceptor;
 import com.nairbspace.octoandroid.data.net.WebsocketInterceptor;
@@ -43,11 +44,13 @@ public class NetworkModule {
     @Named("rest")
     OkHttpClient provideRestOkHttpClient(@Named("rest") Interceptor interceptor,
                                      HttpLoggingInterceptor loggingInterceptor) {
-        return new OkHttpClient.Builder()
-                .addInterceptor(interceptor)
-                .addInterceptor(loggingInterceptor)
-//                .cache(cache) // TODO: implement cache
-                .build();
+        OkHttpClient.Builder builder = new OkHttpClient.Builder()
+                .addInterceptor(interceptor);
+//        .cache(cache) // TODO: implement cache
+        if (BuildConfig.DEBUG) {
+            builder.addInterceptor(loggingInterceptor);
+        }
+        return builder.build();
     }
 
     @Provides
