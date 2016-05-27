@@ -11,11 +11,14 @@ import com.nairbspace.octoandroid.mapper.FileCommandModelMapper;
 import com.nairbspace.octoandroid.mapper.FilesMapper;
 import com.nairbspace.octoandroid.model.FileCommandModel;
 import com.nairbspace.octoandroid.model.FilesModel;
-import com.nairbspace.octoandroid.ui.templates.UseCasePresenter;
+import com.nairbspace.octoandroid.model.WebsocketModel;
+import com.nairbspace.octoandroid.ui.templates.UseCaseEventPresenter;
+
+import org.greenrobot.eventbus.EventBus;
 
 import javax.inject.Inject;
 
-public class FilesPresenter extends UseCasePresenter<FilesScreen> {
+public class FilesPresenter extends UseCaseEventPresenter<FilesScreen, WebsocketModel> {
 
     private final GetFiles mGetFiles;
     private final FilesMapper mFilesMapper;
@@ -24,13 +27,14 @@ public class FilesPresenter extends UseCasePresenter<FilesScreen> {
     private final DeleteFile mDeleteFile;
     private final UploadFile mUploadFile;
     private FilesScreen mScreen;
+    private Boolean mOldClosedOrError;
 
     @Inject
     public FilesPresenter(GetFiles getFiles, FilesMapper filesMapper,
                           FileCommandModelMapper fileCommandModelMapper,
                           SendFileCommand sendFileCommand, DeleteFile deleteFile,
-                          UploadFile uploadFile) {
-        super(getFiles);
+                          UploadFile uploadFile, EventBus eventBus) {
+        super(getFiles, eventBus);
         mGetFiles = getFiles;
         mFilesMapper = filesMapper;
         mFileCommandModelMapper = fileCommandModelMapper;
@@ -60,6 +64,20 @@ public class FilesPresenter extends UseCasePresenter<FilesScreen> {
     @Override
     protected void onNetworkSwitched() {
         execute();
+    }
+
+    @Override
+    protected void onEvent(WebsocketModel websocketModel) {
+        if (mOldClosedOrError == null) { // Initializes Boolean
+            mOldClosedOrError = websocketModel.closedOrError();
+            return;
+        }
+
+        // If doesn't equal old closedOrError value, that means it changed.
+        if (mOldClosedOrError != websocketModel.closedOrError()) {
+            mOldClosedOrError = websocketModel.closedOrError();
+            execute();
+        }
     }
 
     private void renderScreen(FilesModel filesModel) {
