@@ -35,7 +35,7 @@
     <string name="stop">Stop</string>
     <string name="file_details">File Details</string>
     <string name="upload">Upload</string>
-    <string name="info">Info</string>
+    <string name="more">More</string>
     <string name="ip_address_edit_text_hint">octopi.local</string>
     <string name="port_443">443</string>
     <string name="port_80">80</string>

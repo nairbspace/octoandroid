@@ -5,11 +5,14 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.nairbspace.octoandroid.R;
 
 public class SslErrorDialogFragment extends BaseDialogFragment<SslErrorDialogFragment.Listener>
-        implements Dialog.OnClickListener{
+        implements Dialog.OnClickListener {
 
     private Listener mListener;
 
@@ -25,7 +28,7 @@ public class SslErrorDialogFragment extends BaseDialogFragment<SslErrorDialogFra
                 .setMessage(R.string.ssl_error_display_message)
                 .setIcon(R.drawable.ic_warning_black_24dp)
                 .setNegativeButton(android.R.string.cancel, this)
-//                .setNeutralButton(R.string.info, this)
+                .setNeutralButton(R.string.more, null) // Neutral click listener is implemented onStart
                 .setPositiveButton(android.R.string.ok, this)
                 .create();
     }
@@ -42,11 +45,36 @@ public class SslErrorDialogFragment extends BaseDialogFragment<SslErrorDialogFra
         switch (which) {
             case DialogInterface.BUTTON_NEGATIVE:
                 break;
-//            case DialogInterface.BUTTON_NEUTRAL: // TODO need to implement info on SSL error
-//                break;
             case DialogInterface.BUTTON_POSITIVE:
                 mListener.tryUnsecureConnection();
                 break;
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        final AlertDialog alertDialog = (AlertDialog) getDialog();
+        if (alertDialog != null) {
+            Button neutralButton = alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL);
+            neutralButton.setOnClickListener(mNeutralClickListener);
+        }
+    }
+
+    private View.OnClickListener mNeutralClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            AlertDialog alertDialog = (AlertDialog) getDialog();
+            showExtendedMessage(alertDialog);
+        }
+    };
+
+    private void showExtendedMessage(@NonNull AlertDialog alertDialog) {
+        TextView textView = (TextView) alertDialog.findViewById(android.R.id.message);
+        Button neutralButton = alertDialog.getButton(DialogInterface.BUTTON_NEUTRAL);
+        if (textView != null) {
+            textView.setText(R.string.ssl_error_display_message_extended);
+            neutralButton.setEnabled(false);
         }
     }
 

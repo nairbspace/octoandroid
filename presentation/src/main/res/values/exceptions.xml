@@ -8,6 +8,11 @@
 
     <string name="exception_ssl_error">Trust anchor for certification path not found.</string>
     <string name="ssl_error_title">SSL Error</string>
-    <string name="ssl_error_display_message">SSL Certificate is not signed. If accessing printer locally try unsecure connection.</string>
+    <string name="ssl_error_display_message">SSL Certificate is not signed.
+        If accessing printer locally try unsecure connection.</string>
+    <string name="ssl_error_display_message_extended">SSL Certificate is not signed.
+        If accessing printer locally try unsecure connection.
+        \n\nOctoPrint certificate must manually be added to your device\'s
+        \'system trusted\' certificates which requires root access.</string>
     <string name="exception_invalid_api_key">Invalid API key</string>
 </resources>
