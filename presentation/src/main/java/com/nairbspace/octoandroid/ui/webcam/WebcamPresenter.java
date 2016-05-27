@@ -40,7 +40,7 @@ public class WebcamPresenter extends UseCasePresenter<WebcamScreen> {
         mGetWebcam.unsubscribe();
     }
 
-    // TODO this is accessing model MjpegInput Stream from outside module!
+    // TODO this is accessing model MjpegInput Stream from outside module
     private final class WebcamSubscriber extends DefaultSubscriber<MjpegInputStream> {
 
         @Override

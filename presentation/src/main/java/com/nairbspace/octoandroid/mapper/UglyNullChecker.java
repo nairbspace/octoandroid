@@ -9,7 +9,7 @@ public class UglyNullChecker {
 
     @Inject
     public UglyNullChecker() {
-        // TODO not sure if should implement null checker this way
+        // TODO-Low not sure if should implement null checker this way
     }
 
     public boolean isWebSocketNotNull(Websocket websocket) {

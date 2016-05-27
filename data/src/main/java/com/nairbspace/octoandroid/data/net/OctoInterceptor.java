@@ -41,10 +41,13 @@ public class OctoInterceptor implements Interceptor {
                     .build();
             original = original.newBuilder()
                     .url(newUrl)
+
+                    // Looks like this is ignored for multipart which is good
                     .header("Content-Type", "application/json")
+
                     .header("X-Api-Key", printerDbEntity.getApiKey())
                     .build();
-        } // TODO need another interceptor for uploading files or different headers
+        }
         return chain.proceed(original);
     }
 }

@@ -19,7 +19,7 @@ public class CanvasCreator extends Canvas {
     public CanvasCreator(Bitmap bitmap, DisplayMode displayMode, boolean showFps) {
         mBitmap = bitmap;
         mDisplayMode = displayMode.getValue();
-        mShowFps = showFps; // TODO need to implement counter outside of this canvas
+        mShowFps = showFps; // TODO-low need to implement counter outside of this canvas
     }
 
     private void render() {
@@ -79,7 +79,7 @@ public class CanvasCreator extends Canvas {
             mFrameCounter = 0;
             mStartTime = System.currentTimeMillis();
             Bitmap bitmap = makeFpsOverlay(fps);
-            this.drawBitmap(bitmap, width, height, null); // TODO how to combine with current bitmap?
+            this.drawBitmap(bitmap, width, height, null); // TODO-low how to combine with current bitmap?
         }
     }
 

@@ -13,10 +13,6 @@ import java.net.ConnectException;
 
 public class ErrorMessageFactory {
 
-    private ErrorMessageFactory() {
-        // TODO need better way to implement this
-    }
-
     public static String create(Context context, Exception e) {
         String message = context.getString(R.string.exception_message_generic);
 

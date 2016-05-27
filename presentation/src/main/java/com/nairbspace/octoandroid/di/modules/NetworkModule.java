@@ -46,7 +46,7 @@ public class NetworkModule {
                                      HttpLoggingInterceptor loggingInterceptor) {
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .addInterceptor(interceptor);
-//        .cache(cache) // TODO: implement cache
+//        .cache(cache) // TODO-low: implement cache
         if (BuildConfig.DEBUG) {
             builder.addInterceptor(loggingInterceptor);
         }

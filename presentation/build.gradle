@@ -70,8 +70,8 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
 
-    compile project(':data')
-    compile project(':domain')
+    debugCompile project(path: ':data', configuration: 'debug')
+    releaseCompile project(path: ':data', configuration: 'release')
 
     compile presentationDependencies.appcompat_v7
     compile presentationDependencies.design

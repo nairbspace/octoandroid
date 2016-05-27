@@ -49,7 +49,7 @@ public abstract class CurrentHistory {
 
         @AutoValue
         @AutoGson(autoValueClass = AutoValue_CurrentHistory_Job_File.class)
-        public abstract static class File { // TODO need to ask questions on this since doc doesn't match actual output
+        public abstract static class File { // Check against this since doesn't match API doc
             @Nullable @SerializedName("origin") public abstract String origin();
             @Nullable @SerializedName("date") public abstract Long date(); // Unix Timestamp (in seconds)
             @Nullable @SerializedName("name") public abstract String name();

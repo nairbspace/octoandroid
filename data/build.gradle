@@ -10,8 +10,6 @@ android {
         abortOnError false
     }
 
-    defaultPublishConfig "debug" // TODO DO NOT PUBLISH THIS
-
     compileSdkVersion globalConfiguration.getAt("androidCompileSdkVersion")
     buildToolsVersion globalConfiguration.getAt("androidBuildToolsVersion")
 
@@ -21,10 +19,16 @@ android {
         versionCode globalConfiguration.getAt("androidVersionCode")
         versionName globalConfiguration.getAt("androidVersionName")
     }
+
+    publishNonDefault true // Publishes all variations, main module must specify release or compile
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            // Placement for compile options in main project
         }
     }
 }

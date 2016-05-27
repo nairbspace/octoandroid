@@ -24,7 +24,6 @@
             app:headerLayout="@layout/nav_header_main"
             app:menu="@menu/activity_main_drawer"/>
         <!--TODO fix elevations-->
-        <!--TODO possibly implement scroll behavior-->
 
     </android.support.v4.widget.DrawerLayout>
 

@@ -175,7 +175,6 @@ public class PlaybackFragment extends BaseFragmentListener<PlaybackScreen,
         outState.putParcelable(WEBSOCKET_MODEL_KEY, mWebsocketModel);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);

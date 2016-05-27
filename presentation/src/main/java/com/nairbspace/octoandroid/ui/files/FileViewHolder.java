@@ -41,7 +41,7 @@ public class FileViewHolder extends RecyclerView.ViewHolder {
         super(view);
         mView = view;
         mListener = listener;
-        ButterKnife.bind(this, view); // TODO probably need to null this
+        ButterKnife.bind(this, view);
     }
 
     public void bindFileModel(FilesModel.FileModel fileModel) {
@@ -97,7 +97,7 @@ public class FileViewHolder extends RecyclerView.ViewHolder {
 
     public void showOnClickView() {
         mOnClickView.setVisibility(View.VISIBLE);
-        mView.setBackgroundColor(mBackgroundColor); // TODO not sure what color to set when clicked
+        mView.setBackgroundColor(mBackgroundColor);
     }
 
     public interface Listener {
