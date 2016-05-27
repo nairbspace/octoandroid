@@ -25,7 +25,7 @@ public class SslErrorDialogFragment extends BaseDialogFragment<SslErrorDialogFra
                 .setMessage(R.string.ssl_error_display_message)
                 .setIcon(R.drawable.ic_warning_black_24dp)
                 .setNegativeButton(android.R.string.cancel, this)
-                .setNeutralButton(R.string.info, this)
+//                .setNeutralButton(R.string.info, this)
                 .setPositiveButton(android.R.string.ok, this)
                 .create();
     }
@@ -40,10 +40,10 @@ public class SslErrorDialogFragment extends BaseDialogFragment<SslErrorDialogFra
     @Override
     public void onClick(DialogInterface dialog, int which) {
         switch (which) {
-            case DialogInterface.BUTTON_NEGATIVE: // TODO need to implement info on SSL error
+            case DialogInterface.BUTTON_NEGATIVE:
                 break;
-            case DialogInterface.BUTTON_NEUTRAL:
-                break;
+//            case DialogInterface.BUTTON_NEUTRAL: // TODO need to implement info on SSL error
+//                break;
             case DialogInterface.BUTTON_POSITIVE:
                 mListener.tryUnsecureConnection();
                 break;

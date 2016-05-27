@@ -12,6 +12,7 @@ repositories {
 
 dependencies {
     def domainDependencies = rootProject.ext.domainDependencies
+    def domainTestDependencies = rootProject.ext.domainTestDependencies
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
     compile domainDependencies.javaxInject // Inject annotation for Dagger2
@@ -20,4 +21,7 @@ dependencies {
     apt domainDependencies.autoValue // Annotation processing for AutoValue_*
     compile domainDependencies.androidSupportAnnotations // For Nullable annotation
     compile domainDependencies.gson
+
+    testCompile domainTestDependencies.junit
+    testCompile domainTestDependencies.mockito
 }

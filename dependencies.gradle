@@ -28,6 +28,10 @@ ext {
     eventBusVersion = "3.0.0"
     leakcanaryVersion = "1.4-SNAPSHOT"
 
+    // Testing Libraries
+    jUnitVersion = "4.12"
+    mockitoVersion = "1.10.19"
+
     daoGeneratorDependencies = [
             greenDaoGenerator:          "org.greenrobot:greendao-generator:${greenDaoGeneratorVersion}",
     ]
@@ -40,6 +44,11 @@ ext {
             gson:                       "com.google.code.gson:gson:${gsonVersion}"
     ]
 
+    domainTestDependencies = [
+            junit:                      "junit:junit:${jUnitVersion}",
+            mockito:                    "org.mockito:mockito-core:${mockitoVersion}",
+    ]
+
     dataDependencies = [
             greenDao:                   "org.greenrobot:greendao:${greenDaoVersion}",
             rxAndroid:                  "io.reactivex:rxandroid:${rxAndroidVersion}",
@@ -49,6 +58,10 @@ ext {
             retrofitRxJavaAdapter:      "com.squareup.retrofit2:adapter-rxjava:${retrofitVersion}",
             okHttpLoggingInterceptor:   "com.squareup.okhttp3:logging-interceptor:${okHttpVersion}",
             autoValue:                  "com.google.auto.value:auto-value:${autoValueVersion}",
+    ]
+
+    dataTestDependencies = [
+            junit:                      "junit:junit:${jUnitVersion}"
     ]
 
     presentationDependencies = [
