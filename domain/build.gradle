@@ -26,7 +26,6 @@ dependencies {
 
     // Dagger2
     compile 'javax.inject:javax.inject:1'
-    apt 'javax.annotation:jsr250-api:1.0'
 
     // RxJava
     compile 'io.reactivex:rxjava:1.1.3'

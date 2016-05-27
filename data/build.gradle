@@ -35,7 +35,6 @@ dependencies {
     compile 'de.greenrobot:greendao:2.1.0'
     // Dagger2
     compile 'javax.inject:javax.inject:1'
-    provided 'javax.annotation:jsr250-api:1.0'
     // RxAndroid
     compile 'io.reactivex:rxandroid:1.1.0'
     compile 'com.appunite:websockets-rxjava:4.0.1'
