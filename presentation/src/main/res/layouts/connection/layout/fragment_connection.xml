@@ -24,8 +24,7 @@
                 android:id="@+id/connect_progressbar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:translationZ="5dp"/>
+                android:layout_centerInParent="true"/>
 
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>

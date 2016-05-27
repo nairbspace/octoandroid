@@ -18,7 +18,7 @@
             style="@style/TextAppearance.AppCompat.Headline"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Summary"/>
+            android:text="@string/summary"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -28,7 +28,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Machine State: "/>
+                android:text="@string/machine_state_colon_space"/>
 
             <TextView
                 android:id="@+id/machine_state_textview"
@@ -45,7 +45,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="File: "/>
+                android:text="@string/file_colon_space"/>
 
             <TextView
                 android:id="@+id/file_textview"
@@ -62,7 +62,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Approx. Total Print Time: "/>
+                android:text="@string/approx_total_print_time_colon_space"/>
 
             <TextView
                 android:id="@+id/approx_total_print_time_textview"
@@ -79,7 +79,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Print Time: "/>
+                android:text="@string/print_time_colon_space"/>
 
             <TextView
                 android:id="@+id/print_time_textview"
@@ -96,7 +96,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Print Time Left: "/>
+                android:text="@string/print_time_left_colon_space"/>
 
             <TextView
                 android:id="@+id/print_time_left_textview"
@@ -113,7 +113,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Printed: "/>
+                android:text="@string/printed_colon_space"/>
 
             <TextView
                 android:id="@+id/printed_bytes_textview"
@@ -124,7 +124,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=" / "/>
+                android:text="@string/space_backslash_space"/>
 
             <TextView
                 android:id="@+id/printed_file_size_textview"

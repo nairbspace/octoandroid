@@ -10,7 +10,7 @@ import com.nairbspace.octoandroid.ui.status.StatusFragment;
 
 public class StatusFragmentPagerAdapter extends FragmentPagerAdapter {
     private static final int PAGE_COUNT =  3;
-    private String tabTitles[] = new String[]{"Connection", "State", "Files"};
+    private final String tabTitles[] = new String[]{"Connection", "State", "Files"};
 
     public StatusFragmentPagerAdapter(FragmentManager fm) {
         super(fm);

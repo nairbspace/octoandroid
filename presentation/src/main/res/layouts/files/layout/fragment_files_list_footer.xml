@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Free: "/>
+        android:text="@string/free_colon_space"/>
     <TextView
         android:id="@+id/free_text_view"
         android:layout_width="wrap_content"
@@ -17,11 +17,11 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=" / "/>
+        android:text="@string/space_backslash_space"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Total: "/>
+        android:text="@string/total_colon_space"/>
     <TextView
         android:id="@+id/total_text_view"
         android:layout_width="wrap_content"

@@ -82,7 +82,7 @@ public class AddPrinterActivity extends BaseActivity<AddPrinterScreen>
         mSslCheckBox.setChecked(addPrinterModel.isSslChecked());
     }
 
-    private TextView.OnEditorActionListener mApiEditorListener = new TextView.OnEditorActionListener() {
+    private final TextView.OnEditorActionListener mApiEditorListener = new TextView.OnEditorActionListener() {
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
             if (actionId == R.id.add_printer || actionId == EditorInfo.IME_NULL) {
@@ -161,7 +161,7 @@ public class AddPrinterActivity extends BaseActivity<AddPrinterScreen>
                 .setAction("Ok", mSnackBarOnClickListener).show();
     }
 
-    private View.OnClickListener mSnackBarOnClickListener = new View.OnClickListener() {
+    private final View.OnClickListener mSnackBarOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             Timber.d("This is a snackbar");

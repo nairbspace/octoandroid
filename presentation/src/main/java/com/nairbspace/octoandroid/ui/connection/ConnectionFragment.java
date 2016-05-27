@@ -1,6 +1,7 @@
 package com.nairbspace.octoandroid.ui.connection;
 
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -29,6 +30,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.BindDimen;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.BindViews;
@@ -69,6 +71,8 @@ public class ConnectionFragment extends BasePagerFragmentListener<ConnectionScre
             R.id.printer_profile_spinner_title})
     List<View> mConnectShowView;
 
+    @BindDimen(R.dimen.connect_progress_bar_z_translation) float mProgressZTranslation;
+
     private boolean mIsConnectButtonVisible;
     private List<String> mPorts;
     private ArrayAdapter<String> mSerialPortAdapter;
@@ -93,6 +97,11 @@ public class ConnectionFragment extends BasePagerFragmentListener<ConnectionScre
         setUnbinder(ButterKnife.bind(this, view));
         setActionBarTitle("Status");
         mRefreshLayout.setOnRefreshListener(this);
+
+        // ProgressBar doesn't show on top of CardView in Lollipop+ builds
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mConnectProgressBar.setTranslationZ(mProgressZTranslation);
+        }
 
         if (savedInstanceState != null && savedInstanceState.getParcelable(CONNECT_MODEL_KEY) != null) {
             mConnectModel = savedInstanceState.getParcelable(CONNECT_MODEL_KEY);

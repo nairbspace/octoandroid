@@ -16,7 +16,6 @@
     <string name="printer_name">Printer Name</string>
     <string name="octoprint_background_image">OctoPrint Background Image</string>
     <string name="close">Close</string>
-    <string name="title_activity_main">MainActivity</string>
 
     <string name="drawer_open">Drawer open</string>
     <string name="drawer_close">Drawer close</string>
@@ -41,4 +40,22 @@
     <string name="port_443">443</string>
     <string name="port_80">80</string>
     <string name="refresh">Refresh</string>
+
+    <string name="free_colon_space">Free:</string>
+    <string name="space_backslash_space">/</string>
+    <string name="total_colon_space">Total:</string>
+    <string name="serial_port">Serial Port</string>
+    <string name="baudrate">Baudrate</string>
+    <string name="printer_profile">Printer Profile</string>
+    <string name="save_connection_settings">Save connection settings</string>
+    <string name="auto_connect_on_server_startup">Auto-Connect on server startup</string>
+
+
+    <string name="summary">Summary</string>
+    <string name="machine_state_colon_space">Machine State:</string>
+    <string name="file_colon_space">File:</string>
+    <string name="approx_total_print_time_colon_space">Approx. Total Print Time:</string>
+    <string name="print_time_colon_space">Print Time:</string>
+    <string name="print_time_left_colon_space">Print Time Left:</string>
+    <string name="printed_colon_space">Printed:</string>
 </resources>

@@ -18,7 +18,7 @@ import javax.inject.Inject;
 
 public class Authenticator extends AbstractAccountAuthenticator {
 
-    private Context mContext;
+    private final Context mContext;
     @Inject DeletePrinterByName mPrinterDetailsByName;
 
     public Authenticator(Context context) {

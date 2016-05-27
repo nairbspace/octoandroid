@@ -54,7 +54,7 @@ public class WebcamActivity extends BaseActivity<WebcamScreen> implements Webcam
         mControlsView.setOnTouchListener(mDelayHideTouchListener);
     }
 
-    private View.OnClickListener mContentViewClickListener = new View.OnClickListener() {
+    private final View.OnClickListener mContentViewClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             toggle();

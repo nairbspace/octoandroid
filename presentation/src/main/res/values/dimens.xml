@@ -2,7 +2,6 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="recycler_view_bottom_margin">8dp</dimen>  <!--half of normal due to cardview margin-->
     <dimen name="fab_margin">16dp</dimen>
 
     <!-- Formatting for match_parent as dimension -->
@@ -11,7 +10,7 @@
     <dimen name="add_printer_scroll_view_width">@dimen/match_parent</dimen>
 
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="nav_header_vertical_spacing">16dp</dimen>
+    <!--<dimen name="nav_header_vertical_spacing">16dp</dimen>-->
     <dimen name="nav_horizontal_spacing">16dp</dimen>
     <dimen name="nav_header_height">160dp</dimen>
 
@@ -20,11 +19,13 @@
     <dimen name="nav_margin">0dp</dimen>
     <dimen name="text_margin">16dp</dimen>
 
+    <dimen name="connect_progress_bar_z_translation">5dp</dimen>
+
     <item name="drawable_active_opacity" format="float" type="dimen">0.54</item>
 
-    <dimen name="playback_fragment_height">74dp</dimen>
+    <!--Currently implementing programmatically -->
+    <!--<dimen name="playback_fragment_height">74dp</dimen>-->
+
     <dimen name="playback_enabled_alpha_float">1px</dimen>
     <dimen name="playback_disabled_alpha_float">.12px</dimen>
-    <item name="playback_enabled_alpha" format="float" type="dimen">1.0</item>
-    <item name="playback_disabled_alpha" format="float" type="dimen">0.12</item>
 </resources>

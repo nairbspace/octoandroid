@@ -61,6 +61,7 @@ android {
                     'src/main/res/layouts',
                     'src/main/res'
             ]
+            assets.srcDirs = ['src/main/assets', 'src/main/assets/']
         }
     }
 }

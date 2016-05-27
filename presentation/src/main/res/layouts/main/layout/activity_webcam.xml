@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.webcam.WebcamActivity">
+    tools:context=".ui.webcam.WebcamActivity"
+    tools:ignore="MergeRootFrame">
 
     <com.nairbspace.octoandroid.data.net.stream.MjpegSurfaceView
         android:id="@+id/webcam_surface_view"
