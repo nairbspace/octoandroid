@@ -10,25 +10,26 @@ allprojects {
 ext {
     // Libraries
     javaxInjectVersion = "1"
-    rxJavaVersion = '1.1.3'
-    rxAndroidVersion = '1.1.0'
+    rxJavaVersion = '1.1.5'
+    rxAndroidVersion = '1.2.0'
     websocketsRxJavaVersion = "4.0.1"
     autoValueVersion = "1.2"
     autoValueParcelVersion = "0.2.1"
     androidSupportVersion = "23.4.0"
     gsonVersion = "2.6.2"
-    greenDaoVersion = "2.1.0"
-    retrofitVersion = "2.0.0"
-    okHttpVersion = "3.2.0"
+    greenDaoVersion = "2.2.1"
+    greenDaoGeneratorVersion = "2.2.0"
+    retrofitVersion = "2.0.2"
+    okHttpVersion = "3.3.0"
     playServicesVersion = "9.0.0"
     butterknifeVersion = "8.0.1"
     dagger2Version = "2.4"
-    timberVersion = "3.1.0"
+    timberVersion = "4.1.2"
     eventBusVersion = "3.0.0"
     leakcanaryVersion = "1.4-SNAPSHOT"
 
     daoGeneratorDependencies = [
-            greenDaoGenerator:          "de.greenrobot:greendao-generator:${greenDaoVersion}",
+            greenDaoGenerator:          "org.greenrobot:greendao-generator:${greenDaoGeneratorVersion}",
     ]
 
     domainDependencies = [
@@ -40,7 +41,7 @@ ext {
     ]
 
     dataDependencies = [
-            greenDao:                   "de.greenrobot:greendao:${greenDaoVersion}",
+            greenDao:                   "org.greenrobot:greendao:${greenDaoVersion}",
             rxAndroid:                  "io.reactivex:rxandroid:${rxAndroidVersion}",
             websocketsRxJava:           "com.appunite:websockets-rxjava:${websocketsRxJavaVersion}",
             retrofit:                   "com.squareup.retrofit2:retrofit:${retrofitVersion}",
