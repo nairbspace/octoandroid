@@ -28,6 +28,18 @@ public class WebcamPresenter extends UseCasePresenter<WebcamScreen> {
         mGetWebcam.execute(new WebcamSubscriber());
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        execute();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mGetWebcam.unsubscribe();
+    }
+
     // TODO this is accessing model MjpegInput Stream from outside module!
     private final class WebcamSubscriber extends DefaultSubscriber<MjpegInputStream> {
 

@@ -52,7 +52,6 @@ public class WebcamActivity extends BaseActivity<WebcamScreen> implements Webcam
         mContentView.setDisplayMode(DisplayMode.BEST_FIT);
         mContentView.showFps(true);
         mControlsView.setOnTouchListener(mDelayHideTouchListener);
-        mPresenter.execute();
     }
 
     private View.OnClickListener mContentViewClickListener = new View.OnClickListener() {
@@ -81,9 +80,21 @@ public class WebcamActivity extends BaseActivity<WebcamScreen> implements Webcam
     }
 
     @Override
-    protected void onDestroy() {
-        mContentView.setVisibility(View.GONE); // Calls setSurfaceDestroyed which kills thread.
-        super.onDestroy();
+    protected void onResume() {
+        super.onResume();
+        if (!mContentView.isShown()) {
+            mContentView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mContentView.isShown()) {
+            // Calls setSurfaceDestroyed which kills thread.
+            // TODO presenter should be in charge of thread killing.
+            mContentView.setVisibility(View.GONE);
+        }
     }
 
     private final Handler mHideHandler = new Handler();
