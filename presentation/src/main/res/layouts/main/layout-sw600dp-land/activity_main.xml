@@ -23,7 +23,6 @@
             android:fitsSystemWindows="false"
             app:headerLayout="@layout/nav_header_main"
             app:menu="@menu/activity_main_drawer"/>
-        <!--TODO fix elevations-->
 
     </android.support.v4.widget.DrawerLayout>
 
@@ -64,7 +63,9 @@
         android:layout_marginLeft="@dimen/nav_margin"
         android:layout_marginStart="@dimen/nav_margin"
         android:layout_gravity="bottom|center"
+        app:cardElevation="-1dp"
         app:layout_behavior="com.nairbspace.octoandroid.views.MoveUpBehavior"/>
+    <!--TODO-low possibly fix elevation issue with nav-->
     <!--TODO snackbar doesn't look nice on tablet view-->
 
     <android.support.design.widget.FloatingActionButton
