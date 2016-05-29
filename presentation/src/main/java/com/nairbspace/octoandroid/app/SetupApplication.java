@@ -30,6 +30,7 @@ public class SetupApplication extends Application {
         initializeTimber();
         initializeLeakCanary();
         initializeInjector();
+        initializeLifecyclerHandler();
     }
 
     private void initializeTimber() {
@@ -52,6 +53,10 @@ public class SetupApplication extends Application {
                 .websocketModule(new WebsocketModule())
                 .storageModule(new StorageModule())
                 .build();
+    }
+
+    private void initializeLifecyclerHandler() {
+        registerActivityLifecycleCallbacks(new LifecycleHandler());
     }
 
     public AppComponent getAppComponent() {

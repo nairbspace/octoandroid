@@ -25,7 +25,7 @@ public class ErrorMessageFactory {
         } else if (e instanceof IncorrectAddPrinterFormattingException) {
             message = context.getString(R.string.exception_incorrect_ip_address_formatting);
         } else if (e instanceof ConnectException) {
-            message = context.getString(R.string.exception_message_no_connection);
+            message = context.getString(R.string.exception_message_connecting);
         } else if (e.getMessage().contains(context.getString(R.string.exception_ssl_error))) {
             message = context.getString(R.string.ssl_error_display_message);
         } else if (e.getMessage().contains(context.getString(R.string.exception_invalid_api_key))) {

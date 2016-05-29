@@ -2,6 +2,7 @@
 <resources>
     <string name="exception_message_generic">There was an application error</string>
     <string name="exception_message_no_connection">There is no internet connection</string>
+    <string name="exception_message_connecting">There was an error connecting to printer</string>
     <string name="exception_message_printer_not_found">Cannot retrieve printer data.</string>
     <string name="exception_ip_address_blank">IP Address cannot be blank</string>
     <string name="exception_incorrect_ip_address_formatting">Incorrect formatting</string>
