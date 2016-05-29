@@ -46,20 +46,17 @@ public class ConnectionPresenter extends UseCaseEventPresenter<ConnectionScreen,
 
     @Override
     protected void execute() {
-        super.execute();
         mGetConnectionDetails.execute(new GetConnectionSubscriber());
     }
 
     @Override
     protected void onNetworkSwitched() {
-        super.onNetworkSwitched();
         execute();
     }
 
     @Override
     protected void networkNowInactive() {
-        super.networkNowInactive();
-        mScreen.enableScreen(false);
+        mScreen.showErrorView();
     }
 
     public void connectButtonClicked(ConnectModel connectModel) {
@@ -69,7 +66,7 @@ public class ConnectionPresenter extends UseCaseEventPresenter<ConnectionScreen,
 
     private void renderScreen(ConnectModel connectModel) {
         mScreen.showProgressBar(false);
-        mScreen.updateUi(connectModel, true);
+        mScreen.updateUi(connectModel);
 
         if(mIsFirstTime) {
             mIsFirstTime = false;
@@ -99,7 +96,7 @@ public class ConnectionPresenter extends UseCaseEventPresenter<ConnectionScreen,
         @Override
         public void onError(Throwable e) {
             super.onError(e);
-            mScreen.showProgressBar(false);
+            mScreen.showErrorView();
         }
 
         @Override
@@ -113,7 +110,7 @@ public class ConnectionPresenter extends UseCaseEventPresenter<ConnectionScreen,
         @Override
         public void onError(Throwable e) {
             super.onError(e);
-            mScreen.showProgressBar(false);
+            mScreen.showErrorView();
         }
 
         @Override
@@ -127,7 +124,7 @@ public class ConnectionPresenter extends UseCaseEventPresenter<ConnectionScreen,
         @Override
         public void onError(Throwable e) {
             super.onError(e);
-            mScreen.showProgressBar(false);
+            mScreen.showErrorView();
         }
 
         @Override
@@ -141,7 +138,7 @@ public class ConnectionPresenter extends UseCaseEventPresenter<ConnectionScreen,
         @Override
         public void onError(Throwable e) {
             super.onError(e);
-            mScreen.showProgressBar(false);
+            mScreen.showErrorView();
         }
 
         @Override

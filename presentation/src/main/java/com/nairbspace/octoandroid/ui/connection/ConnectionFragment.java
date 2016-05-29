@@ -1,12 +1,14 @@
 package com.nairbspace.octoandroid.ui.connection;
 
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -38,14 +40,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class ConnectionFragment extends BasePagerFragmentListener<ConnectionScreen,
-        ConnectionFragment.ConnectFragmentListener> implements ConnectionScreen,
+        ConnectionFragment.Listener> implements ConnectionScreen,
         SwipeRefreshLayout.OnRefreshListener {
 
     private static final String CONNECT_MODEL_KEY = "connection_model_key";
-    private static final String SHOW_VIEW_KEY = "show_view_key";
-    private ConnectModel mConnectModel;
 
-    private ConnectFragmentListener mListener;
     @Inject ConnectionPresenter mPresenter;
     @Inject SetEnableView mSetEnableView;
     @Inject SetShowView mSetShowView;
@@ -61,19 +60,18 @@ public class ConnectionFragment extends BasePagerFragmentListener<ConnectionScre
     @BindView(R.id.auto_connect_checkbox) CheckBox mAutoConnectCheckBox;
     @BindString(R.string.connect) String CONNECT;
     @BindString(R.string.disconnect) String DISCONNECT;
+    @BindDimen(R.dimen.connect_progress_bar_z_translation) float mProgressZTranslation;
     @BindViews({R.id.serial_port_spinner, R.id.baudrate_spinner, R.id.printer_profile_spinner,
     R.id.save_connection_settings_checkbox, R.id.auto_connect_checkbox, R.id. connect_button})
-    List<View> mAllViews;
-
+    List<View> mInputViews;
     @BindViews({R.id.serial_port_spinner, R.id.baudrate_spinner, R.id.printer_profile_spinner,
             R.id.save_connection_settings_checkbox, R.id.auto_connect_checkbox,
             R.id.serial_port_spinner_title, R.id.baudrate_spinner_title,
             R.id.printer_profile_spinner_title})
-    List<View> mConnectShowView;
+    List<View> mNotConnectedViews;
 
-    @BindDimen(R.dimen.connect_progress_bar_z_translation) float mProgressZTranslation;
-
-    private boolean mIsConnectButtonVisible;
+    private Listener mListener;
+    private ConnectModel mConnectModel;
     private List<String> mPorts;
     private ArrayAdapter<String> mSerialPortAdapter;
     private List<Integer> mBaudrates;
@@ -89,6 +87,7 @@ public class ConnectionFragment extends BasePagerFragmentListener<ConnectionScre
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SetupApplication.get(getActivity()).getAppComponent().inject(this);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -105,49 +104,11 @@ public class ConnectionFragment extends BasePagerFragmentListener<ConnectionScre
 
         if (savedInstanceState != null && savedInstanceState.getParcelable(CONNECT_MODEL_KEY) != null) {
             mConnectModel = savedInstanceState.getParcelable(CONNECT_MODEL_KEY);
-            updateUi(mConnectModel, false);
-        } else {
-            updateUi(ConnectModel.dummyModel(), false); //TODO fix up start up logic!!!
+            updateUi(mConnectModel);
         }
 
+        setEnableInputViews(false);
         return view;
-    }
-
-    @OnClick(R.id.connect_button)
-    void connectButtonPressed() {
-        mPresenter.connectButtonClicked(getConnectModel());
-    }
-
-    private ConnectModel getConnectModel() {
-        int selectedPortId = mSerialPortSpinner.getSelectedItemPosition();
-        int selectedBaudrateId = mBaudrateSpinner.getSelectedItemPosition();
-        int selectedPrinterProfileId = mPrinterProfileSpinner.getSelectedItemPosition();
-        boolean isSaveConnectionChecked = mSaveConnectionSettingsCheckBox.isChecked();
-        boolean isAutoConnectChecked = mAutoConnectCheckBox.isChecked();
-
-        return ConnectModel.builder()
-                .isNotConnected(mIsConnectButtonVisible)
-                .ports(mPorts)
-                .baudrates(mBaudrates)
-                .printerProfiles(mPrinterProfiles)
-                .selectedPortId(selectedPortId)
-                .selectedBaudrateId(selectedBaudrateId)
-                .selectedPrinterProfileId(selectedPrinterProfileId)
-                .isSaveConnectionChecked(isSaveConnectionChecked)
-                .isAutoConnectChecked(isAutoConnectChecked)
-                .build();
-    }
-
-    @Override
-    public void updateUi(ConnectModel connectModel, boolean isUpdateFromPresenter) {
-        mConnectModel = connectModel;
-        updateSerialPortSpinner(connectModel.ports());
-        updateBaudRateSpinner(connectModel.baudrates());
-        updatePrinterProfileSpinner(connectModel.printerProfiles());
-        mAutoConnectCheckBox.setChecked(connectModel.isAutoConnectChecked());
-        enableScreen(connectModel.isNotConnected());
-        mConnectButton.setEnabled(isUpdateFromPresenter);
-        mRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -160,6 +121,72 @@ public class ConnectionFragment extends BasePagerFragmentListener<ConnectionScre
         }
     }
 
+    private ConnectModel getConnectModel() throws NullPointerException {
+        int selectedPortId = mSerialPortSpinner.getSelectedItemPosition();
+        int selectedBaudrateId = mBaudrateSpinner.getSelectedItemPosition();
+        int selectedPrinterProfileId = mPrinterProfileSpinner.getSelectedItemPosition();
+        boolean isSaveConnectionChecked = mSaveConnectionSettingsCheckBox.isChecked();
+        boolean isAutoConnectChecked = mAutoConnectCheckBox.isChecked();
+
+        return ConnectModel.builder()
+                .isNotConnected(mConnectModel.isNotConnected())
+                .ports(mPorts)
+                .baudrates(mBaudrates)
+                .printerProfiles(mPrinterProfiles)
+                .selectedPortId(selectedPortId)
+                .selectedBaudrateId(selectedBaudrateId)
+                .selectedPrinterProfileId(selectedPrinterProfileId)
+                .isSaveConnectionChecked(isSaveConnectionChecked)
+                .isAutoConnectChecked(isAutoConnectChecked)
+                .build();
+    }
+
+    @OnClick(R.id.connect_button)
+    void connectButtonPressed() {
+        mPresenter.connectButtonClicked(getConnectModel());
+    }
+
+    @Override
+    public void setEnableInputViews(boolean shouldEnable) {
+        ButterKnife.apply(mInputViews, mSetEnableView, shouldEnable);
+    }
+
+    @Override
+    public void showProgressBar(boolean isLoading) {
+        if (isLoading) {
+            if (!mRefreshLayout.isRefreshing()) {
+                mConnectProgressBar.setVisibility(View.VISIBLE);
+            }
+            setEnableInputViews(false);
+        } else {
+            mRefreshLayout.setRefreshing(false);
+            mConnectProgressBar.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void updateUi(ConnectModel connectModel) {
+        mConnectModel = connectModel;
+        updateSerialPortSpinner(connectModel.ports());
+        updateBaudRateSpinner(connectModel.baudrates());
+        updatePrinterProfileSpinner(connectModel.printerProfiles());
+        mAutoConnectCheckBox.setChecked(connectModel.isAutoConnectChecked());
+        showProgressBar(false);
+        setEnableInputViews(true);
+        setShowNotConnectedViews(connectModel.isNotConnected());
+    }
+
+    public void setShowNotConnectedViews(boolean shouldShow) {
+        ButterKnife.apply(mNotConnectedViews, mSetShowView, shouldShow);
+        mConnectButton.setText(shouldShow ? CONNECT : DISCONNECT);
+    }
+
+    @Override
+    public void showErrorView() {
+        setEnableInputViews(false);
+        showProgressBar(false);
+    }
+
     @Override
     public void updateUiWithDefaults(int defaultPortId, int defaultBaudrateId,
                                      int defaultPrinterProfileId) {
@@ -168,22 +195,19 @@ public class ConnectionFragment extends BasePagerFragmentListener<ConnectionScre
         setSpinnerSelection(mPrinterProfileSpinner, defaultPrinterProfileId);
     }
 
-    @Override
-    public void updateSerialPortSpinner(List<String> ports) {
+    private void updateSerialPortSpinner(List<String> ports) {
         mPorts = ports;
         mSerialPortAdapter = updateAdapter(mSerialPortAdapter, mPorts);
         mSerialPortSpinner = updateSpinner(mSerialPortAdapter, mSerialPortSpinner);
     }
 
-    @Override
-    public void updateBaudRateSpinner(List<Integer> baudrates) {
+    private void updateBaudRateSpinner(List<Integer> baudrates) {
         mBaudrates = baudrates;
         mBaudrateAdapter = updateAdapter(mBaudrateAdapter, baudrates);
         mBaudrateSpinner = updateSpinner(mBaudrateAdapter, mBaudrateSpinner);
     }
 
-    @Override
-    public void updatePrinterProfileSpinner(HashMap<String, String> printerProfiles) {
+    private void updatePrinterProfileSpinner(HashMap<String, String> printerProfiles) {
         mPrinterProfiles = printerProfiles;
         List<String> printerProfileNames;
         if (printerProfiles.values() instanceof List) {
@@ -208,7 +232,7 @@ public class ConnectionFragment extends BasePagerFragmentListener<ConnectionScre
     }
 
     private Spinner updateSpinner(ArrayAdapter adapter, Spinner spinner) {
-        int position = spinner.getSelectedItemPosition();
+        int position = spinner.getSelectedItemPosition(); // Gets current position before updating
         spinner.setAdapter(adapter);
         setSpinnerSelection(spinner, position);
         return spinner;
@@ -221,28 +245,6 @@ public class ConnectionFragment extends BasePagerFragmentListener<ConnectionScre
             if (count > 0 && position < count) {
                 spinner.setSelection(position, true);
             }
-        }
-    }
-
-    @Override
-    public void showProgressBar(boolean isLoading) {
-        if (!mRefreshLayout.isRefreshing()) {
-            mConnectProgressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
-        }
-        enableScreen(!isLoading);
-    }
-
-    @Override
-    public void enableScreen(boolean isNotConnected) {
-        mIsConnectButtonVisible = isNotConnected;
-        mConnectButton.setText(isNotConnected ? CONNECT : DISCONNECT);
-        ButterKnife.apply(mAllViews, mSetEnableView, isNotConnected);
-        ButterKnife.apply(mConnectShowView, mSetShowView, isNotConnected);
-    }
-
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
         }
     }
 
@@ -260,8 +262,25 @@ public class ConnectionFragment extends BasePagerFragmentListener<ConnectionScre
 
     @NonNull
     @Override
-    protected ConnectFragmentListener setListener() {
-        return (ConnectFragmentListener) getContext();
+    protected Listener setListener() {
+        return (Listener) getContext();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_connection, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.refresh_connection_menu_item:
+                mPresenter.execute();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -269,7 +288,7 @@ public class ConnectionFragment extends BasePagerFragmentListener<ConnectionScre
         mPresenter.execute();
     }
 
-    public interface ConnectFragmentListener {
-        void onFragmentInteraction(Uri uri);
+    public interface Listener {
+
     }
 }

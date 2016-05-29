@@ -42,8 +42,7 @@ import timber.log.Timber;
 
 public class MainActivity extends BaseActivity<MainScreen>
         implements NavigationView.OnNavigationItemSelectedListener, MainScreen,
-        StatusFragment.Listener,
-        ConnectionFragment.ConnectFragmentListener, View.OnClickListener,
+        StatusFragment.Listener, ConnectionFragment.Listener, View.OnClickListener,
         FilesFragment.Listener, PlaybackFragment.Listener {
 
     @Inject MainPresenter mPresenter;
@@ -304,11 +303,6 @@ public class MainActivity extends BaseActivity<MainScreen>
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab:
@@ -331,4 +325,8 @@ public class MainActivity extends BaseActivity<MainScreen>
         return this;
     }
 
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
 }
