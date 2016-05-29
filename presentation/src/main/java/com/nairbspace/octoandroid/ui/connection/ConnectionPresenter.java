@@ -46,6 +46,7 @@ public class ConnectionPresenter extends UseCaseEventPresenter<ConnectionScreen,
 
     @Override
     protected void execute() {
+        unsubscribeAll();
         mGetConnectionDetails.execute(new GetConnectionSubscriber());
     }
 
@@ -150,9 +151,14 @@ public class ConnectionPresenter extends UseCaseEventPresenter<ConnectionScreen,
     @Override
     protected void onDestroy(ConnectionScreen connectionScreen) {
         super.onDestroy(connectionScreen);
+        unsubscribeAll();
+        mIsFirstTime = true;
+    }
+
+    private void unsubscribeAll() {
+        mGetConnectionDetails.unsubscribe();
         mConnectToPrinter.unsubscribe();
         mConnectionMapper.unsubscribe();
         mConnectModelMapper.unsubscribe();
-        mIsFirstTime = true;
     }
 }
