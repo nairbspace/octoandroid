@@ -1,6 +1,5 @@
 package com.nairbspace.octoandroid.ui.status;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -61,12 +60,6 @@ public class StatusFragment extends BasePagerFragmentListener<StatusScreen,
         return view;
     }
 
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void updateUI(WebsocketModel websocketModel) {
         mWebsocketModel = websocketModel;
@@ -105,6 +98,6 @@ public class StatusFragment extends BasePagerFragmentListener<StatusScreen,
     }
 
     public interface Listener {
-        void onFragmentInteraction(Uri uri);
+
     }
 }

@@ -35,15 +35,16 @@ public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
     private static final String CLICKED_POSITION_KEY = "clicked_position_key";
 
     @Inject FilesPresenter mPresenter;
-    private Listener mListener;
-    private FilesModel mFilesModel;
-    private FilesRvAdapter mAdapter;
 
     @BindView(R.id.files_swipe_refresh_layout) SwipeRefreshLayout mRefreshLayout;
     @BindView(R.id.file_list_recyclerview) RecyclerView mRecyclerView;
     @BindView(R.id.empty_files_textview) TextView mEmptyTextView;
     @BindView(R.id.files_progress_bar) ProgressBar mProgressBar;
     @BindString(R.string.status) String STATUS;
+
+    private Listener mListener;
+    private FilesModel mFilesModel;
+    private FilesRvAdapter mAdapter;
 
     public static FilesFragment newInstance() {
         return new FilesFragment();

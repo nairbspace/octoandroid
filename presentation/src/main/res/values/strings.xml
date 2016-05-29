@@ -41,9 +41,9 @@
     <string name="port_80">80</string>
     <string name="refresh">Refresh</string>
 
-    <string name="free_colon_space">Free:</string>
-    <string name="space_backslash_space">/</string>
-    <string name="total_colon_space">Total:</string>
+    <string name="free_colon_space">Free:&#160;</string>
+    <string name="space_backslash_space">&#160;/&#160;</string>
+    <string name="total_colon_space">Total:&#160;</string>
     <string name="serial_port">Serial Port</string>
     <string name="baudrate">Baudrate</string>
     <string name="printer_profile">Printer Profile</string>
@@ -52,10 +52,12 @@
 
 
     <string name="summary">Summary</string>
-    <string name="machine_state_colon_space">Machine State:</string>
-    <string name="file_colon_space">File:</string>
-    <string name="approx_total_print_time_colon_space">Approx. Total Print Time:</string>
-    <string name="print_time_colon_space">Print Time:</string>
-    <string name="print_time_left_colon_space">Print Time Left:</string>
-    <string name="printed_colon_space">Printed:</string>
+    <string name="machine_state_colon_space">Machine State:&#160;</string>
+    <string name="file_colon_space">File:&#160;</string>
+    <string name="approx_total_print_time_colon_space">Approx. Total Print Time:&#160;</string>
+    <string name="print_time_colon_space">Print Time:&#160;</string>
+    <string name="print_time_left_colon_space">Print Time Left:&#160;</string>
+    <string name="printed_colon_space">Printed:&#160;</string>
+    <string name="non_breakable_space">&#160;</string>
+    <string name="breakable_space">&#032;</string>
 </resources>

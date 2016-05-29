@@ -1,7 +1,6 @@
 package com.nairbspace.octoandroid.ui.playback;
 
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -32,7 +31,6 @@ public class PlaybackFragment extends BaseFragmentListener<PlaybackScreen,
         PlaybackFragment.Listener> implements PlaybackScreen, View.OnClickListener {
 
     private static final String WEBSOCKET_MODEL_KEY = "websocket_model_key";
-    private WebsocketModel mWebsocketModel;
 
     @Inject PlaybackPresenter mPresenter;
 
@@ -54,6 +52,7 @@ public class PlaybackFragment extends BaseFragmentListener<PlaybackScreen,
     @BindColor(android.R.color.black) int mBlackColor;
 
     private Listener mListener;
+    private WebsocketModel mWebsocketModel;
 
     public static PlaybackFragment newInstance() {
         return new PlaybackFragment();
@@ -175,12 +174,6 @@ public class PlaybackFragment extends BaseFragmentListener<PlaybackScreen,
         outState.putParcelable(WEBSOCKET_MODEL_KEY, mWebsocketModel);
     }
 
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @NonNull
     @Override
     protected Presenter setPresenter() {
@@ -201,6 +194,5 @@ public class PlaybackFragment extends BaseFragmentListener<PlaybackScreen,
     }
 
     public interface Listener {
-        void onFragmentInteraction(Uri uri);
     }
 }

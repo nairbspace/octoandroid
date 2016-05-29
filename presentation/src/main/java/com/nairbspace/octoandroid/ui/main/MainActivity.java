@@ -2,7 +2,6 @@ package com.nairbspace.octoandroid.ui.main;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -27,12 +26,12 @@ import android.widget.TextView;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
-import com.nairbspace.octoandroid.ui.templates.BaseActivity;
-import com.nairbspace.octoandroid.ui.templates.Presenter;
 import com.nairbspace.octoandroid.ui.connection.ConnectionFragment;
 import com.nairbspace.octoandroid.ui.files.FilesFragment;
 import com.nairbspace.octoandroid.ui.playback.PlaybackFragment;
 import com.nairbspace.octoandroid.ui.status.StatusFragment;
+import com.nairbspace.octoandroid.ui.templates.BaseActivity;
+import com.nairbspace.octoandroid.ui.templates.Presenter;
 
 import javax.inject.Inject;
 
@@ -323,10 +322,5 @@ public class MainActivity extends BaseActivity<MainScreen>
     @Override
     protected MainScreen setScreen() {
         return this;
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
     }
 }

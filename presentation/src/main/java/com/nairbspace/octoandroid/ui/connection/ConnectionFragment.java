@@ -263,7 +263,8 @@ public class ConnectionFragment extends BasePagerFragmentListener<ConnectionScre
     @NonNull
     @Override
     protected Listener setListener() {
-        return (Listener) getContext();
+        mListener = (Listener) getContext();
+        return mListener;
     }
 
     @Override
