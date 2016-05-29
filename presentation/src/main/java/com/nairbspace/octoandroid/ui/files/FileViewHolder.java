@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.model.FilesModel;
@@ -83,6 +84,7 @@ public class FileViewHolder extends RecyclerView.ViewHolder {
 
     @OnClick(R.id.file_details_icon)
     void onDetailsClicked() {
+        Toast.makeText(mView.getContext(), "No file details found", Toast.LENGTH_SHORT).show(); // TODO-low include file details
     }
 
     @OnClick(R.id.load_file_icon)

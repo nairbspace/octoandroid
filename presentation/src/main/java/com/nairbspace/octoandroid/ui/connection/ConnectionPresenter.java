@@ -146,8 +146,7 @@ public class ConnectionPresenter extends UseCaseEventPresenter<ConnectionScreen,
 
         @Override
         public void onNext(Object o) {
-            // Should update automatically now with EventBus
-//            execute();
+            execute();
         }
     }
 
