@@ -1,5 +1,7 @@
 package com.nairbspace.octoandroid.ui.files;
 
+import android.content.Context;
+
 import com.nairbspace.octoandroid.model.FilesModel;
 
 public interface FilesScreen {
@@ -11,4 +13,8 @@ public interface FilesScreen {
     void showEmptyScreen();
 
     void deleteFileFromAdapter(int adapterPosition);
+
+    void showToast(String message);
+
+    Context context();
 }

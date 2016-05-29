@@ -7,6 +7,7 @@ import com.nairbspace.octoandroid.domain.interactor.SendFileCommand;
 import com.nairbspace.octoandroid.domain.interactor.UploadFile;
 import com.nairbspace.octoandroid.domain.model.FileCommand;
 import com.nairbspace.octoandroid.domain.model.Files;
+import com.nairbspace.octoandroid.exception.ErrorMessageFactory;
 import com.nairbspace.octoandroid.mapper.FileCommandModelMapper;
 import com.nairbspace.octoandroid.mapper.FilesMapper;
 import com.nairbspace.octoandroid.model.FileCommandModel;
@@ -52,6 +53,7 @@ public class FilesPresenter extends UseCaseEventPresenter<FilesScreen, Websocket
     @Override
     protected void execute() {
         mScreen.showProgressBar();
+        unsubscribeAll();
         mGetFiles.execute(new GetFilesSubsubscriber());
     }
 
@@ -84,9 +86,8 @@ public class FilesPresenter extends UseCaseEventPresenter<FilesScreen, Websocket
         mScreen.updateUi(filesModel);
     }
 
-    @Override
-    protected void onDestroy(FilesScreen filesScreen) {
-        super.onDestroy(filesScreen);
+    private void unsubscribeAll() {
+        mGetFiles.unsubscribe();
         mFilesMapper.unsubscribe();
         mFileCommandModelMapper.unsubscribe();
         mSendFileCommand.unsubscribe();
@@ -110,16 +111,17 @@ public class FilesPresenter extends UseCaseEventPresenter<FilesScreen, Websocket
 
     public void executeUpload(String uriString) {
         mScreen.showProgressBar();
+        unsubscribeAll();
         mUploadFile.execute(new UploadSubscriber(), uriString);
     }
 
-    // TODO need better error handling.
     private final class GetFilesSubsubscriber extends DefaultSubscriber<Files> {
 
         @Override
         public void onError(Throwable e) {
             super.onError(e);
             mScreen.showEmptyScreen();
+            showErrorMessage(e);
         }
 
         @Override
@@ -134,6 +136,7 @@ public class FilesPresenter extends UseCaseEventPresenter<FilesScreen, Websocket
         public void onError(Throwable e) {
             super.onError(e);
             mScreen.showEmptyScreen();
+            showErrorMessage(e);
         }
 
         @Override
@@ -146,6 +149,7 @@ public class FilesPresenter extends UseCaseEventPresenter<FilesScreen, Websocket
         @Override
         public void onError(Throwable e) {
             super.onError(e);
+            showErrorMessage(e);
         }
 
         @Override
@@ -160,7 +164,7 @@ public class FilesPresenter extends UseCaseEventPresenter<FilesScreen, Websocket
         @Override
         public void onError(Throwable e) {
             super.onError(e);
-            execute();
+            showErrorMessage(e);
         }
     }
 
@@ -175,6 +179,8 @@ public class FilesPresenter extends UseCaseEventPresenter<FilesScreen, Websocket
         @Override
         public void onError(Throwable e) {
             super.onError(e);
+            execute();
+            showErrorMessage(e);
         }
 
         @Override
@@ -195,6 +201,18 @@ public class FilesPresenter extends UseCaseEventPresenter<FilesScreen, Websocket
         public void onError(Throwable e) {
             super.onError(e);
             execute();
+            showErrorMessage(e);
         }
+    }
+
+    private void showErrorMessage(Throwable t) {
+        String message = ErrorMessageFactory.create(mScreen.context(), (Exception) t);
+        mScreen.showToast(message);
+    }
+
+    @Override
+    protected void onDestroy(FilesScreen filesScreen) {
+        super.onDestroy(filesScreen);
+        unsubscribeAll();
     }
 }

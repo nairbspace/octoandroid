@@ -1,6 +1,7 @@
 package com.nairbspace.octoandroid.ui.files;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
@@ -201,6 +203,16 @@ public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
     @Override
     public void loadButtonClicked(String apiUrl) {
         mPresenter.executeLoad(apiUrl);
+    }
+
+    @Override
+    public void showToast(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public Context context() {
+        return getContext();
     }
 
     @Override
