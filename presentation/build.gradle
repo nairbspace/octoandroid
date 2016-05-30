@@ -97,4 +97,6 @@ dependencies {
     testCompile presentationDependencies.leakCanaryNoOp
 
     apt presentationDependencies.autoValueParcel // AutoValue Parcelable
+
+    compile presentationDependencies.mpAndroidChart
 }

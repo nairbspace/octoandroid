@@ -1,9 +1,8 @@
 allprojects {
     repositories {
         jcenter()
-        maven {
-            url 'https://oss.sonatype.org/content/repositories/snapshots/'
-        }
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+        maven { url "https://jitpack.io" }
     }
 }
 
@@ -27,6 +26,7 @@ ext {
     timberVersion = "4.1.2"
     eventBusVersion = "3.0.0"
     leakcanaryVersion = "1.4-SNAPSHOT"
+    mpAndroidChartVersion = "v2.2.5"
 
     // Testing Libraries
     jUnitVersion = "4.12"
@@ -80,5 +80,6 @@ ext {
             leakCanary:                 "com.squareup.leakcanary:leakcanary-android:${leakcanaryVersion}",
             leakCanaryNoOp:             "com.squareup.leakcanary:leakcanary-android-no-op:${leakcanaryVersion}",
             autoValueParcel:            "com.ryanharter.auto.value:auto-value-parcel:${autoValueParcelVersion}",
+            mpAndroidChart:             "com.github.PhilJay:MPAndroidChart:${mpAndroidChartVersion}",
     ]
 }
