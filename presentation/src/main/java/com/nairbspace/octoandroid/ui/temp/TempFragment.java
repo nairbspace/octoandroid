@@ -28,6 +28,11 @@ import butterknife.ButterKnife;
 
 public class TempFragment extends BasePagerFragmentListener<TempScreen, TempFragment.Listener>
         implements TempScreen {
+
+    @Inject TempPresenter mPresenter;
+    @BindView(R.id.temp_line_chart) LineChart mLineChart;
+    private final Listener mListener = (Listener) getContext();
+
     private static final String X_VALS_TIME_KEY = "x_vals_time_key";
     private static final String Y_VALS_ACTUAL_TEMP_BED_KEY = "y_vals_actual_temp_bed_key";
     private static final String Y_VALS_TARGET_TEMP_BED_KEY = "y_vals_target_temp_bed_key";
@@ -36,11 +41,12 @@ public class TempFragment extends BasePagerFragmentListener<TempScreen, TempFrag
     private static final String Y_VALS_ACTUAL_TEMP_TOOL1_KEY = "y_vals_actual_temp_tool1_key";
     private static final String Y_VALS_TARGET_TEMP_TOOL1_KEY = "y_vals_target_temp_tool1_key";
 
-    private final Listener mListener = (Listener) getContext();
-
-    @Inject TempPresenter mPresenter;
-
-    @BindView(R.id.temp_line_chart) LineChart mLineChart;
+    private final int actualTempBedIndex;
+    private final int targetTempBedIndex;
+    private final int actualTempTool0Index;
+    private final int targetTempTool0Index;
+    private final int actualTempTool1Index;
+    private final int targetTempTool1Index;
 
     private ArrayList<String> xValsTime = new ArrayList<>();
     private ArrayList<Entry> yValsActualTempBed = new ArrayList<>();
@@ -50,22 +56,16 @@ public class TempFragment extends BasePagerFragmentListener<TempScreen, TempFrag
     private ArrayList<Entry> yValsActualTempTool1 = new ArrayList<>();
     private ArrayList<Entry> yValsTargetTempTool1 = new ArrayList<>();
 
-    private final LineDataSet actualTempBedDataSet = new LineDataSet(yValsActualTempBed, "Bed - Actual Temp degC");
-    private final LineDataSet targetTempBedDataSet = new LineDataSet(yValsTargetTempBed, "Bed - Target Temp degC");
-    private final LineDataSet actualTempTool0DataSet = new LineDataSet(yValsActualTempTool0, "Tool0 - Actual Temp degC");
-    private final LineDataSet targetTempTool0DataSet = new LineDataSet(yValsTargetTempTool0, "Tool0 - Target Temp degC");
-    private final LineDataSet actualTempTool1DataSet = new LineDataSet(yValsActualTempTool1, "Tool1 - Actual Temp degC");
-    private final LineDataSet targetTempTool1DataSet = new LineDataSet(yValsTargetTempTool1, "Tool1 - Target Temp degC");
-
-    private final int actualTempBedIndex;
-    private final int targetTempBedIndex;
-    private final int actualTempTool0Index;
-    private final int targetTempTool0Index;
-    private final int actualTempTool1Index;
-    private final int targetTempTool1Index;
+    private final LineDataSet actualTempBedDataSet = new LineDataSet(yValsActualTempBed, "Bed - Actual(°C)");
+    private final LineDataSet targetTempBedDataSet = new LineDataSet(yValsTargetTempBed, "Bed - Target(°C)");
+    private final LineDataSet actualTempTool0DataSet = new LineDataSet(yValsActualTempTool0, "Tool0 - Actual(°C)");
+    private final LineDataSet targetTempTool0DataSet = new LineDataSet(yValsTargetTempTool0, "Tool0 - Target(°C)");
+    private final LineDataSet actualTempTool1DataSet = new LineDataSet(yValsActualTempTool1, "Tool1 - Actual(°C)");
+    private final LineDataSet targetTempTool1DataSet = new LineDataSet(yValsTargetTempTool1, "Tool1 - Target(°C)");
 
     private final ArrayList<ILineDataSet> mDataSets = new ArrayList<>();
     private final LineData mLineData;
+    private final static float VISIBLE_X_RANGE_MAX = 10f;
 
     public TempFragment() {
         actualTempBedDataSet.enableDashedLine(10f, 5f, 0f);
@@ -114,7 +114,6 @@ public class TempFragment extends BasePagerFragmentListener<TempScreen, TempFrag
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_temperature, container, false);
         setUnbinder(ButterKnife.bind(this, view));
-        //TODO set title
 
         mLineChart.setData(mLineData);
         mLineChart.setScaleEnabled(true);
@@ -134,6 +133,16 @@ public class TempFragment extends BasePagerFragmentListener<TempScreen, TempFrag
         yValsTargetTempTool0 = savedInstanceState.getParcelableArrayList(Y_VALS_TARGET_TEMP_TOOL0_KEY);
         yValsActualTempTool1 = savedInstanceState.getParcelableArrayList(Y_VALS_ACTUAL_TEMP_TOOL1_KEY);
         yValsTargetTempTool1 = savedInstanceState.getParcelableArrayList(Y_VALS_TARGET_TEMP_TOOL1_KEY);
+
+        mLineChart.getData().setXVals(xValsTime);
+        ((LineDataSet) mLineChart.getData().getDataSetByIndex(actualTempBedIndex)).setYVals(yValsActualTempBed);
+        ((LineDataSet) mLineChart.getData().getDataSetByIndex(targetTempBedIndex)).setYVals(yValsTargetTempBed);
+        ((LineDataSet) mLineChart.getData().getDataSetByIndex(actualTempTool0Index)).setYVals(yValsActualTempTool0);
+        ((LineDataSet) mLineChart.getData().getDataSetByIndex(targetTempTool0Index)).setYVals(yValsTargetTempTool0);
+        ((LineDataSet) mLineChart.getData().getDataSetByIndex(actualTempTool1Index)).setYVals(yValsActualTempTool1);
+        ((LineDataSet) mLineChart.getData().getDataSetByIndex(targetTempTool1Index)).setYVals(yValsTargetTempTool1);
+
+        mLineChart.getData().notifyDataChanged();
         updateChart();
     }
 
@@ -152,48 +161,45 @@ public class TempFragment extends BasePagerFragmentListener<TempScreen, TempFrag
     @Override
     public void updateUi(WebsocketModel websocketModel) {
         xValsTime.add(websocketModel.tempTime());
-        yValsActualTempBed.add(new Entry(websocketModel.actualTempBed(), xValsTime.size()));
-        yValsTargetTempBed.add(new Entry(websocketModel.targetTempBed(), xValsTime.size()));
-        yValsActualTempTool0.add(new Entry(websocketModel.actualTempTool0(), xValsTime.size()));
-        yValsTargetTempTool0.add(new Entry(websocketModel.targetTempTool0(), xValsTime.size()));
-        yValsActualTempTool1.add(new Entry(websocketModel.actualTempTool1(), xValsTime.size()));
-        yValsTargetTempTool1.add(new Entry(websocketModel.targetTempTool1(), xValsTime.size()));
-//        trimData();
+        mLineChart.getData().addXValue(websocketModel.tempTime());
+        addEntry(actualTempBedIndex, websocketModel.actualTempBed());
+        addEntry(targetTempBedIndex, websocketModel.targetTempBed());
+        addEntry(actualTempTool0Index, websocketModel.actualTempTool0());
+        addEntry(targetTempTool0Index, websocketModel.targetTempTool0());
+        addEntry(actualTempTool1Index, websocketModel.actualTempTool1());
+        addEntry(targetTempTool1Index, websocketModel.targetTempTool1());
+
         updateChart();
     }
 
-    private void trimData() {
-        if (xValsTime.size() == 10) {
-            xValsTime.remove(0);
-            yValsActualTempBed.remove(0);
-            yValsTargetTempBed.remove(0);
-            yValsActualTempTool0.remove(0);
-            yValsTargetTempTool0.remove(0);
-            yValsActualTempTool1.remove(0);
-            yValsTargetTempTool1.remove(0);
+    private Entry addEntry(int dataSetIndex, float val) {
+        int xIndex = mLineChart.getData().getDataSetByIndex(dataSetIndex).getEntryCount();
+        Entry entry = new Entry(val, xIndex);
+        mLineChart.getData().addEntry(entry, dataSetIndex);
+
+        // This is for persistence since Entry's are parcelable.
+        // Currently don't know how to retrieve from actual chart
+        if (dataSetIndex == actualTempBedIndex) {
+            yValsActualTempBed.add(entry);
+        } else if (dataSetIndex == targetTempBedIndex) {
+            yValsTargetTempBed.add(entry);
+        } else if (dataSetIndex == actualTempTool0Index) {
+            yValsActualTempTool0.add(entry);
+        } else if (dataSetIndex == targetTempTool0Index) {
+            yValsTargetTempTool0.add(entry);
+        } else if (dataSetIndex == actualTempTool1Index) {
+            yValsActualTempTool1.add(entry);
+        } else if (dataSetIndex == targetTempTool1Index) {
+            yValsTargetTempTool1.add(entry);
         }
+
+        return entry; // For convenience
     }
 
     public void updateChart() {
-        ((LineDataSet) mLineChart.getData().getDataSetByIndex(actualTempBedIndex)).setYVals(yValsActualTempBed);
-        ((LineDataSet) mLineChart.getData().getDataSetByIndex(targetTempBedIndex)).setYVals(yValsTargetTempBed);
-        ((LineDataSet) mLineChart.getData().getDataSetByIndex(actualTempTool0Index)).setYVals(yValsActualTempTool0);
-        ((LineDataSet) mLineChart.getData().getDataSetByIndex(targetTempTool0Index)).setYVals(yValsTargetTempTool0);
-        ((LineDataSet) mLineChart.getData().getDataSetByIndex(actualTempTool1Index)).setYVals(yValsActualTempTool1);
-        ((LineDataSet) mLineChart.getData().getDataSetByIndex(targetTempTool1Index)).setYVals(yValsTargetTempTool1);
-
-        mLineChart.getData().setXVals(xValsTime);
-        mLineChart.getData().notifyDataChanged();
-        autoScroll();
         mLineChart.notifyDataSetChanged();
-    }
-
-    private void autoScroll() {
-        if (xValsTime.size() > 5) {
-//            mLineChart.fitScreen();
-            float xPosition = xValsTime.size() - 5;
-            mLineChart.moveViewToX(xPosition);
-        }
+        mLineChart.setVisibleXRangeMaximum(VISIBLE_X_RANGE_MAX);
+        mLineChart.moveViewToX(mLineChart.getData().getXValCount() - VISIBLE_X_RANGE_MAX - 1);
     }
 
     @NonNull
