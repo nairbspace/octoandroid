@@ -5,6 +5,8 @@ import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 @AutoValue
 @AutoGson(autoValueClass = AutoValue_CurrentHistory.class)
 public abstract class CurrentHistory {
@@ -14,7 +16,7 @@ public abstract class CurrentHistory {
     @Nullable @SerializedName("progress") public abstract Progress progress();
 //    @Nullable @SerializedName("currentZ") public abstract Double currentZ();
 //    @Nullable @SerializedName("offsets") public abstract Offsets offsets();
-//    @Nullable @SerializedName("temps") public abstract List<Temps> temps();
+    @Nullable @SerializedName("temps") public abstract List<Temps> temps();
 //    @Nullable @SerializedName("logs") public abstract List<String> logs();
 //    @Nullable @SerializedName("messages") public abstract List<String> messages();
 //    @Nullable @SerializedName("serverTime") public abstract Double serverTime(); // Pretty sure unix time, not in doc
@@ -92,25 +94,25 @@ public abstract class CurrentHistory {
         @AutoValue
         @AutoGson(autoValueClass = AutoValue_CurrentHistory_Temps_Tool0.class)
         public abstract static class Tool0 {
-            @SerializedName("actual") public abstract Integer actual();
-            @SerializedName("target") public abstract Integer target();
-            @SerializedName("offset") public abstract Integer offset();
+            @Nullable @SerializedName("actual") public abstract Double actual();
+            @Nullable @SerializedName("target") public abstract Double target();
+//            @Nullable @SerializedName("offset") public abstract Double offset();
         }
 
         @AutoValue
         @AutoGson(autoValueClass = AutoValue_CurrentHistory_Temps_Tool1.class)
         public abstract static class Tool1 {
-            @Nullable @SerializedName("actual") public abstract Integer actual();
-            @Nullable @SerializedName("target") public abstract Integer target();
-            @Nullable @SerializedName("offset") public abstract Integer offset();
+            @Nullable @SerializedName("actual") public abstract Double actual();
+            @Nullable @SerializedName("target") public abstract Double target();
+//            @Nullable @SerializedName("offset") public abstract Double offset();
         }
 
         @AutoValue
         @AutoGson(autoValueClass = AutoValue_CurrentHistory_Temps_Bed.class)
         public abstract static class Bed {
-            @Nullable @SerializedName("actual") public abstract Integer actual();
-            @Nullable @SerializedName("target") public abstract Integer target();
-            @Nullable @SerializedName("offset") public abstract Integer offset();
+            @Nullable @SerializedName("actual") public abstract Double actual();
+            @Nullable @SerializedName("target") public abstract Double target();
+//            @Nullable @SerializedName("offset") public abstract Double offset();
         }
     }
 
