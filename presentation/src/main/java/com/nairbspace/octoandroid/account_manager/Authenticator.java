@@ -12,7 +12,6 @@ import android.os.Handler;
 import android.widget.Toast;
 
 import com.nairbspace.octoandroid.R;
-import com.nairbspace.octoandroid.app.LifecycleHandler;
 import com.nairbspace.octoandroid.app.SetupApplication;
 import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
 import com.nairbspace.octoandroid.domain.interactor.DeletePrinterByName;
@@ -76,15 +75,20 @@ public class Authenticator extends AbstractAccountAuthenticator {
     public Bundle getAccountRemovalAllowed(AccountAuthenticatorResponse response, Account account) throws NetworkErrorException {
         Bundle result = new Bundle();
 
-        // Check if app process is running before deleting account
-        if (LifecycleHandler.isApplicationInBackground()) {
-            result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, false);
-            mHandler.post(toastRunnable);
-        } else {
-            String name = account.name;
-            mPrinterDetailsByName.execute(new GetPrinterDetailsSubscriber(), name);
-            result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, true);
-        }
+        // Code below works, but now can't delete from within app...
+//        // Check if app process is running before deleting account
+//        if (LifecycleHandler.isApplicationInBackground()) {
+//            result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, false);
+//            mHandler.post(toastRunnable);
+//        } else {
+//            String name = account.name;
+//            mPrinterDetailsByName.execute(new GetPrinterDetailsSubscriber(), name);
+//            result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, true);
+//        }
+
+        String name = account.name;
+        mPrinterDetailsByName.execute(new GetPrinterDetailsSubscriber(), name);
+        result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, true);
         return result;
     }
 
