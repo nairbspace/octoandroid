@@ -10,7 +10,7 @@ import com.nairbspace.octoandroid.ui.add_printer.AddPrinterActivity;
 import com.nairbspace.octoandroid.ui.connection.ConnectionFragment;
 import com.nairbspace.octoandroid.ui.dispatch.DispatchActivity;
 import com.nairbspace.octoandroid.ui.files.FilesFragment;
-import com.nairbspace.octoandroid.ui.main.MainActivity;
+import com.nairbspace.octoandroid.ui.status.StatusActivity;
 import com.nairbspace.octoandroid.ui.playback.PlaybackFragment;
 import com.nairbspace.octoandroid.ui.state.StateFragment;
 import com.nairbspace.octoandroid.ui.webcam.WebcamActivity;
@@ -27,7 +27,7 @@ public interface AppComponent {
 
     void inject(AddPrinterActivity addPrinterActivity);
 
-    void inject(MainActivity mainActivity);
+    void inject(StatusActivity statusActivity);
 
     void inject(Authenticator authenticator);
 

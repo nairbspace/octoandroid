@@ -14,7 +14,7 @@ import android.support.v7.app.AlertDialog;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.ui.add_printer.AddPrinterActivity;
-import com.nairbspace.octoandroid.ui.main.MainActivity;
+import com.nairbspace.octoandroid.ui.status.StatusActivity;
 import com.nairbspace.octoandroid.ui.settings.SettingsActivity;
 import com.nairbspace.octoandroid.ui.webcam.WebcamActivity;
 
@@ -63,7 +63,7 @@ public class Navigator {
     }
 
     public void navigateToStatusActivity(Activity activity) {
-        Intent i = MainActivity.newIntent(activity);
+        Intent i = StatusActivity.newIntent(activity);
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         activity.startActivity(i);
     }

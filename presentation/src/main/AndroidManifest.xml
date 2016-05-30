@@ -40,15 +40,15 @@
             android:label="@string/add_printer"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".ui.main.MainActivity"
-            android:label="@string/app_name"
+            android:name=".ui.status.StatusActivity"
+            android:label="@string/status"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".ui.webcam.WebcamActivity"
                   android:label="@string/webcam"
                   android:theme="@style/FullscreenTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.main.MainActivity"/>
+                android:value=".ui.status.StatusActivity"/>
         </activity>
         <activity
             android:name=".ui.settings.SettingsActivity"
@@ -56,7 +56,7 @@
             android:label="@string/title_activity_settings">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.main.MainActivity"/>
+                android:value=".ui.status.StatusActivity"/>
         </activity>
 
         <!-- Services -->

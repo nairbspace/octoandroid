@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.ui.main;
+package com.nairbspace.octoandroid.ui.status;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

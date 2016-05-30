@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.ui.main;
+package com.nairbspace.octoandroid.ui.status;
 
 import com.nairbspace.octoandroid.data.exception.NetworkConnectionException;
 import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
@@ -11,23 +11,23 @@ import com.nairbspace.octoandroid.ui.templates.UseCasePresenter;
 
 import javax.inject.Inject;
 
-public class MainPresenter extends UseCasePresenter<MainScreen> {
+public class StatusPresenter extends UseCasePresenter<StatusScreen> {
 
-    private MainScreen mScreen;
+    private StatusScreen mScreen;
     private final GetPrinterDetails mUseCase;
     private final PrinterModelMapper mPrinterModelMapper;
 
     @Inject
-    public MainPresenter(GetPrinterDetails getPrinterDetailsUseCase,
-                         PrinterModelMapper printerModelMapper) {
+    public StatusPresenter(GetPrinterDetails getPrinterDetailsUseCase,
+                           PrinterModelMapper printerModelMapper) {
         super(getPrinterDetailsUseCase);
         mUseCase = getPrinterDetailsUseCase;
         mPrinterModelMapper = printerModelMapper;
     }
 
     @Override
-    protected void onInitialize(MainScreen mainScreen) {
-        mScreen = mainScreen;
+    protected void onInitialize(StatusScreen statusScreen) {
+        mScreen = statusScreen;
         execute();
     }
 

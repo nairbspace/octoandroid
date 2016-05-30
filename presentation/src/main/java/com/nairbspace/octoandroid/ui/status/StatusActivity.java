@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.ui.main;
+package com.nairbspace.octoandroid.ui.status;
 
 import android.content.Context;
 import android.content.Intent;
@@ -39,12 +39,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-public class MainActivity extends BaseActivity<MainScreen>
-        implements NavigationView.OnNavigationItemSelectedListener, MainScreen,
+public class StatusActivity extends BaseActivity<StatusScreen>
+        implements NavigationView.OnNavigationItemSelectedListener, StatusScreen,
         StateFragment.Listener, ConnectionFragment.Listener, View.OnClickListener,
         FilesFragment.Listener, PlaybackFragment.Listener {
 
-    @Inject MainPresenter mPresenter;
+    @Inject StatusPresenter mPresenter;
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.fab) FloatingActionButton mFab;
@@ -59,7 +59,7 @@ public class MainActivity extends BaseActivity<MainScreen>
     private Snackbar mSnackbar;
 
     public static Intent newIntent(Context context) {
-        return new Intent(context, MainActivity.class);
+        return new Intent(context, StatusActivity.class);
     }
 
     @Override
@@ -324,7 +324,7 @@ public class MainActivity extends BaseActivity<MainScreen>
 
     @NonNull
     @Override
-    protected MainScreen setScreen() {
+    protected StatusScreen setScreen() {
         return this;
     }
 }
