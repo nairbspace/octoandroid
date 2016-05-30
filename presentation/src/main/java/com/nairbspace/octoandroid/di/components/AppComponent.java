@@ -8,6 +8,7 @@ import com.nairbspace.octoandroid.di.modules.StorageModule;
 import com.nairbspace.octoandroid.di.modules.WebsocketModule;
 import com.nairbspace.octoandroid.ui.add_printer.AddPrinterActivity;
 import com.nairbspace.octoandroid.ui.connection.ConnectionFragment;
+import com.nairbspace.octoandroid.ui.dispatch.DispatchActivity;
 import com.nairbspace.octoandroid.ui.files.FilesFragment;
 import com.nairbspace.octoandroid.ui.main.MainActivity;
 import com.nairbspace.octoandroid.ui.playback.PlaybackFragment;
@@ -22,6 +23,8 @@ import dagger.Component;
 @Component(modules = {AppModule.class, NetworkModule.class, StorageModule.class,
         RestModule.class, WebsocketModule.class})
 public interface AppComponent {
+    void inject(DispatchActivity dispatchActivity);
+
     void inject(AddPrinterActivity addPrinterActivity);
 
     void inject(MainActivity mainActivity);

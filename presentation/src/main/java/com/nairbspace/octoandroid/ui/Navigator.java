@@ -14,6 +14,7 @@ import android.support.v7.app.AlertDialog;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.ui.add_printer.AddPrinterActivity;
+import com.nairbspace.octoandroid.ui.main.MainActivity;
 import com.nairbspace.octoandroid.ui.settings.SettingsActivity;
 import com.nairbspace.octoandroid.ui.webcam.WebcamActivity;
 
@@ -50,6 +51,21 @@ public class Navigator {
     public void navigateToAddPrinterActivityForResult(Activity activity) {
         Intent intentToLaunch = AddPrinterActivity.newIntent(activity);
         activity.startActivityForResult(intentToLaunch, ADD_PRINTER_REQUEST_CODE);
+    }
+
+    public boolean wasAddPrinterResultOk(int requestCode, int resultCode) {
+        if (requestCode == getAddPrinterRequestCode()) {
+            if (resultCode == Activity.RESULT_OK) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void navigateToStatusActivity(Activity activity) {
+        Intent i = MainActivity.newIntent(activity);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        activity.startActivity(i);
     }
 
     public void navigateToSettingsActivity(Activity activity) {

@@ -58,6 +58,10 @@ public class MainActivity extends BaseActivity<MainScreen>
     private TextView mPrinterIpAddressNavTextView;
     private Snackbar mSnackbar;
 
+    public static Intent newIntent(Context context) {
+        return new Intent(context, MainActivity.class);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
