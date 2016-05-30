@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.ui.status;
+package com.nairbspace.octoandroid.ui.state;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,12 +19,12 @@ import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class StatusFragment extends BasePagerFragmentListener<StatusScreen,
-        StatusFragment.Listener> implements StatusScreen {
+public class StateFragment extends BasePagerFragmentListener<StateScreen,
+        StateFragment.Listener> implements StateScreen {
 
     private static final String STATUS_MODEL_KEY = "status_model_key";
 
-    @Inject StatusPresenter mPresenter;
+    @Inject StatePresenter mPresenter;
 
     @BindView(R.id.machine_state_textview) TextView mMachineStateTextView;
     @BindView(R.id.file_textview) TextView mFileTextview;
@@ -38,8 +38,8 @@ public class StatusFragment extends BasePagerFragmentListener<StatusScreen,
     private Listener mListener;
     private WebsocketModel mWebsocketModel;
 
-    public static StatusFragment newInstance() {
-        return new StatusFragment();
+    public static StateFragment newInstance() {
+        return new StateFragment();
     }
 
     @Override
@@ -86,7 +86,7 @@ public class StatusFragment extends BasePagerFragmentListener<StatusScreen,
 
     @NonNull
     @Override
-    protected StatusScreen setScreen() {
+    protected StateScreen setScreen() {
         return this;
     }
 

@@ -29,7 +29,7 @@ import com.nairbspace.octoandroid.app.SetupApplication;
 import com.nairbspace.octoandroid.ui.connection.ConnectionFragment;
 import com.nairbspace.octoandroid.ui.files.FilesFragment;
 import com.nairbspace.octoandroid.ui.playback.PlaybackFragment;
-import com.nairbspace.octoandroid.ui.status.StatusFragment;
+import com.nairbspace.octoandroid.ui.state.StateFragment;
 import com.nairbspace.octoandroid.ui.templates.BaseActivity;
 import com.nairbspace.octoandroid.ui.templates.Presenter;
 
@@ -41,7 +41,7 @@ import timber.log.Timber;
 
 public class MainActivity extends BaseActivity<MainScreen>
         implements NavigationView.OnNavigationItemSelectedListener, MainScreen,
-        StatusFragment.Listener, ConnectionFragment.Listener, View.OnClickListener,
+        StateFragment.Listener, ConnectionFragment.Listener, View.OnClickListener,
         FilesFragment.Listener, PlaybackFragment.Listener {
 
     @Inject MainPresenter mPresenter;

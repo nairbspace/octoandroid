@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.ui.status;
+package com.nairbspace.octoandroid.ui.state;
 
 import com.nairbspace.octoandroid.model.WebsocketModel;
 import com.nairbspace.octoandroid.ui.templates.EventPresenter;
@@ -7,18 +7,18 @@ import org.greenrobot.eventbus.EventBus;
 
 import javax.inject.Inject;
 
-public class StatusPresenter extends EventPresenter<StatusScreen, WebsocketModel> {
+public class StatePresenter extends EventPresenter<StateScreen, WebsocketModel> {
 
-    private StatusScreen mScreen;
+    private StateScreen mScreen;
 
     @Inject
-    public StatusPresenter(EventBus eventBus) {
+    public StatePresenter(EventBus eventBus) {
         super(eventBus);
     }
 
     @Override
-    protected void onInitialize(StatusScreen statusScreen) {
-        mScreen = statusScreen;
+    protected void onInitialize(StateScreen stateScreen) {
+        mScreen = stateScreen;
     }
 
 

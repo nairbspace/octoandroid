@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.nairbspace.octoandroid.ui.connection.ConnectionFragment;
 import com.nairbspace.octoandroid.ui.files.FilesFragment;
-import com.nairbspace.octoandroid.ui.status.StatusFragment;
+import com.nairbspace.octoandroid.ui.state.StateFragment;
 
 public class StatusFragmentPagerAdapter extends FragmentPagerAdapter {
     private static final int PAGE_COUNT =  3;
@@ -21,7 +21,7 @@ public class StatusFragmentPagerAdapter extends FragmentPagerAdapter {
         if (position == 0) {
             return ConnectionFragment.newInstance();
         } else if (position == 1) {
-            return StatusFragment.newInstance();
+            return StateFragment.newInstance();
         } else {
             return FilesFragment.newInstance();
         }

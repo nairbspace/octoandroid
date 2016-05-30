@@ -1,8 +1,8 @@
-package com.nairbspace.octoandroid.ui.status;
+package com.nairbspace.octoandroid.ui.state;
 
 import com.nairbspace.octoandroid.model.WebsocketModel;
 
-public interface StatusScreen {
+public interface StateScreen {
 
     void updateUI(WebsocketModel websocketModel);
 }
