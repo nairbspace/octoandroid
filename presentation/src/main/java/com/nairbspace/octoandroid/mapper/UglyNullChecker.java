@@ -71,4 +71,40 @@ public class UglyNullChecker {
     public boolean isStateFlagsNotNull(Websocket websocket) {
         return isStateNotNull(websocket) && websocket.current().state().flags() != null;
     }
+
+    public boolean isTempsListNotNullOrEmpty(Websocket websocket) {
+        return isCurrentNotNull(websocket) && websocket.current().temps() != null && websocket.current().temps().size() > 0;
+    }
+
+    public boolean isTempNotNull(Websocket websocket) {
+        return isTempsListNotNullOrEmpty(websocket) && websocket.current().temps().get(0) != null;
+    }
+
+    public boolean isTempTimeNotNull(Websocket websocket) {
+        return isTempNotNull(websocket) && websocket.current().temps().get(0).time() != null;
+    }
+
+    public boolean isActualTempBedNotNull(Websocket websocket) {
+        return isTempNotNull(websocket) && websocket.current().temps().get(0).bed().actual() != null;
+    }
+
+    public boolean isTargetTempBedNotNull(Websocket websocket) {
+        return isTempNotNull(websocket) && websocket.current().temps().get(0).bed().target() != null;
+    }
+
+    public boolean isActualTempTool0NotNull(Websocket websocket) {
+        return isTempNotNull(websocket) && websocket.current().temps().get(0).tool0().actual() != null;
+    }
+
+    public boolean isTargetTempTool0NotNull(Websocket websocket) {
+        return isTempNotNull(websocket) && websocket.current().temps().get(0).tool0().target() != null;
+    }
+
+    public boolean isActualTempTool1NotNull(Websocket websocket) {
+        return isTempNotNull(websocket) && websocket.current().temps().get(0).tool1().actual() != null;
+    }
+
+    public boolean isTargetTempTool1NotNull(Websocket websocket) {
+        return isTempNotNull(websocket) && websocket.current().temps().get(0).tool1().target() != null;
+    }
 }

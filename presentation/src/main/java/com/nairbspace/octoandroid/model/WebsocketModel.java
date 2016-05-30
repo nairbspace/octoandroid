@@ -23,6 +23,14 @@ public abstract class WebsocketModel implements Parcelable {
     public abstract boolean ready();
     public abstract boolean closedOrError();
     public abstract boolean fileLoaded();
+
+    public abstract String tempTime();
+    public abstract float actualTempBed();
+    public abstract float targetTempBed();
+    public abstract float actualTempTool0();
+    public abstract float targetTempTool0();
+    public abstract float actualTempTool1();
+    public abstract float targetTempTool1();
     public static Builder builder() {
         return new AutoValue_WebsocketModel.Builder();
     }
@@ -46,6 +54,15 @@ public abstract class WebsocketModel implements Parcelable {
         public abstract Builder ready(boolean ready);
         public abstract Builder closedOrError(boolean closedOrError);
         public abstract Builder fileLoaded(boolean fileLoaded);
+
+        public abstract Builder tempTime(String tempTime);
+        public abstract Builder actualTempBed(float actualTempBed);
+        public abstract Builder targetTempBed(float targetTempBed);
+        public abstract Builder actualTempTool0(float actualTempTool0);
+        public abstract Builder targetTempTool0(float targetTempTool0);
+        public abstract Builder actualTempTool1(float actualTempTool1);
+        public abstract Builder targetTempTool1(float targetTempTool1);
+
         public abstract WebsocketModel build();
     }
 }

@@ -115,6 +115,45 @@ public class WebsocketModelMapper extends MapperUseCase<Websocket, WebsocketMode
 
         boolean fileLoaded = mUglyNullChecker.isFileNameNotNull(websocket);
 
+        String tempTime = "";
+        float actualTempBed = 0f;
+        float targetTempBed = 0f;
+        float actualTempTool0 = 0f;
+        float targetTempTool0 = 0f;
+        float actualTempTool1 = 0f;
+        float targetTempTool1 = 0f;
+        if (mUglyNullChecker.isTempNotNull(websocket)) {
+            CurrentHistory.Temps temp = websocket.current().temps().get(0);
+            if (mUglyNullChecker.isTempTimeNotNull(websocket)) {
+                long time = temp.time();
+                tempTime = mDateTimeConverter.secondsToShortTimeString(time); // TODO format to MM:ss
+            }
+
+            if (mUglyNullChecker.isActualTempBedNotNull(websocket)) {
+                actualTempBed = temp.bed().actual().floatValue();
+            }
+
+            if (mUglyNullChecker.isTargetTempBedNotNull(websocket)) {
+                targetTempBed = temp.bed().target().floatValue();
+            }
+
+            if (mUglyNullChecker.isActualTempTool0NotNull(websocket)) {
+                actualTempTool0 = temp.tool0().actual().floatValue();
+            }
+
+            if (mUglyNullChecker.isTargetTempTool0NotNull(websocket)) {
+                targetTempTool0 = temp.tool0().target().floatValue();
+            }
+
+            if (mUglyNullChecker.isActualTempTool1NotNull(websocket)) {
+                actualTempTool1 = temp.tool1().actual().floatValue();
+            }
+
+            if (mUglyNullChecker.isTargetTempTool1NotNull(websocket)) {
+                targetTempTool1 = temp.tool1().target().floatValue();
+            }
+        }
+
         return WebsocketModel.builder()
                 .state(state)
                 .file(file)
@@ -133,6 +172,14 @@ public class WebsocketModelMapper extends MapperUseCase<Websocket, WebsocketMode
                 .ready(ready)
                 .closedOrError(closedorError)
                 .fileLoaded(fileLoaded)
+
+                .tempTime(tempTime)
+                .actualTempBed(actualTempBed)
+                .targetTempBed(targetTempBed)
+                .actualTempTool0(actualTempTool0)
+                .targetTempTool0(targetTempTool0)
+                .actualTempTool1(actualTempTool1)
+                .targetTempTool1(targetTempTool1)
                 .build();
     }
 
