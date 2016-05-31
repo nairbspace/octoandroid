@@ -35,6 +35,7 @@ or report it in the [issues section](https://github.com/nairbspace/octoandroid/i
 - [gradle-apt-plugin](https://github.com/tbroyer/gradle-apt-plugin)
 - [Frodo](https://github.com/android10/frodo)
 - [Timber](https://github.com/JakeWharton/timber)
+- [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart)
 
 ## Special Thanks, Credits, & Attributions
 

@@ -65,4 +65,12 @@
 
     <string name="degrees_celcius">&#x2103;</string>
     <string name="degrees">&#xb0;</string>
+
+    <string name="tool0">Tool0</string>
+    <string name="tool1">Tool1</string>
+    <string name="bed">Bed</string>
+    <string name="actual">Actual</string>
+    <string name="target">Target</string>
+    <string name="offset">Offset</string>
+    <string name="set">Set</string>
 </resources>
