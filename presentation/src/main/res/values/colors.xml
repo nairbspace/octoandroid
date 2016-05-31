@@ -6,4 +6,11 @@
     <color name="colorPrimaryLight">#C8E6C9</color>
     <color name="fileSelected">#FFFDE7</color>
     <color name="black_overlay">#66000000</color>
+
+    <color name="chart_actual_temp_bed_color">#F44336</color>
+    <color name="chart_target_temp_bed_color">#EF9A9A</color>
+    <color name="chart_actual_temp_tool_zero_color">#FF9800</color>
+    <color name="chart_target_temp_tool_zero_color">#FFCC80</color>
+    <color name="chart_actual_temp_tool_one_color">#2196F3</color>
+    <color name="chart_target_temp_tool_one_color">#90CAF9</color>
 </resources>

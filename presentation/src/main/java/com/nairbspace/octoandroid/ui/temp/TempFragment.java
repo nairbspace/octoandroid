@@ -9,6 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -23,6 +26,7 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
+import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -31,6 +35,13 @@ public class TempFragment extends BasePagerFragmentListener<TempScreen, TempFrag
 
     @Inject TempPresenter mPresenter;
     @BindView(R.id.temp_line_chart) LineChart mLineChart;
+    @BindColor(R.color.chart_actual_temp_bed_color) int mActualTempBedColor;
+    @BindColor(R.color.chart_target_temp_bed_color) int mTargetTempBedColor;
+    @BindColor(R.color.chart_actual_temp_tool_zero_color) int mActualTempTool0Color;
+    @BindColor(R.color.chart_target_temp_tool_zero_color) int mTargetTempTool0Color;
+    @BindColor(R.color.chart_actual_temp_tool_one_color) int mActualTempTool1Color;
+    @BindColor(R.color.chart_target_temp_tool_one_color) int mTargetTempTool1Color;
+
     private final Listener mListener = (Listener) getContext();
 
     private static final String X_VALS_TIME_KEY = "x_vals_time_key";
@@ -41,12 +52,12 @@ public class TempFragment extends BasePagerFragmentListener<TempScreen, TempFrag
     private static final String Y_VALS_ACTUAL_TEMP_TOOL1_KEY = "y_vals_actual_temp_tool1_key";
     private static final String Y_VALS_TARGET_TEMP_TOOL1_KEY = "y_vals_target_temp_tool1_key";
 
-    private final int actualTempBedIndex;
-    private final int targetTempBedIndex;
-    private final int actualTempTool0Index;
-    private final int targetTempTool0Index;
-    private final int actualTempTool1Index;
-    private final int targetTempTool1Index;
+    private int actualTempBedIndex;
+    private int targetTempBedIndex;
+    private int actualTempTool0Index;
+    private int targetTempTool0Index;
+    private int actualTempTool1Index;
+    private int targetTempTool1Index;
 
     private ArrayList<String> xValsTime = new ArrayList<>();
     private ArrayList<Entry> yValsActualTempBed = new ArrayList<>();
@@ -56,48 +67,17 @@ public class TempFragment extends BasePagerFragmentListener<TempScreen, TempFrag
     private ArrayList<Entry> yValsActualTempTool1 = new ArrayList<>();
     private ArrayList<Entry> yValsTargetTempTool1 = new ArrayList<>();
 
-    private final LineDataSet actualTempBedDataSet = new LineDataSet(yValsActualTempBed, "Bed - Actual(°C)");
-    private final LineDataSet targetTempBedDataSet = new LineDataSet(yValsTargetTempBed, "Bed - Target(°C)");
-    private final LineDataSet actualTempTool0DataSet = new LineDataSet(yValsActualTempTool0, "Tool0 - Actual(°C)");
-    private final LineDataSet targetTempTool0DataSet = new LineDataSet(yValsTargetTempTool0, "Tool0 - Target(°C)");
-    private final LineDataSet actualTempTool1DataSet = new LineDataSet(yValsActualTempTool1, "Tool1 - Actual(°C)");
-    private final LineDataSet targetTempTool1DataSet = new LineDataSet(yValsTargetTempTool1, "Tool1 - Target(°C)");
+    // TODO-low reference from strings.xml
+    private final ActualTempDataSet actualTempBedDataSet = new ActualTempDataSet(yValsActualTempBed, "Bed - Actual(°C)");
+    private final TargetTempDataSet targetTempBedDataSet = new TargetTempDataSet(yValsTargetTempBed, "Bed - Target(°C)");
+    private final ActualTempDataSet actualTempTool0DataSet = new ActualTempDataSet(yValsActualTempTool0, "Tool0 - Actual(°C)");
+    private final TargetTempDataSet targetTempTool0DataSet = new TargetTempDataSet(yValsTargetTempTool0, "Tool0 - Target(°C)");
+    private final ActualTempDataSet actualTempTool1DataSet = new ActualTempDataSet(yValsActualTempTool1, "Tool1 - Actual(°C)");
+    private final TargetTempDataSet targetTempTool1DataSet = new TargetTempDataSet(yValsTargetTempTool1, "Tool1 - Target(°C)");
 
     private final ArrayList<ILineDataSet> mDataSets = new ArrayList<>();
-    private final LineData mLineData;
+    private LineData mLineData;
     private final static float VISIBLE_X_RANGE_MAX = 10f;
-
-    public TempFragment() {
-        actualTempBedDataSet.enableDashedLine(10f, 5f, 0f);
-        actualTempBedDataSet.enableDashedLine(10f, 5f, 0f);
-        actualTempBedDataSet.setColor(Color.BLACK);
-        actualTempBedDataSet.setCircleColor(Color.BLACK);
-        actualTempBedDataSet.setLineWidth(1f);
-        actualTempBedDataSet.setCircleRadius(3f);
-        actualTempBedDataSet.setDrawCircleHole(false);
-        actualTempBedDataSet.setValueTextSize(9f);
-        actualTempBedDataSet.setDrawFilled(true);
-
-        mDataSets.add(actualTempBedDataSet);
-        actualTempBedIndex = mDataSets.size() - 1;
-
-        mDataSets.add(targetTempBedDataSet);
-        targetTempBedIndex = mDataSets.size() - 1;
-
-        mDataSets.add(actualTempTool0DataSet);
-        actualTempTool0Index = mDataSets.size() - 1;
-
-        mDataSets.add(targetTempTool0DataSet);
-        targetTempTool0Index = mDataSets.size() - 1;
-
-        mDataSets.add(actualTempTool1DataSet);
-        actualTempTool1Index = mDataSets.size() - 1;
-
-        mDataSets.add(targetTempTool1DataSet);
-        targetTempTool1Index = mDataSets.size() - 1;
-
-        mLineData = new LineData(xValsTime, mDataSets);
-    }
 
     public static TempFragment newInstance() {
         return new TempFragment();
@@ -115,14 +95,58 @@ public class TempFragment extends BasePagerFragmentListener<TempScreen, TempFrag
         View view = inflater.inflate(R.layout.fragment_temperature, container, false);
         setUnbinder(ButterKnife.bind(this, view));
 
-        mLineChart.setData(mLineData);
-        mLineChart.setScaleEnabled(true);
+        initializeDataSet();
+        initializeChart();
 
         if (savedInstanceState != null) {
             restoreSavedInstanceState(savedInstanceState);
         }
 
         return view;
+    }
+
+    private void initializeDataSet() {
+        actualTempBedDataSet.setColor(mActualTempBedColor);
+        mDataSets.add(actualTempBedDataSet);
+        actualTempBedIndex = mDataSets.size() - 1;
+
+        targetTempBedDataSet.setColor(mTargetTempBedColor);
+        mDataSets.add(targetTempBedDataSet);
+        targetTempBedIndex = mDataSets.size() - 1;
+
+        actualTempTool0DataSet.setColor(mActualTempTool0Color);
+        mDataSets.add(actualTempTool0DataSet);
+        actualTempTool0Index = mDataSets.size() - 1;
+
+        targetTempTool0DataSet.setColor(mTargetTempTool0Color);
+        mDataSets.add(targetTempTool0DataSet);
+        targetTempTool0Index = mDataSets.size() - 1;
+
+        actualTempTool1DataSet.setColor(mActualTempTool1Color);
+        mDataSets.add(actualTempTool1DataSet);
+        actualTempTool1Index = mDataSets.size() - 1;
+
+        targetTempTool1DataSet.setColor(mTargetTempTool1Color);
+        mDataSets.add(targetTempTool1DataSet);
+        targetTempTool1Index = mDataSets.size() - 1;
+
+        mLineData = new LineData(xValsTime, mDataSets);
+        mLineData.setValueTextColor(Color.BLACK);
+    }
+
+    private void initializeChart() {
+        mLineChart.setData(mLineData);
+
+        Legend legend = mLineChart.getLegend();
+        legend.setForm(Legend.LegendForm.CIRCLE);
+        legend.setWordWrapEnabled(true);
+
+        XAxis xAxis = mLineChart.getXAxis();
+        xAxis.setAvoidFirstLastClipping(true);
+        xAxis.setPosition(XAxis.XAxisPosition.TOP);
+
+        YAxis yAxisRight = mLineChart.getAxisRight();
+        yAxisRight.setEnabled(false);
     }
 
     private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {
@@ -199,7 +223,9 @@ public class TempFragment extends BasePagerFragmentListener<TempScreen, TempFrag
     public void updateChart() {
         mLineChart.notifyDataSetChanged();
         mLineChart.setVisibleXRangeMaximum(VISIBLE_X_RANGE_MAX);
-        mLineChart.moveViewToX(mLineChart.getData().getXValCount() - VISIBLE_X_RANGE_MAX - 1);
+
+        // Not sure why -2 works, should be -1
+        mLineChart.moveViewToX(mLineChart.getData().getXValCount() - VISIBLE_X_RANGE_MAX - 2);
     }
 
     @NonNull

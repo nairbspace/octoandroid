@@ -14,7 +14,7 @@
         android:paddingStart="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin">
 
-        <com.github.mikephil.charting.charts.LineChart
+        <com.nairbspace.octoandroid.ui.temp.TempChart
             android:id="@+id/temp_line_chart"
             android:layout_width="match_parent"
             android:layout_height="400dp"/>
