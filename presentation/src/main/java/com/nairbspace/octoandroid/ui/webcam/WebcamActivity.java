@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -47,6 +48,9 @@ public class WebcamActivity extends BaseActivity<WebcamScreen> implements Webcam
         SetupApplication.get(this).getAppComponent().inject(this);
         setContentView(R.layout.activity_webcam);
         ButterKnife.bind(this);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         mVisible = true;
         mContentView.setOnClickListener(mContentViewClickListener);
         mContentView.setDisplayMode(DisplayMode.BEST_FIT);
@@ -95,6 +99,16 @@ public class WebcamActivity extends BaseActivity<WebcamScreen> implements Webcam
             // TODO presenter should be in charge of thread killing.
             mContentView.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private final Handler mHideHandler = new Handler();
