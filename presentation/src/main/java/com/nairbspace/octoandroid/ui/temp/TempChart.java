@@ -5,7 +5,11 @@ import android.util.AttributeSet;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
@@ -13,20 +17,23 @@ public class TempChart extends LineChart implements OnChartValueSelectedListener
 
     public TempChart(Context context) {
         super(context);
-        initializeChart();
     }
 
     public TempChart(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initializeChart();
     }
 
     public TempChart(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        initializeChart();
     }
 
-    private void initializeChart() {
+    /**
+     * By calling setData initializes the rest of the view
+     * @param data the chart data
+     */
+    @Override
+    public void setData(LineData data) {
+        super.setData(data);
         setOnChartValueSelectedListener(this);
         setDescription("");
         setNoDataTextDescription("No chart data");
@@ -36,16 +43,16 @@ public class TempChart extends LineChart implements OnChartValueSelectedListener
         setDrawGridBackground(true);
         setPinchZoom(true);
 
-        // Have to do this at runtime
-//        Legend legend = getLegend();
-//        legend.setWordWrapEnabled(true);
-//
-//        XAxis xAxis = getXAxis();
-//        xAxis.setAvoidFirstLastClipping(true);
-//        xAxis.setPosition(XAxis.XAxisPosition.TOP);
-//
-//        YAxis yAxisRight = getAxisRight();
-//        yAxisRight.setEnabled(false);
+        Legend legend = getLegend();
+        legend.setForm(Legend.LegendForm.CIRCLE);
+        legend.setWordWrapEnabled(true);
+
+        XAxis xAxis = getXAxis();
+        xAxis.setAvoidFirstLastClipping(true);
+        xAxis.setPosition(XAxis.XAxisPosition.TOP);
+
+        YAxis yAxisRight = getAxisRight();
+        yAxisRight.setEnabled(false);
     }
 
     @Override

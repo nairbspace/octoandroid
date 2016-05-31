@@ -8,10 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -34,7 +30,7 @@ public class TempFragment extends BasePagerFragmentListener<TempScreen, TempFrag
         implements TempScreen {
 
     @Inject TempPresenter mPresenter;
-    @BindView(R.id.temp_line_chart) LineChart mLineChart;
+    @BindView(R.id.temp_line_chart) TempChart mLineChart;
     @BindColor(R.color.chart_actual_temp_bed_color) int mActualTempBedColor;
     @BindColor(R.color.chart_target_temp_bed_color) int mTargetTempBedColor;
     @BindColor(R.color.chart_actual_temp_tool_zero_color) int mActualTempTool0Color;
@@ -96,7 +92,7 @@ public class TempFragment extends BasePagerFragmentListener<TempScreen, TempFrag
         setUnbinder(ButterKnife.bind(this, view));
 
         initializeDataSet();
-        initializeChart();
+        mLineChart.setData(mLineData);
 
         if (savedInstanceState != null) {
             restoreSavedInstanceState(savedInstanceState);
@@ -132,21 +128,6 @@ public class TempFragment extends BasePagerFragmentListener<TempScreen, TempFrag
 
         mLineData = new LineData(xValsTime, mDataSets);
         mLineData.setValueTextColor(Color.BLACK);
-    }
-
-    private void initializeChart() {
-        mLineChart.setData(mLineData);
-
-        Legend legend = mLineChart.getLegend();
-        legend.setForm(Legend.LegendForm.CIRCLE);
-        legend.setWordWrapEnabled(true);
-
-        XAxis xAxis = mLineChart.getXAxis();
-        xAxis.setAvoidFirstLastClipping(true);
-        xAxis.setPosition(XAxis.XAxisPosition.TOP);
-
-        YAxis yAxisRight = mLineChart.getAxisRight();
-        yAxisRight.setEnabled(false);
     }
 
     private void restoreSavedInstanceState(@NonNull Bundle savedInstanceState) {

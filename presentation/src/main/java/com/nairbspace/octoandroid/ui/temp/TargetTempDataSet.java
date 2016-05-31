@@ -9,23 +9,17 @@ public class TargetTempDataSet extends LineDataSet {
 
     public TargetTempDataSet(List<Entry> yVals, String label) {
         super(yVals, label);
+    }
+
+    /**
+     *  By calling setColor initializes the rest of the default paramaters
+     * @param color the color of the line
+     */
+    @Override
+    public void setColor(int color) {
+        super.setColor(color);
         setDrawCircles(false);
         setDrawValues(false);
         enableDashedLine(10f, 5f, 0f);
-    }
-
-    @Override
-    public void setDrawCircles(boolean enabled) {
-        super.setDrawCircles(false);
-    }
-
-    @Override
-    public void setDrawValues(boolean enabled) {
-        super.setDrawValues(false);
-    }
-
-    @Override
-    public void enableDashedLine(float lineLength, float spaceLength, float phase) {
-        super.enableDashedLine(10f, 5f, 0f);
     }
 }

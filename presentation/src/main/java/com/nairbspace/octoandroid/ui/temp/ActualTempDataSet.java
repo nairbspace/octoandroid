@@ -9,23 +9,17 @@ public class ActualTempDataSet extends LineDataSet{
 
     public ActualTempDataSet(List<Entry> yVals, String label) {
         super(yVals, label);
+    }
+
+    /**
+     *  By calling setColor initializes the rest of the default paramaters
+     * @param color the color of the line
+     */
+    @Override
+    public void setColor(int color) {
+        super.setColor(color);
         setDrawCircles(false);
         setDrawValues(false);
         setLineWidth(2f);
-    }
-
-    @Override
-    public void setDrawCircles(boolean enabled) {
-        super.setDrawCircles(false);
-    }
-
-    @Override
-    public void setDrawValues(boolean enabled) {
-        super.setDrawValues(false);
-    }
-
-    @Override
-    public void setLineWidth(float width) {
-        super.setLineWidth(2f);
     }
 }
