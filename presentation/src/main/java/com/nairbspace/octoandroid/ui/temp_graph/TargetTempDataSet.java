@@ -1,13 +1,13 @@
-package com.nairbspace.octoandroid.ui.temp;
+package com.nairbspace.octoandroid.ui.temp_graph;
 
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineDataSet;
 
 import java.util.List;
 
-public class ActualTempDataSet extends LineDataSet{
+public class TargetTempDataSet extends LineDataSet {
 
-    public ActualTempDataSet(List<Entry> yVals, String label) {
+    public TargetTempDataSet(List<Entry> yVals, String label) {
         super(yVals, label);
     }
 
@@ -20,6 +20,6 @@ public class ActualTempDataSet extends LineDataSet{
         super.setColor(color);
         setDrawCircles(false);
         setDrawValues(false);
-        setLineWidth(2f);
+        enableDashedLine(10f, 5f, 0f);
     }
 }

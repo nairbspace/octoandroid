@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.ui.temp;
+package com.nairbspace.octoandroid.ui.temp_graph;
 
 import android.content.Context;
 import android.util.AttributeSet;

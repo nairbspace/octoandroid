@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.ui.temp;
+package com.nairbspace.octoandroid.ui.temp_graph;
 
 import android.text.TextUtils;
 
@@ -9,17 +9,17 @@ import org.greenrobot.eventbus.EventBus;
 
 import javax.inject.Inject;
 
-public class TempPresenter extends EventPresenter<TempScreen, WebsocketModel> {
+public class TempGraphPresenter extends EventPresenter<TempGraphScreen, WebsocketModel> {
 
-    private TempScreen mScreen;
+    private TempGraphScreen mScreen;
 
-    @Inject public TempPresenter(EventBus eventBus) {
+    @Inject public TempGraphPresenter(EventBus eventBus) {
         super(eventBus);
     }
 
     @Override
-    protected void onInitialize(TempScreen tempScreen) {
-        mScreen = tempScreen;
+    protected void onInitialize(TempGraphScreen tempGraphScreen) {
+        mScreen = tempGraphScreen;
     }
 
     @Override

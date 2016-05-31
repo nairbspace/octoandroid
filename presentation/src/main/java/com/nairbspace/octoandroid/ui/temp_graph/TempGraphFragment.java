@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.ui.temp;
+package com.nairbspace.octoandroid.ui.temp_graph;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -26,10 +26,10 @@ import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class TempFragment extends BasePagerFragmentListener<TempScreen, TempFragment.Listener>
-        implements TempScreen {
+public class TempGraphFragment extends BasePagerFragmentListener<TempGraphScreen, TempGraphFragment.Listener>
+        implements TempGraphScreen {
 
-    @Inject TempPresenter mPresenter;
+    @Inject TempGraphPresenter mPresenter;
     @BindView(R.id.temp_line_chart) TempChart mLineChart;
     @BindColor(R.color.chart_actual_temp_bed_color) int mActualTempBedColor;
     @BindColor(R.color.chart_target_temp_bed_color) int mTargetTempBedColor;
@@ -75,8 +75,8 @@ public class TempFragment extends BasePagerFragmentListener<TempScreen, TempFrag
     private LineData mLineData;
     private final static float VISIBLE_X_RANGE_MAX = 10f;
 
-    public static TempFragment newInstance() {
-        return new TempFragment();
+    public static TempGraphFragment newInstance() {
+        return new TempGraphFragment();
     }
 
     @Override
@@ -88,7 +88,7 @@ public class TempFragment extends BasePagerFragmentListener<TempScreen, TempFrag
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_temperature, container, false);
+        View view = inflater.inflate(R.layout.fragment_temp_graph, container, false);
         setUnbinder(ButterKnife.bind(this, view));
 
         initializeDataSet();
@@ -217,7 +217,7 @@ public class TempFragment extends BasePagerFragmentListener<TempScreen, TempFrag
 
     @NonNull
     @Override
-    protected TempScreen setScreen() {
+    protected TempGraphScreen setScreen() {
         return this;
     }
 

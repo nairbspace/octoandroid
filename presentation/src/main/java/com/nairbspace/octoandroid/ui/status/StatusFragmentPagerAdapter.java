@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.nairbspace.octoandroid.ui.connection.ConnectionFragment;
 import com.nairbspace.octoandroid.ui.files.FilesFragment;
 import com.nairbspace.octoandroid.ui.state.StateFragment;
-import com.nairbspace.octoandroid.ui.temp.TempFragment;
+import com.nairbspace.octoandroid.ui.temp_graph.TempGraphFragment;
 
 public class StatusFragmentPagerAdapter extends FragmentPagerAdapter {
     private static final int PAGE_COUNT =  4;
@@ -26,7 +26,7 @@ public class StatusFragmentPagerAdapter extends FragmentPagerAdapter {
         } else if (position == 2) {
             return FilesFragment.newInstance();
         } else {
-            return TempFragment.newInstance();
+            return TempGraphFragment.newInstance();
         }
     }
 

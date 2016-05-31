@@ -15,7 +15,7 @@
         android:paddingTop="@dimen/activity_vertical_margin">
 
         <!--suppress AndroidDomInspection -->
-        <com.nairbspace.octoandroid.ui.temp.TempChart
+        <com.nairbspace.octoandroid.ui.temp_graph.TempChart
             android:id="@+id/temp_line_chart"
             app:layout_widthPercent="100%"
             app:layout_aspectRatio="200%"/>
