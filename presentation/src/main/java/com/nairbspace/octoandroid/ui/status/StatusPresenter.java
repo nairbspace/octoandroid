@@ -53,12 +53,8 @@ public class StatusPresenter extends UseCasePresenter<StatusScreen> {
         @Override
         public void onError(Throwable e) {
             Exception exception = (Exception) e;
-            if (ErrorMessageFactory.isThereNoActivePrinter(exception)) {
-                mScreen.navigateToAddPrinterActivityForResult();
-            } else {
-                String error = ErrorMessageFactory.create(mScreen.context(), exception);
-                mScreen.displaySnackBar(error);
-            }
+            String error = ErrorMessageFactory.create(mScreen.context(), exception);
+            mScreen.displaySnackBar(error);
         }
 
         @Override

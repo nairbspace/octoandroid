@@ -19,8 +19,6 @@ public interface StatusScreen {
 
     void syncToggleState();
 
-    void navigateToAddPrinterActivityForResult();
-
     void displaySnackBar(String message);
 
     void hideSnackbar();
@@ -36,8 +34,6 @@ public interface StatusScreen {
     void updateNavHeader(String printerName, String ipAddress);
 
     Context context();
-
-    void displaySnackBarAddPrinterFailure();
 
     void refreshStatusAdapter();
 }

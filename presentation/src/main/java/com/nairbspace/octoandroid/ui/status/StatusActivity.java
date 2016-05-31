@@ -136,7 +136,6 @@ public class StatusActivity extends BaseActivity<StatusScreen>
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         switch (item.getItemId()) {
             case R.id.nav_status:
                 inflateStatusAdapter();
@@ -144,14 +143,6 @@ public class StatusActivity extends BaseActivity<StatusScreen>
             case R.id.nav_webcam:
                 getNavigator().navigateToWebcam(this);
                 break;
-//            case R.id.nav_slideshow:
-//                break;
-//            case R.id.nav_manage:
-//                break;
-//            case R.id.nav_share:
-//                break;
-//            case R.id.nav_send:
-//                break;
         }
 
         closeDrawer();
@@ -192,35 +183,6 @@ public class StatusActivity extends BaseActivity<StatusScreen>
         if (mToggle != null) {
             mToggle.syncState();
         }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == getNavigator().getAddPrinterRequestCode()) {
-            if (resultCode == RESULT_OK) {
-                mPresenter.execute();
-                refreshStatusAdapter();
-            } else {
-                displaySnackBarAddPrinterFailure();
-            }
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public void navigateToAddPrinterActivityForResult() {
-        getNavigator().navigateToAddPrinterActivityForResult(this);
-    }
-
-    @Override
-    public void displaySnackBarAddPrinterFailure() {
-        Snackbar.make(mFab, R.string.no_printer_found, Snackbar.LENGTH_INDEFINITE)
-                .setAction(R.string.add, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        navigateToAddPrinterActivityForResult();
-                    }
-                }).show();
     }
 
     @Override
