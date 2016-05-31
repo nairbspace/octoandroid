@@ -126,7 +126,7 @@ public class WebsocketModelMapper extends MapperUseCase<Websocket, WebsocketMode
             CurrentHistory.Temps temp = websocket.current().temps().get(0);
             if (mUglyNullChecker.isTempTimeNotNull(websocket)) {
                 long time = temp.time();
-                tempTime = mDateTimeConverter.secondsToShortTimeString(time); // TODO format to MM:ss
+                tempTime = mDateTimeConverter.unixSecondsToHHmmss(time);
             }
 
             if (mUglyNullChecker.isActualTempBedNotNull(websocket)) {

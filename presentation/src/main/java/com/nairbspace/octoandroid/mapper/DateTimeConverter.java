@@ -52,6 +52,12 @@ public class DateTimeConverter {
         return millisecondsToShortTimeString(seconds * 1000);
     }
 
+    public String unixSecondsToHHmmss(long seconds) {
+        Date date = new Date(seconds * 1000);
+        DateFormat df = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+        return df.format(date);
+    }
+
     public String secondsToHHmmss(long inputSeconds) {
         long absSeconds = Math.abs(inputSeconds);
         long hours = absSeconds / 3600;

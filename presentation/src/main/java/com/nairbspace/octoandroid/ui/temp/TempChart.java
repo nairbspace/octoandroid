@@ -51,6 +51,9 @@ public class TempChart extends LineChart implements OnChartValueSelectedListener
         xAxis.setAvoidFirstLastClipping(true);
         xAxis.setPosition(XAxis.XAxisPosition.TOP);
 
+        YAxis yAxisLeft = getAxisLeft();
+        yAxisLeft.setAxisMinValue(0);
+
         YAxis yAxisRight = getAxisRight();
         yAxisRight.setEnabled(false);
     }
@@ -58,7 +61,7 @@ public class TempChart extends LineChart implements OnChartValueSelectedListener
     @Override
     public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
         // TODO-low would be nice to display where clicked
-        Toast.makeText(getContext(), e.getVal() + "", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), e.getVal() + "°C", Toast.LENGTH_SHORT).show();
     }
 
     @Override
