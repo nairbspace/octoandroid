@@ -4,25 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
@@ -30,33 +13,21 @@ import com.nairbspace.octoandroid.ui.connection.ConnectionFragment;
 import com.nairbspace.octoandroid.ui.files.FilesFragment;
 import com.nairbspace.octoandroid.ui.playback.PlaybackFragment;
 import com.nairbspace.octoandroid.ui.state.StateFragment;
-import com.nairbspace.octoandroid.ui.templates.BaseActivity;
+import com.nairbspace.octoandroid.ui.templates.BaseNavActivity;
 import com.nairbspace.octoandroid.ui.templates.Presenter;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import timber.log.Timber;
 
-public class StatusActivity extends BaseActivity<StatusScreen>
+public class StatusActivity extends BaseNavActivity<StatusScreen>
         implements NavigationView.OnNavigationItemSelectedListener, StatusScreen,
-        StateFragment.Listener, ConnectionFragment.Listener, View.OnClickListener,
+        StateFragment.Listener, ConnectionFragment.Listener,
         FilesFragment.Listener, PlaybackFragment.Listener {
 
     @Inject StatusPresenter mPresenter;
-
     @BindView(R.id.toolbar) Toolbar mToolbar;
-    @BindView(R.id.fab) FloatingActionButton mFab;
-    @BindView(R.id.drawer_layout) DrawerLayout mDrawer;
-    @BindView(R.id.nav_view) NavigationView mNavView;
-    @BindView(R.id.view_pager) ViewPager mViewPager;
-    @BindView(R.id.tab_layout) TabLayout mTabLayout;
-    @BindView(R.id.fragment_controls) CardView mPlaybackView;
-    private ActionBarDrawerToggle mToggle;
-    private TextView mPrinterNameNavTextView;
-    private TextView mPrinterIpAddressNavTextView;
-    private Snackbar mSnackbar;
 
     public static Intent newIntent(Context context) {
         return new Intent(context, StatusActivity.class);
@@ -64,218 +35,12 @@ public class StatusActivity extends BaseActivity<StatusScreen>
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         SetupApplication.get(this).getAppComponent().inject(this);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+        setUnbinder(ButterKnife.bind(this));
         setSupportActionBar(mToolbar);
-        mFab.setOnClickListener(this);
-        mNavView.setNavigationItemSelectedListener(this);
-        View navHeaderView = mNavView.getHeaderView(0);
-        mPrinterNameNavTextView = ButterKnife.findById(navHeaderView, R.id.printer_name_nav_textview);
-        mPrinterIpAddressNavTextView = ButterKnife.findById(navHeaderView, R.id.printer_ip_address_nav_textview);
-        mToggle = new ActionBarDrawerToggle(this, mDrawer, mToolbar, R.string.drawer_open, R.string.drawer_close);
-        mDrawer.addDrawerListener(mToggle);
-        setDrawer();
-        inflateStatusAdapter();
-
-        FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.fragment_controls);
-
-        if (fragment == null) {
-            fragment = PlaybackFragment.newInstance();
-            fm.beginTransaction()
-                    .add(R.id.fragment_controls, fragment)
-                    .commit();
-        }
-    }
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        // TODO not sure if should implement margin this way...
-        int bottomMargin = mPlaybackView.getHeight();
-        ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) mViewPager.getLayoutParams();
-        p.setMargins(p.leftMargin, p.topMargin, p.rightMargin, bottomMargin);
-        mViewPager.setLayoutParams(p);
-    }
-
-    @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        closeDrawer(); // Not able to close during onCreate and screen is rotated
-        syncToggleState();
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (isDrawerOpen()) {
-            closeDrawer();
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            getNavigator().navigateToSettingsActivity(this);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.nav_status:
-                inflateStatusAdapter();
-                break;
-            case R.id.nav_webcam:
-                getNavigator().navigateToWebcam(this);
-                break;
-        }
-
-        closeDrawer();
-        return true;
-    }
-
-    @Override
-    public void closeDrawer() {
-        if (!isTabletAndLandscape()) { // Cannot close drawer if in tablet landscape
-            mDrawer.closeDrawer(GravityCompat.START);
-        }
-    }
-
-    @Override
-    public boolean isTabletAndLandscape() {
-        return getResources().getBoolean(R.bool.is_tablet_and_landscape);
-    }
-
-    @Override
-    public boolean isDrawerOpen() {
-        return mDrawer.isDrawerOpen(GravityCompat.START);
-    }
-
-    @Override
-    public void lockDrawer() {
-        mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
-    }
-
-    @Override
-    public void hideIndicator() {
-        if (mToggle != null) {
-            mToggle.setDrawerIndicatorEnabled(false);
-        }
-    }
-
-    @Override
-    public void syncToggleState() {
-        if (mToggle != null) {
-            mToggle.syncState();
-        }
-    }
-
-    @Override
-    public void displaySnackBar(String message) {
-        mSnackbar = Snackbar.make(mFab, message, Snackbar.LENGTH_INDEFINITE);
-        mSnackbar.show();
-    }
-
-    @Override
-    public void hideSnackbar() {
-        if (mSnackbar.isShown()) {
-            mSnackbar.dismiss();
-        }
-    }
-
-    @Override
-    public void selectStatusNav() {
-        mNavView.setCheckedItem(R.id.nav_status);
-    }
-
-    @Override
-    public void setDrawer() {
-        if (isTabletAndLandscape()) {
-            lockDrawer();
-            hideIndicator();
-        } else {
-            unlockDrawer();
-        }
-    }
-
-    @Override
-    public void setAdapterAndTabLayout(PagerAdapter pagerAdapter) {
-        if (mViewPager != null) {
-            mViewPager.setAdapter(pagerAdapter);
-            mViewPager.setOffscreenPageLimit(pagerAdapter.getCount());
-        }
-        if (mTabLayout != null) {
-            mTabLayout.setupWithViewPager(mViewPager);
-        }
-    }
-
-    @Override
-    public void refreshStatusAdapter() {
-        if (mViewPager.getAdapter() != null) {
-            Timber.d("Set adapter null");
-            mViewPager.setAdapter(null);
-        }
-        inflateStatusAdapter();
-    }
-
-    @Override
-    public void inflateStatusAdapter() {
-        if (mViewPager.getAdapter() == null) {
-            PagerAdapter adapter = new StatusFragmentPagerAdapter(getSupportFragmentManager());
-            setAdapterAndTabLayout(adapter);
-        } else {
-            PagerAdapter currentAdapter = mViewPager.getAdapter();
-            Class adapterClass = currentAdapter.getClass();
-            if (!adapterClass.equals(StatusFragmentPagerAdapter.class)) {
-                PagerAdapter adapter = new StatusFragmentPagerAdapter(getSupportFragmentManager());
-                setAdapterAndTabLayout(adapter);
-            } else {
-                Timber.d("StatusFragmentPagerAdapter already visible");
-            }
-        }
-        selectStatusNav();
-    }
-
-    @Override
-    public void updateNavHeader(String printerName, String ipAddress) {
-        mPrinterNameNavTextView.setText(printerName);
-        mPrinterIpAddressNavTextView.setText(ipAddress);
-    }
-
-    @Override
-    public Context context() {
-        return this;
-    }
-
-    @Override
-    public void unlockDrawer() {
-        mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.fab:
-                Snackbar.make(mFab, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null)
-                        .show();
-                break;
-        }
+        super.onCreate(savedInstanceState);
+        inflateAdapter(new StatusFragmentPagerAdapter(getSupportFragmentManager()));
     }
 
     @NonNull

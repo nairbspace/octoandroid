@@ -1,5 +1,6 @@
 package com.nairbspace.octoandroid.ui.templates;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -23,15 +24,21 @@ import android.widget.TextView;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.ui.playback.PlaybackFragment;
+import com.nairbspace.octoandroid.ui.status.StatusActivity;
 import com.nairbspace.octoandroid.ui.status.StatusFragmentPagerAdapter;
+
+import javax.inject.Inject;
 
 import butterknife.BindBool;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import timber.log.Timber;
 
-public abstract class BaseNavigatorActivity<T> extends BaseActivity<T>
-        implements NavigationView.OnNavigationItemSelectedListener {
+public abstract class BaseNavActivity<T> extends BaseActivity<T>
+        implements NavigationView.OnNavigationItemSelectedListener, NavScreen {
+
+    @Inject NavPresenter mPresenter;
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.fab) FloatingActionButton mFab;
@@ -42,16 +49,15 @@ public abstract class BaseNavigatorActivity<T> extends BaseActivity<T>
     @BindView(R.id.fragment_controls) CardView mPlaybackView;
     @BindBool(R.bool.is_tablet_and_landscape) boolean mIsTabletAndLandScape;
     private ActionBarDrawerToggle mToggle;
-    private TextView mPrinterNameNavTextView; // TODO class will need its own presenter
+    private TextView mPrinterNameNavTextView;
     private TextView mPrinterIpAddressNavTextView;
-
+    private Snackbar mSnackbar;
     private FragmentManager mFragmentManager;
+    private Unbinder mUnbinder;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
         mFab.setOnClickListener(mFabClickListener);
         mNavView.setNavigationItemSelectedListener(this);
         View navHeaderView = mNavView.getHeaderView(0);
@@ -63,6 +69,10 @@ public abstract class BaseNavigatorActivity<T> extends BaseActivity<T>
 
         mFragmentManager = getSupportFragmentManager();
         inflatePlaybackFragment();
+    }
+
+    protected void setUnbinder(Unbinder unbinder) {
+        mUnbinder = unbinder;
     }
 
     private void inflatePlaybackFragment() {
@@ -80,12 +90,13 @@ public abstract class BaseNavigatorActivity<T> extends BaseActivity<T>
         super.onPostCreate(savedInstanceState);
         closeDrawer();
         syncToggleState();
+        mPresenter.onInitialize(this);
     }
 
-    @Override
+
+    @Override // TODO not sure if should implement margin this way...
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        // TODO not sure if should implement margin this way...
         int bottomMargin = mPlaybackView.getHeight();
         ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) mViewPager.getLayoutParams();
         p.setMargins(p.leftMargin, p.topMargin, p.rightMargin, bottomMargin);
@@ -142,15 +153,18 @@ public abstract class BaseNavigatorActivity<T> extends BaseActivity<T>
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        closeDrawer();
         switch (item.getItemId()) {
             case R.id.nav_status:
-                inflateStatusAdapter();
+                if (!(this instanceof StatusActivity)) {
+                    getNavigator().navigateToStatusActivity(this);
+                    overridePendingTransition(0, 0);
+                }
                 break;
             case R.id.nav_webcam:
                 getNavigator().navigateToWebcam(this);
                 break;
         }
-        closeDrawer(); // TODO might to need to close first to simulate one activity
         return true;
     }
 
@@ -163,9 +177,13 @@ public abstract class BaseNavigatorActivity<T> extends BaseActivity<T>
         if (mTabLayout != null) {
             mTabLayout.setupWithViewPager(mViewPager);
         }
+
+        if (pagerAdapter instanceof StatusFragmentPagerAdapter) {
+            mNavView.setCheckedItem(R.id.nav_status);
+        }
     }
 
-    private void inflateAdapter(PagerAdapter pagerAdapter) {
+    protected void inflateAdapter(PagerAdapter pagerAdapter) {
         if (mViewPager.getAdapter() == null) {
             setAdapterAndTabLayout(pagerAdapter);
         } else {
@@ -178,11 +196,6 @@ public abstract class BaseNavigatorActivity<T> extends BaseActivity<T>
                 Timber.d(message);
             }
         }
-    }
-
-    protected void inflateStatusAdapter() {
-        inflateAdapter(new StatusFragmentPagerAdapter(mFragmentManager));
-        mNavView.setCheckedItem(R.id.nav_status);
     }
 
     @Override
@@ -208,5 +221,50 @@ public abstract class BaseNavigatorActivity<T> extends BaseActivity<T>
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public void networkNowActive() {
+        super.networkNowActive();
+        mPresenter.networkNowActiveReceived();
+    }
+
+    @Override
+    public void networkNowInactive() {
+        super.networkNowInactive();
+        mPresenter.networkNowInactiveReceived();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mUnbinder != null) {
+            mUnbinder = null;
+        }
+        mPresenter.onDestroy(this);
+    }
+
+    @Override
+    public void updateNavHeader(String printerName, String ipAddress) {
+        mPrinterNameNavTextView.setText(printerName);
+        mPrinterIpAddressNavTextView.setText(ipAddress);
+    }
+
+    @Override
+    public Context context() {
+        return this;
+    }
+
+    @Override
+    public void hideSnackbar() {
+        if (mSnackbar.isShown()) {
+            mSnackbar.dismiss();
+        }
+    }
+
+    @Override
+    public void displaySnackBar(String message) {
+        mSnackbar = Snackbar.make(mToolbar, message, Snackbar.LENGTH_INDEFINITE);
+        mSnackbar.show();
     }
 }
