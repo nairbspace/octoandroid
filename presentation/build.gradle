@@ -58,11 +58,11 @@ android {
                     'src/main/res/layouts/status',
                     'src/main/res/layouts/files',
                     'src/main/res/layouts/add_printer',
-                    'src/main/res/layouts/temp',
+                    'src/main/res/layouts/temp_graph',
+                    'src/main/res/layouts/temp_controls',
                     'src/main/res/layouts',
                     'src/main/res'
             ]
-            assets.srcDirs = ['src/main/assets', 'src/main/assets/']
         }
     }
 }

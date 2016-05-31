@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
 import com.nairbspace.octoandroid.ui.playback.PlaybackFragment;
+import com.nairbspace.octoandroid.ui.temp_controls.TempControlsFragment;
 import com.nairbspace.octoandroid.ui.temp_graph.TempGraphFragment;
 import com.nairbspace.octoandroid.ui.templates.BaseNavActivity;
 import com.nairbspace.octoandroid.ui.templates.Presenter;
@@ -20,7 +21,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class TempActivity extends BaseNavActivity<TempScreen> implements TempScreen,
-        PlaybackFragment.Listener, TempGraphFragment.Listener{
+        PlaybackFragment.Listener, TempGraphFragment.Listener, TempControlsFragment.Listener{
 
     @Inject TempPresenter mPresenter;
     @BindView(R.id.toolbar) Toolbar mToolbar;

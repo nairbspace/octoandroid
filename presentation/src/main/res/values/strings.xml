@@ -62,4 +62,7 @@
     <string name="printed_colon_space">Printed:&#160;</string>
     <string name="non_breakable_space">&#160;</string>
     <string name="breakable_space">&#032;</string>
+
+    <string name="degrees_celcius">&#x2103;</string>
+    <string name="degrees">&#xb0;</string>
 </resources>

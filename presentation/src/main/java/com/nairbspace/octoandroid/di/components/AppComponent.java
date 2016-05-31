@@ -14,6 +14,7 @@ import com.nairbspace.octoandroid.ui.status.StatusActivity;
 import com.nairbspace.octoandroid.ui.playback.PlaybackFragment;
 import com.nairbspace.octoandroid.ui.state.StateFragment;
 import com.nairbspace.octoandroid.ui.temp.TempActivity;
+import com.nairbspace.octoandroid.ui.temp_controls.TempControlsFragment;
 import com.nairbspace.octoandroid.ui.temp_graph.TempGraphFragment;
 import com.nairbspace.octoandroid.ui.webcam.WebcamActivity;
 
@@ -46,4 +47,6 @@ public interface AppComponent {
     void inject(TempActivity tempActivity);
 
     void inject(TempGraphFragment tempGraphFragment);
+
+    void inject(TempControlsFragment tempControlsFragment);
 }
