@@ -6,6 +6,10 @@
             android:id="@+id/nav_status"
             android:icon="@drawable/ic_info_black_24dp"
             android:title="@string/status"/>
+        <item
+            android:id="@+id/nav_temp"
+            android:icon="@drawable/ic_wb_sunny_black_24dp"
+            android:title="@string/temperature"/>
         <!--<item-->
             <!--android:id="@+id/nav_slideshow"-->
             <!--android:icon="@android:drawable/ic_menu_slideshow"-->

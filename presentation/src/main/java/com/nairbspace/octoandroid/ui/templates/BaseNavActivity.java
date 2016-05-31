@@ -26,6 +26,8 @@ import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.ui.playback.PlaybackFragment;
 import com.nairbspace.octoandroid.ui.status.StatusActivity;
 import com.nairbspace.octoandroid.ui.status.StatusFragmentPagerAdapter;
+import com.nairbspace.octoandroid.ui.temp.TempActivity;
+import com.nairbspace.octoandroid.ui.temp.TempFragmentPagerAdapter;
 
 import javax.inject.Inject;
 
@@ -158,7 +160,14 @@ public abstract class BaseNavActivity<T> extends BaseActivity<T>
             case R.id.nav_status:
                 if (!(this instanceof StatusActivity)) {
                     getNavigator().navigateToStatusActivity(this);
-                    overridePendingTransition(0, 0);
+                    // TODO need to work on transistion animations
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                }
+                break;
+            case R.id.nav_temp:
+                if (!(this instanceof TempActivity)) {
+                    getNavigator().navigateToTempActivity(this);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 }
                 break;
             case R.id.nav_webcam:
@@ -180,6 +189,8 @@ public abstract class BaseNavActivity<T> extends BaseActivity<T>
 
         if (pagerAdapter instanceof StatusFragmentPagerAdapter) {
             mNavView.setCheckedItem(R.id.nav_status);
+        } else if (pagerAdapter instanceof TempFragmentPagerAdapter) {
+            mNavView.setCheckedItem(R.id.nav_temp);
         }
     }
 

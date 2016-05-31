@@ -38,7 +38,7 @@ public class TempGraphFragment extends BasePagerFragmentListener<TempGraphScreen
     @BindColor(R.color.chart_actual_temp_tool_one_color) int mActualTempTool1Color;
     @BindColor(R.color.chart_target_temp_tool_one_color) int mTargetTempTool1Color;
 
-    private final Listener mListener = (Listener) getContext();
+    private Listener mListener;
 
     private static final String X_VALS_TIME_KEY = "x_vals_time_key";
     private static final String Y_VALS_ACTUAL_TEMP_BED_KEY = "y_vals_actual_temp_bed_key";
@@ -224,6 +224,7 @@ public class TempGraphFragment extends BasePagerFragmentListener<TempGraphScreen
     @NonNull
     @Override
     protected Listener setListener() {
+        mListener = (Listener) getContext();
         return mListener;
     }
 

@@ -16,6 +16,7 @@ import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.ui.add_printer.AddPrinterActivity;
 import com.nairbspace.octoandroid.ui.status.StatusActivity;
 import com.nairbspace.octoandroid.ui.settings.SettingsActivity;
+import com.nairbspace.octoandroid.ui.temp.TempActivity;
 import com.nairbspace.octoandroid.ui.webcam.WebcamActivity;
 
 import javax.inject.Inject;
@@ -64,6 +65,12 @@ public class Navigator {
 
     public void navigateToStatusActivity(Activity activity) {
         Intent i = StatusActivity.newIntent(activity);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        activity.startActivity(i);
+    }
+
+    public void navigateToTempActivity(Activity activity) {
+        Intent i = TempActivity.newIntent(activity);
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         activity.startActivity(i);
     }
