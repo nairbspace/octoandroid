@@ -13,13 +13,12 @@
         android:orientation="vertical"
         android:padding="8dp">
         <TextView
-            android:id="@+id/temp_control_label"
             style="@style/TextAppearance.AppCompat.Headline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="16dp"
-            tools:text="Tool0"/>
+            android:text="@string/bed"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -36,7 +35,7 @@
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textSize="16sp"/>
             <TextView
-                android:id="@+id/actual_temp_textview"
+                android:id="@+id/actual_temp_bed_textview"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -66,7 +65,7 @@
                     android:hint="@string/target">
 
                     <com.nairbspace.octoandroid.ui.temp_controls.TempInputEditText
-                        android:id="@+id/target_temp_input"
+                        android:id="@+id/target_temp_bed_input"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="end"
@@ -82,7 +81,7 @@
                 android:layout_weight="1"
                 android:layout_gravity="bottom">
                 <Button
-                    android:id="@+id/set_target_temp"
+                    android:id="@+id/set_target_temp_bed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/set"/>
@@ -107,6 +106,7 @@
                     android:hint="@string/offset">
 
                     <com.nairbspace.octoandroid.ui.temp_controls.TempInputEditText
+                        android:id="@+id/offset_temp_bed_input"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="end"
@@ -122,7 +122,7 @@
                 android:layout_weight="1"
                 android:layout_gravity="bottom">
                 <Button
-                    android:id="@+id/set_offset_temp"
+                    android:id="@+id/set_offset_temp_bed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/set"/>

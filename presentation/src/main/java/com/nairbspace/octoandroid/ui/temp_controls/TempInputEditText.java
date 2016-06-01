@@ -31,7 +31,7 @@ public class TempInputEditText extends TextInputEditText implements View.OnFocus
     @Override
     public void setOnFocusChangeListener(OnFocusChangeListener l) {
         if (l != this) {
-            l = this;
+            throw new RuntimeException("OnFocusChangeListener already implemented for this view");
         }
 
         super.setOnFocusChangeListener(l);
