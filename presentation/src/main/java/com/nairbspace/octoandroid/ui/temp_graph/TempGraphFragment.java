@@ -1,10 +1,14 @@
 package com.nairbspace.octoandroid.ui.temp_graph;
 
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -23,6 +27,8 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 
 import butterknife.BindColor;
+import butterknife.BindDrawable;
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -37,6 +43,10 @@ public class TempGraphFragment extends BasePagerFragmentListener<TempGraphScreen
     @BindColor(R.color.chart_target_temp_tool_zero_color) int mTargetTempTool0Color;
     @BindColor(R.color.chart_actual_temp_tool_one_color) int mActualTempTool1Color;
     @BindColor(R.color.chart_target_temp_tool_one_color) int mTargetTempTool1Color;
+    @BindString(R.string.unlock) String UNLOCK;
+    @BindString(R.string.lock) String LOCK;
+    @BindDrawable(R.drawable.ic_lock_open_white_24dp) Drawable mUnlockDrawable;
+    @BindDrawable(R.drawable.ic_lock_outline_white_24dp) Drawable mLockDrawable;
 
     private Listener mListener;
 
@@ -83,6 +93,7 @@ public class TempGraphFragment extends BasePagerFragmentListener<TempGraphScreen
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SetupApplication.get(getContext()).getAppComponent().inject(this);
+        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -209,6 +220,33 @@ public class TempGraphFragment extends BasePagerFragmentListener<TempGraphScreen
         mLineChart.moveViewToX(mLineChart.getData().getXValCount() - VISIBLE_X_RANGE_MAX - 2);
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_temp_graph, menu);
+        MenuItem item = menu.findItem(R.id.temp_graph_lock_swipe_menu_item);
+        if (item != null) {
+            updateLockIcon(item);
+        }
+    }
+
+    private void updateLockIcon(@NonNull MenuItem menuItem) {
+        menuItem.setTitle(mListener.isSwipeEnabled() ? UNLOCK : LOCK);
+        menuItem.setIcon(mListener.isSwipeEnabled() ? mUnlockDrawable : mLockDrawable);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.temp_graph_lock_swipe_menu_item:
+                mListener.setSwipeEnabled(!mListener.isSwipeEnabled());
+                updateLockIcon(item);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     @NonNull
     @Override
     protected Presenter setPresenter() {
@@ -229,6 +267,7 @@ public class TempGraphFragment extends BasePagerFragmentListener<TempGraphScreen
     }
 
     public interface Listener {
-
+        void setSwipeEnabled(boolean swipeEnabled);
+        boolean isSwipeEnabled();
     }
 }

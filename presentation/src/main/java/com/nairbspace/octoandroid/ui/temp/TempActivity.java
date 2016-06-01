@@ -14,6 +14,7 @@ import com.nairbspace.octoandroid.ui.temp_controls.TempControlsFragment;
 import com.nairbspace.octoandroid.ui.temp_graph.TempGraphFragment;
 import com.nairbspace.octoandroid.ui.templates.BaseNavActivity;
 import com.nairbspace.octoandroid.ui.templates.Presenter;
+import com.nairbspace.octoandroid.views.LockSwipeViewPager;
 
 import javax.inject.Inject;
 
@@ -25,6 +26,7 @@ public class TempActivity extends BaseNavActivity<TempScreen> implements TempScr
 
     @Inject TempPresenter mPresenter;
     @BindView(R.id.toolbar) Toolbar mToolbar;
+    @BindView(R.id.view_pager) LockSwipeViewPager mViewPager;
 
     public static Intent newIntent(Context context) {
         return new Intent(context, TempActivity.class);
@@ -38,6 +40,16 @@ public class TempActivity extends BaseNavActivity<TempScreen> implements TempScr
         setSupportActionBar(mToolbar);
         super.onCreate(savedInstanceState);
         inflateAdapter(new TempFragmentPagerAdapter(getSupportFragmentManager()));
+    }
+
+    @Override
+    public void setSwipeEnabled(boolean swipeEnabled) {
+        mViewPager.setSwipeEnabled(swipeEnabled);
+    }
+
+    @Override
+    public boolean isSwipeEnabled() {
+        return mViewPager.isSwipeEnabled();
     }
 
     @NonNull

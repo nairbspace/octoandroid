@@ -37,7 +37,7 @@
             <!-- TODO-Low would be nice to collapse toolbar but not tablayout-->
         </android.support.design.widget.AppBarLayout>
 
-        <android.support.v4.view.ViewPager
+        <com.nairbspace.octoandroid.views.LockSwipeViewPager
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
