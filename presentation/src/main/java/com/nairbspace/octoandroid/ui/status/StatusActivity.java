@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v7.widget.Toolbar;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
@@ -18,7 +17,6 @@ import com.nairbspace.octoandroid.ui.templates.Presenter;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class StatusActivity extends BaseNavActivity<StatusScreen>
@@ -27,7 +25,6 @@ public class StatusActivity extends BaseNavActivity<StatusScreen>
         FilesFragment.Listener, PlaybackFragment.Listener {
 
     @Inject StatusPresenter mPresenter;
-    @BindView(R.id.toolbar) Toolbar mToolbar;
 
     public static Intent newIntent(Context context) {
         return new Intent(context, StatusActivity.class);
@@ -35,11 +32,10 @@ public class StatusActivity extends BaseNavActivity<StatusScreen>
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         SetupApplication.get(this).getAppComponent().inject(this);
         setContentView(R.layout.activity_main);
-        setUnbinder(ButterKnife.bind(this));
-        setSupportActionBar(mToolbar);
-        super.onCreate(savedInstanceState);
+        onCreateDrawer(ButterKnife.bind(this));
         inflateAdapter(new StatusFragmentPagerAdapter(getSupportFragmentManager()));
     }
 

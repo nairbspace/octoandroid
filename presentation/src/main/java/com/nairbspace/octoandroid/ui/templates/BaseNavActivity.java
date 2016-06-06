@@ -11,7 +11,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.CardView;
@@ -28,6 +27,7 @@ import com.nairbspace.octoandroid.ui.status.StatusActivity;
 import com.nairbspace.octoandroid.ui.status.StatusFragmentPagerAdapter;
 import com.nairbspace.octoandroid.ui.temp.TempActivity;
 import com.nairbspace.octoandroid.ui.temp.TempFragmentPagerAdapter;
+import com.nairbspace.octoandroid.views.LockSwipeViewPager;
 
 import javax.inject.Inject;
 
@@ -46,7 +46,7 @@ public abstract class BaseNavActivity<T> extends BaseActivity<T>
     @BindView(R.id.fab) FloatingActionButton mFab;
     @BindView(R.id.drawer_layout) DrawerLayout mDrawer;
     @BindView(R.id.nav_view) NavigationView mNavView;
-    @BindView(R.id.view_pager) ViewPager mViewPager;
+    @BindView(R.id.view_pager) LockSwipeViewPager mViewPager;
     @BindView(R.id.tab_layout) TabLayout mTabLayout;
     @BindView(R.id.fragment_controls) CardView mPlaybackView;
     @BindBool(R.bool.is_tablet_and_landscape) boolean mIsTabletAndLandScape;
@@ -57,9 +57,9 @@ public abstract class BaseNavActivity<T> extends BaseActivity<T>
     private FragmentManager mFragmentManager;
     private Unbinder mUnbinder;
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreateDrawer(Unbinder unbinder) {
+        mUnbinder = unbinder;
+        setSupportActionBar(mToolbar);
         mFab.setOnClickListener(mFabClickListener);
         mNavView.setNavigationItemSelectedListener(this);
         View navHeaderView = mNavView.getHeaderView(0);
@@ -73,8 +73,8 @@ public abstract class BaseNavActivity<T> extends BaseActivity<T>
         inflatePlaybackFragment();
     }
 
-    protected void setUnbinder(Unbinder unbinder) {
-        mUnbinder = unbinder;
+    public LockSwipeViewPager getViewPager() {
+        return mViewPager;
     }
 
     private void inflatePlaybackFragment() {
