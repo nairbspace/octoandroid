@@ -1,7 +1,7 @@
-# OctoAndroid: OctoPrint for Android
+# OctoAndroid: OctoPrint for Android <img src="presentation/src/main/res/mipmap-mdpi/ic_launcher.png">
 Native Android interface for OctoPrint.
 
-<p align="center">
+<p align="start">
 <a href="https://play.google.com/store/apps/details?id=com.nairbspace.octoandroid">
 <img src="https://play.google.com/intl/en_us/badges/images/apps/en-play-badge.png" width="204" height="61"></a><br>
 <img src="images/screenshot_preview.png"/>
