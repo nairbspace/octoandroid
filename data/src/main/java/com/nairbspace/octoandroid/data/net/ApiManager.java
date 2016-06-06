@@ -5,6 +5,7 @@ import com.nairbspace.octoandroid.data.entity.ConnectEntity;
 import com.nairbspace.octoandroid.data.entity.ConnectionEntity;
 import com.nairbspace.octoandroid.data.entity.FileCommandEntity;
 import com.nairbspace.octoandroid.data.entity.VersionEntity;
+import com.nairbspace.octoandroid.domain.model.TempCommand;
 
 import okhttp3.MultipartBody;
 import rx.Observable;
@@ -22,4 +23,5 @@ public interface ApiManager extends OctoApi {
 
     Func1<MultipartBody.Part, Observable<?>> funcUploadFile();
 
+    Func1<Object, Observable<?>> funcSendToolOrBedCommand(TempCommand tempCommand);
 }

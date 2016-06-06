@@ -49,4 +49,7 @@ public interface OctoApi {
     @Multipart
     @POST("/api/files/{location}")
     Observable<Object> uploadFile(@Path("location") String location, @Part MultipartBody.Part file);
+
+    @POST("/api/printer/{toolOrBed}")
+    Observable<Object> sendToolOrBedTempCommand(@Path("toolOrBed") String toolOrBed, @Body Object object);
 }

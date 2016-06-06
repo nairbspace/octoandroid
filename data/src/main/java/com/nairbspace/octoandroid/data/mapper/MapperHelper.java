@@ -12,6 +12,7 @@ import com.nairbspace.octoandroid.domain.model.Connection;
 import com.nairbspace.octoandroid.domain.model.FileCommand;
 import com.nairbspace.octoandroid.domain.model.Files;
 import com.nairbspace.octoandroid.domain.model.Printer;
+import com.nairbspace.octoandroid.domain.model.TempCommand;
 import com.nairbspace.octoandroid.domain.model.Websocket;
 
 import javax.inject.Inject;
@@ -31,6 +32,7 @@ public class MapperHelper {
     private final WebsocketEntityMapper mWebsocketEntityMapper;
     private final FileCommandEntityMapper mFileCommandEntityMapper;
     private final MultipartBodyPartMapper mMultipartBodyPartMapper;
+    private final TempCommandEntityMapper mTempCommandEntityMapper;
 
     @Inject
     public MapperHelper(PrinterDbEntityMapper printerDbEntityMapper,
@@ -39,7 +41,8 @@ public class MapperHelper {
                         FilesEntityMapper filesEntityMapper,
                         WebsocketEntityMapper websocketEntityMapper,
                         FileCommandEntityMapper fileCommandEntityMapper,
-                        MultipartBodyPartMapper multipartBodyPartMapper) {
+                        MultipartBodyPartMapper multipartBodyPartMapper,
+                        TempCommandEntityMapper tempCommandEntityMapper) {
         mPrinterDbEntityMapper = printerDbEntityMapper;
         mConnectionEntityMapper = connectionEntityMapper;
         mConnectEntityMapper = connectEntityMapper;
@@ -47,6 +50,7 @@ public class MapperHelper {
         mWebsocketEntityMapper = websocketEntityMapper;
         mFileCommandEntityMapper = fileCommandEntityMapper;
         mMultipartBodyPartMapper = multipartBodyPartMapper;
+        mTempCommandEntityMapper = tempCommandEntityMapper;
     }
 
     public Func1<PrinterDbEntity, Printer> maptoPrinter() {
@@ -79,5 +83,9 @@ public class MapperHelper {
 
     public Observable.OnSubscribe<MultipartBody.Part> mapToMultiPartBodyPart(final String uriString) {
         return mMultipartBodyPartMapper.mapToMultiPartBodyPart(uriString);
+    }
+
+    public Observable.OnSubscribe<Object> mapToTempCommandEntity(final TempCommand tempCommand) {
+        return mTempCommandEntityMapper.mapToTempCommandEntity(tempCommand);
     }
 }

@@ -12,6 +12,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="8dp">
+
         <TextView
             style="@style/TextAppearance.AppCompat.Headline"
             android:layout_width="wrap_content"
@@ -19,11 +20,13 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="16dp"
             android:text="@string/tool1"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="8dp"
+            android:orientation="horizontal">
+
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -34,13 +37,14 @@
                 android:text="@string/actual"
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textSize="16sp"/>
+
             <TextView
                 android:id="@+id/actual_temp_tool1_textview"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginLeft="16dp"
                 android:layout_marginStart="16dp"
+                android:layout_weight="1"
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textSize="16sp"
                 tools:text="175°C"/>
@@ -49,19 +53,21 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
             android:layout_marginBottom="8dp"
-            android:baselineAligned="false">
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
             <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
+
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_gravity="end"
                     android:layout_marginEnd="16dp"
                     android:layout_marginRight="16dp"
-                    android:layout_gravity="end"
                     android:hint="@string/target">
 
                     <com.nairbspace.octoandroid.ui.temp_controls.TempInputEditText
@@ -69,17 +75,17 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="end"
-                        android:ems="3"
-                        android:maxLength="3"
-                        android:inputType="number"
-                        android:maxLines="1"/>
+                        android:imeOptions="actionDone"
+                        android:inputType="number"/>
                 </android.support.design.widget.TextInputLayout>
             </FrameLayout>
+
             <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_gravity="bottom">
+                android:layout_gravity="bottom"
+                android:layout_weight="1">
+
                 <Button
                     android:id="@+id/set_target_temp_tool1"
                     android:layout_width="wrap_content"
@@ -91,18 +97,20 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:baselineAligned="false">
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
             <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
+
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_gravity="end"
                     android:layout_marginEnd="16dp"
                     android:layout_marginRight="16dp"
-                    android:layout_gravity="end"
                     android:hint="@string/offset">
 
                     <com.nairbspace.octoandroid.ui.temp_controls.TempInputEditText
@@ -110,17 +118,17 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="end"
-                        android:ems="3"
-                        android:maxLength="3"
-                        android:inputType="number"
-                        android:maxLines="1"/>
+                        android:imeOptions="actionDone"
+                        android:inputType="numberSigned"/>
                 </android.support.design.widget.TextInputLayout>
             </FrameLayout>
+
             <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_gravity="bottom">
+                android:layout_gravity="bottom"
+                android:layout_weight="1">
+
                 <Button
                     android:id="@+id/set_offset_temp_tool1"
                     android:layout_width="wrap_content"

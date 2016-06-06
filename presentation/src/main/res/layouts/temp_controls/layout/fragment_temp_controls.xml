@@ -15,6 +15,8 @@
         android:paddingStart="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin">
 
+        <!--TODO include offsets in view. Need to also include in websocket model-->
+
         <include layout="@layout/fragment_temp_controls_tool0"/>
         <android.support.v4.widget.Space
             android:layout_width="match_parent"

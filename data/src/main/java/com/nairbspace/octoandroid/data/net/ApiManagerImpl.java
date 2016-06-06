@@ -8,6 +8,8 @@ import com.nairbspace.octoandroid.data.entity.FileCommandEntity;
 import com.nairbspace.octoandroid.data.entity.FilesEntity;
 import com.nairbspace.octoandroid.data.entity.PrinterStateEntity;
 import com.nairbspace.octoandroid.data.entity.VersionEntity;
+import com.nairbspace.octoandroid.domain.model.TempCommand;
+import com.nairbspace.octoandroid.domain.model.TempCommand.ToolBedOffsetTemp;
 
 import java.util.HashMap;
 
@@ -24,6 +26,8 @@ import rx.functions.Func1;
 
 @Singleton
 public class ApiManagerImpl implements ApiManager {
+    private static final String TOOL_PATH = "tool";
+    private static final String BED_PATH = "bed";
 
     private final OctoApi mOctoApi;
     private final PrefHelper mPrefHelper;
@@ -80,6 +84,11 @@ public class ApiManagerImpl implements ApiManager {
     }
 
     @Override
+    public Observable<Object> sendToolOrBedTempCommand(@Path("toolOrBed") String toolOrBed, @Body Object object) {
+        return mOctoApi.sendToolOrBedTempCommand(toolOrBed, object);
+    }
+
+    @Override
     public Func1<PrinterDbEntity, Observable<VersionEntity>> funcGetVersion() {
         return new Func1<PrinterDbEntity, Observable<VersionEntity>>() {
             @Override
@@ -125,6 +134,21 @@ public class ApiManagerImpl implements ApiManager {
             @Override
             public Observable call(MultipartBody.Part part) {
                 return uploadFile(location, part);
+            }
+        };
+    }
+
+    @Override
+    public Func1<Object, Observable<?>> funcSendToolOrBedCommand(final TempCommand tempCommand) {
+        return new Func1<Object, Observable<?>>() {
+            @Override
+            public Observable<?> call(Object object) {
+                if (tempCommand.toolBedOffsetTemp() == ToolBedOffsetTemp.OFFSET_BED ||
+                        tempCommand.toolBedOffsetTemp() == ToolBedOffsetTemp.TARGET_BED) {
+                    return sendToolOrBedTempCommand(BED_PATH, object);
+                } else {
+                    return sendToolOrBedTempCommand(TOOL_PATH, object);
+                }
             }
         };
     }

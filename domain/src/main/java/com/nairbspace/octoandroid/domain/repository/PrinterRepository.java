@@ -6,6 +6,7 @@ import com.nairbspace.octoandroid.domain.model.Connection;
 import com.nairbspace.octoandroid.domain.model.FileCommand;
 import com.nairbspace.octoandroid.domain.model.Files;
 import com.nairbspace.octoandroid.domain.model.Printer;
+import com.nairbspace.octoandroid.domain.model.TempCommand;
 import com.nairbspace.octoandroid.domain.model.Websocket;
 
 import java.util.HashMap;
@@ -39,4 +40,6 @@ public interface PrinterRepository {
     Observable uploadFile(String uriString);
 
     Observable connectToWebcam();
+
+    Observable sendTempCommand(TempCommand tempCommand);
 }

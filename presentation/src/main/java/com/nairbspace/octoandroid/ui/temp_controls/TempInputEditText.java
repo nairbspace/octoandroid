@@ -2,6 +2,7 @@ package com.nairbspace.octoandroid.ui.temp_controls;
 
 import android.content.Context;
 import android.support.design.widget.TextInputEditText;
+import android.text.InputFilter;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -11,17 +12,24 @@ public class TempInputEditText extends TextInputEditText implements View.OnFocus
 
     public TempInputEditText(Context context) {
         super(context);
-        setOnFocusChangeListener(this);
+        initializeView();
     }
 
     public TempInputEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
-        setOnFocusChangeListener(this);
+        initializeView();
     }
 
     public TempInputEditText(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        initializeView();
+    }
+
+    private void initializeView() {
         setOnFocusChangeListener(this);
+        setEms(3);
+        setMaxLines(1);
+        setFilters(new InputFilter[]{new InputFilter.LengthFilter(3)}); // Max Length
     }
 
     /**

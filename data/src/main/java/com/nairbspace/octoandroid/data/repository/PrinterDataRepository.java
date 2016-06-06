@@ -12,6 +12,7 @@ import com.nairbspace.octoandroid.domain.model.Connection;
 import com.nairbspace.octoandroid.domain.model.FileCommand;
 import com.nairbspace.octoandroid.domain.model.Files;
 import com.nairbspace.octoandroid.domain.model.Printer;
+import com.nairbspace.octoandroid.domain.model.TempCommand;
 import com.nairbspace.octoandroid.domain.model.Websocket;
 import com.nairbspace.octoandroid.domain.repository.PrinterRepository;
 
@@ -120,5 +121,11 @@ public class PrinterDataRepository implements PrinterRepository {
     @Override
     public Observable connectToWebcam() {
         return mWebcamManager.connect();
+    }
+
+    @Override
+    public Observable sendTempCommand(final TempCommand tempCommand) {
+        return Observable.create(mMapperHelper.mapToTempCommandEntity(tempCommand))
+                .concatMap(mApiManager.funcSendToolOrBedCommand(tempCommand));
     }
 }
