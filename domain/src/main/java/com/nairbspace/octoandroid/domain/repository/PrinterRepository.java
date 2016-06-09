@@ -8,6 +8,7 @@ import com.nairbspace.octoandroid.domain.model.Files;
 import com.nairbspace.octoandroid.domain.model.PrintHeadCommand;
 import com.nairbspace.octoandroid.domain.model.Printer;
 import com.nairbspace.octoandroid.domain.model.TempCommand;
+import com.nairbspace.octoandroid.domain.model.ToolCommand;
 import com.nairbspace.octoandroid.domain.model.Websocket;
 
 import java.util.HashMap;
@@ -45,4 +46,8 @@ public interface PrinterRepository {
     Observable sendTempCommand(TempCommand tempCommand);
 
     Observable sendPrintHeadCommand(PrintHeadCommand command);
+
+    Observable selectTool(int tool);
+
+    Observable sendToolCommand(ToolCommand toolCommand);
 }

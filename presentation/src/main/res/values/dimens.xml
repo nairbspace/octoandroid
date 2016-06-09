@@ -36,4 +36,7 @@
     <dimen name="jog_hundred_multiplier">100px</dimen>
     <integer name="feedrate_percent_offset">50</integer>
     <integer name="feedrate_default_progress">50</integer>
+
+    <integer name="flowrate_percent_offset">50</integer>
+    <integer name="flowrate_default_progress">50</integer>
 </resources>

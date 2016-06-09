@@ -89,8 +89,13 @@ public class ApiManagerImpl implements ApiManager {
     }
 
     @Override
-    public Observable<Observable> sendPrintHeadCommand(@Body Object object) {
+    public Observable<Object> sendPrintHeadCommand(@Body Object object) {
         return mOctoApi.sendPrintHeadCommand(object);
+    }
+
+    @Override
+    public Observable<Object> selectTool(@Body Object object) {
+        return mOctoApi.selectTool(object);
     }
 
     @Override
@@ -164,6 +169,16 @@ public class ApiManagerImpl implements ApiManager {
             @Override
             public Observable<?> call(Object o) {
                 return sendPrintHeadCommand(o); // TODO-low should probably check if instance of PrintHeadCommandEntity
+            }
+        };
+    }
+
+    @Override
+    public Func1<Object, Observable<?>> funcSendToolCommand() {
+        return new Func1<Object, Observable<?>>() {
+            @Override
+            public Observable call(Object o) {
+                return selectTool(o);
             }
         };
     }

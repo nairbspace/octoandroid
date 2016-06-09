@@ -26,4 +26,6 @@ public interface ApiManager extends OctoApi {
     Func1<Object, Observable<?>> funcSendToolOrBedCommand(TempCommand tempCommand);
 
     Func1<Object, Observable<?>> funcSendPrintHeadCommand();
+
+    Func1<Object, Observable<?>> funcSendToolCommand();
 }

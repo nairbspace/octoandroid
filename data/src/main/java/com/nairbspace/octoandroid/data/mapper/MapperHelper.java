@@ -14,6 +14,7 @@ import com.nairbspace.octoandroid.domain.model.Files;
 import com.nairbspace.octoandroid.domain.model.PrintHeadCommand;
 import com.nairbspace.octoandroid.domain.model.Printer;
 import com.nairbspace.octoandroid.domain.model.TempCommand;
+import com.nairbspace.octoandroid.domain.model.ToolCommand;
 import com.nairbspace.octoandroid.domain.model.Websocket;
 
 import javax.inject.Inject;
@@ -37,6 +38,7 @@ public class MapperHelper {
     private final MultipartBodyPartMapper mMultipartBodyPartMapper;
     private final TempCommandEntityMapper mTempCommandEntityMapper;
     private final PrintHeadCommandEntityMapper mPrintHeadCommandEntityMapper;
+    private final ToolCommandEntityMapper mToolCommandEntityMapper;
 
     @Inject
     public MapperHelper(PrinterDbEntityMapper printerDbEntityMapper,
@@ -47,7 +49,8 @@ public class MapperHelper {
                         FileCommandEntityMapper fileCommandEntityMapper,
                         MultipartBodyPartMapper multipartBodyPartMapper,
                         TempCommandEntityMapper tempCommandEntityMapper,
-                        PrintHeadCommandEntityMapper printHeadCommandEntityMapper) {
+                        PrintHeadCommandEntityMapper printHeadCommandEntityMapper,
+                        ToolCommandEntityMapper toolCommandEntityMapper) {
         mPrinterDbEntityMapper = printerDbEntityMapper;
         mConnectionEntityMapper = connectionEntityMapper;
         mConnectEntityMapper = connectEntityMapper;
@@ -57,6 +60,7 @@ public class MapperHelper {
         mMultipartBodyPartMapper = multipartBodyPartMapper;
         mTempCommandEntityMapper = tempCommandEntityMapper;
         mPrintHeadCommandEntityMapper = printHeadCommandEntityMapper;
+        mToolCommandEntityMapper = toolCommandEntityMapper;
     }
 
     public Func1<PrinterDbEntity, Printer> maptoPrinter() {
@@ -97,5 +101,9 @@ public class MapperHelper {
 
     public Observable.OnSubscribe<Object> mapToPrintHeadCommandEntity(PrintHeadCommand printHeadCommand) {
         return mPrintHeadCommandEntityMapper.mapToPrintHeadCommandEntity(printHeadCommand);
+    }
+
+    public Observable.OnSubscribe<Object> mapToToolCommandEntity(ToolCommand toolCommand) {
+        return mToolCommandEntityMapper.mapToToolCommandEntity(toolCommand);
     }
 }

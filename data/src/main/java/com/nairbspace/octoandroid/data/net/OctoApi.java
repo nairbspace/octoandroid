@@ -54,5 +54,8 @@ public interface OctoApi {
     Observable<Object> sendToolOrBedTempCommand(@Path("toolOrBed") String toolOrBed, @Body Object object);
 
     @POST("/api/printer/printhead")
-    Observable<Observable> sendPrintHeadCommand(@Body Object object);
+    Observable<Object> sendPrintHeadCommand(@Body Object object);
+
+    @POST("/api/printer/tool")
+    Observable<Object> selectTool(@Body Object object);
 }

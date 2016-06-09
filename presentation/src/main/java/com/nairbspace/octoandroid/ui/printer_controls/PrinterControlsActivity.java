@@ -10,6 +10,7 @@ import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
 import com.nairbspace.octoandroid.ui.playback.PlaybackFragment;
 import com.nairbspace.octoandroid.ui.print_head.PrintHeadFragment;
+import com.nairbspace.octoandroid.ui.printer_controls_tool.ToolFragment;
 import com.nairbspace.octoandroid.ui.templates.BaseNavActivity;
 import com.nairbspace.octoandroid.ui.templates.Presenter;
 
@@ -19,7 +20,8 @@ import butterknife.BindArray;
 import butterknife.ButterKnife;
 
 public class PrinterControlsActivity extends BaseNavActivity<PrinterControlsScreen>
-        implements PrinterControlsScreen, PlaybackFragment.Listener, PrintHeadFragment.Listener {
+        implements PrinterControlsScreen, PlaybackFragment.Listener, PrintHeadFragment.Listener,
+        ToolFragment.Listener {
 
     @Inject PrinterControlsPresenter mPresenter;
     @BindArray(R.array.printer_controls_fragment_pager_adapter) String[] mPagerArray;

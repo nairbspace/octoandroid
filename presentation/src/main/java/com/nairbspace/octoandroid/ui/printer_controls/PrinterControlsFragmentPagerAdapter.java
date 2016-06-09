@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.nairbspace.octoandroid.ui.print_head.PrintHeadFragment;
+import com.nairbspace.octoandroid.ui.printer_controls_tool.ToolFragment;
 
 public class PrinterControlsFragmentPagerAdapter extends FragmentPagerAdapter {
     private final String mTabTitles[];
@@ -16,12 +17,11 @@ public class PrinterControlsFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return PrintHeadFragment.newInstance();
-//        if (position == 0) {
-//            return TempGraphFragment.newInstance();
-//        } else {
-//            return TempControlsFragment.newInstance();
-//        }
+        if (position == 0) {
+            return PrintHeadFragment.newInstance();
+        } else {
+            return ToolFragment.newInstance();
+        }
     }
 
     @Override

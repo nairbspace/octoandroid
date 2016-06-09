@@ -1,6 +1,7 @@
 package com.nairbspace.octoandroid.data.repository;
 
 import com.nairbspace.octoandroid.data.disk.DiskManager;
+import com.nairbspace.octoandroid.data.entity.ToolCommandEntity;
 import com.nairbspace.octoandroid.data.mapper.MapperHelper;
 import com.nairbspace.octoandroid.data.net.ApiManager;
 import com.nairbspace.octoandroid.data.net.WebsocketManager;
@@ -14,6 +15,7 @@ import com.nairbspace.octoandroid.domain.model.Files;
 import com.nairbspace.octoandroid.domain.model.PrintHeadCommand;
 import com.nairbspace.octoandroid.domain.model.Printer;
 import com.nairbspace.octoandroid.domain.model.TempCommand;
+import com.nairbspace.octoandroid.domain.model.ToolCommand;
 import com.nairbspace.octoandroid.domain.model.Websocket;
 import com.nairbspace.octoandroid.domain.repository.PrinterRepository;
 
@@ -134,5 +136,24 @@ public class PrinterDataRepository implements PrinterRepository {
     public Observable sendPrintHeadCommand(PrintHeadCommand command) {
         return Observable.create(mMapperHelper.mapToPrintHeadCommandEntity(command))
                 .concatMap(mApiManager.funcSendPrintHeadCommand());
+    }
+
+    @Override
+    public Observable selectTool(int tool) {
+        // TODO should probably combine with sendToolCommand
+        ToolCommandEntity.Select select;
+        if (tool == 0) {
+            select = ToolCommandEntity.Select.createTool0();
+        } else {
+            select = ToolCommandEntity.Select.createTool1();
+        }
+        return mApiManager.selectTool(select);
+    }
+
+    @Override
+    public Observable sendToolCommand(ToolCommand toolCommand) {
+        return Observable.create(mMapperHelper.mapToToolCommandEntity(toolCommand))
+                .concatMap(mApiManager.funcSendToolCommand());
+
     }
 }
