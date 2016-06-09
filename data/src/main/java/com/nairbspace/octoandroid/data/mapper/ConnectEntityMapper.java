@@ -8,17 +8,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import rx.Observable;
 import rx.Subscriber;
 
 public class ConnectEntityMapper {
 
-    @Inject public ConnectEntityMapper() {
-    }
-
-    public Observable.OnSubscribe<ConnectEntity> mapToConnectEntity(final Connect connect) {
+    public static Observable.OnSubscribe<ConnectEntity> mapToConnectEntity(final Connect connect) {
         return new Observable.OnSubscribe<ConnectEntity>() {
             @Override
             public void call(Subscriber<? super ConnectEntity> subscriber) {

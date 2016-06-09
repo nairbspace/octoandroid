@@ -6,8 +6,6 @@ import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import javax.inject.Inject;
-
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -19,11 +17,7 @@ public class MultipartBodyPartMapper {
     private static final String MULTIPART_CONTENT = "multipart/form-data";
     private static final String FILE = "file";
 
-    @Inject
-    public MultipartBodyPartMapper() {
-    }
-
-    public Observable.OnSubscribe<MultipartBody.Part> mapToMultiPartBodyPart(final String uriString) {
+    public static Observable.OnSubscribe<MultipartBody.Part> mapToMultiPartBodyPart(final String uriString) {
         return new Observable.OnSubscribe<MultipartBody.Part>() {
             @Override
             public void call(Subscriber<? super MultipartBody.Part> subscriber) {

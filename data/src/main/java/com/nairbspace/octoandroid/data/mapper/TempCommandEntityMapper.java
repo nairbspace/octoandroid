@@ -4,18 +4,12 @@ import com.nairbspace.octoandroid.data.entity.TempCommandEntity;
 import com.nairbspace.octoandroid.data.exception.EntityMapperException;
 import com.nairbspace.octoandroid.domain.model.TempCommand;
 
-import javax.inject.Inject;
-
 import rx.Observable;
 import rx.Subscriber;
 
 public class TempCommandEntityMapper {
 
-    @Inject
-    public TempCommandEntityMapper() {
-    }
-
-    public Observable.OnSubscribe<Object> mapToTempCommandEntity(final TempCommand tempCommand) {
+    public static Observable.OnSubscribe<Object> mapToTempCommandEntity(final TempCommand tempCommand) {
         return new Observable.OnSubscribe<Object>() {
             @Override
             public void call(Subscriber<? super Object> subscriber) {

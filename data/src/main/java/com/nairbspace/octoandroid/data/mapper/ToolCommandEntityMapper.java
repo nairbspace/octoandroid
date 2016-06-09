@@ -4,18 +4,12 @@ import com.nairbspace.octoandroid.data.entity.ToolCommandEntity;
 import com.nairbspace.octoandroid.data.exception.EntityMapperException;
 import com.nairbspace.octoandroid.domain.model.ToolCommand;
 
-import javax.inject.Inject;
-
 import rx.Observable;
 import rx.Subscriber;
 
 public class ToolCommandEntityMapper {
 
-    @Inject
-    public ToolCommandEntityMapper() {
-    }
-
-    public Observable.OnSubscribe<Object> mapToToolCommandEntity(final ToolCommand toolCommand) {
+    public static Observable.OnSubscribe<Object> mapToToolCommandEntity(final ToolCommand toolCommand) {
         return new Observable.OnSubscribe<Object>() {
             @Override
             public void call(Subscriber<? super Object> subscriber) {

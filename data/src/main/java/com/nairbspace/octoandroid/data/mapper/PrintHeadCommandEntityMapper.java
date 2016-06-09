@@ -4,18 +4,12 @@ import com.nairbspace.octoandroid.data.entity.PrintHeadCommandEntity;
 import com.nairbspace.octoandroid.data.exception.EntityMapperException;
 import com.nairbspace.octoandroid.domain.model.PrintHeadCommand;
 
-import javax.inject.Inject;
-
 import rx.Observable;
 import rx.Subscriber;
 
 public class PrintHeadCommandEntityMapper {
 
-    @Inject
-    public PrintHeadCommandEntityMapper() {
-    }
-
-    public Observable.OnSubscribe<Object> mapToPrintHeadCommandEntity(final PrintHeadCommand printHeadCommand) {
+    public static Observable.OnSubscribe<Object> mapToPrintHeadCommandEntity(final PrintHeadCommand printHeadCommand) {
         return new Observable.OnSubscribe<Object>() {
             @Override
             public void call(Subscriber<? super Object> subscriber) {
