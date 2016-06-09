@@ -11,6 +11,7 @@ import com.nairbspace.octoandroid.domain.model.Connect;
 import com.nairbspace.octoandroid.domain.model.Connection;
 import com.nairbspace.octoandroid.domain.model.FileCommand;
 import com.nairbspace.octoandroid.domain.model.Files;
+import com.nairbspace.octoandroid.domain.model.PrintHeadCommand;
 import com.nairbspace.octoandroid.domain.model.Printer;
 import com.nairbspace.octoandroid.domain.model.TempCommand;
 import com.nairbspace.octoandroid.domain.model.Websocket;
@@ -22,6 +23,8 @@ import okhttp3.MultipartBody;
 import rx.Observable;
 import rx.functions.Func1;
 
+
+// TODO-low can probably just use static methods
 @Singleton
 public class MapperHelper {
 
@@ -33,6 +36,7 @@ public class MapperHelper {
     private final FileCommandEntityMapper mFileCommandEntityMapper;
     private final MultipartBodyPartMapper mMultipartBodyPartMapper;
     private final TempCommandEntityMapper mTempCommandEntityMapper;
+    private final PrintHeadCommandEntityMapper mPrintHeadCommandEntityMapper;
 
     @Inject
     public MapperHelper(PrinterDbEntityMapper printerDbEntityMapper,
@@ -42,7 +46,8 @@ public class MapperHelper {
                         WebsocketEntityMapper websocketEntityMapper,
                         FileCommandEntityMapper fileCommandEntityMapper,
                         MultipartBodyPartMapper multipartBodyPartMapper,
-                        TempCommandEntityMapper tempCommandEntityMapper) {
+                        TempCommandEntityMapper tempCommandEntityMapper,
+                        PrintHeadCommandEntityMapper printHeadCommandEntityMapper) {
         mPrinterDbEntityMapper = printerDbEntityMapper;
         mConnectionEntityMapper = connectionEntityMapper;
         mConnectEntityMapper = connectEntityMapper;
@@ -51,6 +56,7 @@ public class MapperHelper {
         mFileCommandEntityMapper = fileCommandEntityMapper;
         mMultipartBodyPartMapper = multipartBodyPartMapper;
         mTempCommandEntityMapper = tempCommandEntityMapper;
+        mPrintHeadCommandEntityMapper = printHeadCommandEntityMapper;
     }
 
     public Func1<PrinterDbEntity, Printer> maptoPrinter() {
@@ -87,5 +93,9 @@ public class MapperHelper {
 
     public Observable.OnSubscribe<Object> mapToTempCommandEntity(final TempCommand tempCommand) {
         return mTempCommandEntityMapper.mapToTempCommandEntity(tempCommand);
+    }
+
+    public Observable.OnSubscribe<Object> mapToPrintHeadCommandEntity(PrintHeadCommand printHeadCommand) {
+        return mPrintHeadCommandEntityMapper.mapToPrintHeadCommandEntity(printHeadCommand);
     }
 }

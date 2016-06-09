@@ -89,6 +89,11 @@ public class ApiManagerImpl implements ApiManager {
     }
 
     @Override
+    public Observable<Observable> sendPrintHeadCommand(@Body Object object) {
+        return mOctoApi.sendPrintHeadCommand(object);
+    }
+
+    @Override
     public Func1<PrinterDbEntity, Observable<VersionEntity>> funcGetVersion() {
         return new Func1<PrinterDbEntity, Observable<VersionEntity>>() {
             @Override
@@ -149,6 +154,16 @@ public class ApiManagerImpl implements ApiManager {
                 } else {
                     return sendToolOrBedTempCommand(TOOL_PATH, object);
                 }
+            }
+        };
+    }
+
+    @Override
+    public Func1<Object, Observable<?>> funcSendPrintHeadCommand() {
+        return new Func1<Object, Observable<?>>() {
+            @Override
+            public Observable<?> call(Object o) {
+                return sendPrintHeadCommand(o); // TODO-low should probably check if instance of PrintHeadCommandEntity
             }
         };
     }

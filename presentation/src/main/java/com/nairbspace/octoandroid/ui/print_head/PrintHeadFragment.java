@@ -9,12 +9,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
+import com.nairbspace.octoandroid.domain.model.PrintHeadCommand;
 import com.nairbspace.octoandroid.ui.templates.BasePagerFragmentListener;
 import com.nairbspace.octoandroid.ui.templates.Presenter;
 import com.nairbspace.octoandroid.views.AbstractSeekBarListener;
+import com.nairbspace.octoandroid.views.SetEnableView;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -22,6 +27,7 @@ import butterknife.BindDimen;
 import butterknife.BindInt;
 import butterknife.BindString;
 import butterknife.BindView;
+import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -40,25 +46,30 @@ public class PrintHeadFragment extends BasePagerFragmentListener<PrintHeadScreen
     @BindDimen(R.dimen.jog_hundred_multiplier) float mHundred;
 
     @Inject PrintHeadPresenter mPresenter;
+    @Inject SetEnableView mSetEnableView;
     private Listener mListener;
 
-    @OnClick(R.id.jog_xy_up_imageview) void xyUpClicked() {}
-    @OnClick(R.id.jog_xy_left_imageview) void xyLeftClicked(){}
-    @OnClick(R.id.jog_xy_right_imageview) void xyRightClicked(){}
-    @OnClick(R.id.jog_xy_down_imageview) void xyDownClicked(){}
-    @OnClick(R.id.jog_xy_home_imageview) void xyHomeClicked(){}
+    @OnClick(R.id.jog_xy_left_imageview) void xLeftClicked(){mPresenter.executeCommand(PrintHeadCommand.Type.JOG_X_LEFT);}
+    @OnClick(R.id.jog_xy_right_imageview) void xRightClicked(){mPresenter.executeCommand(PrintHeadCommand.Type.JOG_X_RIGHT);}
+    @OnClick(R.id.jog_xy_up_imageview) void yUpClicked() {mPresenter.executeCommand(PrintHeadCommand.Type.JOG_Y_UP);}
+    @OnClick(R.id.jog_xy_down_imageview) void yDownClicked(){mPresenter.executeCommand(PrintHeadCommand.Type.JOG_Y_DOWN);}
+    @OnClick(R.id.jog_xy_home_imageview) void xyHomeClicked(){mPresenter.executeCommand(PrintHeadCommand.Type.HOME_XY);}
 
-    @OnClick(R.id.jog_z_up_imageview) void mZUpImageView(){}
-    @OnClick(R.id.jog_z_down_imageview) void mZDownImageView(){}
-    @OnClick(R.id.jog_z_home_imageview) void mZHomeImageView(){}
+    @OnClick(R.id.jog_z_up_imageview) void zUpClicked(){mPresenter.executeCommand(PrintHeadCommand.Type.JOG_Z_UP);}
+    @OnClick(R.id.jog_z_down_imageview) void zDownClicked(){mPresenter.executeCommand(PrintHeadCommand.Type.JOG_Z_DOWN);}
+    @OnClick(R.id.jog_z_home_imageview) void zHomeClicked(){mPresenter.executeCommand(PrintHeadCommand.Type.HOME_Z);}
 
     @BindView(R.id.jog_xyz_radiogroup) RadioGroup mRadioGroup;
     @BindView(R.id.print_head_feedrate_seekbar) SeekBar mFeedRateSeekBar;
     @BindInt(R.integer.feedrate_percent_offset) int mFeedRateOffset;
     @BindView(R.id.set_print_head_feedrate_button) Button mFeedRateSetButton;
-    @OnClick(R.id.set_print_head_feedrate_button) void feedRateSetButtonClicked() {
-        int feedRate = mFeedRateSeekBar.getProgress() + mFeedRateOffset;
-    }
+    @OnClick(R.id.set_print_head_feedrate_button) void feedRateSetButtonClicked() {mPresenter.executeCommand(PrintHeadCommand.Type.FEEDRATE);}
+
+    @BindViews({R.id.jog_xy_left_imageview, R.id.jog_xy_right_imageview,
+            R.id.jog_xy_up_imageview, R.id.jog_xy_down_imageview,
+            R.id.jog_xy_home_imageview,
+            R.id.jog_z_up_imageview, R.id.jog_z_down_imageview, R.id.jog_z_home_imageview,
+            R.id.jog_xyz_radiogroup, R.id.set_print_head_feedrate_button}) List<View> mEnableViews;
 
     public static PrintHeadFragment newInstance() {
         return new PrintHeadFragment();
@@ -81,10 +92,23 @@ public class PrintHeadFragment extends BasePagerFragmentListener<PrintHeadScreen
             mFeedRateSeekBar.setProgress(savedInstanceState.getInt(SEEKBAR_PROGRESS_KEY));
         }
 
-        FeedRateListener feedRateListener = new FeedRateListener();
-        feedRateListener.setFeedRateButtonText(mFeedRateSeekBar.getProgress());
-        mFeedRateSeekBar.setOnSeekBarChangeListener(feedRateListener);
+        updateFeedrateButtonText();
+        mFeedRateSeekBar.setOnSeekBarChangeListener(new FeedRateListener());
         return view;
+    }
+
+    @Override
+    public int getFeedRateWithOffset() {
+        return mFeedRateSeekBar.getProgress() + mFeedRateOffset;
+    }
+
+    private String createFeedRateString(int feedrate) {
+        return FEEDRATE + feedrate + PERCENT;
+    }
+
+    private void updateFeedrateButtonText() {
+        String s = createFeedRateString(getFeedRateWithOffset());
+        mFeedRateSetButton.setText(s);
     }
 
     @Override
@@ -95,7 +119,7 @@ public class PrintHeadFragment extends BasePagerFragmentListener<PrintHeadScreen
     }
 
     @Override
-    public float getFeedRateMultiplier() {
+    public float getJogMultiplier() {
         int id = mRadioGroup.getCheckedRadioButtonId();
         switch (id) {
             case R.id.jog_xyz_tenth_button: return mTenth;
@@ -104,6 +128,16 @@ public class PrintHeadFragment extends BasePagerFragmentListener<PrintHeadScreen
             case R.id.jog_xyz_hundred_button: return mHundred;
             default: return mOne;
         }
+    }
+
+    @Override
+    public void showToast(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void setEnableViews(boolean enable) {
+        ButterKnife.apply(mEnableViews, mSetEnableView, enable);
     }
 
     @NonNull
@@ -133,20 +167,7 @@ public class PrintHeadFragment extends BasePagerFragmentListener<PrintHeadScreen
 
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            setFeedRateButtonText(progress);
-        }
-
-        private int feedRateWithOffset(int progress) {
-            return progress + mFeedRateOffset;
-        }
-
-        private String feedRateButtonString(int feedrate) {
-            return FEEDRATE + feedrate + PERCENT;
-        }
-
-        private void setFeedRateButtonText(int progress) {
-            String feedRatePercent = feedRateButtonString(feedRateWithOffset(progress));
-            mFeedRateSetButton.setText(feedRatePercent);
+            updateFeedrateButtonText();
         }
     }
 }

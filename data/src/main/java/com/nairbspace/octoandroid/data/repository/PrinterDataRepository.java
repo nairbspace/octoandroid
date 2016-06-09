@@ -11,6 +11,7 @@ import com.nairbspace.octoandroid.domain.model.Connect;
 import com.nairbspace.octoandroid.domain.model.Connection;
 import com.nairbspace.octoandroid.domain.model.FileCommand;
 import com.nairbspace.octoandroid.domain.model.Files;
+import com.nairbspace.octoandroid.domain.model.PrintHeadCommand;
 import com.nairbspace.octoandroid.domain.model.Printer;
 import com.nairbspace.octoandroid.domain.model.TempCommand;
 import com.nairbspace.octoandroid.domain.model.Websocket;
@@ -127,5 +128,11 @@ public class PrinterDataRepository implements PrinterRepository {
     public Observable sendTempCommand(final TempCommand tempCommand) {
         return Observable.create(mMapperHelper.mapToTempCommandEntity(tempCommand))
                 .concatMap(mApiManager.funcSendToolOrBedCommand(tempCommand));
+    }
+
+    @Override
+    public Observable sendPrintHeadCommand(PrintHeadCommand command) {
+        return Observable.create(mMapperHelper.mapToPrintHeadCommandEntity(command))
+                .concatMap(mApiManager.funcSendPrintHeadCommand());
     }
 }
