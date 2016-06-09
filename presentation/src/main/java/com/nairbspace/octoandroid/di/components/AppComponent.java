@@ -10,6 +10,8 @@ import com.nairbspace.octoandroid.ui.add_printer.AddPrinterActivity;
 import com.nairbspace.octoandroid.ui.connection.ConnectionFragment;
 import com.nairbspace.octoandroid.ui.dispatch.DispatchActivity;
 import com.nairbspace.octoandroid.ui.files.FilesFragment;
+import com.nairbspace.octoandroid.ui.print_head.PrintHeadFragment;
+import com.nairbspace.octoandroid.ui.printer_controls.PrinterControlsActivity;
 import com.nairbspace.octoandroid.ui.status.StatusActivity;
 import com.nairbspace.octoandroid.ui.playback.PlaybackFragment;
 import com.nairbspace.octoandroid.ui.state.StateFragment;
@@ -49,4 +51,8 @@ public interface AppComponent {
     void inject(TempGraphFragment tempGraphFragment);
 
     void inject(TempControlsFragment tempControlsFragment);
+
+    void inject(PrinterControlsActivity printerControlsActivity);
+
+    void inject(PrintHeadFragment printHeadFragment);
 }

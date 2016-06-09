@@ -36,7 +36,7 @@
                     android:layout_marginBottom="3dp"
                     android:text="@string/x_y_label"/>
 
-                <com.nairbspace.octoandroid.views.HintedImageView
+                <ImageView
                     android:id="@+id/jog_xy_up_imageview"
                     android:layout_width="@dimen/jog_arrow_size"
                     android:layout_height="@dimen/jog_arrow_size"
@@ -45,7 +45,9 @@
                     android:src="@drawable/ic_expand_less_black_24dp"
                     android:tint="@color/colorAccent"/>
 
-                <com.nairbspace.octoandroid.views.HintedImageView
+                <!--TODO setcontentDescription-->
+
+                <ImageView
                     android:id="@+id/jog_xy_home_imageview"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
@@ -59,7 +61,7 @@
                     android:layout_marginTop="12dp"
                     android:src="@drawable/ic_home_black_24dp"/>
 
-                <com.nairbspace.octoandroid.views.HintedImageView
+                <ImageView
                     android:id="@+id/jog_xy_left_imageview"
                     android:layout_width="@dimen/jog_arrow_size"
                     android:layout_height="@dimen/jog_arrow_size"
@@ -69,7 +71,7 @@
                     android:src="@drawable/ic_chevron_left_black_24dp"
                     android:tint="@color/colorAccent"/>
 
-                <com.nairbspace.octoandroid.views.HintedImageView
+                <ImageView
                     android:id="@+id/jog_xy_right_imageview"
                     android:layout_width="@dimen/jog_arrow_size"
                     android:layout_height="@dimen/jog_arrow_size"
@@ -79,7 +81,7 @@
                     android:src="@drawable/ic_chevron_right_black_24dp"
                     android:tint="@color/colorAccent"/>
 
-                <com.nairbspace.octoandroid.views.HintedImageView
+                <ImageView
                     android:id="@+id/jog_xy_down_imageview"
                     android:layout_width="@dimen/jog_arrow_size"
                     android:layout_height="@dimen/jog_arrow_size"
@@ -106,7 +108,7 @@
                     android:layout_marginBottom="3dp"
                     android:text="@string/z_label"/>
 
-                <com.nairbspace.octoandroid.views.HintedImageView
+                <ImageView
                     android:id="@+id/jog_z_up_imageview"
                     android:layout_width="@dimen/jog_arrow_size"
                     android:layout_height="@dimen/jog_arrow_size"
@@ -115,7 +117,7 @@
                     android:src="@drawable/ic_expand_less_black_24dp"
                     android:tint="@color/colorAccent"/>
 
-                <com.nairbspace.octoandroid.views.HintedImageView
+                <ImageView
                     android:id="@+id/jog_z_home_imageview"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
@@ -125,7 +127,7 @@
                     android:layout_marginTop="12dp"
                     android:src="@drawable/ic_home_black_24dp"/>
 
-                <com.nairbspace.octoandroid.views.HintedImageView
+                <ImageView
                     android:id="@+id/jog_z_down_imageview"
                     android:layout_width="@dimen/jog_arrow_size"
                     android:layout_height="@dimen/jog_arrow_size"
@@ -139,7 +141,7 @@
         </LinearLayout>
 
         <RadioGroup
-            android:id="@+id/jog_xy_radiogroup"
+            android:id="@+id/jog_xyz_radiogroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/jog_xyz"
@@ -147,14 +149,14 @@
             android:orientation="horizontal">
 
             <RadioButton
-                android:id="@+id/jog_xy_tenth_button"
+                android:id="@+id/jog_xyz_tenth_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/zero_point_one"/>
 
             <RadioButton
-                android:id="@+id/jog_xy_one_button"
+                android:id="@+id/jog_xyz_one_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -162,14 +164,14 @@
                 android:text="@string/one"/>
 
             <RadioButton
-                android:id="@+id/jog_xy_ten_button"
+                android:id="@+id/jog_xyz_ten_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/ten"/>
 
             <RadioButton
-                android:id="@+id/jog_xy_hundred_button"
+                android:id="@+id/jog_xyz_hundred_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -180,10 +182,10 @@
             android:id="@+id/print_head_feedrate_seekbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/jog_xy_radiogroup"
+            android:layout_below="@id/jog_xyz_radiogroup"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="12dp"
-            tools:progress="50"/>
+            android:progress="@integer/feedrate_default_progress"/>
 
         <Button
             android:id="@+id/set_print_head_feedrate_button"

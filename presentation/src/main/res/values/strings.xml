@@ -4,6 +4,7 @@
     <string name="status">Status</string>
     <string name="webcam">Webcam</string>
     <string name="temperature">Temperature</string>
+    <string name="printer_controls">Printer Controls</string>
     <string name="controls">Controls</string>
     <string name="warning">Warning</string>
     <string name="warning_webcam_message">Webcam is currently experimental. Try at your own risk!</string>

@@ -30,4 +30,10 @@
     <dimen name="playback_disabled_alpha_float">.12px</dimen>
 
     <dimen name="jog_arrow_size">72dp</dimen>
+    <dimen name="jog_tenth_multiplier">0.1px</dimen>
+    <dimen name="jog_one_multiplier">1px</dimen>
+    <dimen name="jog_ten_multiplier">10px</dimen>
+    <dimen name="jog_hundred_multiplier">100px</dimen>
+    <integer name="feedrate_percent_offset">50</integer>
+    <integer name="feedrate_default_progress">50</integer>
 </resources>

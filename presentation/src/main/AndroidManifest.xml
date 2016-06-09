@@ -50,6 +50,9 @@
         <activity android:name=".ui.temp.TempActivity"
                   android:label="@string/temperature"
                   android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.printer_controls.PrinterControlsActivity"
+                  android:label="@string/printer_controls"
+                  android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".ui.settings.SettingsActivity"
             android:theme="@style/AppTheme"
