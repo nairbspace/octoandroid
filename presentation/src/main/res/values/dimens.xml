@@ -28,4 +28,6 @@
 
     <dimen name="playback_enabled_alpha_float">1px</dimen>
     <dimen name="playback_disabled_alpha_float">.12px</dimen>
+
+    <dimen name="jog_arrow_size">72dp</dimen>
 </resources>

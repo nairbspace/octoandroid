@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardUseCompatPadding="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <LinearLayout
+            android:id="@+id/jog_xyz"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:id="@+id/jog_xy"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2">
+
+                <TextView
+                    android:id="@+id/xy_label"
+                    style="@style/TextAppearance.AppCompat.Headline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="3dp"
+                    android:text="@string/x_y_label"/>
+
+                <com.nairbspace.octoandroid.views.HintedImageView
+                    android:id="@+id/jog_xy_up_imageview"
+                    android:layout_width="@dimen/jog_arrow_size"
+                    android:layout_height="@dimen/jog_arrow_size"
+                    android:layout_below="@id/xy_label"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/ic_expand_less_black_24dp"
+                    android:tint="@color/colorAccent"/>
+
+                <com.nairbspace.octoandroid.views.HintedImageView
+                    android:id="@+id/jog_xy_home_imageview"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_below="@id/jog_xy_up_imageview"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="6dp"
+                    android:layout_marginEnd="18dp"
+                    android:layout_marginLeft="18dp"
+                    android:layout_marginRight="18dp"
+                    android:layout_marginStart="18dp"
+                    android:layout_marginTop="12dp"
+                    android:src="@drawable/ic_home_black_24dp"/>
+
+                <com.nairbspace.octoandroid.views.HintedImageView
+                    android:id="@+id/jog_xy_left_imageview"
+                    android:layout_width="@dimen/jog_arrow_size"
+                    android:layout_height="@dimen/jog_arrow_size"
+                    android:layout_below="@id/jog_xy_up_imageview"
+                    android:layout_toLeftOf="@id/jog_xy_home_imageview"
+                    android:layout_toStartOf="@id/jog_xy_home_imageview"
+                    android:src="@drawable/ic_chevron_left_black_24dp"
+                    android:tint="@color/colorAccent"/>
+
+                <com.nairbspace.octoandroid.views.HintedImageView
+                    android:id="@+id/jog_xy_right_imageview"
+                    android:layout_width="@dimen/jog_arrow_size"
+                    android:layout_height="@dimen/jog_arrow_size"
+                    android:layout_below="@id/jog_xy_up_imageview"
+                    android:layout_toEndOf="@id/jog_xy_home_imageview"
+                    android:layout_toRightOf="@id/jog_xy_home_imageview"
+                    android:src="@drawable/ic_chevron_right_black_24dp"
+                    android:tint="@color/colorAccent"/>
+
+                <com.nairbspace.octoandroid.views.HintedImageView
+                    android:id="@+id/jog_xy_down_imageview"
+                    android:layout_width="@dimen/jog_arrow_size"
+                    android:layout_height="@dimen/jog_arrow_size"
+                    android:layout_below="@id/jog_xy_home_imageview"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="6dp"
+                    android:src="@drawable/ic_expand_more_black_24dp"
+                    android:tint="@color/colorAccent"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/jog_z"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/z_label"
+                    style="@style/TextAppearance.AppCompat.Headline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="3dp"
+                    android:text="@string/z_label"/>
+
+                <com.nairbspace.octoandroid.views.HintedImageView
+                    android:id="@+id/jog_z_up_imageview"
+                    android:layout_width="@dimen/jog_arrow_size"
+                    android:layout_height="@dimen/jog_arrow_size"
+                    android:layout_below="@id/z_label"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/ic_expand_less_black_24dp"
+                    android:tint="@color/colorAccent"/>
+
+                <com.nairbspace.octoandroid.views.HintedImageView
+                    android:id="@+id/jog_z_home_imageview"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_below="@id/jog_z_up_imageview"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="6dp"
+                    android:layout_marginTop="12dp"
+                    android:src="@drawable/ic_home_black_24dp"/>
+
+                <com.nairbspace.octoandroid.views.HintedImageView
+                    android:id="@+id/jog_z_down_imageview"
+                    android:layout_width="@dimen/jog_arrow_size"
+                    android:layout_height="@dimen/jog_arrow_size"
+                    android:layout_below="@id/jog_z_home_imageview"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="6dp"
+                    android:src="@drawable/ic_expand_more_black_24dp"
+                    android:tint="@color/colorAccent"/>
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <RadioGroup
+            android:id="@+id/jog_xy_radiogroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/jog_xyz"
+            android:layout_marginTop="6dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/jog_xy_tenth_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/zero_point_one"/>
+
+            <RadioButton
+                android:id="@+id/jog_xy_one_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checked="true"
+                android:text="@string/one"/>
+
+            <RadioButton
+                android:id="@+id/jog_xy_ten_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/ten"/>
+
+            <RadioButton
+                android:id="@+id/jog_xy_hundred_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/hundred"/>
+        </RadioGroup>
+
+        <SeekBar
+            android:id="@+id/print_head_feedrate_seekbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/jog_xy_radiogroup"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="12dp"
+            tools:progress="50"/>
+
+        <Button
+            android:id="@+id/set_print_head_feedrate_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/print_head_feedrate_seekbar"
+            tools:text="Feed rate: 100%"/>
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

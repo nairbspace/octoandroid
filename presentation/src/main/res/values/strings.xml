@@ -4,6 +4,7 @@
     <string name="status">Status</string>
     <string name="webcam">Webcam</string>
     <string name="temperature">Temperature</string>
+    <string name="controls">Controls</string>
     <string name="warning">Warning</string>
     <string name="warning_webcam_message">Webcam is currently experimental. Try at your own risk!</string>
     <string name="ip_address">IP Address</string>
@@ -76,4 +77,13 @@
 
     <string name="lock">Lock</string>
     <string name="unlock">Unlock</string>
+
+    <string name="x_y_label">X/Y</string>
+    <string name="z_label">Z</string>
+    <string name="zero_point_one">0.1</string>
+    <string name="one">1</string>
+    <string name="ten">10</string>
+    <string name="hundred">100</string>
+    <string name="feed_rate_colon_space">Feed rate:&#160;</string>
+    <string name="percent">%</string>
 </resources>

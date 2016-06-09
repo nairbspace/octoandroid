@@ -10,6 +10,10 @@
             android:id="@+id/nav_temp"
             android:icon="@drawable/ic_whatshot_black_24dp"
             android:title="@string/temperature"/>
+        <item
+            android:id="@+id/nav_controls"
+            android:icon="@drawable/ic_gamepad_black_24dp"
+            android:title="@string/controls"/>
         <!--<item-->
             <!--android:id="@+id/nav_slideshow"-->
             <!--android:icon="@android:drawable/ic_menu_slideshow"-->

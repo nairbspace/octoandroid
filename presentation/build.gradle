@@ -60,6 +60,7 @@ android {
                     'src/main/res/layouts/add_printer',
                     'src/main/res/layouts/temp_graph',
                     'src/main/res/layouts/temp_controls',
+                    'src/main/res/layouts/printer_controls',
                     'src/main/res/layouts',
                     'src/main/res'
             ]
