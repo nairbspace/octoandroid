@@ -9,11 +9,11 @@ import com.nairbspace.octoandroid.ui.files.FilesFragment;
 import com.nairbspace.octoandroid.ui.state.StateFragment;
 
 public class StatusFragmentPagerAdapter extends FragmentPagerAdapter {
-    private static final int PAGE_COUNT =  3;
-    private final String tabTitles[] = new String[]{"Connection", "State", "Files"};
+    private final String[] mTabTitles;
 
-    public StatusFragmentPagerAdapter(FragmentManager fm) {
+    public StatusFragmentPagerAdapter(String[] array, FragmentManager fm) {
         super(fm);
+        mTabTitles = array;
     }
 
     @Override
@@ -29,11 +29,11 @@ public class StatusFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return PAGE_COUNT;
+        return mTabTitles.length;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return tabTitles[position];
+        return mTabTitles[position];
     }
 }

@@ -17,6 +17,7 @@ import com.nairbspace.octoandroid.ui.templates.Presenter;
 
 import javax.inject.Inject;
 
+import butterknife.BindArray;
 import butterknife.ButterKnife;
 
 public class StatusActivity extends BaseNavActivity<StatusScreen>
@@ -25,6 +26,7 @@ public class StatusActivity extends BaseNavActivity<StatusScreen>
         FilesFragment.Listener, PlaybackFragment.Listener {
 
     @Inject StatusPresenter mPresenter;
+    @BindArray(R.array.status_fragment_pager_adapter) String[] mPagerArray;
 
     public static Intent newIntent(Context context) {
         return new Intent(context, StatusActivity.class);
@@ -36,7 +38,7 @@ public class StatusActivity extends BaseNavActivity<StatusScreen>
         SetupApplication.get(this).getAppComponent().inject(this);
         setContentView(R.layout.activity_main);
         onCreateDrawer(ButterKnife.bind(this));
-        inflateAdapter(new StatusFragmentPagerAdapter(getSupportFragmentManager()));
+        inflateAdapter(new StatusFragmentPagerAdapter(mPagerArray, getSupportFragmentManager()));
     }
 
     @NonNull

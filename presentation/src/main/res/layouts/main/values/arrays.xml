@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="status_fragment_pager_adapter">
+        <item>@string/connection</item>
+        <item>@string/state</item>
+        <item>@string/files</item>
+    </string-array>
+
+    <string-array name="temp_fragment_pager_adapter">
+        <item>@string/graph</item>
+        <item>@string/controls</item>
+    </string-array>
+
+    <string-array name="printer_controls_fragment_pager_adapter">
+        <item>@string/print_head</item>
+    </string-array>
+
+</resources>

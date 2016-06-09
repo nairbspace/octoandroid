@@ -16,12 +16,14 @@ import com.nairbspace.octoandroid.ui.templates.Presenter;
 
 import javax.inject.Inject;
 
+import butterknife.BindArray;
 import butterknife.ButterKnife;
 
 public class TempActivity extends BaseNavActivity<TempScreen> implements TempScreen,
         PlaybackFragment.Listener, TempGraphFragment.Listener, TempControlsFragment.Listener{
 
     @Inject TempPresenter mPresenter;
+    @BindArray(R.array.temp_fragment_pager_adapter) String[] mPagerArray;
 
     public static Intent newIntent(Context context) {
         return new Intent(context, TempActivity.class);
@@ -33,7 +35,7 @@ public class TempActivity extends BaseNavActivity<TempScreen> implements TempScr
         SetupApplication.get(this).getAppComponent().inject(this);
         setContentView(R.layout.activity_main);
         onCreateDrawer(ButterKnife.bind(this));
-        inflateAdapter(new TempFragmentPagerAdapter(getSupportFragmentManager()));
+        inflateAdapter(new TempFragmentPagerAdapter(mPagerArray, getSupportFragmentManager()));
     }
 
     @Override

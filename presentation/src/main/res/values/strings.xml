@@ -24,12 +24,14 @@
     <string name="drawer_open">Drawer open</string>
     <string name="drawer_close">Drawer close</string>
 
+    <string name="connection">Connection</string>
     <string name="action_settings">Settings</string>
     <string name="connect">Connect</string>
     <string name="disconnect">Disconnect</string>
     <string name="print">Print</string>
     <string name="download">Download</string>
 
+    <string name="files">Files</string>
     <string name="load">Load</string>
     <string name="file_location">File Location</string>
     <string name="delete_file">Delete File</string>
@@ -54,7 +56,7 @@
     <string name="save_connection_settings">Save connection settings</string>
     <string name="auto_connect_on_server_startup">Auto-Connect on server startup</string>
 
-
+    <string name="state">State</string>
     <string name="summary">Summary</string>
     <string name="machine_state_colon_space">Machine State:&#160;</string>
     <string name="file_colon_space">File:&#160;</string>
@@ -68,6 +70,7 @@
     <string name="degrees_celcius">&#x2103;</string>
     <string name="degrees">&#xb0;</string>
 
+    <string name="graph">Graph</string>
     <string name="tool0">Tool0</string>
     <string name="tool1">Tool1</string>
     <string name="bed">Bed</string>
@@ -79,6 +82,7 @@
     <string name="lock">Lock</string>
     <string name="unlock">Unlock</string>
 
+    <string name="print_head">Print Head</string>
     <string name="x_y_label">X/Y</string>
     <string name="z_label">Z</string>
     <string name="zero_point_one">0.1</string>

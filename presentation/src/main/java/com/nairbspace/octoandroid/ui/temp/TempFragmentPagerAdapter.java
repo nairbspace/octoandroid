@@ -8,11 +8,11 @@ import com.nairbspace.octoandroid.ui.temp_controls.TempControlsFragment;
 import com.nairbspace.octoandroid.ui.temp_graph.TempGraphFragment;
 
 public class TempFragmentPagerAdapter extends FragmentPagerAdapter {
-    private static final int PAGE_COUNT = 2;
-    private final String tabTitles[] = new String[]{"Graph", "Controls"};
+    private final String[] mTabTitles;
 
-    public TempFragmentPagerAdapter(FragmentManager fm) {
+    public TempFragmentPagerAdapter(String[] array, FragmentManager fm) {
         super(fm);
+        mTabTitles = array;
     }
 
     @Override
@@ -26,11 +26,11 @@ public class TempFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return PAGE_COUNT;
+        return mTabTitles.length;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return tabTitles[position];
+        return mTabTitles[position];
     }
 }

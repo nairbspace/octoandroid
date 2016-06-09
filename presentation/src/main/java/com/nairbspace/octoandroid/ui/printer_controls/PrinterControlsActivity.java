@@ -15,12 +15,14 @@ import com.nairbspace.octoandroid.ui.templates.Presenter;
 
 import javax.inject.Inject;
 
+import butterknife.BindArray;
 import butterknife.ButterKnife;
 
 public class PrinterControlsActivity extends BaseNavActivity<PrinterControlsScreen>
         implements PrinterControlsScreen, PlaybackFragment.Listener, PrintHeadFragment.Listener {
 
     @Inject PrinterControlsPresenter mPresenter;
+    @BindArray(R.array.printer_controls_fragment_pager_adapter) String[] mPagerArray;
 
     public static Intent newIntent(Context context) {
         return new Intent(context, PrinterControlsActivity.class);
@@ -32,7 +34,7 @@ public class PrinterControlsActivity extends BaseNavActivity<PrinterControlsScre
         SetupApplication.get(this).getAppComponent().inject(this);
         setContentView(R.layout.activity_main);
         onCreateDrawer(ButterKnife.bind(this));
-        inflateAdapter(new PrinterControlsFragmentPagerAdapter(getSupportFragmentManager()));
+        inflateAdapter(new PrinterControlsFragmentPagerAdapter(mPagerArray, getSupportFragmentManager()));
     }
 
     @NonNull

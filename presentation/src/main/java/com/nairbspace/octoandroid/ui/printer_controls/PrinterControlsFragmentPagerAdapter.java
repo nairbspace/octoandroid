@@ -7,11 +7,11 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.nairbspace.octoandroid.ui.print_head.PrintHeadFragment;
 
 public class PrinterControlsFragmentPagerAdapter extends FragmentPagerAdapter {
-    private static final int PAGE_COUNT = 1;
-    private final String tabTitles[] = new String[]{"Print Head"};
+    private final String mTabTitles[];
 
-    public PrinterControlsFragmentPagerAdapter(FragmentManager fm) {
+    public PrinterControlsFragmentPagerAdapter(String[] array, FragmentManager fm) {
         super(fm);
+        mTabTitles = array;
     }
 
     @Override
@@ -26,11 +26,11 @@ public class PrinterControlsFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return PAGE_COUNT;
+        return mTabTitles.length;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return tabTitles[position];
+        return mTabTitles[position];
     }
 }
