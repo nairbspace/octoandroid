@@ -9,7 +9,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.0'
+        classpath 'com.android.tools.build:gradle:2.1.2'
         classpath "net.ltgt.gradle:gradle-apt-plugin:0.6" // Java annotation processing
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8' // Android annotation processing
         classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1' // Hugo
