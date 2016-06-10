@@ -15,8 +15,9 @@
 
         <RadioGroup
             android:id="@+id/tool_radiogroup"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
             android:layout_marginBottom="6dp"
             android:orientation="horizontal">
 
@@ -24,6 +25,8 @@
                 android:id="@+id/tool0_radio"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="24dp"
+                android:layout_marginRight="24dp"
                 android:layout_weight="1"
                 android:checked="true"
                 android:text="@string/tool0"/>
@@ -37,33 +40,38 @@
 
         </RadioGroup>
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/retraction_length_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tool_radiogroup"
-            android:layout_marginBottom="6dp">
-
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/tool_amount_input"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/extract_retract_amount_mm"
-                android:maxLines="1"
-                android:inputType="number"/>
-        </android.support.design.widget.TextInputLayout>
-
         <LinearLayout
             android:id="@+id/extract_retract_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/retraction_length_layout"
-            android:orientation="horizontal"
-            android:baselineAligned="false">
+            android:layout_below="@id/tool_radiogroup"
+            android:layout_marginBottom="6dp"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/retraction_length_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/tool_amount_input"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:ems="3"
+                    android:gravity="center"
+                    android:hint="@string/mm"
+                    android:inputType="number"
+                    android:maxLength="3"
+                    android:maxLines="1"/>
+            </android.support.design.widget.TextInputLayout>
 
             <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_weight="1">
 
                 <Button
@@ -77,6 +85,7 @@
             <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_weight="1">
 
                 <Button
@@ -95,7 +104,7 @@
             android:layout_below="@id/extract_retract_layout"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="16dp"
-            android:progress="@integer/flowrate_default_progress"/>
+            tools:progress="50"/>
 
         <Button
             android:id="@+id/set_tool_flowrate_button"

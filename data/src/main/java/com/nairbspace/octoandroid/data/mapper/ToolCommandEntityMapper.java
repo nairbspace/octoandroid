@@ -28,4 +28,12 @@ public class ToolCommandEntityMapper {
             }
         };
     }
+
+    public static ToolCommandEntity.Select mapToToolCommandEntitySelect(int tool) {
+        if (tool == 0) {
+            return ToolCommandEntity.Select.createTool0();
+        } else {
+            return ToolCommandEntity.Select.createTool1();
+        }
+    }
 }

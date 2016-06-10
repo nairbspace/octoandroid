@@ -28,6 +28,16 @@ public class ToolPresenter extends UseCasePresenter<ToolScreen> {
         mScreen = toolScreen;
     }
 
+    @Override
+    protected void networkNowInactive() {
+        mScreen.setEnableViews(false);
+    }
+
+    @Override
+    protected void onNetworkSwitched() {
+        mScreen.setEnableViews(true);
+    }
+
     public void executeSelectTool(ToolCommand.Type type) {
         mSelectTool.execute(new ToolSubscriber(type), mScreen.getTool());
     }
@@ -63,14 +73,15 @@ public class ToolPresenter extends UseCasePresenter<ToolScreen> {
             return;
         }
 
-        int amount = -1;
+        int amount = 0;
         try {
             amount = Integer.parseInt(s);
         } catch (NumberFormatException e) {
             mScreen.showInputAmountError("Incorrect formatting");
         }
 
-        if (amount < 0) {
+        if (amount < 1) {
+            mScreen.showInputAmountError("Brb extruding nothing");
             return;
         }
 

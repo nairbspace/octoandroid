@@ -1,7 +1,6 @@
 package com.nairbspace.octoandroid.data.repository;
 
 import com.nairbspace.octoandroid.data.disk.DiskManager;
-import com.nairbspace.octoandroid.data.entity.ToolCommandEntity;
 import com.nairbspace.octoandroid.data.mapper.MapperHelper;
 import com.nairbspace.octoandroid.data.net.ApiManager;
 import com.nairbspace.octoandroid.data.net.WebsocketManager;
@@ -140,14 +139,7 @@ public class PrinterDataRepository implements PrinterRepository {
 
     @Override
     public Observable selectTool(int tool) {
-        // TODO should probably combine with sendToolCommand
-        ToolCommandEntity.Select select;
-        if (tool == 0) {
-            select = ToolCommandEntity.Select.createTool0();
-        } else {
-            select = ToolCommandEntity.Select.createTool1();
-        }
-        return mApiManager.selectTool(select);
+        return mApiManager.selectTool(mMapperHelper.mapToToolCommandEntitySelect(tool));
     }
 
     @Override

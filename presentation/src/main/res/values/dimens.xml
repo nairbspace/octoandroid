@@ -34,9 +34,11 @@
     <dimen name="jog_one_multiplier">1px</dimen>
     <dimen name="jog_ten_multiplier">10px</dimen>
     <dimen name="jog_hundred_multiplier">100px</dimen>
-    <integer name="feedrate_percent_offset">50</integer>
-    <integer name="feedrate_default_progress">50</integer>
+    <integer name="feedrate_y_intercept">50</integer>
+    <dimen name="feedrate_slope">1.5px</dimen>
+    <integer name="feedrate_default">100</integer>
 
-    <integer name="flowrate_percent_offset">50</integer>
-    <integer name="flowrate_default_progress">50</integer>
+    <integer name="flowrate_y_intercept">75</integer>
+    <dimen name="flowrate_slope">0.5px</dimen>
+    <integer name="flowrate_default">100</integer>
 </resources>

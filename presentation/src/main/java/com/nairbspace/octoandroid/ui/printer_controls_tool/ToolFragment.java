@@ -18,12 +18,17 @@ import com.nairbspace.octoandroid.domain.model.ToolCommand;
 import com.nairbspace.octoandroid.ui.templates.BasePagerFragmentListener;
 import com.nairbspace.octoandroid.ui.templates.Presenter;
 import com.nairbspace.octoandroid.views.AbstractSeekBarListener;
+import com.nairbspace.octoandroid.views.SetEnableView;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.BindDimen;
 import butterknife.BindInt;
 import butterknife.BindString;
 import butterknife.BindView;
+import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -32,9 +37,12 @@ public class ToolFragment extends BasePagerFragmentListener<ToolScreen, ToolFrag
 
     @BindString(R.string.flow_rate_colon_space) String FLOWRATE;
     @BindString(R.string.percent) String PERCENT;
-    @BindInt(R.integer.flowrate_percent_offset) int mFlowrateOffset;
+    @BindInt(R.integer.flowrate_y_intercept) int mFlowrateYIntercept;
+    @BindDimen(R.dimen.flowrate_slope) float mFlowrateSlope;
+    @BindInt(R.integer.flowrate_default) int mFlowrateDefault;
 
     @Inject ToolPresenter mPresenter;
+    @Inject SetEnableView mSetEnableView;
     private Listener mListener;
 
     @BindView(R.id.tool_radiogroup) RadioGroup mRadioGroup;
@@ -44,6 +52,9 @@ public class ToolFragment extends BasePagerFragmentListener<ToolScreen, ToolFrag
     @BindView(R.id.tool_flowrate_seekbar) SeekBar mSeekBar;
     @BindView(R.id.set_tool_flowrate_button) Button mFlowRateButton;
     @OnClick(R.id.set_tool_flowrate_button) void flowrateButtonClicked() {mPresenter.executeSelectTool(ToolCommand.Type.FLOWRATE);}
+
+    @BindViews({R.id.tool_extract_button, R.id.tool_retract_button, R.id.set_tool_flowrate_button})
+    List<View> mEnableViews;
 
     public static ToolFragment newInstance() {
         return new ToolFragment();
@@ -60,14 +71,19 @@ public class ToolFragment extends BasePagerFragmentListener<ToolScreen, ToolFrag
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_printer_controls_tool, container, false);
         setUnbinder(ButterKnife.bind(this, view));
+        mSeekBar.setProgress(setDefaultFlowrateProgress());
         updateFlowrateButtonText();
         mSeekBar.setOnSeekBarChangeListener(new SeekBarListener());
         return view;
     }
 
+    private int setDefaultFlowrateProgress() {
+        return Math.round((mFlowrateDefault - mFlowrateYIntercept) * (1 / mFlowrateSlope));
+    }
+
     @Override
     public int getFlowrateWithOffset() {
-        return mSeekBar.getProgress() + mFlowrateOffset;
+        return Math.round(mFlowrateSlope * mSeekBar.getProgress() + mFlowrateYIntercept);
     }
 
     @Override
@@ -101,6 +117,11 @@ public class ToolFragment extends BasePagerFragmentListener<ToolScreen, ToolFrag
     @Override
     public void showToast(String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void setEnableViews(boolean enable) {
+        ButterKnife.apply(mEnableViews, mSetEnableView, enable);
     }
 
     @NonNull

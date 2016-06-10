@@ -34,11 +34,11 @@ import butterknife.OnClick;
 public class PrintHeadFragment extends BasePagerFragmentListener<PrintHeadScreen, PrintHeadFragment.Listener>
         implements PrintHeadScreen {
 
-    private static final String SELECTED_MULTIPLIER_KEY = "selected_multiplier_key";
-    private static final String SEEKBAR_PROGRESS_KEY = "seekbar_progress_key";
-
     @BindString(R.string.feed_rate_colon_space) String FEEDRATE;
     @BindString(R.string.percent) String PERCENT;
+    @BindInt(R.integer.feedrate_y_intercept) int mFeedrateYIntercept;
+    @BindDimen(R.dimen.feedrate_slope) float mFeedrateSlope;
+    @BindInt(R.integer.feedrate_default) int mFeedrateDefault;
 
     @BindDimen(R.dimen.jog_tenth_multiplier) float mTenth;
     @BindDimen(R.dimen.jog_one_multiplier) float mOne;
@@ -61,7 +61,6 @@ public class PrintHeadFragment extends BasePagerFragmentListener<PrintHeadScreen
 
     @BindView(R.id.jog_xyz_radiogroup) RadioGroup mRadioGroup;
     @BindView(R.id.print_head_feedrate_seekbar) SeekBar mFeedRateSeekBar;
-    @BindInt(R.integer.feedrate_percent_offset) int mFeedRateOffset;
     @BindView(R.id.set_print_head_feedrate_button) Button mFeedRateSetButton;
     @OnClick(R.id.set_print_head_feedrate_button) void feedRateSetButtonClicked() {mPresenter.executeCommand(PrintHeadCommand.Type.FEEDRATE);}
 
@@ -86,20 +85,19 @@ public class PrintHeadFragment extends BasePagerFragmentListener<PrintHeadScreen
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_printer_controls_xyz, container, false);
         setUnbinder(ButterKnife.bind(this, view));
-
-        if (savedInstanceState != null) {
-            mRadioGroup.check(savedInstanceState.getInt(SELECTED_MULTIPLIER_KEY));
-            mFeedRateSeekBar.setProgress(savedInstanceState.getInt(SEEKBAR_PROGRESS_KEY));
-        }
-
+        mFeedRateSeekBar.setProgress(setDefaultFlowrateProgress());
         updateFeedrateButtonText();
         mFeedRateSeekBar.setOnSeekBarChangeListener(new FeedRateListener());
         return view;
     }
 
+    private int setDefaultFlowrateProgress() {
+        return Math.round((mFeedrateDefault - mFeedrateYIntercept) * (1 / mFeedrateSlope));
+    }
+
     @Override
     public int getFeedRateWithOffset() {
-        return mFeedRateSeekBar.getProgress() + mFeedRateOffset;
+        return Math.round(mFeedrateSlope * mFeedRateSeekBar.getProgress() + mFeedrateYIntercept);
     }
 
     private String createFeedRateString(int feedrate) {
@@ -109,13 +107,6 @@ public class PrintHeadFragment extends BasePagerFragmentListener<PrintHeadScreen
     private void updateFeedrateButtonText() {
         String s = createFeedRateString(getFeedRateWithOffset());
         mFeedRateSetButton.setText(s);
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(SELECTED_MULTIPLIER_KEY, mRadioGroup.getCheckedRadioButtonId());
-        outState.putInt(SEEKBAR_PROGRESS_KEY, mFeedRateSeekBar.getProgress());
     }
 
     @Override

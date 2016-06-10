@@ -11,4 +11,6 @@ public interface ToolScreen {
     void showInputAmountError(String message);
 
     void showToast(String message);
+
+    void setEnableViews(boolean enable);
 }
