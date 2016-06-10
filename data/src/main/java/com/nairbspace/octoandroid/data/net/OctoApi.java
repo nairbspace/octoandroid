@@ -58,4 +58,7 @@ public interface OctoApi {
 
     @POST("/api/printer/tool")
     Observable<Object> selectTool(@Body Object object);
+
+    @POST("/api/printer/command")
+    Observable<Object> sendArbitraryCommand(@Body Object object);
 }

@@ -7,6 +7,7 @@ import com.nairbspace.octoandroid.data.net.WebsocketManager;
 import com.nairbspace.octoandroid.data.net.stream.WebcamManager;
 import com.nairbspace.octoandroid.data.repository.datasource.PrinterDataStoreFactory;
 import com.nairbspace.octoandroid.domain.model.AddPrinter;
+import com.nairbspace.octoandroid.domain.model.ArbitraryCommand;
 import com.nairbspace.octoandroid.domain.model.Connect;
 import com.nairbspace.octoandroid.domain.model.Connection;
 import com.nairbspace.octoandroid.domain.model.FileCommand;
@@ -147,5 +148,10 @@ public class PrinterDataRepository implements PrinterRepository {
         return Observable.create(mMapperHelper.mapToToolCommandEntity(toolCommand))
                 .concatMap(mApiManager.funcSendToolCommand());
 
+    }
+
+    @Override
+    public Observable sendArbitraryCommand(ArbitraryCommand arbitraryCommand) {
+        return mApiManager.sendArbitraryCommand(mMapperHelper.mapToArbitraryCommandEntity(arbitraryCommand));
     }
 }

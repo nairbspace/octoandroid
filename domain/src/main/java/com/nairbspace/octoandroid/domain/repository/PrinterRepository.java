@@ -1,6 +1,7 @@
 package com.nairbspace.octoandroid.domain.repository;
 
 import com.nairbspace.octoandroid.domain.model.AddPrinter;
+import com.nairbspace.octoandroid.domain.model.ArbitraryCommand;
 import com.nairbspace.octoandroid.domain.model.Connect;
 import com.nairbspace.octoandroid.domain.model.Connection;
 import com.nairbspace.octoandroid.domain.model.FileCommand;
@@ -50,4 +51,6 @@ public interface PrinterRepository {
     Observable selectTool(int tool);
 
     Observable sendToolCommand(ToolCommand toolCommand);
+
+    Observable sendArbitraryCommand(ArbitraryCommand arbitraryCommand);
 }

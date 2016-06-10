@@ -8,6 +8,7 @@ import com.nairbspace.octoandroid.data.entity.FilesEntity;
 import com.nairbspace.octoandroid.data.entity.ToolCommandEntity;
 import com.nairbspace.octoandroid.data.entity.WebsocketEntity;
 import com.nairbspace.octoandroid.domain.model.AddPrinter;
+import com.nairbspace.octoandroid.domain.model.ArbitraryCommand;
 import com.nairbspace.octoandroid.domain.model.Connect;
 import com.nairbspace.octoandroid.domain.model.Connection;
 import com.nairbspace.octoandroid.domain.model.FileCommand;
@@ -82,5 +83,9 @@ public class MapperHelper {
 
     public Observable.OnSubscribe<Object> mapToToolCommandEntity(ToolCommand toolCommand) {
         return ToolCommandEntityMapper.mapToToolCommandEntity(toolCommand);
+    }
+
+    public Object mapToArbitraryCommandEntity(ArbitraryCommand arbitraryCommand) {
+        return ArbitraryCommandEntityMapper.mapToArbitraryCommandEntity(arbitraryCommand);
     }
 }

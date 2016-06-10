@@ -99,6 +99,11 @@ public class ApiManagerImpl implements ApiManager {
     }
 
     @Override
+    public Observable<Object> sendArbitraryCommand(@Body Object object) {
+        return mOctoApi.sendArbitraryCommand(object);
+    }
+
+    @Override
     public Func1<PrinterDbEntity, Observable<VersionEntity>> funcGetVersion() {
         return new Func1<PrinterDbEntity, Observable<VersionEntity>>() {
             @Override

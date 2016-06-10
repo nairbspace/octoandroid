@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.nairbspace.octoandroid.ui.print_head.PrintHeadFragment;
+import com.nairbspace.octoandroid.ui.printer_controls_general.GeneralFragment;
 import com.nairbspace.octoandroid.ui.printer_controls_tool.ToolFragment;
 
 public class PrinterControlsFragmentPagerAdapter extends FragmentPagerAdapter {
@@ -19,8 +20,10 @@ public class PrinterControlsFragmentPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         if (position == 0) {
             return PrintHeadFragment.newInstance();
-        } else {
+        } else if (position == 1) {
             return ToolFragment.newInstance();
+        } else {
+            return GeneralFragment.newInstance();
         }
     }
 

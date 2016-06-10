@@ -15,6 +15,7 @@
     <string-array name="printer_controls_fragment_pager_adapter">
         <item>@string/print_head</item>
         <item>@string/tool</item>
+        <item>@string/general</item>
     </string-array>
 
 </resources>
