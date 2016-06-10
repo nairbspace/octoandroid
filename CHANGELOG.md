@@ -1,7 +1,14 @@
 Change Log
 ==========
 
-Version 1.2.0 *(2016-06-09)*
+Version 1.4.1 *(2016-06-10)*
+----------------------------
+
+ * General controls added.
+ * Bugfix. Check if Exception message for subscriber is null.
+ * Bugfix. Check if Tool0 or Tool1 is null in WebsocketModel.
+
+Version 1.3.0 *(2016-06-09)*
 ----------------------------
 
  * Tool controls added.
