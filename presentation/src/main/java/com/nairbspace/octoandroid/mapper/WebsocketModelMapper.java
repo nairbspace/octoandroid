@@ -87,20 +87,20 @@ public class WebsocketModelMapper extends MapperUseCase<Websocket, WebsocketMode
 
     private void parseJob(@NonNull CurrentHistory.Job job) {
         if (job.file() != null) parseFile(job.file());
-        if (job.estimatedPrintTime() != null) mApproxTotalPrintTime = DateTimeConverter.secondsToHHmmss(job.estimatedPrintTime());
+        mApproxTotalPrintTime = DateTimeConverter.secondsToHHmmss(job.estimatedPrintTime());
     }
 
     private void parseFile(@NonNull CurrentHistory.Job.File file) {
         if (file.name() != null) mFile = file.name();
-        if (file.size() != null) mPrintedFileSize = ByteConverter.toReadableString(file.size());
+        mPrintedFileSize = ByteConverter.toReadableString(file.size());
         mFileLoaded = file.name() != null;
     }
 
     private void parseProgress(@NonNull CurrentHistory.Progress progress) {
-        if (progress.printTime() != null) mPrintTime = DateTimeConverter.secondsToHHmmss(progress.printTime());
-        if (progress.printTimeLeft() != null) mPrintTimeLeft = DateTimeConverter.secondsToHHmmss(progress.printTimeLeft());
-        if (progress.filepos() != null) mPrintedBytes = ByteConverter.toReadableString(progress.filepos());
-        if (progress.completion() != null) mCompletionProgress = formatCompletion(progress.completion());
+        mPrintTime = DateTimeConverter.secondsToHHmmss(progress.printTime());
+        mPrintTimeLeft = DateTimeConverter.secondsToHHmmss(progress.printTimeLeft());
+        mPrintedBytes = ByteConverter.toReadableString(progress.filepos());
+        mCompletionProgress = formatCompletion(progress.completion());
     }
 
     private void parseTemps(@NonNull List<CurrentHistory.Temps> temps) {
@@ -108,36 +108,36 @@ public class WebsocketModelMapper extends MapperUseCase<Websocket, WebsocketMode
     }
 
     private void parseFlags(@NonNull CurrentHistory.State.Flags flags) {
-        if (flags.operational() != null) mOperational = flags.operational();
-        if (flags.paused() != null) mPaused = flags.paused();
-        if (flags.printing() != null) mPrinting = flags.printing();
-        if (flags.paused() != null && flags.printing() != null) mPausedOrPrinting = flags.paused() || flags.printing();
-        if (flags.sdReady() != null) mSdReady = flags.sdReady();
-        if (flags.error() != null) mError = flags.error();
-        if (flags.ready() != null) mReady = flags.ready();
-        if (flags.closedOrError() != null) mClosedOrError = flags.closedOrError();
+        mOperational = flags.operational();
+        mPaused = flags.paused();
+        mPrinting = flags.printing();
+        mPausedOrPrinting = flags.paused() || flags.printing();
+        mSdReady = flags.sdReady();
+        mError = flags.error();
+        mReady = flags.ready();
+        mClosedOrError = flags.closedOrError();
     }
 
     private void parseTemp(@NonNull CurrentHistory.Temps temp) {
-        if (temp.time() != null) mTempTime = DateTimeConverter.unixSecondsToHHmmss(temp.time());
+        mTempTime = DateTimeConverter.unixSecondsToHHmmss(temp.time());
         if (temp.bed() != null) parseTempBed(temp.bed());
         if (temp.tool0() != null) parseTempTool0(temp.tool0());
         if (temp.tool1() != null) parseTempTool1(temp.tool1());
     }
 
     private void parseTempBed(@NonNull CurrentHistory.Temps.Bed bed) {
-        if (bed.actual() != null) mActualTempBed = bed.actual().floatValue();
-        if (bed.target() != null) mTargetTempBed = bed.target().floatValue();
+        mActualTempBed = (float) bed.actual();
+        mTargetTempBed = (float) bed.target();
     }
 
     private void parseTempTool0(@NonNull CurrentHistory.Temps.Tool0 tool0) {
-        if (tool0.actual() != null) mActualTempTool0 = tool0.actual().floatValue();
-        if (tool0.target() != null) mTargetTempTool0 = tool0.target().floatValue();
+        mActualTempTool0 = (float) tool0.actual();
+        mTargetTempTool0 = (float) tool0.target();
     }
 
     private void parseTempTool1(@NonNull CurrentHistory.Temps.Tool1 tool1) {
-        if (tool1.actual() != null) mActualTempTool1 = tool1.actual().floatValue();
-        if (tool1.target() != null) mTargetTempTool1 = tool1.target().floatValue();
+        mActualTempTool1 = (float) tool1.actual();
+        mTargetTempTool1 = (float) tool1.target();
     }
 
     private WebsocketModel mapToWebsocketModel() {

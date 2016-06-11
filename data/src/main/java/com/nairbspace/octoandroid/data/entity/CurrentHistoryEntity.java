@@ -31,13 +31,13 @@ public abstract class CurrentHistoryEntity {
         @AutoValue
         @AutoGson(autoValueClass = AutoValue_CurrentHistoryEntity_State_Flags.class)
         public abstract static class Flags {
-            @Nullable @SerializedName("operational") public abstract Boolean operational();
-            @Nullable @SerializedName("paused") public abstract Boolean paused();
-            @Nullable @SerializedName("printing") public abstract Boolean printing();
-            @Nullable @SerializedName("sdReady") public abstract Boolean sdReady();
-            @Nullable @SerializedName("error") public abstract Boolean error();
-            @Nullable @SerializedName("ready") public abstract Boolean ready();
-            @Nullable @SerializedName("closedOrError") public abstract Boolean closedOrError();
+            @SerializedName("operational") public abstract boolean operational();
+            @SerializedName("paused") public abstract boolean paused();
+            @SerializedName("printing") public abstract boolean printing();
+            @SerializedName("sdReady") public abstract boolean sdReady();
+            @SerializedName("error") public abstract boolean error();
+            @SerializedName("ready") public abstract boolean ready();
+            @SerializedName("closedOrError") public abstract boolean closedOrError();
         }
     }
 
@@ -45,48 +45,48 @@ public abstract class CurrentHistoryEntity {
     @AutoGson(autoValueClass = AutoValue_CurrentHistoryEntity_Job.class)
     public abstract static class Job {
         @Nullable @SerializedName("file") public abstract File file();
-        @Nullable @SerializedName("estimatedPrintTime") public abstract Double estimatedPrintTime();
-        @Nullable @SerializedName("lastPrintTime") public abstract Double lastPrintTime();
+        @SerializedName("estimatedPrintTime") public abstract double estimatedPrintTime();
+        @SerializedName("lastPrintTime") public abstract double lastPrintTime();
 //        @Nullable @SerializedName("filament") public abstract Filament filament();
 
         @AutoValue
         @AutoGson(autoValueClass = AutoValue_CurrentHistoryEntity_Job_File.class)
         public abstract static class File { // Test against this, because doesn't match with API docs
             @Nullable @SerializedName("origin") public abstract String origin();
-            @Nullable @SerializedName("date") public abstract Long date(); // Unix Timestamp (in seconds)
+            @SerializedName("date") public abstract long date(); // Unix Timestamp (in seconds)
             @Nullable @SerializedName("name") public abstract String name();
-            @Nullable @SerializedName("size") public abstract Long size();
+            @SerializedName("size") public abstract long size();
         }
 
         @AutoValue
         @AutoGson(autoValueClass = AutoValue_CurrentHistoryEntity_Job_Filament.class)
         public abstract static class Filament {
-            @Nullable @SerializedName("length") public abstract Double length();
-            @Nullable @SerializedName("volume") public abstract Double volume();
+            @SerializedName("length") public abstract double length();
+            @SerializedName("volume") public abstract double volume();
         }
     }
 
     @AutoValue
     @AutoGson(autoValueClass = AutoValue_CurrentHistoryEntity_Progress.class)
     public abstract static class Progress {
-        @Nullable @SerializedName("completion") public abstract Double completion();
-        @Nullable @SerializedName("filepos") public abstract Long filepos();
-        @Nullable @SerializedName("printTime") public abstract Long printTime();
-        @Nullable @SerializedName("printTimeLeft") public abstract Long printTimeLeft();
+        @SerializedName("completion") public abstract double completion();
+        @SerializedName("filepos") public abstract long filepos();
+        @SerializedName("printTime") public abstract long printTime();
+        @SerializedName("printTimeLeft") public abstract long printTimeLeft();
     }
 
     @AutoValue
     @AutoGson(autoValueClass = AutoValue_CurrentHistoryEntity_Offsets.class)
     public abstract static class Offsets {
-        @Nullable @SerializedName("tool0") public abstract Integer tool0();
-        @Nullable @SerializedName("tool1") public abstract Integer tool1();
-        @Nullable @SerializedName("bed") public abstract Integer bed();
+        @SerializedName("tool0") public abstract int tool0();
+        @SerializedName("tool1") public abstract int tool1();
+        @SerializedName("bed") public abstract int bed();
     }
 
     @AutoValue
     @AutoGson(autoValueClass = AutoValue_CurrentHistoryEntity_Temps.class)
     public abstract static class Temps {
-        @Nullable @SerializedName("time") public abstract Long time(); // Unix Timestamp (in seconds)
+        @SerializedName("time") public abstract long time(); // Unix Timestamp (in seconds)
         @Nullable @SerializedName("tool0") public abstract Tool0 tool0();
         @Nullable @SerializedName("tool1") public abstract Tool1 tool1();
         @Nullable @SerializedName("bed") public abstract Bed bed();
@@ -94,24 +94,24 @@ public abstract class CurrentHistoryEntity {
         @AutoValue
         @AutoGson(autoValueClass = AutoValue_CurrentHistoryEntity_Temps_Tool0.class)
         public abstract static class Tool0 {
-            @Nullable @SerializedName("actual") public abstract Double actual();
-            @Nullable @SerializedName("target") public abstract Double target();
+            @SerializedName("actual") public abstract double actual();
+            @SerializedName("target") public abstract double target();
 //            @Nullable @SerializedName("offset") public abstract Double offset();
         }
 
         @AutoValue
         @AutoGson(autoValueClass = AutoValue_CurrentHistoryEntity_Temps_Tool1.class)
         public abstract static class Tool1 {
-            @Nullable @SerializedName("actual") public abstract Double actual();
-            @Nullable @SerializedName("target") public abstract Double target();
+            @SerializedName("actual") public abstract double actual();
+            @SerializedName("target") public abstract double target();
 //            @Nullable @SerializedName("offset") public abstract Double offset();
         }
 
         @AutoValue
         @AutoGson(autoValueClass = AutoValue_CurrentHistoryEntity_Temps_Bed.class)
         public abstract static class Bed {
-            @Nullable @SerializedName("actual") public abstract Double actual();
-            @Nullable @SerializedName("target") public abstract Double target();
+            @SerializedName("actual") public abstract double actual();
+            @SerializedName("target") public abstract double target();
 //            @Nullable @SerializedName("offset") public abstract Double offset();
         }
     }
