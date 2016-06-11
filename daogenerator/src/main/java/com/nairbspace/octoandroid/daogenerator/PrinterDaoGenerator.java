@@ -5,7 +5,7 @@ import de.greenrobot.daogenerator.Entity;
 import de.greenrobot.daogenerator.Schema;
 
 public class PrinterDaoGenerator {
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 2;
     private static final String DEFAULT_JAVA_PACKAGE = "com.nairbspace.octoandroid.data.db";
     private static final String OUT_DIR = "./data/src/main/java";
 
@@ -35,7 +35,7 @@ public class PrinterDaoGenerator {
     private static Entity addPrinter(Schema schema) {
         Entity printer = schema.addEntity("PrinterDbEntity");
         printer.setTableName("PRINTER");
-        printer.addIdProperty().primaryKey().notNull().unique();
+        printer.addIdProperty().primaryKey().unique();
         printer.addStringProperty("name").notNull().unique();
         printer.addStringProperty("apiKey").columnName("api_key").notNull();
         printer.addStringProperty("scheme").notNull();

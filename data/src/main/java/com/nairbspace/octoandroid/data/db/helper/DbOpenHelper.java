@@ -18,6 +18,7 @@ public class DbOpenHelper extends DaoMaster.OpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Currently Version 1
+        if (oldVersion < 2) Version2.update(db);
+//         if(oldVersion < 3) db.execSQL(UpgradeToVersion3.STATEMENT);
     }
 }
