@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nairbspace.octoandroid.R;
@@ -55,6 +56,7 @@ public abstract class BaseNavActivity<T> extends BaseActivity<T>
     private ActionBarDrawerToggle mToggle;
     private TextView mPrinterNameNavTextView;
     private TextView mPrinterIpAddressNavTextView;
+    private ImageView mPrinterSettingsImageView;
     private Snackbar mSnackbar;
     private FragmentManager mFragmentManager;
     private Unbinder mUnbinder;
@@ -67,12 +69,25 @@ public abstract class BaseNavActivity<T> extends BaseActivity<T>
         View navHeaderView = mNavView.getHeaderView(0);
         mPrinterNameNavTextView = ButterKnife.findById(navHeaderView, R.id.printer_name_nav_textview);
         mPrinterIpAddressNavTextView = ButterKnife.findById(navHeaderView, R.id.printer_ip_address_nav_textview);
+        mPrinterSettingsImageView = ButterKnife.findById(navHeaderView, R.id.nav_printer_settings);
+        mPrinterSettingsImageView.setOnClickListener(mPrinterSettingsClickListener);
         mToggle = new ActionBarDrawerToggle(this, mDrawer, mToolbar, R.string.drawer_open, R.string.drawer_close);
         mDrawer.addDrawerListener(mToggle);
         setDrawer();
 
         mFragmentManager = getSupportFragmentManager();
         inflatePlaybackFragment();
+    }
+
+    private View.OnClickListener mPrinterSettingsClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            navigateToPrinterSettingsActivity();
+        }
+    };
+
+    private void navigateToPrinterSettingsActivity() {
+        getNavigator().navigateToPrinterSettingsActivity(this);
     }
 
     public LockSwipeViewPager getViewPager() {

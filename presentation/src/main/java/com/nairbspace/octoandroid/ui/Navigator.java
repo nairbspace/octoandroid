@@ -15,6 +15,7 @@ import android.support.v7.app.AlertDialog;
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.ui.add_printer.AddPrinterActivity;
 import com.nairbspace.octoandroid.ui.printer_controls.PrinterControlsActivity;
+import com.nairbspace.octoandroid.ui.printer_settings.PrinterSettingsActivity;
 import com.nairbspace.octoandroid.ui.status.StatusActivity;
 import com.nairbspace.octoandroid.ui.settings.SettingsActivity;
 import com.nairbspace.octoandroid.ui.temp.TempActivity;
@@ -84,6 +85,11 @@ public class Navigator {
 
     public void navigateToSettingsActivity(Activity activity) {
         Intent i = SettingsActivity.newIntent(activity);
+        activity.startActivity(i);
+    }
+
+    public void navigateToPrinterSettingsActivity(Activity activity) {
+        Intent i = PrinterSettingsActivity.newIntent(activity);
         activity.startActivity(i);
     }
 

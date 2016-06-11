@@ -62,6 +62,9 @@
             android:theme="@style/AppTheme"
             android:label="@string/title_activity_settings">
         </activity>
+        <activity android:name=".ui.printer_settings.PrinterSettingsActivity"
+                  android:label="@string/printer_settings"
+                  android:theme="@style/AppTheme.NoActionBar"/>
 
         <!-- Services -->
         <!-- Service needed for Account Manager -->
