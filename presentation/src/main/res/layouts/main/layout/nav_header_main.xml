@@ -1,35 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="@dimen/nav_header_height"
-              android:background="@drawable/side_nav_bar"
-              android:gravity="bottom"
-              android:orientation="vertical"
-              android:paddingBottom="@dimen/activity_vertical_margin"
-              android:paddingLeft="@dimen/nav_horizontal_spacing"
-              android:paddingRight="@dimen/nav_horizontal_spacing"
-              android:paddingTop="@dimen/activity_vertical_margin"
-              android:theme="@style/ThemeOverlay.AppCompat.Dark">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/nav_header_height"
+    android:background="@drawable/side_nav_bar"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/nav_horizontal_spacing"
+    android:paddingRight="@dimen/nav_horizontal_spacing"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:src="@drawable/launcher_icon_24dp"
+            tools:ignore="ContentDescription"/>
+
+        <TextView
+            android:id="@+id/printer_name_nav_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            tools:text="Printer Name"/>
+
+        <TextView
+            android:id="@+id/printer_ip_address_nav_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="192.168.1.1"/>
+    </LinearLayout>
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="72dp"
-        android:layout_height="72dp"
-        android:src="@drawable/launcher_icon_24dp"
-        tools:ignore="ContentDescription"/>
-
-    <TextView
-        android:id="@+id/printer_name_nav_textview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="Printer Name"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
-
-    <TextView
-        android:id="@+id/printer_ip_address_nav_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="192.168.1.1"/>
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:contentDescription="@string/printer_settings"
+        android:src="@drawable/ic_settings_black_24dp"
+        android:tint="@android:color/white"/>
 
-</LinearLayout>
+</RelativeLayout>
