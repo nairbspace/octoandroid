@@ -19,8 +19,6 @@ import rx.Subscriber;
 @SuppressWarnings("ConstantConditions")
 public class WebsocketModelMapper extends MapperUseCase<Websocket, WebsocketModel> {
 
-    private final DateTimeConverter mDateTimeConverter;
-
     private String mState = "";
     private String mFile = "";
     private String mApproxTotalPrintTime = "";
@@ -48,10 +46,8 @@ public class WebsocketModelMapper extends MapperUseCase<Websocket, WebsocketMode
 
     @Inject
     public WebsocketModelMapper(ThreadExecutor threadExecutor,
-                                PostExecutionThread postExecutionThread,
-                                DateTimeConverter dateTimeConverter) {
+                                PostExecutionThread postExecutionThread) {
         super(threadExecutor, postExecutionThread);
-        mDateTimeConverter = dateTimeConverter;
     }
 
     @Override
@@ -91,7 +87,7 @@ public class WebsocketModelMapper extends MapperUseCase<Websocket, WebsocketMode
 
     private void parseJob(@NonNull CurrentHistory.Job job) {
         if (job.file() != null) parseFile(job.file());
-        if (job.estimatedPrintTime() != null) mApproxTotalPrintTime = mDateTimeConverter.secondsToHHmmss(job.estimatedPrintTime());
+        if (job.estimatedPrintTime() != null) mApproxTotalPrintTime = DateTimeConverter.secondsToHHmmss(job.estimatedPrintTime());
     }
 
     private void parseFile(@NonNull CurrentHistory.Job.File file) {
@@ -101,8 +97,8 @@ public class WebsocketModelMapper extends MapperUseCase<Websocket, WebsocketMode
     }
 
     private void parseProgress(@NonNull CurrentHistory.Progress progress) {
-        if (progress.printTime() != null) mPrintTime = mDateTimeConverter.secondsToHHmmss(progress.printTime());
-        if (progress.printTimeLeft() != null) mPrintTimeLeft = mDateTimeConverter.secondsToHHmmss(progress.printTimeLeft());
+        if (progress.printTime() != null) mPrintTime = DateTimeConverter.secondsToHHmmss(progress.printTime());
+        if (progress.printTimeLeft() != null) mPrintTimeLeft = DateTimeConverter.secondsToHHmmss(progress.printTimeLeft());
         if (progress.filepos() != null) mPrintedBytes = ByteConverter.toReadableString(progress.filepos());
         if (progress.completion() != null) mCompletionProgress = formatCompletion(progress.completion());
     }
@@ -123,7 +119,7 @@ public class WebsocketModelMapper extends MapperUseCase<Websocket, WebsocketMode
     }
 
     private void parseTemp(@NonNull CurrentHistory.Temps temp) {
-        if (temp.time() != null) mTempTime = mDateTimeConverter.unixSecondsToHHmmss(temp.time());
+        if (temp.time() != null) mTempTime = DateTimeConverter.unixSecondsToHHmmss(temp.time());
         if (temp.bed() != null) parseTempBed(temp.bed());
         if (temp.tool0() != null) parseTempTool0(temp.tool0());
         if (temp.tool1() != null) parseTempTool1(temp.tool1());

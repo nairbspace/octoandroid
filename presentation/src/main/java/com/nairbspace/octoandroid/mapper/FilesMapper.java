@@ -18,14 +18,11 @@ import rx.Subscriber;
 
 public class FilesMapper extends MapperUseCase<Files, FilesModel> {
     private static final String FOLDER = "folder";
-    private final DateTimeConverter mDateTimeConverter;
 
     @Inject
     public FilesMapper(ThreadExecutor threadExecutor,
-                       PostExecutionThread postExecutionThread,
-                       DateTimeConverter dateTimeConverter) {
+                       PostExecutionThread postExecutionThread) {
         super(threadExecutor, postExecutionThread);
-        mDateTimeConverter = dateTimeConverter;
     }
 
     @Override
@@ -78,8 +75,8 @@ public class FilesMapper extends MapperUseCase<Files, FilesModel> {
         String date = "";
         String time = "";
         if (file.date() != null) {
-            date = mDateTimeConverter.secondsToShortDateString(file.date());
-            time = mDateTimeConverter.secondsToShortTimeString(file.date());
+            date = DateTimeConverter.secondsToShortDateString(file.date());
+            time = DateTimeConverter.secondsToShortTimeString(file.date());
         }
 
         String origin = file.origin();
@@ -94,7 +91,7 @@ public class FilesMapper extends MapperUseCase<Files, FilesModel> {
         String estimatedPrintTime = "";
         if (isEstimatedPrintTimeNotNull(file)) {
             Double estPrintTime = file.gcodeAnalysis().estimatedPrintTime();
-            estimatedPrintTime = mDateTimeConverter.secondsToHHmmss(estPrintTime);
+            estimatedPrintTime = DateTimeConverter.secondsToHHmmss(estPrintTime);
         }
 
         String type = "";
