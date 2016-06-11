@@ -6,6 +6,9 @@ import com.nairbspace.octoandroid.domain.model.Printer;
 import com.nairbspace.octoandroid.exception.TransformErrorException;
 import com.nairbspace.octoandroid.model.PrinterModel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import rx.Observable;
@@ -25,20 +28,50 @@ public class PrinterModelMapper extends MapperUseCase<Printer, PrinterModel> {
             @Override
             public void call(Subscriber<? super PrinterModel> subscriber) {
                 try {
-                    PrinterModel model = PrinterModel.builder()
-                            .id(printer.id())
-                            .name(printer.name())
-                            .apiKey(printer.apiKey())
-                            .scheme(printer.scheme())
-                            .host(printer.host())
-                            .port(printer.port())
-                            .build();
-                    subscriber.onNext(model);
+                    subscriber.onNext(printerToPrinterModel(printer));
                     subscriber.onCompleted();
                 } catch (Exception e) {
                     subscriber.onError(new TransformErrorException());
                 }
             }
         });
+    }
+
+    public static PrinterModel printerToPrinterModel(Printer printer) {
+        return PrinterModel.builder()
+                .id(printer.id())
+                .name(printer.name())
+                .apiKey(printer.apiKey())
+                .scheme(printer.scheme())
+                .host(printer.host())
+                .port(printer.port())
+                .build();
+    }
+
+    public static class ListMapper extends MapperUseCase<List<Printer>, List<PrinterModel>> {
+
+        @Inject
+        public ListMapper(ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
+            super(threadExecutor, postExecutionThread);
+        }
+
+        @Override
+        protected Observable<List<PrinterModel>> buildUseCaseObservable(final List<Printer> printers) {
+            return Observable.create(new Observable.OnSubscribe<List<PrinterModel>>() {
+                @Override
+                public void call(Subscriber<? super List<PrinterModel>> subscriber) {
+                    try {
+                        List<PrinterModel> printerModels = new ArrayList<>();
+                        for (Printer printer : printers) {
+                            printerModels.add(PrinterModelMapper.printerToPrinterModel(printer));
+                        }
+                        subscriber.onNext(printerModels);
+                        subscriber.onCompleted();
+                    } catch (Exception e) {
+                        subscriber.onError(new TransformErrorException());
+                    }
+                }
+            });
+        }
     }
 }

@@ -9,6 +9,9 @@ import com.nairbspace.octoandroid.data.exception.IpAddressEmptyException;
 import com.nairbspace.octoandroid.domain.model.AddPrinter;
 import com.nairbspace.octoandroid.domain.model.Printer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import okhttp3.HttpUrl;
 import rx.Observable;
 import rx.Subscriber;
@@ -26,19 +29,40 @@ public class PrinterDbEntityMapper {
             @Override
             public Printer call(PrinterDbEntity printerDbEntity) {
                 try {
-                    return Printer.builder()
-                            .id(printerDbEntity.getId())
-                            .name(printerDbEntity.getName())
-                            .apiKey(printerDbEntity.getApiKey())
-                            .scheme(printerDbEntity.getScheme())
-                            .host(printerDbEntity.getHost())
-                            .port(printerDbEntity.getPort())
-                            .build();
+                    return printerDbEntityToPrinter(printerDbEntity);
                 } catch (Exception e) {
                     throw Exceptions.propagate(new EntityMapperException(e));
                 }
             }
         };
+    }
+
+    public static Func1<List<PrinterDbEntity>, List<Printer>> mapToPrinters() {
+        return new Func1<List<PrinterDbEntity>, List<Printer>>() {
+            @Override
+            public List<Printer> call(List<PrinterDbEntity> printerDbEntities) {
+                try {
+                    List<Printer> printers = new ArrayList<>();
+                    for (PrinterDbEntity printerDbEntity : printerDbEntities) {
+                        printers.add(printerDbEntityToPrinter(printerDbEntity));
+                    }
+                    return printers;
+                } catch (Exception e) {
+                    throw Exceptions.propagate(new EntityMapperException(e));
+                }
+            }
+        };
+    }
+
+    private static Printer printerDbEntityToPrinter(PrinterDbEntity printerDbEntity) {
+        return Printer.builder()
+                .id(printerDbEntity.getId())
+                .name(printerDbEntity.getName())
+                .apiKey(printerDbEntity.getApiKey())
+                .scheme(printerDbEntity.getScheme())
+                .host(printerDbEntity.getHost())
+                .port(printerDbEntity.getPort())
+                .build();
     }
 
     public static Observable.OnSubscribe<PrinterDbEntity> mapAddPrinterToPrinterDbEntity(final AddPrinter addPrinter) {

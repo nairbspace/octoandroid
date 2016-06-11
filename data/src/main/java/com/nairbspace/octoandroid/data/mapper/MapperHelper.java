@@ -19,6 +19,8 @@ import com.nairbspace.octoandroid.domain.model.TempCommand;
 import com.nairbspace.octoandroid.domain.model.ToolCommand;
 import com.nairbspace.octoandroid.domain.model.Websocket;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -39,6 +41,10 @@ public class MapperHelper {
 
     public Func1<PrinterDbEntity, Printer> maptoPrinter() {
         return PrinterDbEntityMapper.maptoPrinter();
+    }
+
+    public Func1<List<PrinterDbEntity>, List<Printer>> mapToPrinters() {
+        return PrinterDbEntityMapper.mapToPrinters();
     }
 
     public Observable.OnSubscribe<PrinterDbEntity> mapAddPrinterToPrinterDbEntity(AddPrinter addPrinter) {

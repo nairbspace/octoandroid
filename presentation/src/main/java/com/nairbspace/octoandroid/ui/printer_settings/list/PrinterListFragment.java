@@ -3,6 +3,7 @@ package com.nairbspace.octoandroid.ui.printer_settings.list;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,7 @@ public class PrinterListFragment extends BaseFragmentListener<PrinterListScreen,
     private List<PrinterModel> mPrinterModels;
 
     @BindView(R.id.printer_list_recyclerview) RecyclerView mRecyclerView;
+    @BindView(R.id.add_printer_fab) FloatingActionButton mFab;
 
     public static PrinterListFragment newInstance() {
         return new PrinterListFragment();
@@ -46,8 +48,16 @@ public class PrinterListFragment extends BaseFragmentListener<PrinterListScreen,
         View view = inflater.inflate(R.layout.fragment_printer_list, container, false);
         setUnbinder(ButterKnife.bind(this, view));
         mRecyclerView.setAdapter(new PrinterListRvAdapter(this));
+        mFab.setOnClickListener(mFabClickListener);
         return view;
     }
+
+    private View.OnClickListener mFabClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            mListener.addPrinter();
+        }
+    };
 
     @Override
     public void updateUi(List<PrinterModel> printerModels) {
@@ -83,5 +93,6 @@ public class PrinterListFragment extends BaseFragmentListener<PrinterListScreen,
 
     public interface Listener {
         void inflatePrinterDetails(PrinterModel printerModel);
+        void addPrinter();
     }
 }

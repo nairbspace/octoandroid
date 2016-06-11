@@ -3,6 +3,8 @@ package com.nairbspace.octoandroid.data.disk;
 import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
 import com.nairbspace.octoandroid.data.db.PrinterDbEntityDao;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -50,6 +52,10 @@ public class DbHelper {
         return printerDbEntity;
     }
 
+    public List<PrinterDbEntity> getPrintersFromDb() {
+        return mPrinterDbEntityDao.queryBuilder().list();
+    }
+
     public void deletePrinterInDb(PrinterDbEntity printerDbEntity) {
         PrinterDbEntity oldPrinterDbEntity = getPrinterFromDbByName(printerDbEntity.getName());
         if (oldPrinterDbEntity != null) {
@@ -57,8 +63,8 @@ public class DbHelper {
         }
     }
 
-    public void insertOrReplace(PrinterDbEntity printerDbEntity) {
-        mPrinterDbEntityDao.insertOrReplace(printerDbEntity);
+    public long insertOrReplace(PrinterDbEntity printerDbEntity) {
         mPrefHelper.setSaveTimeMillis(System.currentTimeMillis());
+        return mPrinterDbEntityDao.insertOrReplace(printerDbEntity);
     }
 }

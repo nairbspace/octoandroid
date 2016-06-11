@@ -29,6 +29,8 @@ public class PrinterSettingsActivity extends BaseActivity<PrinterSettingsScreen>
     @Inject PrinterSettingsPresenter mPresenter;
     @BindView(R.id.toolbar) Toolbar mToolbar;
 
+    private boolean mPrinterWasAdded = false;
+
     public static Intent newIntent(Context context) {
         return new Intent(context, PrinterSettingsActivity.class);
     }
@@ -65,6 +67,27 @@ public class PrinterSettingsActivity extends BaseActivity<PrinterSettingsScreen>
                 .replace(R.id.printer_settings_fragment, fragment)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    public void addPrinter() {
+        getNavigator().navigateToAddPrinterActivityForResult(this);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (getNavigator().wasAddPrinterResultOk(requestCode, resultCode)) {
+            mPrinterWasAdded = true;
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mPrinterWasAdded) {
+            mPrinterWasAdded = false;
+            inflatePrinterList();
+        }
     }
 
     @Override

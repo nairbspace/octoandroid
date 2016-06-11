@@ -13,12 +13,15 @@ import com.nairbspace.octoandroid.domain.model.ToolCommand;
 import com.nairbspace.octoandroid.domain.model.Websocket;
 
 import java.util.HashMap;
+import java.util.List;
 
 import rx.Observable;
 
 public interface PrinterRepository {
 
     Observable<Printer> printerDetails();
+
+    Observable<List<Printer>> getPrinters();
 
     Observable addPrinterDetails(AddPrinter addPrinter);
 

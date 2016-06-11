@@ -20,6 +20,7 @@ import com.nairbspace.octoandroid.domain.model.Websocket;
 import com.nairbspace.octoandroid.domain.repository.PrinterRepository;
 
 import java.util.HashMap;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -53,6 +54,12 @@ public class PrinterDataRepository implements PrinterRepository {
     public Observable<Printer> printerDetails() {
         return Observable.create(mDiskManager.getPrinterInDb())
                 .map(mMapperHelper.maptoPrinter());
+    }
+
+    @Override
+    public Observable<List<Printer>> getPrinters() {
+        return Observable.create(mDiskManager.getPrintersInDb())
+                .map(mMapperHelper.mapToPrinters());
     }
 
     @Override

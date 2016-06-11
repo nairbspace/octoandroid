@@ -8,6 +8,8 @@ import com.nairbspace.octoandroid.data.exception.NoActivePrinterException;
 import com.nairbspace.octoandroid.data.exception.PrinterDataNotFoundException;
 import com.nairbspace.octoandroid.data.mapper.EntitySerializer;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -72,6 +74,21 @@ public class DiskManagerImpl implements DiskManager {
     }
 
     @Override
+    public Observable.OnSubscribe<List<PrinterDbEntity>> getPrintersInDb() {
+        return new Observable.OnSubscribe<List<PrinterDbEntity>>() {
+            @Override
+            public void call(Subscriber<? super List<PrinterDbEntity>> subscriber) {
+                List<PrinterDbEntity> list = mDbHelper.getPrintersFromDb();
+                if (list == null) {
+                    subscriber.onError(new PrinterDataNotFoundException());
+                }
+                subscriber.onNext(list);
+                subscriber.onCompleted();
+            }
+        };
+    }
+
+    @Override
     public Observable.OnSubscribe<PrinterDbEntity> getPrinterByName(final String name) {
         return new Observable.OnSubscribe<PrinterDbEntity>() {
             @Override
@@ -93,10 +110,10 @@ public class DiskManagerImpl implements DiskManager {
             public PrinterDbEntity call(PrinterDbEntity printerDbEntity) {
                 try {
                     mDbHelper.deletePrinterInDb(printerDbEntity);
-                    mDbHelper.insertOrReplace(printerDbEntity);
+                    long id = mDbHelper.insertOrReplace(printerDbEntity);
 
                     // Need to fetch printer from db which has id
-                    printerDbEntity = mDbHelper.getPrinterFromDbByName(printerDbEntity.getName());
+                    printerDbEntity = mDbHelper.getPrinterFromDbById(id);
 
                     mPrefHelper.setActivePrinter(printerDbEntity.getId());
                     mPrefHelper.setSaveTimeMillis(System.currentTimeMillis());
