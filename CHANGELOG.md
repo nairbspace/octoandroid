@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+Version 1.4.2 *(2016-06-11)*
+----------------------------
+
+ * Bugfix. Switched parsing method for websocket models and class types to primitives wherever possible.
+
 Version 1.4.1 *(2016-06-10)*
 ----------------------------
 
