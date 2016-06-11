@@ -1,11 +1,15 @@
 package com.nairbspace.octoandroid.mapper;
 
+import android.support.annotation.NonNull;
+
 import com.nairbspace.octoandroid.domain.executor.PostExecutionThread;
 import com.nairbspace.octoandroid.domain.executor.ThreadExecutor;
 import com.nairbspace.octoandroid.domain.model.CurrentHistory;
 import com.nairbspace.octoandroid.domain.model.Websocket;
 import com.nairbspace.octoandroid.exception.TransformErrorException;
 import com.nairbspace.octoandroid.model.WebsocketModel;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -15,18 +19,40 @@ import rx.Subscriber;
 @SuppressWarnings("ConstantConditions")
 public class WebsocketModelMapper extends MapperUseCase<Websocket, WebsocketModel> {
 
-    private final UglyNullChecker mUglyNullChecker;
     private final ByteConverter mByteConverter;
     private final DateTimeConverter mDateTimeConverter;
+
+    private String mState = "";
+    private String mFile = "";
+    private String mApproxTotalPrintTime = "";
+    private String mPrintTimeLeft = "";
+    private String mPrintTime = "";
+    private String mPrintedBytes = "";
+    private String mPrintedFileSize = "";
+    private int mCompletionProgress = 0;
+    private boolean mOperational = false;
+    private boolean mPaused = false;
+    private boolean mPrinting = false;
+    private boolean mPausedOrPrinting = false;
+    private boolean mSdReady = false;
+    private boolean mError = false;
+    private boolean mReady = false;
+    private boolean mClosedOrError = false;
+    private boolean mFileLoaded = false;
+    private String mTempTime = "";
+    private float mActualTempBed = 0;
+    private float mTargetTempBed = 0;
+    private float mActualTempTool0 = 0;
+    private float mTargetTempTool0 = 0;
+    private float mActualTempTool1 = 0;
+    private float mTargetTempTool1 = 0;
 
     @Inject
     public WebsocketModelMapper(ThreadExecutor threadExecutor,
                                 PostExecutionThread postExecutionThread,
-                                UglyNullChecker uglyNullChecker,
                                 ByteConverter byteConverter,
                                 DateTimeConverter dateTimeConverter) {
         super(threadExecutor, postExecutionThread);
-        mUglyNullChecker = uglyNullChecker;
         mByteConverter = byteConverter;
         mDateTimeConverter = dateTimeConverter;
     }
@@ -37,8 +63,9 @@ public class WebsocketModelMapper extends MapperUseCase<Websocket, WebsocketMode
             @Override
             public void call(Subscriber<? super WebsocketModel> subscriber) {
                 try {
-                    if (mUglyNullChecker.isCurrentNotNull(websocket)) {
-                        WebsocketModel websocketModel = mapToStatusModel(websocket, websocket.current());
+                    if (websocket != null) {
+                        parseWebsocket(websocket);
+                        WebsocketModel websocketModel = mapToWebsocketModel();
                         subscriber.onNext(websocketModel);
                         subscriber.onCompleted();
                     }
@@ -49,137 +76,104 @@ public class WebsocketModelMapper extends MapperUseCase<Websocket, WebsocketMode
         });
     }
 
-    private WebsocketModel mapToStatusModel(Websocket websocket, CurrentHistory current) {
-        String state = "";
-        if (mUglyNullChecker.ifStateTextNotNull(websocket)) {
-            state = current.state().text();
-        }
+    private void parseWebsocket(@NonNull Websocket websocket) {
+        if (websocket.current() != null) parseCurrentHistory(websocket.current());
+    }
 
-        String file = "";
-        if (mUglyNullChecker.isFileNameNotNull(websocket)) {
-            file = current.job().file().name();
-        }
+    private void parseCurrentHistory(@NonNull CurrentHistory currentHistory) {
+        if (currentHistory.state() != null) parseState(currentHistory.state());
+        if (currentHistory.job() != null) parseJob(currentHistory.job());
+        if (currentHistory.progress() != null) parseProgress(currentHistory.progress());
+        if (currentHistory.temps() != null) parseTemps(currentHistory.temps());
+    }
 
-        String approxTotalPrintTime = "";
-        if (mUglyNullChecker.isApproxTotalPrintTimeIsNotNull(websocket)) {
-            Double time = current.job().estimatedPrintTime();
-            approxTotalPrintTime = mDateTimeConverter.secondsToHHmmss(time);
-        }
+    private void parseState(@NonNull CurrentHistory.State state) {
+        if (state.text() != null) mState = state.text();
+        if (state.flags() != null) parseFlags(state.flags());
+    }
 
-        String printTime = "";
-        if (mUglyNullChecker.isPrintTimeIsNotNull(websocket)) {
-            printTime = mDateTimeConverter.secondsToHHmmss(current.progress().printTime());
-        }
+    private void parseJob(@NonNull CurrentHistory.Job job) {
+        if (job.file() != null) parseFile(job.file());
+        if (job.estimatedPrintTime() != null) mApproxTotalPrintTime = mDateTimeConverter.secondsToHHmmss(job.estimatedPrintTime());
+    }
 
-        String printTimeLeft = "";
-        if (mUglyNullChecker.isPrintTimeLeftIsNotNull(websocket)) {
-            if (current.progress().printTimeLeft() > 0) {
-                printTimeLeft = mDateTimeConverter.secondsToHHmmss(current.progress().printTimeLeft());
-            }
-        }
+    private void parseFile(@NonNull CurrentHistory.Job.File file) {
+        if (file.name() != null) mFile = file.name();
+        if (file.size() != null) mPrintedFileSize = mByteConverter.toReadableString(file.size());
+        mFileLoaded = file.name() != null;
+    }
 
-        String printedBytes = "";
-        if (mUglyNullChecker.isPrintedBytesIsNotNull(websocket)) {
-            printedBytes = mByteConverter.toReadableString(current.progress().filepos());
-        }
+    private void parseProgress(@NonNull CurrentHistory.Progress progress) {
+        if (progress.printTime() != null) mPrintTime = mDateTimeConverter.secondsToHHmmss(progress.printTime());
+        if (progress.printTimeLeft() != null) mPrintTimeLeft = mDateTimeConverter.secondsToHHmmss(progress.printTimeLeft());
+        if (progress.filepos() != null) mPrintedBytes = mByteConverter.toReadableString(progress.filepos());
+        if (progress.completion() != null) mCompletionProgress = formatCompletion(progress.completion());
+    }
 
-        String printedFileSize = "";
-        if (mUglyNullChecker.isPrintedFileSizeIsNotNull(websocket)) {
-            printedFileSize = mByteConverter.toReadableString(current.job().file().size());
-        }
+    private void parseTemps(@NonNull List<CurrentHistory.Temps> temps) {
+        if (!temps.isEmpty()) parseTemp(temps.get(0));
+    }
 
-        int completionProgress = 0;
-        if (mUglyNullChecker.isCompletionNotNull(websocket)) {
-            completionProgress = formatCompletion(current.progress().completion());
-        }
+    private void parseFlags(@NonNull CurrentHistory.State.Flags flags) {
+        if (flags.operational() != null) mOperational = flags.operational();
+        if (flags.paused() != null) mPaused = flags.paused();
+        if (flags.printing() != null) mPrinting = flags.printing();
+        if (flags.paused() != null && flags.printing() != null) mPausedOrPrinting = flags.paused() || flags.printing();
+        if (flags.sdReady() != null) mSdReady = flags.sdReady();
+        if (flags.error() != null) mError = flags.error();
+        if (flags.ready() != null) mReady = flags.ready();
+        if (flags.closedOrError() != null) mClosedOrError = flags.closedOrError();
+    }
 
-        boolean operational = false;
-        boolean paused = false;
-        boolean printing = false;
-        boolean pausedOrPrinting = false;
-        boolean sdReady = false;
-        boolean error = false;
-        boolean ready = false;
-        boolean closedorError = false;
-        if (mUglyNullChecker.isStateFlagsNotNull(websocket)) {
-            CurrentHistory.State.Flags flags = current.state().flags();
-            operational = flags.operational();
-            paused = flags.paused();
-            printing = flags.printing();
-            pausedOrPrinting = flags.paused() || flags.printing();
-            sdReady = flags.sdReady();
-            error = flags.error();
-            ready = flags.ready();
-            closedorError = flags.closedOrError();
-        }
+    private void parseTemp(@NonNull CurrentHistory.Temps temp) {
+        if (temp.time() != null) mTempTime = mDateTimeConverter.unixSecondsToHHmmss(temp.time());
+        if (temp.bed() != null) parseTempBed(temp.bed());
+        if (temp.tool0() != null) parseTempTool0(temp.tool0());
+        if (temp.tool1() != null) parseTempTool1(temp.tool1());
+    }
 
-        boolean fileLoaded = mUglyNullChecker.isFileNameNotNull(websocket);
+    private void parseTempBed(@NonNull CurrentHistory.Temps.Bed bed) {
+        if (bed.actual() != null) mActualTempBed = bed.actual().floatValue();
+        if (bed.target() != null) mTargetTempBed = bed.target().floatValue();
+    }
 
-        String tempTime = "";
-        float actualTempBed = 0f;
-        float targetTempBed = 0f;
-        float actualTempTool0 = 0f;
-        float targetTempTool0 = 0f;
-        float actualTempTool1 = 0f;
-        float targetTempTool1 = 0f;
-        if (mUglyNullChecker.isTempNotNull(websocket)) {
-            CurrentHistory.Temps temp = websocket.current().temps().get(0);
-            if (mUglyNullChecker.isTempTimeNotNull(websocket)) {
-                long time = temp.time();
-                tempTime = mDateTimeConverter.unixSecondsToHHmmss(time);
-            }
+    private void parseTempTool0(@NonNull CurrentHistory.Temps.Tool0 tool0) {
+        if (tool0.actual() != null) mActualTempTool0 = tool0.actual().floatValue();
+        if (tool0.target() != null) mTargetTempTool0 = tool0.target().floatValue();
+    }
 
-            if (mUglyNullChecker.isActualTempBedNotNull(websocket)) {
-                actualTempBed = temp.bed().actual().floatValue();
-            }
+    private void parseTempTool1(@NonNull CurrentHistory.Temps.Tool1 tool1) {
+        if (tool1.actual() != null) mActualTempTool1 = tool1.actual().floatValue();
+        if (tool1.target() != null) mTargetTempTool1 = tool1.target().floatValue();
+    }
 
-            if (mUglyNullChecker.isTargetTempBedNotNull(websocket)) {
-                targetTempBed = temp.bed().target().floatValue();
-            }
-
-            if (mUglyNullChecker.isActualTempTool0NotNull(websocket)) {
-                actualTempTool0 = temp.tool0().actual().floatValue();
-            }
-
-            if (mUglyNullChecker.isTargetTempTool0NotNull(websocket)) {
-                targetTempTool0 = temp.tool0().target().floatValue();
-            }
-
-            if (mUglyNullChecker.isActualTempTool1NotNull(websocket)) {
-                actualTempTool1 = temp.tool1().actual().floatValue();
-            }
-
-            if (mUglyNullChecker.isTargetTempTool1NotNull(websocket)) {
-                targetTempTool1 = temp.tool1().target().floatValue();
-            }
-        }
-
+    private WebsocketModel mapToWebsocketModel() {
         return WebsocketModel.builder()
-                .state(state)
-                .file(file)
-                .approxTotalPrintTime(approxTotalPrintTime)
-                .printTime(printTime)
-                .printTimeLeft(printTimeLeft)
-                .printedBytes(printedBytes)
-                .printedFileSize(printedFileSize)
-                .completionProgress(completionProgress)
-                .operational(operational)
-                .paused(paused)
-                .printing(printing)
-                .pausedOrPrinting(pausedOrPrinting)
-                .sdReady(sdReady)
-                .error(error)
-                .ready(ready)
-                .closedOrError(closedorError)
-                .fileLoaded(fileLoaded)
+                .state(mState)
+                .file(mFile)
+                .approxTotalPrintTime(mApproxTotalPrintTime)
+                .printTime(mPrintTime)
+                .printTimeLeft(mPrintTimeLeft)
+                .printedBytes(mPrintedBytes)
+                .printedFileSize(mPrintedFileSize)
+                .completionProgress(mCompletionProgress)
+                .operational(mOperational)
+                .paused(mPaused)
+                .printing(mPrinting)
+                .pausedOrPrinting(mPausedOrPrinting)
+                .sdReady(mSdReady)
+                .error(mError)
+                .ready(mReady)
+                .closedOrError(mClosedOrError)
+                .fileLoaded(mFileLoaded)
 
-                .tempTime(tempTime)
-                .actualTempBed(actualTempBed)
-                .targetTempBed(targetTempBed)
-                .actualTempTool0(actualTempTool0)
-                .targetTempTool0(targetTempTool0)
-                .actualTempTool1(actualTempTool1)
-                .targetTempTool1(targetTempTool1)
+                .tempTime(mTempTime)
+                .actualTempBed(mActualTempBed)
+                .targetTempBed(mTargetTempBed)
+                .actualTempTool0(mActualTempTool0)
+                .targetTempTool0(mTargetTempTool0)
+                .actualTempTool1(mActualTempTool1)
+                .targetTempTool1(mTargetTempTool1)
                 .build();
     }
 
