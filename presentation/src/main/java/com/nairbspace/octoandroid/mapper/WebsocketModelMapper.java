@@ -19,7 +19,6 @@ import rx.Subscriber;
 @SuppressWarnings("ConstantConditions")
 public class WebsocketModelMapper extends MapperUseCase<Websocket, WebsocketModel> {
 
-    private final ByteConverter mByteConverter;
     private final DateTimeConverter mDateTimeConverter;
 
     private String mState = "";
@@ -50,10 +49,8 @@ public class WebsocketModelMapper extends MapperUseCase<Websocket, WebsocketMode
     @Inject
     public WebsocketModelMapper(ThreadExecutor threadExecutor,
                                 PostExecutionThread postExecutionThread,
-                                ByteConverter byteConverter,
                                 DateTimeConverter dateTimeConverter) {
         super(threadExecutor, postExecutionThread);
-        mByteConverter = byteConverter;
         mDateTimeConverter = dateTimeConverter;
     }
 
@@ -99,14 +96,14 @@ public class WebsocketModelMapper extends MapperUseCase<Websocket, WebsocketMode
 
     private void parseFile(@NonNull CurrentHistory.Job.File file) {
         if (file.name() != null) mFile = file.name();
-        if (file.size() != null) mPrintedFileSize = mByteConverter.toReadableString(file.size());
+        if (file.size() != null) mPrintedFileSize = ByteConverter.toReadableString(file.size());
         mFileLoaded = file.name() != null;
     }
 
     private void parseProgress(@NonNull CurrentHistory.Progress progress) {
         if (progress.printTime() != null) mPrintTime = mDateTimeConverter.secondsToHHmmss(progress.printTime());
         if (progress.printTimeLeft() != null) mPrintTimeLeft = mDateTimeConverter.secondsToHHmmss(progress.printTimeLeft());
-        if (progress.filepos() != null) mPrintedBytes = mByteConverter.toReadableString(progress.filepos());
+        if (progress.filepos() != null) mPrintedBytes = ByteConverter.toReadableString(progress.filepos());
         if (progress.completion() != null) mCompletionProgress = formatCompletion(progress.completion());
     }
 
@@ -177,7 +174,7 @@ public class WebsocketModelMapper extends MapperUseCase<Websocket, WebsocketMode
                 .build();
     }
 
-    public int formatCompletion(Double completion) {
+    private int formatCompletion(Double completion) {
         int completionProgress = completion.intValue();
         return Math.abs(completionProgress);
     }

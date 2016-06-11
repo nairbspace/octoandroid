@@ -18,16 +18,13 @@ import rx.Subscriber;
 
 public class FilesMapper extends MapperUseCase<Files, FilesModel> {
     private static final String FOLDER = "folder";
-    private final ByteConverter mByteConverter;
     private final DateTimeConverter mDateTimeConverter;
 
     @Inject
     public FilesMapper(ThreadExecutor threadExecutor,
                        PostExecutionThread postExecutionThread,
-                       ByteConverter byteConverter,
                        DateTimeConverter dateTimeConverter) {
         super(threadExecutor, postExecutionThread);
-        mByteConverter = byteConverter;
         mDateTimeConverter = dateTimeConverter;
     }
 
@@ -48,8 +45,8 @@ public class FilesMapper extends MapperUseCase<Files, FilesModel> {
     }
 
     private FilesModel mapToFilesModel(Files files) {
-        String free = mByteConverter.toReadableString(files.free());
-        String total = mByteConverter.toReadableString(files.total());
+        String free = ByteConverter.toReadableString(files.free());
+        String total = ByteConverter.toReadableString(files.total());
         List<FileModel> fileModels = mapToFileModels(files.files());
         return FilesModel.builder()
                 .free(free)
@@ -75,7 +72,7 @@ public class FilesMapper extends MapperUseCase<Files, FilesModel> {
 
         String size = "";
         if (file.size() != null) {
-            size = mByteConverter.toReadableString(file.size());
+            size = ByteConverter.toReadableString(file.size());
         }
 
         String date = "";

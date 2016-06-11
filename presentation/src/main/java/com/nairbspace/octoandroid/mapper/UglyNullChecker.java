@@ -2,15 +2,8 @@ package com.nairbspace.octoandroid.mapper;
 
 import com.nairbspace.octoandroid.domain.model.Websocket;
 
-import javax.inject.Inject;
-
 @SuppressWarnings("ConstantConditions")
 public class UglyNullChecker {
-
-    @Inject
-    public UglyNullChecker() {
-        // TODO-Low not sure if should implement null checker this way
-    }
 
     public boolean isWebSocketNotNull(Websocket websocket) {
         return websocket != null;
