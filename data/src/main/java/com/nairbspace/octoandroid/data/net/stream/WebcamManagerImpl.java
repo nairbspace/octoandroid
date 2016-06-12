@@ -48,11 +48,10 @@ public class WebcamManagerImpl implements WebcamManager {
         String scheme = printerDbEntity.getScheme();
         String host = printerDbEntity.getHost();
         int port = printerDbEntity.getPort();
-        String path = "/webcam/";
-        String query = "action=stream";
+        String pathQuery = printerDbEntity.getWebcamPathQuery();
 
         try {
-            return new URI(scheme, null, host, port, path, query, null).toString();
+            return new URI(scheme, null, host, port, null, null, null).toString() + pathQuery;
         } catch (URISyntaxException e) {
             throw Exceptions.propagate(new URISyntaxException(e.getInput(), e.getReason()));
         }

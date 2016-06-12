@@ -43,7 +43,7 @@ public class WebsocketInterceptor implements Interceptor {
     private String getWebsocketUrl(PrinterDbEntity printerDbEntity) {
         String scheme = printerDbEntity.getScheme();
         String host = printerDbEntity.getHost();
-        String path = "/sockjs/websocket";
+        String path = printerDbEntity.getWebsocketPath();
 
         String socketScheme = scheme.replace("http", "ws").replace("https", "wss");
         try {

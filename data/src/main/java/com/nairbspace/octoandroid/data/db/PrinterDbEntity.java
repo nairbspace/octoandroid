@@ -16,6 +16,10 @@ public class PrinterDbEntity {
     /** Not-null value. */
     private String host;
     private int port;
+    /** Not-null value. */
+    private String websocketPath;
+    /** Not-null value. */
+    private String webcamPathQuery;
     private String versionJson;
     private String connectionJson;
     private String printerStateJson;
@@ -28,13 +32,15 @@ public class PrinterDbEntity {
         this.id = id;
     }
 
-    public PrinterDbEntity(Long id, String name, String apiKey, String scheme, String host, int port, String versionJson, String connectionJson, String printerStateJson, String filesJson) {
+    public PrinterDbEntity(Long id, String name, String apiKey, String scheme, String host, int port, String websocketPath, String webcamPathQuery, String versionJson, String connectionJson, String printerStateJson, String filesJson) {
         this.id = id;
         this.name = name;
         this.apiKey = apiKey;
         this.scheme = scheme;
         this.host = host;
         this.port = port;
+        this.websocketPath = websocketPath;
+        this.webcamPathQuery = webcamPathQuery;
         this.versionJson = versionJson;
         this.connectionJson = connectionJson;
         this.printerStateJson = printerStateJson;
@@ -95,6 +101,26 @@ public class PrinterDbEntity {
 
     public void setPort(int port) {
         this.port = port;
+    }
+
+    /** Not-null value. */
+    public String getWebsocketPath() {
+        return websocketPath;
+    }
+
+    /** Not-null value; ensure this value is available before it is saved to the database. */
+    public void setWebsocketPath(String websocketPath) {
+        this.websocketPath = websocketPath;
+    }
+
+    /** Not-null value. */
+    public String getWebcamPathQuery() {
+        return webcamPathQuery;
+    }
+
+    /** Not-null value; ensure this value is available before it is saved to the database. */
+    public void setWebcamPathQuery(String webcamPathQuery) {
+        this.webcamPathQuery = webcamPathQuery;
     }
 
     public String getVersionJson() {

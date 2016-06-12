@@ -27,10 +27,12 @@ public class PrinterDbEntityDao extends AbstractDao<PrinterDbEntity, Long> {
         public final static Property Scheme = new Property(3, String.class, "scheme", false, "SCHEME");
         public final static Property Host = new Property(4, String.class, "host", false, "HOST");
         public final static Property Port = new Property(5, int.class, "port", false, "PORT");
-        public final static Property VersionJson = new Property(6, String.class, "versionJson", false, "version_json");
-        public final static Property ConnectionJson = new Property(7, String.class, "connectionJson", false, "connection_json");
-        public final static Property PrinterStateJson = new Property(8, String.class, "printerStateJson", false, "printer_state_json");
-        public final static Property FilesJson = new Property(9, String.class, "filesJson", false, "files_json");
+        public final static Property WebsocketPath = new Property(6, String.class, "websocketPath", false, "websocket_path");
+        public final static Property WebcamPathQuery = new Property(7, String.class, "webcamPathQuery", false, "webcam_path_query");
+        public final static Property VersionJson = new Property(8, String.class, "versionJson", false, "version_json");
+        public final static Property ConnectionJson = new Property(9, String.class, "connectionJson", false, "connection_json");
+        public final static Property PrinterStateJson = new Property(10, String.class, "printerStateJson", false, "printer_state_json");
+        public final static Property FilesJson = new Property(11, String.class, "filesJson", false, "files_json");
     };
 
 
@@ -52,10 +54,12 @@ public class PrinterDbEntityDao extends AbstractDao<PrinterDbEntity, Long> {
                 "\"SCHEME\" TEXT NOT NULL ," + // 3: scheme
                 "\"HOST\" TEXT NOT NULL ," + // 4: host
                 "\"PORT\" INTEGER NOT NULL ," + // 5: port
-                "\"version_json\" TEXT," + // 6: versionJson
-                "\"connection_json\" TEXT," + // 7: connectionJson
-                "\"printer_state_json\" TEXT," + // 8: printerStateJson
-                "\"files_json\" TEXT);"); // 9: filesJson
+                "\"websocket_path\" TEXT NOT NULL ," + // 6: websocketPath
+                "\"webcam_path_query\" TEXT NOT NULL ," + // 7: webcamPathQuery
+                "\"version_json\" TEXT," + // 8: versionJson
+                "\"connection_json\" TEXT," + // 9: connectionJson
+                "\"printer_state_json\" TEXT," + // 10: printerStateJson
+                "\"files_json\" TEXT);"); // 11: filesJson
     }
 
     /** Drops the underlying database table. */
@@ -78,25 +82,27 @@ public class PrinterDbEntityDao extends AbstractDao<PrinterDbEntity, Long> {
         stmt.bindString(4, entity.getScheme());
         stmt.bindString(5, entity.getHost());
         stmt.bindLong(6, entity.getPort());
+        stmt.bindString(7, entity.getWebsocketPath());
+        stmt.bindString(8, entity.getWebcamPathQuery());
  
         String versionJson = entity.getVersionJson();
         if (versionJson != null) {
-            stmt.bindString(7, versionJson);
+            stmt.bindString(9, versionJson);
         }
  
         String connectionJson = entity.getConnectionJson();
         if (connectionJson != null) {
-            stmt.bindString(8, connectionJson);
+            stmt.bindString(10, connectionJson);
         }
  
         String printerStateJson = entity.getPrinterStateJson();
         if (printerStateJson != null) {
-            stmt.bindString(9, printerStateJson);
+            stmt.bindString(11, printerStateJson);
         }
  
         String filesJson = entity.getFilesJson();
         if (filesJson != null) {
-            stmt.bindString(10, filesJson);
+            stmt.bindString(12, filesJson);
         }
     }
 
@@ -116,10 +122,12 @@ public class PrinterDbEntityDao extends AbstractDao<PrinterDbEntity, Long> {
             cursor.getString(offset + 3), // scheme
             cursor.getString(offset + 4), // host
             cursor.getInt(offset + 5), // port
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // versionJson
-            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // connectionJson
-            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // printerStateJson
-            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9) // filesJson
+            cursor.getString(offset + 6), // websocketPath
+            cursor.getString(offset + 7), // webcamPathQuery
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // versionJson
+            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // connectionJson
+            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // printerStateJson
+            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11) // filesJson
         );
         return entity;
     }
@@ -133,10 +141,12 @@ public class PrinterDbEntityDao extends AbstractDao<PrinterDbEntity, Long> {
         entity.setScheme(cursor.getString(offset + 3));
         entity.setHost(cursor.getString(offset + 4));
         entity.setPort(cursor.getInt(offset + 5));
-        entity.setVersionJson(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setConnectionJson(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
-        entity.setPrinterStateJson(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
-        entity.setFilesJson(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
+        entity.setWebsocketPath(cursor.getString(offset + 6));
+        entity.setWebcamPathQuery(cursor.getString(offset + 7));
+        entity.setVersionJson(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setConnectionJson(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
+        entity.setPrinterStateJson(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
+        entity.setFilesJson(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
      }
     
     /** @inheritdoc */

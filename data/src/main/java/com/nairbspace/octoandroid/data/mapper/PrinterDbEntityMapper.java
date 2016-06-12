@@ -23,6 +23,8 @@ public class PrinterDbEntityMapper {
     private static final int HTTP_PORT = 80;
     private static final int HTTPS_PORT = 443;
     private static final String HTTPS_SCHEME = "https";
+    public static final String DEFAULT_WEBSOCKET_PATH = "/sockjs/websocket";
+    public static final String DEFAULT_WEBCAM_PATH_QUERY = "/webcam/?action=stream";
 
     public static Func1<PrinterDbEntity, Printer> maptoPrinter() {
         return new Func1<PrinterDbEntity, Printer>() {
@@ -62,6 +64,8 @@ public class PrinterDbEntityMapper {
                 .scheme(printerDbEntity.getScheme())
                 .host(printerDbEntity.getHost())
                 .port(printerDbEntity.getPort())
+                .websocketPath(printerDbEntity.getWebsocketPath())
+                .webcamPathQuery(printerDbEntity.getWebcamPathQuery())
                 .build();
     }
 
@@ -84,6 +88,8 @@ public class PrinterDbEntityMapper {
                 printerDbEntity.setScheme(scheme);
                 printerDbEntity.setHost(ipAddress);
                 printerDbEntity.setPort(port);
+                printerDbEntity.setWebsocketPath(DEFAULT_WEBSOCKET_PATH);
+                printerDbEntity.setWebcamPathQuery(DEFAULT_WEBCAM_PATH_QUERY);
 
                 if (isUrlValid(printerDbEntity)) {
                     subscriber.onNext(printerDbEntity);
