@@ -43,6 +43,7 @@ public class PrinterDaoGenerator {
         printer.addIntProperty("port").notNull();
         printer.addStringProperty("websocketPath").columnName("websocket_path").notNull();
         printer.addStringProperty("webcamPathQuery").columnName("webcam_path_query").notNull();
+        printer.addStringProperty("uploadLocation").columnName("upload_location").notNull();
         printer.addStringProperty("versionJson").columnName("version_json");
         printer.addStringProperty("connectionJson").columnName("connection_json");
         printer.addStringProperty("printerStateJson").columnName("printer_state_json");

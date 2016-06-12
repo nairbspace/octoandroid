@@ -15,6 +15,7 @@ public abstract class PrinterModel implements Parcelable {
     public abstract int port();
     public abstract String websocketPath();
     public abstract String webcamPathQuery();
+    public abstract String uploadLocation();
     public static Builder builder() {
         return new AutoValue_PrinterModel.Builder();
     }
@@ -29,6 +30,7 @@ public abstract class PrinterModel implements Parcelable {
         public abstract Builder port(int port);
         public abstract Builder websocketPath(String websocketPath);
         public abstract Builder webcamPathQuery(String webcamPathQuery);
+        public abstract Builder uploadLocation(String uploadLocation);
         public abstract PrinterModel build();
     }
 }

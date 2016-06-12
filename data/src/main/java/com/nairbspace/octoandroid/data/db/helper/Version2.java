@@ -4,7 +4,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.nairbspace.octoandroid.data.mapper.PrinterDbEntityMapper;
 
-// Remove _ID NOT NULL constraint and add websocket path and webcam path and query.
+// Remove _ID NOT NULL constraint and add upload location, websocket path, webcam path and query.
 public final class Version2 {
     private static final String PRINTER = "\"PRINTER\"";
     private static final String DUMMY_PRINTER = "\"DUMMY_PRINTER\"";
@@ -16,25 +16,27 @@ public final class Version2 {
     private static final String PORT = "\"PORT\"";
     private static final String WEBSOCKET_PATH = "\"websocket_path\"";
     private static final String WEBCAM_PATH_QUERY = "\"webcam_path_query\"";
+    private static final String UPLOAD_LOCATION = "\"upload_location\"";
     private static final String VERSION_JSON = "\"version_json\"";
     private static final String CONNECTION_JSON = "\"connection_json\"";
     private static final String PRINTER_STATE_JSON = "\"printer_state_json\"";
     private static final String FILES_JSON = "\"files_json\"";
 
     private static final String CREATE_DUMMY_PRINTER_TABLE =
-            "CREATE TABLE IF NOT EXISTS " + DUMMY_PRINTER + " (" + //
-                    _ID + " INTEGER PRIMARY KEY UNIQUE, " + // 0: id
-                    NAME + " TEXT NOT NULL UNIQUE, " + // 1: name
-                    API_KEY + " TEXT NOT NULL, " + // 2: apiKey
-                    SCHEME + " TEXT NOT NULL, " + // 3: scheme
-                    HOST + " TEXT NOT NULL, " + // 4: host
-                    PORT + " INTEGER NOT NULL, " + // 5: port
+            "CREATE TABLE IF NOT EXISTS " + DUMMY_PRINTER + " (" +
+                    _ID + " INTEGER PRIMARY KEY UNIQUE, " +
+                    NAME + " TEXT NOT NULL UNIQUE, " +
+                    API_KEY + " TEXT NOT NULL, " +
+                    SCHEME + " TEXT NOT NULL, " +
+                    HOST + " TEXT NOT NULL, " +
+                    PORT + " INTEGER NOT NULL, " +
                     WEBSOCKET_PATH + " TEXT DEFAULT '" + PrinterDbEntityMapper.DEFAULT_WEBSOCKET_PATH + "', " +
                     WEBCAM_PATH_QUERY + " TEXT DEFAULT '" + PrinterDbEntityMapper.DEFAULT_WEBCAM_PATH_QUERY + "', " +
-                    VERSION_JSON + " TEXT, " + // 6: versionJson
-                    CONNECTION_JSON + " TEXT, " + // 7: connectionJson
-                    PRINTER_STATE_JSON + " TEXT, " + // 8: printerStateJson
-                    FILES_JSON + " TEXT);"; // 9: filesJson
+                    UPLOAD_LOCATION + " TEXT DEFAULT '" + PrinterDbEntityMapper.DEFAULT_UPLOAD_LOCATION + "', " +
+                    VERSION_JSON + " TEXT, " +
+                    CONNECTION_JSON + " TEXT, " +
+                    PRINTER_STATE_JSON + " TEXT, " +
+                    FILES_JSON + " TEXT);";
 
     private static final String INSERT_INTO_DUMMY_PRINTER =
             "INSERT INTO " + DUMMY_PRINTER + " (" +
@@ -68,19 +70,20 @@ public final class Version2 {
     private static final String DROP_DUMMY_PRINTER_TABLE = "DROP TABLE IF EXISTS " + DUMMY_PRINTER + ";";
 
     private static final String CREATE_DUMMY_PRINTER_TABLE_2 =
-            "CREATE TABLE IF NOT EXISTS " + DUMMY_PRINTER + " (" + //
-                    _ID + " INTEGER PRIMARY KEY UNIQUE, " + // 0: id
-                    NAME + " TEXT NOT NULL UNIQUE, " + // 1: name
-                    API_KEY + " TEXT NOT NULL, " + // 2: apiKey
-                    SCHEME + " TEXT NOT NULL, " + // 3: scheme
-                    HOST + " TEXT NOT NULL, " + // 4: host
-                    PORT + " INTEGER NOT NULL, " + // 5: port
-                    WEBSOCKET_PATH + " TEXT NOT NULL, " + // 6: websocketPath
-                    WEBCAM_PATH_QUERY + " TEXT NOT NULL, " + // 7: webcamPathQuery
-                    VERSION_JSON + " TEXT, " + // 6: versionJson
-                    CONNECTION_JSON + " TEXT, " + // 7: connectionJson
-                    PRINTER_STATE_JSON + " TEXT, " + // 8: printerStateJson
-                    FILES_JSON + " TEXT);"; // 9: filesJson
+            "CREATE TABLE IF NOT EXISTS " + DUMMY_PRINTER + " (" +
+                    _ID + " INTEGER PRIMARY KEY UNIQUE, " +
+                    NAME + " TEXT NOT NULL UNIQUE, " +
+                    API_KEY + " TEXT NOT NULL, " +
+                    SCHEME + " TEXT NOT NULL, " +
+                    HOST + " TEXT NOT NULL, " +
+                    PORT + " INTEGER NOT NULL, " +
+                    WEBSOCKET_PATH + " TEXT NOT NULL, " +
+                    WEBCAM_PATH_QUERY + " TEXT NOT NULL, " +
+                    UPLOAD_LOCATION + " TEXT NOT NULL, " +
+                    VERSION_JSON + " TEXT, " +
+                    CONNECTION_JSON + " TEXT, " +
+                    PRINTER_STATE_JSON + " TEXT, " +
+                    FILES_JSON + " TEXT);";
 
     private static final String INSERT_INTO_DUMMY_PRINTER_2 =
             "INSERT INTO " + DUMMY_PRINTER + " (" +
@@ -92,6 +95,7 @@ public final class Version2 {
                     PORT + ", " +
                     WEBSOCKET_PATH + ", " +
                     WEBCAM_PATH_QUERY + ", " +
+                    UPLOAD_LOCATION + ", " +
                     VERSION_JSON + ", " +
                     CONNECTION_JSON + ", " +
                     PRINTER_STATE_JSON + ", " +
@@ -107,6 +111,7 @@ public final class Version2 {
                     PORT + ", " +
                     WEBSOCKET_PATH + ", " +
                     WEBCAM_PATH_QUERY + ", " +
+                    UPLOAD_LOCATION + ", " +
                     VERSION_JSON + ", " +
                     CONNECTION_JSON + ", " +
                     PRINTER_STATE_JSON + ", " +

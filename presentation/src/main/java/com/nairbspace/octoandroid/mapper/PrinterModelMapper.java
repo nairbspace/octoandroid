@@ -47,6 +47,7 @@ public class PrinterModelMapper extends MapperUseCase<Printer, PrinterModel> {
                 .port(printer.port())
                 .websocketPath(printer.websocketPath())
                 .webcamPathQuery(printer.webcamPathQuery())
+                .uploadLocation(printer.uploadLocation())
                 .build();
     }
 

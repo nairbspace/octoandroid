@@ -29,10 +29,11 @@ public class PrinterDbEntityDao extends AbstractDao<PrinterDbEntity, Long> {
         public final static Property Port = new Property(5, int.class, "port", false, "PORT");
         public final static Property WebsocketPath = new Property(6, String.class, "websocketPath", false, "websocket_path");
         public final static Property WebcamPathQuery = new Property(7, String.class, "webcamPathQuery", false, "webcam_path_query");
-        public final static Property VersionJson = new Property(8, String.class, "versionJson", false, "version_json");
-        public final static Property ConnectionJson = new Property(9, String.class, "connectionJson", false, "connection_json");
-        public final static Property PrinterStateJson = new Property(10, String.class, "printerStateJson", false, "printer_state_json");
-        public final static Property FilesJson = new Property(11, String.class, "filesJson", false, "files_json");
+        public final static Property UploadLocation = new Property(8, String.class, "uploadLocation", false, "upload_location");
+        public final static Property VersionJson = new Property(9, String.class, "versionJson", false, "version_json");
+        public final static Property ConnectionJson = new Property(10, String.class, "connectionJson", false, "connection_json");
+        public final static Property PrinterStateJson = new Property(11, String.class, "printerStateJson", false, "printer_state_json");
+        public final static Property FilesJson = new Property(12, String.class, "filesJson", false, "files_json");
     };
 
 
@@ -56,10 +57,11 @@ public class PrinterDbEntityDao extends AbstractDao<PrinterDbEntity, Long> {
                 "\"PORT\" INTEGER NOT NULL ," + // 5: port
                 "\"websocket_path\" TEXT NOT NULL ," + // 6: websocketPath
                 "\"webcam_path_query\" TEXT NOT NULL ," + // 7: webcamPathQuery
-                "\"version_json\" TEXT," + // 8: versionJson
-                "\"connection_json\" TEXT," + // 9: connectionJson
-                "\"printer_state_json\" TEXT," + // 10: printerStateJson
-                "\"files_json\" TEXT);"); // 11: filesJson
+                "\"upload_location\" TEXT NOT NULL ," + // 8: uploadLocation
+                "\"version_json\" TEXT," + // 9: versionJson
+                "\"connection_json\" TEXT," + // 10: connectionJson
+                "\"printer_state_json\" TEXT," + // 11: printerStateJson
+                "\"files_json\" TEXT);"); // 12: filesJson
     }
 
     /** Drops the underlying database table. */
@@ -84,25 +86,26 @@ public class PrinterDbEntityDao extends AbstractDao<PrinterDbEntity, Long> {
         stmt.bindLong(6, entity.getPort());
         stmt.bindString(7, entity.getWebsocketPath());
         stmt.bindString(8, entity.getWebcamPathQuery());
+        stmt.bindString(9, entity.getUploadLocation());
  
         String versionJson = entity.getVersionJson();
         if (versionJson != null) {
-            stmt.bindString(9, versionJson);
+            stmt.bindString(10, versionJson);
         }
  
         String connectionJson = entity.getConnectionJson();
         if (connectionJson != null) {
-            stmt.bindString(10, connectionJson);
+            stmt.bindString(11, connectionJson);
         }
  
         String printerStateJson = entity.getPrinterStateJson();
         if (printerStateJson != null) {
-            stmt.bindString(11, printerStateJson);
+            stmt.bindString(12, printerStateJson);
         }
  
         String filesJson = entity.getFilesJson();
         if (filesJson != null) {
-            stmt.bindString(12, filesJson);
+            stmt.bindString(13, filesJson);
         }
     }
 
@@ -124,10 +127,11 @@ public class PrinterDbEntityDao extends AbstractDao<PrinterDbEntity, Long> {
             cursor.getInt(offset + 5), // port
             cursor.getString(offset + 6), // websocketPath
             cursor.getString(offset + 7), // webcamPathQuery
-            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // versionJson
-            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // connectionJson
-            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // printerStateJson
-            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11) // filesJson
+            cursor.getString(offset + 8), // uploadLocation
+            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // versionJson
+            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // connectionJson
+            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // printerStateJson
+            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12) // filesJson
         );
         return entity;
     }
@@ -143,10 +147,11 @@ public class PrinterDbEntityDao extends AbstractDao<PrinterDbEntity, Long> {
         entity.setPort(cursor.getInt(offset + 5));
         entity.setWebsocketPath(cursor.getString(offset + 6));
         entity.setWebcamPathQuery(cursor.getString(offset + 7));
-        entity.setVersionJson(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
-        entity.setConnectionJson(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
-        entity.setPrinterStateJson(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
-        entity.setFilesJson(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
+        entity.setUploadLocation(cursor.getString(offset + 8));
+        entity.setVersionJson(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
+        entity.setConnectionJson(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
+        entity.setPrinterStateJson(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
+        entity.setFilesJson(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
      }
     
     /** @inheritdoc */

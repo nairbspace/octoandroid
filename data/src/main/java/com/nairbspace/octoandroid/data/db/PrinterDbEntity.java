@@ -20,6 +20,8 @@ public class PrinterDbEntity {
     private String websocketPath;
     /** Not-null value. */
     private String webcamPathQuery;
+    /** Not-null value. */
+    private String uploadLocation;
     private String versionJson;
     private String connectionJson;
     private String printerStateJson;
@@ -32,7 +34,7 @@ public class PrinterDbEntity {
         this.id = id;
     }
 
-    public PrinterDbEntity(Long id, String name, String apiKey, String scheme, String host, int port, String websocketPath, String webcamPathQuery, String versionJson, String connectionJson, String printerStateJson, String filesJson) {
+    public PrinterDbEntity(Long id, String name, String apiKey, String scheme, String host, int port, String websocketPath, String webcamPathQuery, String uploadLocation, String versionJson, String connectionJson, String printerStateJson, String filesJson) {
         this.id = id;
         this.name = name;
         this.apiKey = apiKey;
@@ -41,6 +43,7 @@ public class PrinterDbEntity {
         this.port = port;
         this.websocketPath = websocketPath;
         this.webcamPathQuery = webcamPathQuery;
+        this.uploadLocation = uploadLocation;
         this.versionJson = versionJson;
         this.connectionJson = connectionJson;
         this.printerStateJson = printerStateJson;
@@ -121,6 +124,16 @@ public class PrinterDbEntity {
     /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setWebcamPathQuery(String webcamPathQuery) {
         this.webcamPathQuery = webcamPathQuery;
+    }
+
+    /** Not-null value. */
+    public String getUploadLocation() {
+        return uploadLocation;
+    }
+
+    /** Not-null value; ensure this value is available before it is saved to the database. */
+    public void setUploadLocation(String uploadLocation) {
+        this.uploadLocation = uploadLocation;
     }
 
     public String getVersionJson() {
