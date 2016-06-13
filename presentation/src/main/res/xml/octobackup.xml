@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <!--TODO need to reference paths from strings resource in all locations when branches are fully merged!! -->
+    <include domain="database" path="printer-db"/>
+    <include domain="sharedpref" path="com.nairbspace.octoandroid_preferences"/>
+
+</full-backup-content>
