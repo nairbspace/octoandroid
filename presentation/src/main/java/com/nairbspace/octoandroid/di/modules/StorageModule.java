@@ -20,7 +20,7 @@ import dagger.Provides;
 
 @Module
 public class StorageModule {
-    private static final String DB_NAME = "printer-db";
+    public static final String DB_NAME = "printer-db";
 
     @Provides
     @Singleton

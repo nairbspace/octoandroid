@@ -25,6 +25,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
+        android:backupAgent=".app.OctoBackupAgent"
         android:theme="@style/AppTheme">
 
         <meta-data
@@ -34,6 +35,9 @@
         <meta-data
             android:name="${crashlyticsName}"
             android:value="${crashlyticsApiKey}"/>
+        <meta-data
+            android:name="${googleBackupName}"
+            android:value="${googleBackupApiKey}"/>
 
         <activity android:name=".ui.dispatch.DispatchActivity"
                   android:label="@string/app_name"
