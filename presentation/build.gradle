@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt' // Dagger2
 apply plugin: 'com.jakewharton.hugo' // Hugo
+apply plugin: 'io.fabric' // Crashlytics
 
 android {
     def globalConfiguration = rootProject.extensions.getByName("ext")
@@ -34,6 +35,10 @@ android {
         versionCode globalConfiguration.getAt("androidVersionCode")
         versionName globalConfiguration.getAt("androidVersionName")
         resValue "string", "google_app_id", MyGoogleAppId
+        manifestPlaceholders = [
+                crashlyticsName : CrashlyticsName,
+                crashlyticsApiKey: CrashlyticsApiKey,
+        ]
     }
 
     buildTypes {
@@ -101,4 +106,6 @@ dependencies {
     apt presentationDependencies.autoValueParcel // AutoValue Parcelable
 
     compile presentationDependencies.mpAndroidChart
+
+    compile(presentationDependencies.crashlytics) { transitive = true; }
 }

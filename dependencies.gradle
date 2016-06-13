@@ -2,7 +2,8 @@ allprojects {
     repositories {
         jcenter()
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
-        maven { url "https://jitpack.io" }
+        maven { url 'https://jitpack.io' }
+        maven { url 'https://maven.fabric.io/public' }
     }
 }
 
@@ -27,6 +28,7 @@ ext {
     eventBusVersion = "3.0.0"
     leakcanaryVersion = "1.4-SNAPSHOT"
     mpAndroidChartVersion = "v2.2.5"
+    crashlyticsVersion = "2.5.6@aar"
 
     // Testing Libraries
     jUnitVersion = "4.12"
@@ -81,5 +83,6 @@ ext {
             leakCanaryNoOp:             "com.squareup.leakcanary:leakcanary-android-no-op:${leakcanaryVersion}",
             autoValueParcel:            "com.ryanharter.auto.value:auto-value-parcel:${autoValueParcelVersion}",
             mpAndroidChart:             "com.github.PhilJay:MPAndroidChart:${mpAndroidChartVersion}",
+            crashlytics:                "com.crashlytics.sdk.android:crashlytics:${crashlyticsVersion}"
     ]
 }

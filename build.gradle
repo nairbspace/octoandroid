@@ -4,16 +4,18 @@ apply from: 'dependencies.gradle'
 buildscript {
     repositories {
         jcenter()
-        maven {
-            url "https://plugins.gradle.org/m2/" // For Java annotation processing plugin
-        }
+        maven { url 'https://plugins.gradle.org/m2/' } // For Java annotation processing plugin
+        maven { url 'https://maven.fabric.io/public' } // Fabric (Crashlytics)
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.1.2'
-        classpath "net.ltgt.gradle:gradle-apt-plugin:0.6" // Java annotation processing
+        classpath 'net.ltgt.gradle:gradle-apt-plugin:0.6' // Java annotation processing
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8' // Android annotation processing
         classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1' // Hugo
-        classpath "com.fernandocejas.frodo:frodo-plugin:0.8.2" // Frodo (RxLogger)
+        classpath 'com.fernandocejas.frodo:frodo-plugin:0.8.2' // Frodo (RxLogger)
+
+        //noinspection GradleDynamicVersion
+        classpath "io.fabric.tools:gradle:1.+" // Open ended fabric version to react quickly to Android tooling updates
     }
 }
 

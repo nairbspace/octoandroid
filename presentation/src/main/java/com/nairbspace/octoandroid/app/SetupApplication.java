@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.core.CrashlyticsCore;
 import com.nairbspace.octoandroid.BuildConfig;
 import com.nairbspace.octoandroid.di.components.AppComponent;
 import com.nairbspace.octoandroid.di.components.DaggerAppComponent;
@@ -14,6 +16,7 @@ import com.nairbspace.octoandroid.di.modules.StorageModule;
 import com.nairbspace.octoandroid.di.modules.WebsocketModule;
 import com.squareup.leakcanary.LeakCanary;
 
+import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
 public class SetupApplication extends Application {
@@ -27,10 +30,18 @@ public class SetupApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        initializeCrashlytics();
         initializeTimber();
         initializeLeakCanary();
         initializeInjector();
         initializeLifecyclerHandler();
+    }
+
+    private void initializeCrashlytics() {
+        CrashlyticsCore core = new CrashlyticsCore.Builder()
+                .disabled(BuildConfig.DEBUG)
+                .build();
+        Fabric.with(this, new Crashlytics.Builder().core(core).build());
     }
 
     private void initializeTimber() {
@@ -64,19 +75,24 @@ public class SetupApplication extends Application {
     }
 
     private class CrashReportingTree extends Timber.Tree {
+        private static final String CRASHLYTICS_KEY_PRIORITY = "priority";
+        private static final String CRASHLYTICS_KEY_TAG = "tag";
+        private static final String CRASHLYTICS_KEY_MESSAGE = "message";
+
         @Override
         protected void log(int priority, String tag, String message, Throwable t) {
             if (priority == Log.VERBOSE || priority == Log.DEBUG || priority == Log.INFO) {
                 return;
             }
 
-            if (t != null) {
-                if (priority == Log.WARN) { //TODO-LOW Implement crash analytics during run time
-                    return;
-                }
-                if (priority == Log.ERROR) {
-                    return;
-                }
+            Crashlytics.setInt(CRASHLYTICS_KEY_PRIORITY, priority);
+            Crashlytics.setString(CRASHLYTICS_KEY_TAG, tag);
+            Crashlytics.setString(CRASHLYTICS_KEY_MESSAGE, message);
+
+            if (t == null) {
+                Crashlytics.logException(new Exception(message));
+            } else {
+                Crashlytics.logException(t);
             }
         }
     }

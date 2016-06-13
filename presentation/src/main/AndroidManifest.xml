@@ -26,6 +26,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <meta-data
+            android:name="${crashlyticsName}"
+            android:value="${crashlyticsApiKey}"/>
+
         <activity android:name=".ui.dispatch.DispatchActivity"
                   android:label="@string/app_name"
                   android:theme="@style/AppTheme.NoActionBar">
@@ -71,6 +75,7 @@
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/authenticator"/>
         </service>
+
     </application>
 
 </manifest>
