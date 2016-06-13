@@ -10,8 +10,8 @@ import com.nairbspace.octoandroid.domain.model.AutoGson;
 @AutoGson(autoValueClass = AutoValue_WebsocketEntity.class)
 public abstract class WebsocketEntity {
     @Nullable @SerializedName("current") public abstract CurrentHistoryEntity current();
-    @Nullable @SerializedName("history") public abstract CurrentHistoryEntity history();
-    @Nullable @SerializedName("event") public abstract EventEntity event();
-    @Nullable @SerializedName("slicingProgress") public abstract SlicingProgressEntity slicingProgress();
+//    @Nullable @SerializedName("history") public abstract CurrentHistoryEntity history();
+//    @Nullable @SerializedName("event") public abstract EventEntity event();
+//    @Nullable @SerializedName("slicingProgress") public abstract SlicingProgressEntity slicingProgress();
 
 }

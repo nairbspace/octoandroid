@@ -75,13 +75,13 @@ public abstract class CurrentHistory {
         @SerializedName("printTimeLeft") public abstract long printTimeLeft();
     }
 
-    @AutoValue
-    @AutoGson(autoValueClass = AutoValue_CurrentHistory_Offsets.class)
-    public abstract static class Offsets {
-        @Nullable @SerializedName("tool0") public abstract Integer tool0();
-        @Nullable @SerializedName("tool1") public abstract Integer tool1();
-        @Nullable @SerializedName("bed") public abstract Integer bed();
-    }
+//    @AutoValue
+//    @AutoGson(autoValueClass = AutoValue_CurrentHistory_Offsets.class)
+//    public abstract static class Offsets {
+//        @Nullable @SerializedName("tool0") public abstract Integer tool0();
+//        @Nullable @SerializedName("tool1") public abstract Integer tool1();
+//        @Nullable @SerializedName("bed") public abstract Integer bed();
+//    }
 
     @AutoValue
     @AutoGson(autoValueClass = AutoValue_CurrentHistory_Temps.class)
@@ -116,10 +116,10 @@ public abstract class CurrentHistory {
         }
     }
 
-    @AutoValue
-    @AutoGson(autoValueClass = AutoValue_CurrentHistory_BusyFiles.class)
-    public abstract static class BusyFiles {
-        @Nullable @SerializedName("origin") public abstract String origin();
-        @Nullable @SerializedName("name") public abstract String name();
-    }
+//    @AutoValue
+//    @AutoGson(autoValueClass = AutoValue_CurrentHistory_BusyFiles.class)
+//    public abstract static class BusyFiles {
+//        @Nullable @SerializedName("origin") public abstract String origin();
+//        @Nullable @SerializedName("name") public abstract String name();
+//    }
 }

@@ -9,8 +9,8 @@ import com.google.gson.annotations.SerializedName;
 @AutoGson(autoValueClass = AutoValue_Websocket.class)
 public abstract class Websocket {
     @Nullable @SerializedName("current") public abstract CurrentHistory current();
-    @Nullable @SerializedName("history") public abstract CurrentHistory history();
-    @Nullable @SerializedName("event") public abstract Event event();
-    @Nullable @SerializedName("slicingProgress") public abstract SlicingProgress slicingProgress();
+//    @Nullable @SerializedName("history") public abstract CurrentHistory history();
+//    @Nullable @SerializedName("event") public abstract Event event();
+//    @Nullable @SerializedName("slicingProgress") public abstract SlicingProgress slicingProgress();
 
 }
