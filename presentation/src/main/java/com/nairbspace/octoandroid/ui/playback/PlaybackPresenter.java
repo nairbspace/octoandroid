@@ -71,6 +71,7 @@ public class PlaybackPresenter extends UseCasePresenter<PlaybackScreen> {
         @Override
         public void onError(Throwable e) {
             super.onError(e);
+            Timber.e(e, null);
         }
 
         @Override
@@ -84,6 +85,7 @@ public class PlaybackPresenter extends UseCasePresenter<PlaybackScreen> {
         @Override
         public void onError(Throwable e) {
             super.onError(e);
+            Timber.e(e, null);
         }
 
         @Override
