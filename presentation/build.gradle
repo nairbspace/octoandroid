@@ -82,6 +82,7 @@ dependencies {
     releaseCompile project(path: ':data', configuration: 'release')
 
     compile presentationDependencies.appcompat_v7
+    compile presentationDependencies.preference_v7
     compile presentationDependencies.design
     compile presentationDependencies.cardview_v7
     compile presentationDependencies.support_v4
