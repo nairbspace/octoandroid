@@ -1,10 +1,11 @@
 Change Log
 ==========
 
-Version 1.4.3 *(2016-06-13)*
+Version 1.4.4 *(2016-06-13)*
 ----------------------------
 
  * Crashlytics added.
+ * Bugfix. Check if SSL Exception message is null.
 
 Version 1.4.2 *(2016-06-11)*
 ----------------------------
