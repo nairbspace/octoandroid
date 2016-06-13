@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+        android:title="@string/prefs_printer_name_title"
+        android:key="@string/prefs_printer_name_key"/>
+    <EditTextPreference
+        android:title="@string/prefs_printer_host_title"
+        android:key="@string/prefs_printer_host_key"/>
+    <EditTextPreference
+        android:title="@string/prefs_printer_api_key_title"
+        android:key="@string/prefs_printer_api_key_key"/>
+    <ListPreference
+        android:title="@string/prefs_printer_scheme_title"
+        android:key="@string/prefs_printer_scheme_key"
+        android:entries="@array/prefs_printer_scheme_options"
+        android:entryValues="@array/prefs_printer_scheme_values"/>
+    <EditTextPreference
+        android:title="@string/prefs_printer_port_title"
+        android:key="@string/prefs_printer_port_key"
+        android:inputType="number"/>
+    <EditTextPreference
+        android:title="@string/prefs_printer_websocket_path_title"
+        android:key="@string/prefs_printer_websocket_path_key"/>
+    <EditTextPreference
+        android:title="@string/prefs_printer_webcam_path_query_title"
+        android:key="@string/prefs_printer_webcam_path_query_key"/>
+
+    <ListPreference
+        android:title="@string/prefs_printer_upload_location_title"
+        android:key="@string/prefs_printer_upload_location_key"
+        android:defaultValue="@string/prefs_printer_upload_location_local_value"
+        android:entryValues="@array/prefs_upload_location_values"
+        android:entries="@array/prefs_upload_location_options"/>
+</PreferenceScreen>

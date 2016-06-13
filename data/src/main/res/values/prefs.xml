@@ -2,15 +2,42 @@
 <resources>
     <string name="account_type">com.nairbspace.actoandroid</string>
 
-    <string name="prefs_upload_location_title">Upload Location</string>
-    <string name="prefs_upload_location_local_option">Local</string>
-    <string name="prefs_upload_location_sdcard_option">SD Card</string>
-    <string name="prefs_upload_location_key" translatable="false">upload_location</string>
-    <string name="prefs_upload_location_local_value">@string/file_origin_local</string>
-    <string name="prefs_upload_location_sdcard_value">@string/file_origin_sdcard</string>
+    <string name="prefs_printer_id_key" translatable="false">printer_id</string>
+
+    <string name="prefs_printer_name_title">Printer Name</string>
+    <string name="prefs_printer_name_key" translatable="false">printer_name</string>
+
+    <string name="prefs_printer_host_title">IP Address</string>
+    <string name="prefs_printer_host_key" translatable="false">printer_host</string>
+
+    <string name="prefs_printer_api_key_title">API Key</string>
+    <string name="prefs_printer_api_key_key" translatable="false">printer_api_key</string>
+
+    <string name="prefs_printer_scheme_title">Scheme</string>
+    <string name="prefs_printer_scheme_key" translatable="false">printer_scheme</string>
+    <string name="prefs_printer_scheme_http_option">HTTP</string>
+    <string name="prefs_printer_scheme_https_option">HTTPS</string>
+    <string name="prefs_printer_scheme_http_value">http</string>
+    <string name="prefs_printer_scheme_https_value">https</string>
+
+    <string name="prefs_printer_port_title">Port</string>
+    <string name="prefs_printer_port_key" translatable="false">printer_port</string>
+
+    <string name="prefs_printer_websocket_path_title">Websocket Path</string>
+    <string name="prefs_printer_websocket_path_key" translatable="false">printer_websocket_path</string>
+
+    <string name="prefs_printer_webcam_path_query_title">Webcam Path/Query</string>
+    <string name="prefs_printer_webcam_path_query_key" translatable="false">printer_webcam_path_query</string>
+
+    <string name="prefs_printer_upload_location_title">Upload Location</string>
+    <string name="prefs_printer_upload_location_local_option">Local</string>
+    <string name="prefs_printer_upload_location_sdcard_option">SD Card</string>
+    <string name="prefs_printer_upload_location_key" translatable="false">upload_location</string>
+    <string name="prefs_printer_upload_location_local_value">@string/file_origin_local</string>
+    <string name="prefs_printer_upload_location_sdcard_value">@string/file_origin_sdcard</string>
 
     <string name="prefs_active_printer_key">active_printer</string>
-    <string name="prefs_active_printer_none_value">-1</string>  <!-- This is long value -->
+    <integer name="prefs_active_printer_none_value">-1</integer>
     <string name="prefs_last_save_time_key">last_save_time</string>
     <integer name="prefs_last_save_time_default_value">0</integer>
 </resources>

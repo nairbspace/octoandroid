@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="prefs_upload_location_options">
-        <item>@string/prefs_upload_location_local_option</item>
-        <item>@string/prefs_upload_location_sdcard_option</item>
+        <item>@string/prefs_printer_upload_location_local_option</item>
+        <item>@string/prefs_printer_upload_location_sdcard_option</item>
     </string-array>
     <string-array name="prefs_upload_location_values">
-        <item>@string/prefs_upload_location_local_value</item>
-        <item>@string/prefs_upload_location_sdcard_value</item>
+        <item>@string/prefs_printer_upload_location_local_value</item>
+        <item>@string/prefs_printer_upload_location_sdcard_value</item>
+    </string-array>
+    <string-array name="prefs_printer_scheme_options">
+        <item>@string/prefs_printer_scheme_http_option</item>
+        <item>@string/prefs_printer_scheme_https_option</item>
+    </string-array>
+    <string-array name="prefs_printer_scheme_values">
+        <item>@string/prefs_printer_scheme_http_value</item>
+        <item>@string/prefs_printer_scheme_https_value</item>
     </string-array>
 </resources>

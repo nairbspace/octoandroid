@@ -20,7 +20,7 @@ public class PrefHelper {
     }
 
     public String getUploadLocation() {
-        return mPreferences.getString(mResManager.getUploadLocationKey(),
+        return mPreferences.getString(mResManager.getPrinterUploadLocationKey(),
                 mResManager.getDefaultUploadLocationValue());
     }
 
@@ -52,5 +52,21 @@ public class PrefHelper {
     public long getLastSaveTimeMillis() {
         return mPreferences.getLong(mResManager.getLastSaveTimeKey(),
                 mResManager.getDefaultSaveTimeValue());
+    }
+
+    public void setPrinterDbEntityToPrefs(PrinterDbEntity printerDbEntity) {
+        mPreferences.edit().putLong(mResManager.getPrinterLongId(), printerDbEntity.getId()).apply();
+        mPreferences.edit().putString(mResManager.getPrinterNameKey(), printerDbEntity.getName()).apply();
+        mPreferences.edit().putString(mResManager.getPrinterApiKey(), printerDbEntity.getApiKey()).apply();
+        mPreferences.edit().putString(mResManager.getPrinterApiKey(), printerDbEntity.getApiKey()).apply();
+        mPreferences.edit().putString(mResManager.getPrinterSchemeKey(), printerDbEntity.getScheme()).apply();
+        mPreferences.edit().putString(mResManager.getPrinterHostKey(), printerDbEntity.getHost()).apply();
+
+        // Have to store as string or else will have to override EditTextPreference and modify PreferenceFragment
+        mPreferences.edit().putString(mResManager.getPrinterPortKey(), Integer.toString(printerDbEntity.getPort())).apply();
+
+        mPreferences.edit().putString(mResManager.getWebsocketPathKey(), printerDbEntity.getWebsocketPath()).apply();
+        mPreferences.edit().putString(mResManager.getWebcamPathQueryKey(), printerDbEntity.getWebcamPathQuery()).apply();
+        mPreferences.edit().putString(mResManager.getPrinterUploadLocationKey(), printerDbEntity.getUploadLocation()).apply();
     }
 }

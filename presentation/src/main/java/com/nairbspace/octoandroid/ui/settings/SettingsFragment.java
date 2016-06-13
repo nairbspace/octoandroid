@@ -22,7 +22,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
         // For all preferences, attach an OnPreferenceChangeListener so the UI summary can be
         // updated when the preference changes.
-        bindPreferenceSummaryToValue(findPreference(getString(R.string.prefs_upload_location_key)));
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.prefs_printer_upload_location_key)));
     }
 
     private void bindPreferenceSummaryToValue(Preference preference) {
