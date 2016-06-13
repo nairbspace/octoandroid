@@ -89,10 +89,9 @@ public class AddPrinterPresenter extends UseCasePresenter<AddPrinterScreen> {
         public void onError(Throwable e) {
             super.onError(e);
             showLoading(false);
-            Exception ex = (Exception) e;
 
-            String errorMessage = ErrorMessageFactory.create(mScreen.context(), ex);
-            if (ErrorMessageFactory.ifSslError(mScreen.context(), e.getMessage())) {
+            String errorMessage = ErrorMessageFactory.create(mScreen.context(), (Exception) e);
+            if (ErrorMessageFactory.ifSslError(mScreen.context(), (Exception) e)) {
                 mScreen.showAlertDialog();
             } else {
                 mScreen.showSnackbar(errorMessage);

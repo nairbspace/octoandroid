@@ -53,7 +53,7 @@ public class ErrorMessageFactory {
                 exception instanceof IncorrectAddPrinterFormattingException;
     }
 
-    public static boolean ifSslError(Context context, String error) {
-        return error.contains(context.getResources().getString(R.string.exception_ssl_error));
+    public static boolean ifSslError(Context context, Exception e) {
+        return e.getMessage() != null && e.getMessage().contains(context.getResources().getString(R.string.exception_ssl_error));
     }
 }
