@@ -70,16 +70,13 @@ public class PlaybackPresenter extends UseCasePresenter<PlaybackScreen> {
 
         @Override
         public void onError(Throwable e) {
-//            super.onError(e);
+            super.onError(e);
         }
 
         @Override
         public void onNext(Websocket websocket) {
-            super.onNext(websocket);
             mMapper.execute(new TransformSubscriber(), websocket);
-            if (websocket != null) {
-//                Timber.d(websocket.toString());
-            }
+            if (websocket != null) Timber.d(websocket.toString());
         }
     }
 

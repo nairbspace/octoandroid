@@ -58,8 +58,7 @@ public class WebsocketModelMapper extends MapperUseCase<Websocket, WebsocketMode
                 try {
                     if (websocket != null) {
                         parseWebsocket(websocket);
-                        WebsocketModel websocketModel = mapToWebsocketModel();
-                        subscriber.onNext(websocketModel);
+                        subscriber.onNext(mapToWebsocketModel());
                         subscriber.onCompleted();
                     }
                 } catch (Exception e) {
