@@ -46,5 +46,6 @@ dependencies {
     compile dataDependencies.retrofitGsonConverter
     compile dataDependencies.retrofitRxJavaAdapter
     compile dataDependencies.okHttpLoggingInterceptor
+    compile dataDependencies.okHttpWebsocket
     apt dataDependencies.autoValue
 }

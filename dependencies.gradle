@@ -20,7 +20,7 @@ ext {
     greenDaoVersion = "2.2.1"
     greenDaoGeneratorVersion = "2.2.0"
     retrofitVersion = "2.0.2"
-    okHttpVersion = "3.2.0" // 3.3.0 logging interceptor doesn't log body
+    okHttpVersion = "3.3.1"
     playServicesVersion = "9.0.0"
     butterknifeVersion = "8.0.1"
     dagger2Version = "2.4"
@@ -60,6 +60,7 @@ ext {
             retrofitGsonConverter:      "com.squareup.retrofit2:converter-gson:${retrofitVersion}",
             retrofitRxJavaAdapter:      "com.squareup.retrofit2:adapter-rxjava:${retrofitVersion}",
             okHttpLoggingInterceptor:   "com.squareup.okhttp3:logging-interceptor:${okHttpVersion}",
+            okHttpWebsocket:            "com.squareup.okhttp3:okhttp-ws:${okHttpVersion}",
             autoValue:                  "com.google.auto.value:auto-value:${autoValueVersion}",
     ]
 
