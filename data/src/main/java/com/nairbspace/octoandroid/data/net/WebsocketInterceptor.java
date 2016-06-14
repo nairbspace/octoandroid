@@ -45,7 +45,7 @@ public class WebsocketInterceptor implements Interceptor {
         String host = printerDbEntity.getHost();
         String path = printerDbEntity.getWebsocketPath();
 
-        String socketScheme = scheme.replace("http", "ws").replace("https", "wss");
+        String socketScheme = scheme.replace("http", "ws"); // Also works for https
         try {
             return new URI(socketScheme, host, path, null).toString();
         } catch (URISyntaxException e) {

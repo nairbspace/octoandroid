@@ -72,6 +72,7 @@ ext {
             preference_v7:              "com.takisoft.fix:preference-v7:${preferenceVersion}",
             design:                     "com.android.support:design:${androidSupportVersion}",
             cardview_v7:                "com.android.support:cardview-v7:${androidSupportVersion}",
+            recyclerView_v7:            "com.android.support:recyclerview-v7:${androidSupportVersion}",
             support_v4:                 "com.android.support:support-v4:${androidSupportVersion}",
             percent:                    "com.android.support:percent:${androidSupportVersion}",
             playServicesVision:         "com.google.android.gms:play-services-vision:${playServicesVersion}",

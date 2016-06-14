@@ -85,6 +85,7 @@ dependencies {
     compile presentationDependencies.preference_v7
     compile presentationDependencies.design
     compile presentationDependencies.cardview_v7
+    compile presentationDependencies.recyclerView_v7
     compile presentationDependencies.support_v4
     compile presentationDependencies.percent
 
