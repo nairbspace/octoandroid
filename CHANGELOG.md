@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-Version 1.4.5 *(2016-06-13)*
+Version 1.4.6 *(2016-06-13)*
 ----------------------------
 
  * Hotfix. Unsubscribe websocket on background thread till proper fix is found.
