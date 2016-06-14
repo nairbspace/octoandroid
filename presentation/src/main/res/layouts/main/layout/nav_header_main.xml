@@ -47,6 +47,7 @@
         android:layout_alignParentRight="true"
         android:contentDescription="@string/printer_settings"
         android:src="@drawable/ic_settings_black_24dp"
+        android:visibility="gone"
         android:tint="@android:color/white"/>
 
 </RelativeLayout>
