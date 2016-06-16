@@ -30,7 +30,7 @@ public class GetWebsocket extends UseCase {
 
     @Override
     protected Observable buildUseCaseObservable() {
-        return mPrinterRepository.getWebsocket().retry();
+        return mPrinterRepository.getWebsocket();
     }
 
     @SuppressWarnings("unchecked")
