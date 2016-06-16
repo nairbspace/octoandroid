@@ -1,6 +1,14 @@
 Change Log
 ==========
 
+Version 1.4.7 *(2016-06-15)*
+----------------------------
+
+ * Updated OkHttp libraries including okhttp-ws which is used in JavaWebsockets library.
+ * Added RecyclerView support library. Apparently need to actually include it for older devices or it will crash.
+ * Slowed down websocket stream to sample every second due to overflow on certain devices (Samsung).
+ * Cleaned up code in TempGraphFragment. 
+
 Version 1.4.6 *(2016-06-13)*
 ----------------------------
 
