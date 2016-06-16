@@ -68,6 +68,13 @@
     <string name="non_breakable_space">&#160;</string>
     <string name="breakable_space">&#032;</string>
 
+    <string name="actual_temp_bed_chart_label">Bed - Actual(&#x2103;)</string>
+    <string name="target_temp_bed_chart_label">Bed - Target(&#x2103;)</string>
+    <string name="actual_temp_tool0_chart_label">Tool0 - Actual(&#x2103;)</string>
+    <string name="target_temp_tool0_chart_label">Tool0 - Target(&#x2103;)</string>
+    <string name="actual_temp_tool1_chart_label">Tool1 - Actual(&#x2103;)</string>
+    <string name="target_temp_tool1_chart_label">Tool1 - Target(&#x2103;)</string>
+
     <string name="degrees_celcius">&#x2103;</string>
     <string name="degrees">&#xb0;</string>
 
