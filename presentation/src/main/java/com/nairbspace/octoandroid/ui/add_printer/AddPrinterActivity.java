@@ -21,6 +21,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.nairbspace.octoandroid.R;
+import com.nairbspace.octoandroid.answers.AnswersHelper;
 import com.nairbspace.octoandroid.app.SetupApplication;
 import com.nairbspace.octoandroid.model.AddPrinterModel;
 import com.nairbspace.octoandroid.ui.templates.BaseActivity;
@@ -31,13 +32,13 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import timber.log.Timber;
 
 public class AddPrinterActivity extends BaseActivity<AddPrinterScreen>
         implements AddPrinterScreen, QrDialogFragment.Listener, SslErrorDialogFragment.Listener {
     private static final String ADD_PRINTER_MODEL_KEY = "add_printer_model_key";
 
     @Inject AddPrinterPresenter mPresenter;
+    @Inject AnswersHelper mAnswersHelper;
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.add_printer_form) ScrollView mScrollView;
@@ -93,15 +94,15 @@ public class AddPrinterActivity extends BaseActivity<AddPrinterScreen>
         }
     };
 
-    @OnClick(R.id.qr_button)
-    public void onQrButtonClicked() {
+    @OnClick(R.id.qr_button) void onQrButtonClicked() {
         showQrDialogFragment();
+        mAnswersHelper.qrClicked();
     }
 
-    @OnClick(R.id.add_printer_button)
-    public void onAddPrinterButtonClicked() {
+    @OnClick(R.id.add_printer_button) void onAddPrinterButtonClicked() {
         AddPrinterModel model = getAddPrinterModel();
         mPresenter.onAddPrinterClicked(model);
+        mAnswersHelper.addPrinterWithSsl(model.isSslChecked());
     }
 
     private AddPrinterModel getAddPrinterModel() {
@@ -158,13 +159,13 @@ public class AddPrinterActivity extends BaseActivity<AddPrinterScreen>
     @Override
     public void showSnackbar(String message) {
         Snackbar.make(mScrollView, message, Snackbar.LENGTH_INDEFINITE)
-                .setAction("Ok", mSnackBarOnClickListener).show();
+                .setAction(android.R.string.ok, mSnackBarOnClickListener).show();
     }
 
     private final View.OnClickListener mSnackBarOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Timber.d("This is a snackbar");
+            // Do nothing in particular
         }
     };
 
@@ -173,6 +174,7 @@ public class AddPrinterActivity extends BaseActivity<AddPrinterScreen>
         SslErrorDialogFragment sslDialog = SslErrorDialogFragment.newInstance();
         sslDialog.setCancelable(true);
         sslDialog.show(getSupportFragmentManager(), null);
+        mAnswersHelper.sslAlertDialog();
     }
 
     @Override
@@ -182,6 +184,7 @@ public class AddPrinterActivity extends BaseActivity<AddPrinterScreen>
 
     @Override
     public void navigateToPreviousScreen() {
+        mAnswersHelper.loginSuccessWithSsl(getAddPrinterModel().isSslChecked());
         setResult(RESULT_OK);
         finish();
     }
@@ -195,6 +198,7 @@ public class AddPrinterActivity extends BaseActivity<AddPrinterScreen>
     @Override
     public void onQrSuccess(String apiKey) {
         mApiKeyEditText.setText(apiKey);
+        mAnswersHelper.qrWasSuccess();
     }
 
     @NonNull
@@ -213,5 +217,6 @@ public class AddPrinterActivity extends BaseActivity<AddPrinterScreen>
     public void tryUnsecureConnection() {
         mSslCheckBox.setChecked(false);
         onAddPrinterButtonClicked();
+        mAnswersHelper.userTriedUnsecureConnection();
     }
 }
