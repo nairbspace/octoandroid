@@ -13,26 +13,26 @@ import java.net.ConnectException;
 
 public class ErrorMessageFactory {
 
-    public static String create(Context context, Exception e) {
+    public static String create(Context context, Throwable t) {
         String message = context.getString(R.string.exception_message_generic);
 
-        if (e instanceof NetworkConnectionException) {
+        if (t instanceof NetworkConnectionException) {
             message = context.getString(R.string.exception_message_no_connection);
-        } else if (e instanceof PrinterDataNotFoundException) {
+        } else if (t instanceof PrinterDataNotFoundException) {
             message = context.getString(R.string.exception_message_printer_not_found);
-        } else if (e instanceof IpAddressEmptyException) {
+        } else if (t instanceof IpAddressEmptyException) {
             message = context.getString(R.string.exception_ip_address_blank);
-        } else if (e instanceof IncorrectAddPrinterFormattingException) {
+        } else if (t instanceof IncorrectAddPrinterFormattingException) {
             message = context.getString(R.string.exception_incorrect_ip_address_formatting);
-        } else if (e instanceof ConnectException) {
+        } else if (t instanceof ConnectException) {
             message = context.getString(R.string.exception_message_connecting);
         }
 
         //  Message can be null such as in the event of a SocketTimeOutException
-        if (e.getMessage() != null) {
-            if (e.getMessage().contains(context.getString(R.string.exception_ssl_error))) {
+        if (t.getMessage() != null) {
+            if (t.getMessage().contains(context.getString(R.string.exception_ssl_error))) {
                 message = context.getString(R.string.ssl_error_display_message);
-            } else if (e.getMessage().contains(context.getString(R.string.exception_invalid_api_key))) {
+            } else if (t.getMessage().contains(context.getString(R.string.exception_invalid_api_key))) {
                 message = context.getString(R.string.exception_invalid_api_key);
             }
         }
@@ -40,20 +40,20 @@ public class ErrorMessageFactory {
         return message;
     }
 
-    public static boolean ifNoInternet(Exception e) {
-        return e instanceof NetworkConnectionException || e instanceof ConnectException;
+    public static boolean ifNoInternet(Throwable t) {
+        return t instanceof NetworkConnectionException || t instanceof ConnectException;
     }
 
-    public static boolean isThereNoActivePrinter(Exception exception) {
-        return (exception instanceof NoActivePrinterException);
+    public static boolean isThereNoActivePrinter(Throwable t) {
+        return (t instanceof NoActivePrinterException);
     }
 
-    public static boolean isIpAddressError(Exception exception) {
-        return exception instanceof IpAddressEmptyException ||
-                exception instanceof IncorrectAddPrinterFormattingException;
+    public static boolean isIpAddressError(Throwable t) {
+        return t instanceof IpAddressEmptyException ||
+                t instanceof IncorrectAddPrinterFormattingException;
     }
 
-    public static boolean ifSslError(Context context, Exception e) {
-        return e.getMessage() != null && e.getMessage().contains(context.getResources().getString(R.string.exception_ssl_error));
+    public static boolean ifSslError(Context context, Throwable t) {
+        return t.getMessage() != null && t.getMessage().contains(context.getResources().getString(R.string.exception_ssl_error));
     }
 }
