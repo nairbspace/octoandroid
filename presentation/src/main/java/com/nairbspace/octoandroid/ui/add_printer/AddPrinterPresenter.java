@@ -11,6 +11,8 @@ import com.nairbspace.octoandroid.ui.templates.UseCasePresenter;
 
 import javax.inject.Inject;
 
+import timber.log.Timber;
+
 public class AddPrinterPresenter extends UseCasePresenter<AddPrinterScreen> {
 
     private final VerifyPrinterDetails mVerifyPrinterDetails;
@@ -34,6 +36,7 @@ public class AddPrinterPresenter extends UseCasePresenter<AddPrinterScreen> {
     }
 
     public void onAddPrinterClicked(final AddPrinterModel addPrinterModel) {
+        showLoading(true);
         mAddPrinterModelMapper.execute(new TransformSubscriber(), addPrinterModel);
     }
 
@@ -47,9 +50,14 @@ public class AddPrinterPresenter extends UseCasePresenter<AddPrinterScreen> {
     }
 
     private final class TransformSubscriber extends DefaultSubscriber<AddPrinter> {
+
+        @Override
+        public void onError(Throwable e) {
+            showError(e);
+        }
+
         @Override
         public void onNext(AddPrinter addPrinter) {
-            showLoading(true);
             mAddPrinterDetails.execute(new AddPrinterSubscriber(), addPrinter);
         }
     }
@@ -58,16 +66,7 @@ public class AddPrinterPresenter extends UseCasePresenter<AddPrinterScreen> {
 
         @Override
         public void onError(Throwable e) {
-            super.onError(e);
-            showLoading(false);
-            Exception ex = (Exception) e;
-
-            String errorMessage = ErrorMessageFactory.create(mScreen.context(), ex);
-            if (ErrorMessageFactory.isIpAddressError(ex)) {
-                mScreen.showIpAddressError(errorMessage);
-            } else {
-                mScreen.showSnackbar(errorMessage);
-            }
+            showError(e);
         }
 
         @Override
@@ -75,7 +74,6 @@ public class AddPrinterPresenter extends UseCasePresenter<AddPrinterScreen> {
             mVerifyPrinterDetails.execute(new VerifyPrinterSubscriber());
         }
     }
-
 
     private final class VerifyPrinterSubscriber extends DefaultSubscriber {
 
@@ -87,15 +85,21 @@ public class AddPrinterPresenter extends UseCasePresenter<AddPrinterScreen> {
 
         @Override
         public void onError(Throwable e) {
-            super.onError(e);
-            showLoading(false);
+            showError(e);
+        }
+    }
 
-            String errorMessage = ErrorMessageFactory.create(mScreen.context(), (Exception) e);
-            if (ErrorMessageFactory.ifSslError(mScreen.context(), (Exception) e)) {
-                mScreen.showAlertDialog();
-            } else {
-                mScreen.showSnackbar(errorMessage);
-            }
+    private void showError(Throwable t) {
+        Timber.e(t, null);
+        showLoading(false);
+        Exception e = (Exception) t;
+        String errorMessage = ErrorMessageFactory.create(mScreen.context(), e);
+        if (ErrorMessageFactory.ifSslError(mScreen.context(), e)) {
+            mScreen.showAlertDialog();
+        } else if (ErrorMessageFactory.isIpAddressError(e)) {
+            mScreen.showIpAddressError(errorMessage);
+        } else {
+            mScreen.showSnackbar(errorMessage);
         }
     }
 }
