@@ -39,6 +39,7 @@ android {
                 crashlyticsName : CrashlyticsName,
                 crashlyticsApiKey: CrashlyticsApiKey,
         ]
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -75,8 +76,8 @@ android {
 
 dependencies {
     def presentationDependencies = rootProject.ext.presentationDependencies
+    def presentationTestDependencies = rootProject.ext.presentationTestDependencies
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
 
     debugCompile project(path: ':data', configuration: 'debug')
     releaseCompile project(path: ':data', configuration: 'release')
@@ -88,26 +89,30 @@ dependencies {
     compile presentationDependencies.recyclerView_v7
     compile presentationDependencies.support_v4
     compile presentationDependencies.percent
-
     compile presentationDependencies.playServicesVision // QR Decoder
-
     compile presentationDependencies.butterknife
     apt presentationDependencies.butterknifeCompiler
-
     compile presentationDependencies.dagger
     apt presentationDependencies.daggerCompiler
-
     compile presentationDependencies.timber
-
     compile presentationDependencies.eventBus
-
     debugCompile presentationDependencies.leakCanary
     releaseCompile presentationDependencies.leakCanaryNoOp
     testCompile presentationDependencies.leakCanaryNoOp
-
     apt presentationDependencies.autoValueParcel // AutoValue Parcelable
-
     compile presentationDependencies.mpAndroidChart
-
     compile(presentationDependencies.crashlytics) { transitive = true; }
+
+    androidTestCompile (presentationTestDependencies.espressoRunner) { exclude module: "support-annotations" }
+    androidTestCompile (presentationTestDependencies.jUnitRules) { exclude module: "support-annotations" }
+    androidTestCompile (presentationTestDependencies.espressoCore) { exclude module: "support-annotations" }
+    androidTestCompile presentationTestDependencies.uiAutomator
+    androidTestCompile (presentationTestDependencies.espressoContrib) {
+        exclude module: "support-annotations"
+        exclude module: "support-v4"
+        exclude module: "appcompat-v7"
+        exclude module: "design"
+        exclude module: "recyclerview-v7"
+    }
+    testCompile presentationTestDependencies.roboelectric
 }

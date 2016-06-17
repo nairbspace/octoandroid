@@ -34,6 +34,12 @@ ext {
     // Testing Libraries
     jUnitVersion = "4.12"
     mockitoVersion = "1.10.19"
+    assertJAndroidVersion = "1.1.1"
+    roboelectricVersion = "3.0"
+    espressoVersion = "2.2.2"
+    espressoRunnerVersion = "0.5"
+    uiAutomatorVersion = "2.1.2"
+    jUnitRulesVersion = "0.5" // Dependency to use JUnit 4 rules
 
     daoGeneratorDependencies = [
             greenDaoGenerator:          "org.greenrobot:greendao-generator:${greenDaoGeneratorVersion}",
@@ -88,5 +94,14 @@ ext {
             autoValueParcel:            "com.ryanharter.auto.value:auto-value-parcel:${autoValueParcelVersion}",
             mpAndroidChart:             "com.github.PhilJay:MPAndroidChart:${mpAndroidChartVersion}",
             crashlytics:                "com.crashlytics.sdk.android:crashlytics:${crashlyticsVersion}"
+    ]
+
+    presentationTestDependencies = [
+            espressoRunner:             "com.android.support.test:runner:${espressoRunnerVersion}",
+            jUnitRules:                 "com.android.support.test:rules:${jUnitRulesVersion}",
+            espressoCore:               "com.android.support.test.espresso:espresso-core:${espressoVersion}",
+            uiAutomator:                "com.android.support.test.uiautomator:uiautomator-v18:${uiAutomatorVersion}",
+            espressoContrib:            "com.android.support.test.espresso:espresso-contrib:${espressoVersion}",
+            roboelectric:               "org.robolectric:robolectric:${roboelectricVersion}",
     ]
 }
