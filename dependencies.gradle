@@ -103,5 +103,6 @@ ext {
             uiAutomator:                "com.android.support.test.uiautomator:uiautomator-v18:${uiAutomatorVersion}",
             espressoContrib:            "com.android.support.test.espresso:espresso-contrib:${espressoVersion}",
             roboelectric:               "org.robolectric:robolectric:${roboelectricVersion}",
+            mockito:                    "org.mockito:mockito-core:${mockitoVersion}",
     ]
 }

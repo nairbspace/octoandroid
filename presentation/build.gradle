@@ -115,4 +115,5 @@ dependencies {
         exclude module: "recyclerview-v7"
     }
     testCompile presentationTestDependencies.roboelectric
+    testCompile presentationTestDependencies.mockito
 }

@@ -39,14 +39,16 @@ public abstract class BaseActivity<T> extends AppCompatActivity implements Activ
     protected void onResume() {
         super.onResume();
         setPresenter().onResume();
-        registerReceiver(mActiveNetworkReceiver, mActiveNetworkReceiver.getIntentFilter());
+        if (mActiveNetworkReceiver != null) {
+            registerReceiver(mActiveNetworkReceiver, mActiveNetworkReceiver.getIntentFilter());
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         setPresenter().onPause();
-        unregisterReceiver(mActiveNetworkReceiver);
+        if (mActiveNetworkReceiver != null) unregisterReceiver(mActiveNetworkReceiver);
     }
 
     @Override
@@ -60,7 +62,7 @@ public abstract class BaseActivity<T> extends AppCompatActivity implements Activ
     protected void onDestroy() {
         super.onDestroy();
         setPresenter().onDestroy(setScreen());
-        mActiveNetworkReceiver = null;
+        if (mActiveNetworkReceiver != null) mActiveNetworkReceiver = null;
     }
 
     @Override
