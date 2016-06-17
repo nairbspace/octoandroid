@@ -89,9 +89,7 @@
                         android:id="@+id/api_key_edit_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:imeActionId="@+id/add_printer"
-                        android:imeActionLabel="@string/add"
-                        android:imeOptions="actionUnspecified"
+                        android:imeOptions="actionDone"
                         android:inputType="textVisiblePassword"
                         android:maxLines="1"
                         android:text="@string/my_api_key"/>

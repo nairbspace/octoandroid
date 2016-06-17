@@ -86,9 +86,8 @@ public class AddPrinterActivity extends BaseActivity<AddPrinterScreen>
     private final TextView.OnEditorActionListener mApiEditorListener = new TextView.OnEditorActionListener() {
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-            if (actionId == R.id.add_printer || actionId == EditorInfo.IME_NULL) {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
                 onAddPrinterButtonClicked();
-                return true;
             }
             return false;
         }
