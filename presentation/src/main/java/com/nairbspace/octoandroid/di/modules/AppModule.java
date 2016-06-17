@@ -4,6 +4,10 @@ import android.app.Application;
 import android.content.Context;
 import android.content.res.Resources;
 
+import com.nairbspace.octoandroid.BuildConfig;
+import com.nairbspace.octoandroid.answers.AnswersHelper;
+import com.nairbspace.octoandroid.answers.AnswersHelperBlank;
+import com.nairbspace.octoandroid.answers.AnswersHelperImpl;
 import com.nairbspace.octoandroid.data.disk.DiskManager;
 import com.nairbspace.octoandroid.data.disk.DiskManagerImpl;
 import com.nairbspace.octoandroid.data.executor.JobExecutor;
@@ -74,5 +78,12 @@ public class AppModule {
     @Singleton
     PrinterRepository providePrinterRepository(PrinterDataRepository printerDataRepository) {
         return printerDataRepository;
+    }
+
+    @Provides
+    @Singleton
+    AnswersHelper provideAnswersHelper() {
+        if (BuildConfig.DEBUG) return new AnswersHelperBlank();
+        else return new AnswersHelperImpl();
     }
 }

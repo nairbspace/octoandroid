@@ -37,11 +37,21 @@ public class SetupApplication extends Application {
         initializeLifecyclerHandler();
     }
 
+    /**
+     * The Crashlytics build method creates an Answers instance which currently
+     * cannot be disabled. So must wrap in if statement
+     * to check if build config so it doesn't get created.
+     * All methods of Answers.getInstance must be wrapped in null checks
+     * or build config checks unfortunately.
+     */
     private void initializeCrashlytics() {
-        CrashlyticsCore core = new CrashlyticsCore.Builder()
-                .disabled(BuildConfig.DEBUG)
-                .build();
-        Fabric.with(this, new Crashlytics.Builder().core(core).build());
+        if (!BuildConfig.DEBUG) {
+            CrashlyticsCore core = new CrashlyticsCore.Builder()
+                    .disabled(BuildConfig.DEBUG)
+                    .build();
+
+            Fabric.with(this, new Crashlytics.Builder().core(core).build());
+        }
     }
 
     private void initializeTimber() {

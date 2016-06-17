@@ -50,6 +50,7 @@ android {
             resValue "string", "my_api_key", BlankApiKey
         }
         debug {
+            ext.enableCrashlytics = false; // Disables sending mapping file and ID generation
             resValue "string", "my_ip_address", MyIpAddress
             resValue "string", "my_api_key", MyApiKey
         }
