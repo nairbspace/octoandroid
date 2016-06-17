@@ -75,8 +75,8 @@ public class FilesMapper extends MapperUseCase<Files, FilesModel> {
         String date = "";
         String time = "";
         if (file.date() != null) {
-            date = DateTimeConverter.secondsToShortDateString(file.date());
-            time = DateTimeConverter.secondsToShortTimeString(file.date());
+            date = DateTimeConverter.unixTimeToShortDateString(file.date());
+            time = DateTimeConverter.unixTimeToShortTimeString(file.date());
         }
 
         String origin = file.origin();

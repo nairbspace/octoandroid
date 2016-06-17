@@ -16,7 +16,6 @@ import javax.inject.Inject;
 import rx.Observable;
 import rx.Subscriber;
 
-@SuppressWarnings("ConstantConditions")
 public class WebsocketModelMapper extends MapperUseCase<Websocket, WebsocketModel> {
 
     private String mState = "";
@@ -69,23 +68,35 @@ public class WebsocketModelMapper extends MapperUseCase<Websocket, WebsocketMode
     }
 
     private void parseWebsocket(@NonNull Websocket websocket) {
-        if (websocket.current() != null) parseCurrentHistory(websocket.current());
+        CurrentHistory current = websocket.current();
+        if (current != null) parseCurrentHistory(current);
     }
 
     private void parseCurrentHistory(@NonNull CurrentHistory currentHistory) {
-        if (currentHistory.state() != null) parseState(currentHistory.state());
-        if (currentHistory.job() != null) parseJob(currentHistory.job());
-        if (currentHistory.progress() != null) parseProgress(currentHistory.progress());
-        if (currentHistory.temps() != null) parseTemps(currentHistory.temps());
+        CurrentHistory.State state = currentHistory.state();
+        if (state != null) parseState(state);
+
+        CurrentHistory.Job job = currentHistory.job();
+        if (job != null) parseJob(job);
+
+        CurrentHistory.Progress progress = currentHistory.progress();
+        if (progress != null) parseProgress(progress);
+
+        List<CurrentHistory.Temps> temps = currentHistory.temps();
+        if (temps != null) parseTemps(temps);
     }
 
     private void parseState(@NonNull CurrentHistory.State state) {
         if (state.text() != null) mState = state.text();
-        if (state.flags() != null) parseFlags(state.flags());
+
+        CurrentHistory.State.Flags flags = state.flags();
+        if (flags != null) parseFlags(flags);
     }
 
     private void parseJob(@NonNull CurrentHistory.Job job) {
-        if (job.file() != null) parseFile(job.file());
+        CurrentHistory.Job.File file = job.file();
+        if (file != null) parseFile(file);
+
         mApproxTotalPrintTime = DateTimeConverter.secondsToHHmmss(job.estimatedPrintTime());
     }
 
@@ -118,10 +129,16 @@ public class WebsocketModelMapper extends MapperUseCase<Websocket, WebsocketMode
     }
 
     private void parseTemp(@NonNull CurrentHistory.Temps temp) {
-        mTempTime = DateTimeConverter.unixSecondsToHHmmss(temp.time());
-        if (temp.bed() != null) parseTempBed(temp.bed());
-        if (temp.tool0() != null) parseTempTool0(temp.tool0());
-        if (temp.tool1() != null) parseTempTool1(temp.tool1());
+        if (temp.time() > 0) mTempTime = DateTimeConverter.unixTimeToHHmmss(temp.time());
+
+        CurrentHistory.Temps.Bed bed = temp.bed();
+        if (bed != null) parseTempBed(bed);
+
+        CurrentHistory.Temps.Tool0 tool0 = temp.tool0();
+        if (tool0 != null) parseTempTool0(tool0);
+
+        CurrentHistory.Temps.Tool1 tool1 = temp.tool1();
+        if (tool1 != null) parseTempTool1(tool1);
     }
 
     private void parseTempBed(@NonNull CurrentHistory.Temps.Bed bed) {
@@ -158,7 +175,6 @@ public class WebsocketModelMapper extends MapperUseCase<Websocket, WebsocketMode
                 .ready(mReady)
                 .closedOrError(mClosedOrError)
                 .fileLoaded(mFileLoaded)
-
                 .tempTime(mTempTime)
                 .actualTempBed(mActualTempBed)
                 .targetTempBed(mTargetTempBed)

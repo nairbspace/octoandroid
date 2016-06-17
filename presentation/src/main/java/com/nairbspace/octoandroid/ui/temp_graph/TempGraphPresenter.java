@@ -12,6 +12,7 @@ import javax.inject.Inject;
 public class TempGraphPresenter extends EventPresenter<TempGraphScreen, WebsocketModel> {
 
     private TempGraphScreen mScreen;
+    private String mPreviousTime;
 
     @Inject public TempGraphPresenter(EventBus eventBus) {
         super(eventBus);
@@ -24,8 +25,23 @@ public class TempGraphPresenter extends EventPresenter<TempGraphScreen, Websocke
 
     @Override
     protected void onEvent(WebsocketModel websocketModel) {
-        if (!TextUtils.isEmpty(websocketModel.tempTime())) {
+        String tempTime = websocketModel.tempTime();
+        if (!TextUtils.isEmpty(tempTime) && !isTempTimeStale(tempTime)) {
             mScreen.updateUi(websocketModel);
         }
+    }
+
+    private boolean isTempTimeStale(String tempTime) {
+        if (mPreviousTime == null) {
+            mPreviousTime = tempTime;
+            return false;
+        }
+
+        if (!mPreviousTime.equals(tempTime)) {
+            mPreviousTime = tempTime;
+            return false;
+        }
+
+        return true;
     }
 }
