@@ -145,9 +145,19 @@ public class AddPrinterActivity extends BaseActivity<AddPrinterScreen>
 
     @Override
     public void showQrDialogFragment() {
-        DialogFragment df = QrDialogFragment.newInstance();
-        df.setCancelable(true);
-        df.show(getSupportFragmentManager(), null);
+        if (PlayServiceChecker.isAvailable(this)) {
+            DialogFragment df = QrDialogFragment.newInstance();
+            df.setCancelable(true);
+            df.show(getSupportFragmentManager(), null);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PlayServiceChecker.REQUEST_CODE && resultCode == RESULT_OK) {
+            showQrDialogFragment();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
