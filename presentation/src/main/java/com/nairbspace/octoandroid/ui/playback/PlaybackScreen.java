@@ -20,7 +20,7 @@ public interface PlaybackScreen {
 
     int getStopId();
 
-    void setServiceAlarm(boolean shouldStartAlarm);
+    void setWebsocketServiceAlarm(boolean shouldStartAlarm);
 
     boolean isPrinting();
 }

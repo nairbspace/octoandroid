@@ -58,4 +58,6 @@ public interface PrinterRepository {
     Observable sendArbitraryCommand(ArbitraryCommand arbitraryCommand);
 
     Observable<Boolean> isPushNotificationOn();
+
+    Observable<Boolean> isStickyNotificationOn();
 }

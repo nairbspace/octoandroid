@@ -57,7 +57,7 @@ public class PlaybackPresenter extends UseCasePresenter<PlaybackScreen> {
     @Override
     protected void onResume() {
         execute();
-        mScreen.setServiceAlarm(false);
+        mScreen.setWebsocketServiceAlarm(false);
     }
 
     @Override
@@ -168,7 +168,7 @@ public class PlaybackPresenter extends UseCasePresenter<PlaybackScreen> {
         @Override
         public void onNext(Boolean aBoolean) {
             if (aBoolean != null && aBoolean) {
-                if (mScreen.isPrinting()) mScreen.setServiceAlarm(true);
+                if (mScreen.isPrinting()) mScreen.setWebsocketServiceAlarm(true);
             }
         }
     }

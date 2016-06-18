@@ -44,6 +44,10 @@
     <string name="prefs_push_notification_title">Push Notification</string>
     <string name="prefs_push_notification_summary">Notification when print is complete</string>
     <string name="prefs_push_notification_key" translatable="false">push_notification</string>
+
+    <string name="prefs_sticky_notification_title">Sticky Notification</string>
+    <string name="prefs_sticky_notification_summary">Sticky notification when printing</string>
+    <string name="prefs_sticky_notification_key" translatable="false">sticky_notification</string>
     
     <string name="prefs_server_settings_category_title">Server Settings</string>
     <string name="prefs_update_settings_category_title">Update Settings</string>

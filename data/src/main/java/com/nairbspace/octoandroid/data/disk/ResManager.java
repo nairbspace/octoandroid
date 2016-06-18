@@ -53,4 +53,6 @@ public class ResManager {
 
     public String getPushNotificationKey() {return mResources.getString(R.string.prefs_push_notification_key);}
 
+    public String getStickyNotificationKey() {return mResources.getString(R.string.prefs_sticky_notification_key);}
+
 }

@@ -164,7 +164,7 @@ public class PlaybackFragment extends BaseFragmentListener<PlaybackScreen,
     }
 
     @Override
-    public void setServiceAlarm(boolean isOn) {
+    public void setWebsocketServiceAlarm(boolean isOn) {
         getNavigator().setWebsocketServiceAlarm(getContext(), isOn);
     }
 

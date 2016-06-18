@@ -169,4 +169,9 @@ public class PrinterDataRepository implements PrinterRepository {
     public Observable<Boolean> isPushNotificationOn() {
         return mDiskManager.isPushNotificationOn();
     }
+
+    @Override
+    public Observable<Boolean> isStickyNotificationOn() {
+        return mDiskManager.isStickyNotificationOn();
+    }
 }

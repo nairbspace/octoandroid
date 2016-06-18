@@ -111,4 +111,6 @@
     <string name="fan_off">Fan Off</string>
 
     <string name="print_complete">Print Complete</string>
+    <string name="printer_space_colon">Printing:&#160;</string>
+    <string name="in_progress">In Progress</string>
 </resources>

@@ -2,6 +2,7 @@ package com.nairbspace.octoandroid.ui;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -11,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
+import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationCompat;
@@ -77,26 +79,28 @@ public class Navigator {
         activity.startActivity(i);
     }
 
-    public void navigateToStatusActivityFromNotification(Context context, String contentText) {
-        Resources res = context.getResources();
+    public void navigateToStatusActivityFromNotification(Context context, NotificationCompat.Builder builder, int id) {
         Intent i = StatusActivity.newIntent(context);
-        PendingIntent pi = PendingIntent.getActivity(context, 0, i, 0);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent pi = PendingIntent.getActivity(context, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Notification notification = new NotificationCompat.Builder(context)
-                .setTicker(res.getString(R.string.print_complete))
-                .setSmallIcon(R.drawable.ic_print_black_24dp)
-                .setContentTitle(res.getString(R.string.print_complete))
-                .setContentText(contentText)
-                .setContentIntent(pi)
-                .setAutoCancel(true)
-                .build();
-
+        Notification notification = builder.setContentIntent(pi).build();
         NotificationManagerCompat nm = NotificationManagerCompat.from(context);
-        nm.notify(0, notification);
+        nm.notify(id, notification);
     }
 
     public void setWebsocketServiceAlarm(Context context, boolean isOn) {
-        WebsocketService.setServiceAlarm(context, isOn);
+        Intent i = WebsocketService.newIntent(context);
+        PendingIntent pi = PendingIntent.getService(context, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+        if (isOn) {
+            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME,
+                    SystemClock.elapsedRealtime(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pi);
+        } else {
+            alarmManager.cancel(pi);
+            pi.cancel();
+        }
     }
 
     public void navigateToTempActivity(Activity activity) {

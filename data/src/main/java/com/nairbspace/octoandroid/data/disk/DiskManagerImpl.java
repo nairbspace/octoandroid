@@ -266,4 +266,20 @@ public class DiskManagerImpl implements DiskManager {
             }
         });
     }
+
+    @Override
+    public Observable<Boolean> isStickyNotificationOn() {
+        return Observable.create(new Observable.OnSubscribe<Boolean>() {
+            @Override
+            public void call(Subscriber<? super Boolean> subscriber) {
+                try {
+                    boolean isStickyNotificationOn = mPrefHelper.isStickyNotificationOn();
+                    subscriber.onNext(isStickyNotificationOn);
+                    subscriber.onCompleted();
+                } catch (Exception e) {
+                    subscriber.onError(e);
+                }
+            }
+        });
+    }
 }

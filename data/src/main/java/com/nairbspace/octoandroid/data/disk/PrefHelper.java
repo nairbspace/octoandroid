@@ -73,4 +73,8 @@ public class PrefHelper {
     public boolean isPushNotificationOn() {
         return mPreferences.getBoolean(mResManager.getPushNotificationKey(), false);
     }
+
+    public boolean isStickyNotificationOn() {
+        return mPreferences.getBoolean(mResManager.getStickyNotificationKey(), false);
+    }
 }
