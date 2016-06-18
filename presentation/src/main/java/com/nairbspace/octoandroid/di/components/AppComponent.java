@@ -6,6 +6,7 @@ import com.nairbspace.octoandroid.di.modules.NetworkModule;
 import com.nairbspace.octoandroid.di.modules.RestModule;
 import com.nairbspace.octoandroid.di.modules.StorageModule;
 import com.nairbspace.octoandroid.di.modules.WebsocketModule;
+import com.nairbspace.octoandroid.services.WebsocketService;
 import com.nairbspace.octoandroid.ui.add_printer.AddPrinterActivity;
 import com.nairbspace.octoandroid.ui.connection.ConnectionFragment;
 import com.nairbspace.octoandroid.ui.dispatch.DispatchActivity;
@@ -70,4 +71,6 @@ public interface AppComponent {
     void inject(PrinterListFragment printerListFragment);
 
     void inject(PrinterDetailsFragment printerDetailsFragment);
+
+    void inject(WebsocketService websocketService);
 }

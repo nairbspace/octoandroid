@@ -2,6 +2,9 @@ package com.nairbspace.octoandroid.ui;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Notification;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,14 +13,17 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AlertDialog;
 
 import com.nairbspace.octoandroid.R;
+import com.nairbspace.octoandroid.services.WebsocketService;
 import com.nairbspace.octoandroid.ui.add_printer.AddPrinterActivity;
 import com.nairbspace.octoandroid.ui.printer_controls.PrinterControlsActivity;
 import com.nairbspace.octoandroid.ui.printer_settings.PrinterSettingsActivity;
-import com.nairbspace.octoandroid.ui.status.StatusActivity;
 import com.nairbspace.octoandroid.ui.settings.SettingsActivity;
+import com.nairbspace.octoandroid.ui.status.StatusActivity;
 import com.nairbspace.octoandroid.ui.temp.TempActivity;
 import com.nairbspace.octoandroid.ui.webcam.WebcamActivity;
 
@@ -69,6 +75,28 @@ public class Navigator {
         Intent i = StatusActivity.newIntent(activity);
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         activity.startActivity(i);
+    }
+
+    public void navigateToStatusActivityFromNotification(Context context, String contentText) {
+        Resources res = context.getResources();
+        Intent i = StatusActivity.newIntent(context);
+        PendingIntent pi = PendingIntent.getActivity(context, 0, i, 0);
+
+        Notification notification = new NotificationCompat.Builder(context)
+                .setTicker(res.getString(R.string.print_complete))
+                .setSmallIcon(R.drawable.ic_print_black_24dp)
+                .setContentTitle(res.getString(R.string.print_complete))
+                .setContentText(contentText)
+                .setContentIntent(pi)
+                .setAutoCancel(true)
+                .build();
+
+        NotificationManagerCompat nm = NotificationManagerCompat.from(context);
+        nm.notify(0, notification);
+    }
+
+    public void setWebsocketServiceAlarm(Context context, boolean isOn) {
+        WebsocketService.setServiceAlarm(context, isOn);
     }
 
     public void navigateToTempActivity(Activity activity) {

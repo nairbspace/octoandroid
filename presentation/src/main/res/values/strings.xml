@@ -109,4 +109,6 @@
     <string name="motors_off">Motors Off</string>
     <string name="fan_on">Fan On</string>
     <string name="fan_off">Fan Off</string>
+
+    <string name="print_complete">Print Complete</string>
 </resources>
