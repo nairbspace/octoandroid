@@ -51,4 +51,6 @@ public class ResManager {
 
     public String getPrinterUploadLocationKey() {return mResources.getString(R.string.prefs_printer_upload_location_key);}
 
+    public String getPushNotificationKey() {return mResources.getString(R.string.prefs_push_notification_key);}
+
 }

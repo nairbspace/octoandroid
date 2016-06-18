@@ -250,4 +250,20 @@ public class DiskManagerImpl implements DiskManager {
             }
         };
     }
+
+    @Override
+    public Observable<Boolean> isPushNotificationOn() {
+        return Observable.create(new Observable.OnSubscribe<Boolean>() {
+            @Override
+            public void call(Subscriber<? super Boolean> subscriber) {
+                try {
+                    boolean isPushNotificationOn = mPrefHelper.isPushNotificationOn();
+                    subscriber.onNext(isPushNotificationOn);
+                    subscriber.onCompleted();
+                } catch (Exception e) {
+                    subscriber.onError(e);
+                }
+            }
+        });
+    }
 }

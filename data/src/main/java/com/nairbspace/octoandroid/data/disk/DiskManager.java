@@ -33,4 +33,6 @@ public interface DiskManager {
     boolean isExpired();
 
     Func1<PrinterDbEntity, ConnectionEntity> getConnectionInDb();
+
+    Observable<Boolean> isPushNotificationOn();
 }

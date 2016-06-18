@@ -1,6 +1,7 @@
 package com.nairbspace.octoandroid.ui.playback;
 
 import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
+import com.nairbspace.octoandroid.domain.interactor.GetPushNotificationSetting;
 import com.nairbspace.octoandroid.domain.interactor.GetWebsocket;
 import com.nairbspace.octoandroid.domain.interactor.SendJobCommand;
 import com.nairbspace.octoandroid.domain.model.Websocket;
@@ -22,15 +23,17 @@ public class PlaybackPresenter extends UseCasePresenter<PlaybackScreen> {
     private final GetWebsocket mGetWebsocket;
     private final WebsocketModelMapper mMapper;
     private final SendJobCommand mSendJobCommand;
+    private final GetPushNotificationSetting mGetPushSetting;
     private final EventBus mEventBus;
 
     @Inject
     public PlaybackPresenter(GetWebsocket getWebsocket, WebsocketModelMapper mapper,
-                             SendJobCommand sendJobCommand, EventBus eventBus) {
+                             SendJobCommand sendJobCommand, GetPushNotificationSetting getPushSetting, EventBus eventBus) {
         super(getWebsocket);
         mGetWebsocket = getWebsocket;
         mMapper = mapper;
         mSendJobCommand = sendJobCommand;
+        mGetPushSetting = getPushSetting;
         mEventBus = eventBus;
     }
 
@@ -54,11 +57,13 @@ public class PlaybackPresenter extends UseCasePresenter<PlaybackScreen> {
     @Override
     protected void onResume() {
         execute();
+        mScreen.setServiceAlarm(false);
     }
 
     @Override
     protected void onPause() {
         mGetWebsocket.unsubscribe(); // TODO might be best to have websocket on separate thread.
+        mGetPushSetting.execute(new GetPushSubscriber());
     }
 
     @Override
@@ -154,10 +159,25 @@ public class PlaybackPresenter extends UseCasePresenter<PlaybackScreen> {
         }
     }
 
+    private final class GetPushSubscriber extends DefaultSubscriber<Boolean> {
+        @Override
+        public void onError(Throwable e) {
+            super.onError(e);
+        }
+
+        @Override
+        public void onNext(Boolean aBoolean) {
+            if (aBoolean != null && aBoolean) {
+                if (mScreen.isPrinting()) mScreen.setServiceAlarm(true);
+            }
+        }
+    }
+
     @Override
     protected void onDestroy(PlaybackScreen playbackScreen) {
         super.onDestroy(playbackScreen);
         mMapper.unsubscribe();
         mSendJobCommand.unsubscribe();
+        mGetPushSetting.unsubscribe();
     }
 }

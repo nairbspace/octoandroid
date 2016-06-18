@@ -164,4 +164,9 @@ public class PrinterDataRepository implements PrinterRepository {
     public Observable sendArbitraryCommand(ArbitraryCommand arbitraryCommand) {
         return mApiManager.sendArbitraryCommand(mMapperHelper.mapToArbitraryCommandEntity(arbitraryCommand));
     }
+
+    @Override
+    public Observable<Boolean> isPushNotificationOn() {
+        return mDiskManager.isPushNotificationOn();
+    }
 }

@@ -69,4 +69,8 @@ public class PrefHelper {
         mPreferences.edit().putString(mResManager.getWebcamPathQueryKey(), printerDbEntity.getWebcamPathQuery()).apply();
         mPreferences.edit().putString(mResManager.getPrinterUploadLocationKey(), printerDbEntity.getUploadLocation()).apply();
     }
+
+    public boolean isPushNotificationOn() {
+        return mPreferences.getBoolean(mResManager.getPushNotificationKey(), false);
+    }
 }

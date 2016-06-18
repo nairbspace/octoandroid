@@ -56,4 +56,6 @@ public interface PrinterRepository {
     Observable sendToolCommand(ToolCommand toolCommand);
 
     Observable sendArbitraryCommand(ArbitraryCommand arbitraryCommand);
+
+    Observable<Boolean> isPushNotificationOn();
 }
