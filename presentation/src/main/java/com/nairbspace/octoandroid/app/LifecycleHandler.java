@@ -59,7 +59,4 @@ public class LifecycleHandler implements Application.ActivityLifecycleCallbacks 
         return sResumed > sPaused;
     }
 
-    public static boolean isApplicationInBackground() {
-        return sStarted > 0;
-    }
 }
