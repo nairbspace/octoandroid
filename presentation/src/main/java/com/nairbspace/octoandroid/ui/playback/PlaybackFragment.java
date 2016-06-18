@@ -163,6 +163,16 @@ public class PlaybackFragment extends BaseFragmentListener<PlaybackScreen,
         return mStopButton.getId();
     }
 
+    @Override
+    public void setServiceAlarm(boolean isOn) {
+        getNavigator().setWebsocketServiceAlarm(getContext(), isOn);
+    }
+
+    @Override
+    public boolean isPrinting() {
+        return mWebsocketModel != null && mWebsocketModel.printing();
+    }
+
     private void setEnableView(View view, boolean setEnabled) {
         view.setEnabled(setEnabled);
         view.animate().setDuration(mLongAnimTime).alpha(setEnabled ? mEnabledAlpha : mDisabledAlpha);

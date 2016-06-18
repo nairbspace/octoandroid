@@ -19,4 +19,8 @@ public interface PlaybackScreen {
     int getPausePlayId();
 
     int getStopId();
+
+    void setServiceAlarm(boolean shouldStartAlarm);
+
+    boolean isPrinting();
 }
