@@ -60,6 +60,8 @@ public abstract class BaseNavActivity<T> extends BaseActivity<T>
     private Snackbar mSnackbar;
     private FragmentManager mFragmentManager;
     private Unbinder mUnbinder;
+    private int mFadeIn;
+    private int mFadeOut;
 
     protected void onCreateDrawer(Unbinder unbinder) {
         mUnbinder = unbinder;
@@ -74,6 +76,9 @@ public abstract class BaseNavActivity<T> extends BaseActivity<T>
         mToggle = new ActionBarDrawerToggle(this, mDrawer, mToolbar, R.string.drawer_open, R.string.drawer_close);
         mDrawer.addDrawerListener(mToggle);
         setDrawer();
+
+        mFadeIn = mIsTabletAndLandScape ? 0 : android.R.anim.fade_in;
+        mFadeOut = mIsTabletAndLandScape ? 0 : android.R.anim.fade_out;
 
         mFragmentManager = getSupportFragmentManager();
         inflatePlaybackFragment();
@@ -178,19 +183,19 @@ public abstract class BaseNavActivity<T> extends BaseActivity<T>
                 if (!(this instanceof StatusActivity)) {
                     getNavigator().navigateToStatusActivity(this);
                     // TODO need to work on transistion animations
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    overridePendingTransition(mFadeIn, mFadeOut);
                 }
                 break;
             case R.id.nav_temp:
                 if (!(this instanceof TempActivity)) {
                     getNavigator().navigateToTempActivity(this);
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    overridePendingTransition(mFadeIn, mFadeOut);
                 }
                 break;
             case R.id.nav_controls:
                 if (!(this instanceof PrinterControlsActivity)) {
                     getNavigator().navigateToPrinterControlsActivity(this);
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    overridePendingTransition(mFadeIn, mFadeOut);
                 }
                 break;
             case R.id.nav_webcam:
