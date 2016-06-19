@@ -57,9 +57,7 @@ public class WebsocketService extends Service implements WebsocketServiceHelper.
      */
     @Override
     public void checkApplicationStatus() {
-        if (LifecycleHandler.isApplicationInForeground()) {
-            turnOffAlarmAndStopService();
-        }
+        if (LifecycleHandler.isApplicationInForeground()) turnOffAlarmAndStopService();
     }
 
     /**
@@ -71,27 +69,24 @@ public class WebsocketService extends Service implements WebsocketServiceHelper.
      */
     @Override
     public void showSticky(WebsocketModel model) {
-        if (mStickyBuilder == null) {
-            createSticky();
-        } else {
-            updateSticky(model);
-        }
+        if (mStickyBuilder == null) createSticky();
+        else updateSticky(model);
     }
 
     private void createSticky() {
         mStickyBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_print_black_24dp)
-                .setContentTitle(getResources().getString(R.string.printer_space_colon))
+                .setContentTitle(getResources().getString(R.string.printing))
                 .setContentText(getResources().getString(R.string.in_progress))
                 .setAutoCancel(true)
                 .setOngoing(true);
 
-        mNavigator.navigateToDispatchActivityFromNotification(this, mStickyBuilder, PRINT_NOTIFICATION_ID);
+        mNavigator.createNotificationToDispatchActivity(this, mStickyBuilder, PRINT_NOTIFICATION_ID);
     }
 
     private void updateSticky(WebsocketModel model) {
         Resources res = getResources();
-        String printingFile = res.getString(R.string.printer_space_colon) + model.file();
+        String printingFile = res.getString(R.string.printing_space_colon) + model.file();
         String printTimeLeft = res.getString(R.string.print_time_left_colon_space) + model.printTimeLeft();
         mStickyBuilder
                 .setContentTitle(printingFile)
@@ -115,7 +110,7 @@ public class WebsocketService extends Service implements WebsocketServiceHelper.
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setAutoCancel(true);
 
-        mNavigator.navigateToDispatchActivityFromNotification(this, mFinishedBuilder, PRINT_NOTIFICATION_ID);
+        mNavigator.createNotificationToDispatchActivity(this, mFinishedBuilder, PRINT_NOTIFICATION_ID);
     }
 
     @Override

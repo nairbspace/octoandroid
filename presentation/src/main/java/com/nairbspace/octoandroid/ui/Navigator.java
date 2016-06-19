@@ -66,12 +66,7 @@ public class Navigator {
     }
 
     public boolean wasAddPrinterResultOk(int requestCode, int resultCode) {
-        if (requestCode == getAddPrinterRequestCode()) {
-            if (resultCode == Activity.RESULT_OK) {
-                return true;
-            }
-        }
-        return false;
+        return requestCode == getAddPrinterRequestCode() && resultCode == Activity.RESULT_OK;
     }
 
     public void navigateToStatusActivity(Activity activity) {
@@ -80,7 +75,7 @@ public class Navigator {
         activity.startActivity(i);
     }
 
-    public void navigateToDispatchActivityFromNotification(Context context, NotificationCompat.Builder builder, int id) {
+    public void createNotificationToDispatchActivity(Context context, NotificationCompat.Builder builder, int id) {
         Intent i = DispatchActivity.newIntent(context);
         PendingIntent pi = PendingIntent.getActivity(context, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -91,12 +86,8 @@ public class Navigator {
 
     public void setWebsocketServiceAndAlarm(Context context, boolean isOn) {
         Intent i = WebsocketService.newIntent(context);
-        if (isOn) {
-            context.startService(i);
-        } else {
-            context.stopService(i);
-        }
-
+        if (isOn) context.startService(i);
+        else context.stopService(i);
         setWebsocketServiceAlarm(context, isOn);
     }
 
@@ -218,11 +209,6 @@ public class Navigator {
     }
 
     private boolean checkPermissionGranted(int inputRequestCode, int actualRequestCode, int[] grantResults) {
-        if (inputRequestCode == actualRequestCode) {
-            if (grantResults.length == 1 && grantResults[0] == PERMISSION_GRANTED) {
-                return true;
-            }
-        }
-        return false;
+        return inputRequestCode == actualRequestCode && grantResults.length == 1 && grantResults[0] == PERMISSION_GRANTED;
     }
 }
