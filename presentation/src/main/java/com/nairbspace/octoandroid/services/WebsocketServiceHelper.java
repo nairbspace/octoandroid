@@ -97,6 +97,11 @@ public class WebsocketServiceHelper {
         if (model.closedOrError() || model.error()) {
             mListener.showErrorAndStopService();
         }
+
+        // TODO-low would be nice in feature to pause/resume print from notification!
+        if (!model.pausedOrPrinting()) {
+            mListener.showFinishedAndDestroy(model.file(), false);
+        }
     }
 
     private final class PushSubscriber extends DefaultSubscriber<Boolean> {
