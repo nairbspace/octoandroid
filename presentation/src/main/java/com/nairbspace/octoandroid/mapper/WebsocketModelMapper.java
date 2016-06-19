@@ -1,7 +1,5 @@
 package com.nairbspace.octoandroid.mapper;
 
-import android.support.annotation.NonNull;
-
 import com.nairbspace.octoandroid.domain.executor.PostExecutionThread;
 import com.nairbspace.octoandroid.domain.executor.ThreadExecutor;
 import com.nairbspace.octoandroid.domain.model.CurrentHistory;
@@ -56,7 +54,7 @@ public class WebsocketModelMapper extends MapperUseCase<Websocket, WebsocketMode
             public void call(Subscriber<? super WebsocketModel> subscriber) {
                 try {
                     if (websocket != null) {
-                        parseWebsocket(websocket);
+                        parseWebsocket(websocket, subscriber);
                         subscriber.onNext(mapToWebsocketModel());
                         subscriber.onCompleted();
                     }
@@ -67,14 +65,16 @@ public class WebsocketModelMapper extends MapperUseCase<Websocket, WebsocketMode
         });
     }
 
-    private void parseWebsocket(@NonNull Websocket websocket) {
+    private void parseWebsocket(Websocket websocket, Subscriber subscriber) {
         CurrentHistory current = websocket.current();
-        if (current != null) parseCurrentHistory(current);
+        if (current != null) parseCurrentHistory(current, subscriber);
+        else subscriber.unsubscribe();
     }
 
-    private void parseCurrentHistory(@NonNull CurrentHistory currentHistory) {
+    private void parseCurrentHistory(CurrentHistory currentHistory, Subscriber subscriber) {
         CurrentHistory.State state = currentHistory.state();
-        if (state != null) parseState(state);
+        if (state != null) parseState(state, subscriber);
+        else subscriber.unsubscribe();
 
         CurrentHistory.Job job = currentHistory.job();
         if (job != null) parseJob(job);
@@ -86,49 +86,72 @@ public class WebsocketModelMapper extends MapperUseCase<Websocket, WebsocketMode
         if (temps != null) parseTemps(temps);
     }
 
-    private void parseState(@NonNull CurrentHistory.State state) {
+    private void parseState(CurrentHistory.State state, Subscriber subscriber) {
         if (state.text() != null) mState = state.text();
 
         CurrentHistory.State.Flags flags = state.flags();
-        if (flags != null) parseFlags(flags);
+        if (flags != null) parseFlags(flags, subscriber);
+        else subscriber.unsubscribe();
     }
 
-    private void parseJob(@NonNull CurrentHistory.Job job) {
+    private void parseJob(CurrentHistory.Job job) {
         CurrentHistory.Job.File file = job.file();
         if (file != null) parseFile(file);
 
         mApproxTotalPrintTime = DateTimeConverter.secondsToHHmmss(job.estimatedPrintTime());
     }
 
-    private void parseFile(@NonNull CurrentHistory.Job.File file) {
+    private void parseFile(CurrentHistory.Job.File file) {
         if (file.name() != null) mFile = file.name();
         mPrintedFileSize = ByteConverter.toReadableString(file.size());
         mFileLoaded = file.name() != null;
     }
 
-    private void parseProgress(@NonNull CurrentHistory.Progress progress) {
+    private void parseProgress(CurrentHistory.Progress progress) {
         mPrintTime = DateTimeConverter.secondsToHHmmss(progress.printTime());
         mPrintTimeLeft = DateTimeConverter.secondsToHHmmss(progress.printTimeLeft());
         mPrintedBytes = ByteConverter.toReadableString(progress.filepos());
         mCompletionProgress = formatCompletion(progress.completion());
     }
 
-    private void parseTemps(@NonNull List<CurrentHistory.Temps> temps) {
+    private void parseTemps(List<CurrentHistory.Temps> temps) {
         if (!temps.isEmpty()) parseTemp(temps.get(0));
     }
 
-    private void parseFlags(@NonNull CurrentHistory.State.Flags flags) {
-        mOperational = flags.operational();
-        mPaused = flags.paused();
-        mPrinting = flags.printing();
-        mPausedOrPrinting = flags.paused() || flags.printing();
-        mSdReady = flags.sdReady();
-        mError = flags.error();
-        mReady = flags.ready();
-        mClosedOrError = flags.closedOrError();
+    private void parseFlags(CurrentHistory.State.Flags flags, Subscriber subscriber) {
+        Boolean operational = flags.operational();
+        Boolean paused = flags.paused();
+        Boolean printing = flags.printing();
+        Boolean sdReady = flags.sdReady();
+        Boolean error = flags.error();
+        Boolean ready = flags.ready();
+        Boolean closedOrError = flags.closedOrError();
+
+        if (operational != null) mOperational = operational;
+        else subscriber.unsubscribe();
+
+        if (paused != null) mPaused = paused;
+        else subscriber.unsubscribe();
+
+        if (printing != null) mPrinting = printing;
+        else subscriber.unsubscribe();
+
+        if (paused != null && printing != null) mPausedOrPrinting = paused || printing;
+
+        if (sdReady != null) mSdReady = sdReady;
+        else subscriber.unsubscribe();
+
+        if (error != null) mError = error;
+        else subscriber.unsubscribe();
+
+        if (ready != null) mReady = ready;
+        else subscriber.unsubscribe();
+
+        if (closedOrError != null) mClosedOrError = closedOrError;
+        else subscriber.unsubscribe();
     }
 
-    private void parseTemp(@NonNull CurrentHistory.Temps temp) {
+    private void parseTemp(CurrentHistory.Temps temp) {
         if (temp.time() > 0) mTempTime = DateTimeConverter.unixTimeToHHmmss(temp.time());
 
         CurrentHistory.Temps.Bed bed = temp.bed();
@@ -141,17 +164,17 @@ public class WebsocketModelMapper extends MapperUseCase<Websocket, WebsocketMode
         if (tool1 != null) parseTempTool1(tool1);
     }
 
-    private void parseTempBed(@NonNull CurrentHistory.Temps.Bed bed) {
+    private void parseTempBed(CurrentHistory.Temps.Bed bed) {
         mActualTempBed = (float) bed.actual();
         mTargetTempBed = (float) bed.target();
     }
 
-    private void parseTempTool0(@NonNull CurrentHistory.Temps.Tool0 tool0) {
+    private void parseTempTool0(CurrentHistory.Temps.Tool0 tool0) {
         mActualTempTool0 = (float) tool0.actual();
         mTargetTempTool0 = (float) tool0.target();
     }
 
-    private void parseTempTool1(@NonNull CurrentHistory.Temps.Tool1 tool1) {
+    private void parseTempTool1(CurrentHistory.Temps.Tool1 tool1) {
         mActualTempTool1 = (float) tool1.actual();
         mTargetTempTool1 = (float) tool1.target();
     }
