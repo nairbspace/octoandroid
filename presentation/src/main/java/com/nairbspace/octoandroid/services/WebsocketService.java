@@ -75,7 +75,7 @@ public class WebsocketService extends Service implements WebsocketServiceHelper.
 
     private void createSticky() {
         mStickyBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_print_black_24dp)
+                .setSmallIcon(R.drawable.ic_print_white_24dp)
                 .setContentTitle(getResources().getString(R.string.printing))
                 .setContentText(getResources().getString(R.string.in_progress))
                 .setAutoCancel(true)
@@ -104,7 +104,7 @@ public class WebsocketService extends Service implements WebsocketServiceHelper.
     private void showFinishedNotification(String fileName) {
         mFinishedBuilder = new NotificationCompat.Builder(this)
                 .setTicker(getResources().getString(R.string.print_complete))
-                .setSmallIcon(R.drawable.ic_print_black_24dp)
+                .setSmallIcon(R.drawable.ic_print_white_24dp)
                 .setContentTitle(getResources().getString(R.string.print_complete))
                 .setContentText(fileName)
                 .setDefaults(Notification.DEFAULT_ALL)
@@ -117,7 +117,7 @@ public class WebsocketService extends Service implements WebsocketServiceHelper.
     public void showErrorAndStopService() {
         mFinishedBuilder = new NotificationCompat.Builder(this)
                 .setTicker(getResources().getString(R.string.print_stopped))
-                .setSmallIcon(R.drawable.ic_error_black_24dp)
+                .setSmallIcon(R.drawable.ic_error_white_24dp)
                 .setContentTitle(getResources().getString(R.string.print_stopped))
                 .setContentText(getResources().getString(R.string.print_stopped_description))
                 .setDefaults(Notification.DEFAULT_ALL)
