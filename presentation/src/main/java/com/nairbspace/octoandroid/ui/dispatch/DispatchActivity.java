@@ -1,5 +1,6 @@
 package com.nairbspace.octoandroid.ui.dispatch;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,6 +15,10 @@ import javax.inject.Inject;
 public class DispatchActivity extends BaseActivity<DispatchScreen> implements DispatchScreen {
 
     @Inject DispatchPresenter mPresenter;
+
+    public static Intent newIntent(Context context) {
+        return new Intent(context, DispatchActivity.class);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

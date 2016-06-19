@@ -22,6 +22,7 @@ import android.support.v7.app.AlertDialog;
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.services.WebsocketService;
 import com.nairbspace.octoandroid.ui.add_printer.AddPrinterActivity;
+import com.nairbspace.octoandroid.ui.dispatch.DispatchActivity;
 import com.nairbspace.octoandroid.ui.printer_controls.PrinterControlsActivity;
 import com.nairbspace.octoandroid.ui.printer_settings.PrinterSettingsActivity;
 import com.nairbspace.octoandroid.ui.settings.SettingsActivity;
@@ -79,10 +80,8 @@ public class Navigator {
         activity.startActivity(i);
     }
 
-    public void navigateToStatusActivityFromNotification(Context context, NotificationCompat.Builder builder, int id) {
-        Intent i = StatusActivity.newIntent(context);
-        // TODO need to fix flags. If screen is currently on another Activity besides StatusActivity it will create unwanted backstack.
-        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+    public void navigateToDispatchActivityFromNotification(Context context, NotificationCompat.Builder builder, int id) {
+        Intent i = DispatchActivity.newIntent(context);
         PendingIntent pi = PendingIntent.getActivity(context, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification notification = builder.setContentIntent(pi).build();
