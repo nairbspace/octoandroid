@@ -114,4 +114,6 @@
     <string name="printing">Printing</string>
     <string name="printing_space_colon">Printing:&#160;</string>
     <string name="in_progress">In Progress</string>
+    <string name="print_stopped">Print Stopped</string>
+    <string name="print_stopped_description">Printer disconnected or error occurred</string>
 </resources>

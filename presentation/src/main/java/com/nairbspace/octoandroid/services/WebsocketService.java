@@ -114,6 +114,20 @@ public class WebsocketService extends Service implements WebsocketServiceHelper.
     }
 
     @Override
+    public void showErrorAndStopService() {
+        mFinishedBuilder = new NotificationCompat.Builder(this)
+                .setTicker(getResources().getString(R.string.print_stopped))
+                .setSmallIcon(R.drawable.ic_error_black_24dp)
+                .setContentTitle(getResources().getString(R.string.print_stopped))
+                .setContentText(getResources().getString(R.string.print_stopped_description))
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setAutoCancel(true);
+
+        mNavigator.createNotificationToDispatchActivity(this, mFinishedBuilder, PRINT_NOTIFICATION_ID);
+        turnOffAlarmAndStopService();
+    }
+
+    @Override
     public void turnOffAlarmAndStopService() {
         mNavigator.setWebsocketServiceAlarm(this, false);
         stopSelf();

@@ -21,7 +21,6 @@ public class WebsocketServiceHelper {
     private final GetStickyNotificationSetting mGetStickySetting;
 
     private Listener mListener;
-    private boolean mWasPreviouslyPrinting;
     private boolean mStickyOn;
 
     @Inject
@@ -86,16 +85,17 @@ public class WebsocketServiceHelper {
     }
 
     /**
-     * Checks to see if last state was previously printing. If it was then
-     * it checks if current status is complete which finishes this service.
-     * Otherwise it stores current state as previous.
+     * If print is complete show notification and stop service.
+     * If closed or error show error notification and stop service
      * @param model {@link WebsocketModel}
      */
     private void checkPrintStatus(WebsocketModel model) {
-        if (mWasPreviouslyPrinting && model.completionProgress() == COMPLETE) {
+        if (model.completionProgress() == COMPLETE) {
             mGetPushSetting.execute(new PushSubscriber(model.file()));
-        } else {
-            mWasPreviouslyPrinting = model.printing();
+        }
+
+        if (model.closedOrError() || model.error()) {
+            mListener.showErrorAndStopService();
         }
     }
 
@@ -132,5 +132,6 @@ public class WebsocketServiceHelper {
         void showSticky(WebsocketModel model);
         void showFinishedAndDestroy(String fileName, boolean showFinish);
         void checkApplicationStatus();
+        void showErrorAndStopService();
     }
 }
