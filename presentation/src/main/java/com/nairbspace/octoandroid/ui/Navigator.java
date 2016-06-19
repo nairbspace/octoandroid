@@ -81,12 +81,24 @@ public class Navigator {
 
     public void navigateToStatusActivityFromNotification(Context context, NotificationCompat.Builder builder, int id) {
         Intent i = StatusActivity.newIntent(context);
+        // TODO need to fix flags. If screen is currently on another Activity besides StatusActivity it will create unwanted backstack.
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent pi = PendingIntent.getActivity(context, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification notification = builder.setContentIntent(pi).build();
         NotificationManagerCompat nm = NotificationManagerCompat.from(context);
         nm.notify(id, notification);
+    }
+
+    public void setWebsocketServiceAndAlarm(Context context, boolean isOn) {
+        Intent i = WebsocketService.newIntent(context);
+        if (isOn) {
+            context.startService(i);
+        } else {
+            context.stopService(i);
+        }
+
+        setWebsocketServiceAlarm(context, isOn);
     }
 
     public void setWebsocketServiceAlarm(Context context, boolean isOn) {

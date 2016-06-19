@@ -42,7 +42,7 @@
     <integer name="prefs_last_save_time_default_value">0</integer>
 
     <string name="prefs_push_notification_title">Push Notification</string>
-    <string name="prefs_push_notification_summary">Notification when print is complete</string>
+    <string name="prefs_push_notification_summary">Notification when print is complete\nWarning: May affect battery life</string>
     <string name="prefs_push_notification_key" translatable="false">push_notification</string>
 
     <string name="prefs_sticky_notification_title">Sticky Notification</string>

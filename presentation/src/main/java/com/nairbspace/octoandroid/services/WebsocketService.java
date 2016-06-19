@@ -68,6 +68,17 @@ public class WebsocketService extends Service implements WebsocketServiceHelper.
     }
 
     @Override
+    public boolean isStickyBuilderNull() {
+        return mStickyBuilder == null;
+    }
+
+    /**
+     * Checks to see if {@link #mStickyBuilder} is not null since {@link android.app.AlarmManager}
+     * will call {@link #onStartCommand(Intent, int, int)} and start service all over again. If it's
+     * the first time loading it will display the initial notification screen until it is updated
+     * later again with the current progress and info.
+     */
+    @Override
     public void showSticky() {
         if (mStickyBuilder != null) return;
         mStickyBuilder = new NotificationCompat.Builder(this)
@@ -134,7 +145,7 @@ public class WebsocketService extends Service implements WebsocketServiceHelper.
 
 //    public static void toggleServiceAlarm(Context context) {
 //        boolean shouldStartAlarm = !isServiceAlarmOn(context);
-//        setWebsocketServiceAlarm(context, shouldStartAlarm);
+//        setWebsocketServiceAndAlarm(context, shouldStartAlarm);
 //    }
 //
 //    public static boolean isServiceAlarmOn(Context context) {

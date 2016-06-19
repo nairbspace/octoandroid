@@ -25,6 +25,7 @@ public class PlaybackPresenter extends UseCasePresenter<PlaybackScreen> {
     private final SendJobCommand mSendJobCommand;
     private final GetPushNotificationSetting mGetPushSetting;
     private final EventBus mEventBus;
+    private boolean mIsPushOn;
 
     @Inject
     public PlaybackPresenter(GetWebsocket getWebsocket, WebsocketModelMapper mapper,
@@ -57,13 +58,14 @@ public class PlaybackPresenter extends UseCasePresenter<PlaybackScreen> {
     @Override
     protected void onResume() {
         execute();
-        mScreen.setWebsocketServiceAlarm(false);
+        mScreen.setWebsocketServiceAndAlarm(false);
+        mGetPushSetting.execute(new GetPushSubscriber());
     }
 
     @Override
     protected void onPause() {
         mGetWebsocket.unsubscribe(); // TODO might be best to have websocket on separate thread.
-        mGetPushSetting.execute(new GetPushSubscriber());
+        if (mScreen.isPrinting()) mScreen.setWebsocketServiceAndAlarm(mIsPushOn);
     }
 
     @Override
@@ -167,9 +169,7 @@ public class PlaybackPresenter extends UseCasePresenter<PlaybackScreen> {
 
         @Override
         public void onNext(Boolean aBoolean) {
-            if (aBoolean != null && aBoolean) {
-                if (mScreen.isPrinting()) mScreen.setWebsocketServiceAlarm(true);
-            }
+            if (aBoolean != null) mIsPushOn = aBoolean;
         }
     }
 

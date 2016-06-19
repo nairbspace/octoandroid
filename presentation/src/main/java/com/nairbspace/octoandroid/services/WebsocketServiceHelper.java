@@ -22,6 +22,7 @@ public class WebsocketServiceHelper {
 
     private Listener mListener;
     private boolean mWasPreviouslyPrinting;
+    private boolean mStickyOn;
 
     @Inject
     public WebsocketServiceHelper(GetWebsocket getWebsocket,
@@ -41,13 +42,8 @@ public class WebsocketServiceHelper {
 
     protected void onStartCommand() {
         Timber.d("Websocket service started");
-        if (!mListener.isApplicationVisible()) {
-            Timber.d("Websocket service started in background");
-            mGetWebsocket.execute(new WebsocketSubscriber());
-            mGetStickySetting.execute(new StickySubscriber());
-        } else {
-            mListener.turnOffAlarmAndStopService();
-        }
+        mGetWebsocket.execute(new WebsocketSubscriber());
+        mGetStickySetting.execute(new StickySubscriber());
     }
 
     private final class StickySubscriber extends DefaultSubscriber<Boolean> {
@@ -58,9 +54,7 @@ public class WebsocketServiceHelper {
 
         @Override
         public void onNext(Boolean aBoolean) {
-            if (aBoolean != null && aBoolean) {
-                mListener.showSticky();
-            }
+            if (aBoolean != null) mStickyOn = aBoolean;
         }
     }
 
@@ -86,8 +80,18 @@ public class WebsocketServiceHelper {
         public void onNext(WebsocketModel websocketModel) {
             Timber.d(websocketModel.toString());
             mListener.checkApplicationStatus();
-            mListener.updateSticky(websocketModel);
+            checkStickyStatus(websocketModel);
             checkPrintStatus(websocketModel);
+        }
+    }
+
+    private void checkStickyStatus(WebsocketModel model) {
+        if (!mStickyOn) return;
+
+        if (mListener.isStickyBuilderNull()) {
+            mListener.showSticky();
+        } else {
+            mListener.updateSticky(model);
         }
     }
 
@@ -131,6 +135,7 @@ public class WebsocketServiceHelper {
         mGetWebsocket.unsubscribe();
         mWebsocketModelMapper.unsubscribe();
         mGetPushSetting.unsubscribe();
+        mGetStickySetting.unsubscribe();
         mListener = null;
     }
 
@@ -141,5 +146,6 @@ public class WebsocketServiceHelper {
         void showFinishedAndDestroy(String fileName, boolean showFinish);
         void checkApplicationStatus();
         void updateSticky(WebsocketModel model);
+        boolean isStickyBuilderNull();
     }
 }
