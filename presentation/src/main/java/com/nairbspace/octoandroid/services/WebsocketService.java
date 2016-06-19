@@ -52,11 +52,6 @@ public class WebsocketService extends Service implements WebsocketServiceHelper.
         return super.onStartCommand(intent, flags, startId);
     }
 
-    @Override
-    public boolean isApplicationVisible() {
-        return LifecycleHandler.isApplicationVisible();
-    }
-
     /**
      * Checks to see if application is visible. If so then turns off alarm and stops service.
      */
@@ -67,20 +62,23 @@ public class WebsocketService extends Service implements WebsocketServiceHelper.
         }
     }
 
-    @Override
-    public boolean isStickyBuilderNull() {
-        return mStickyBuilder == null;
-    }
-
     /**
      * Checks to see if {@link #mStickyBuilder} is not null since {@link android.app.AlarmManager}
      * will call {@link #onStartCommand(Intent, int, int)} and start service all over again. If it's
      * the first time loading it will display the initial notification screen until it is updated
      * later again with the current progress and info.
+     * @param model WebsocketModel
      */
     @Override
-    public void showSticky() {
-        if (mStickyBuilder != null) return;
+    public void showSticky(WebsocketModel model) {
+        if (mStickyBuilder == null) {
+            createSticky();
+        } else {
+            updateSticky(model);
+        }
+    }
+
+    private void createSticky() {
         mStickyBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_print_black_24dp)
                 .setContentTitle(getResources().getString(R.string.printer_space_colon))
@@ -88,17 +86,10 @@ public class WebsocketService extends Service implements WebsocketServiceHelper.
                 .setAutoCancel(true)
                 .setOngoing(true);
 
-        mNavigator.navigateToStatusActivityFromNotification(this, mStickyBuilder, PRINT_NOTIFICATION_ID);
+        mNavigator.navigateToDispatchActivityFromNotification(this, mStickyBuilder, PRINT_NOTIFICATION_ID);
     }
 
-    /**
-     * If {@link #mStickyBuilder} is null that means it was never created
-     * (ie. Sticky Notification is turned off). Otherwise update it with latest data from model.
-     * @param model {@link WebsocketModel}
-     */
-    @Override
-    public void updateSticky(WebsocketModel model) {
-        if (mStickyBuilder == null) return;
+    private void updateSticky(WebsocketModel model) {
         Resources res = getResources();
         String printingFile = res.getString(R.string.printer_space_colon) + model.file();
         String printTimeLeft = res.getString(R.string.print_time_left_colon_space) + model.printTimeLeft();
@@ -111,18 +102,20 @@ public class WebsocketService extends Service implements WebsocketServiceHelper.
 
     @Override
     public void showFinishedAndDestroy(String fileName, boolean showFinish) {
-        if (showFinish) {
-            mFinishedBuilder = new NotificationCompat.Builder(this)
-                    .setTicker(getResources().getString(R.string.print_complete))
-                    .setSmallIcon(R.drawable.ic_print_black_24dp)
-                    .setContentTitle(getResources().getString(R.string.print_complete))
-                    .setContentText(fileName)
-                    .setDefaults(Notification.DEFAULT_ALL)
-                    .setAutoCancel(true);
-
-            mNavigator.navigateToStatusActivityFromNotification(this, mFinishedBuilder, PRINT_NOTIFICATION_ID);
-        }
+        if (showFinish) showFinishedNotification(fileName);
         turnOffAlarmAndStopService();
+    }
+
+    private void showFinishedNotification(String fileName) {
+        mFinishedBuilder = new NotificationCompat.Builder(this)
+                .setTicker(getResources().getString(R.string.print_complete))
+                .setSmallIcon(R.drawable.ic_print_black_24dp)
+                .setContentTitle(getResources().getString(R.string.print_complete))
+                .setContentText(fileName)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setAutoCancel(true);
+
+        mNavigator.navigateToDispatchActivityFromNotification(this, mFinishedBuilder, PRINT_NOTIFICATION_ID);
     }
 
     @Override

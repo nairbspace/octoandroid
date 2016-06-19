@@ -80,18 +80,8 @@ public class WebsocketServiceHelper {
         public void onNext(WebsocketModel websocketModel) {
             Timber.d(websocketModel.toString());
             mListener.checkApplicationStatus();
-            checkStickyStatus(websocketModel);
+            if (mStickyOn) mListener.showSticky(websocketModel);
             checkPrintStatus(websocketModel);
-        }
-    }
-
-    private void checkStickyStatus(WebsocketModel model) {
-        if (!mStickyOn) return;
-
-        if (mListener.isStickyBuilderNull()) {
-            mListener.showSticky();
-        } else {
-            mListener.updateSticky(model);
         }
     }
 
@@ -124,9 +114,7 @@ public class WebsocketServiceHelper {
 
         @Override
         public void onNext(Boolean aBoolean) {
-            if (aBoolean != null) {
-                mListener.showFinishedAndDestroy(mFileName, aBoolean);
-            }
+            if (aBoolean != null) mListener.showFinishedAndDestroy(mFileName, aBoolean);
         }
     }
 
@@ -140,12 +128,9 @@ public class WebsocketServiceHelper {
     }
 
     public interface Listener {
-        boolean isApplicationVisible();
         void turnOffAlarmAndStopService();
-        void showSticky();
+        void showSticky(WebsocketModel model);
         void showFinishedAndDestroy(String fileName, boolean showFinish);
         void checkApplicationStatus();
-        void updateSticky(WebsocketModel model);
-        boolean isStickyBuilderNull();
     }
 }
