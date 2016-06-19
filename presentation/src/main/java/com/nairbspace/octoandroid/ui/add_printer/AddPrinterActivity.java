@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -29,6 +30,7 @@ import com.nairbspace.octoandroid.ui.templates.Presenter;
 
 import javax.inject.Inject;
 
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -36,6 +38,7 @@ import butterknife.OnClick;
 public class AddPrinterActivity extends BaseActivity<AddPrinterScreen>
         implements AddPrinterScreen, QrDialogFragment.Listener, SslErrorDialogFragment.Listener {
     private static final String ADD_PRINTER_MODEL_KEY = "add_printer_model_key";
+    @BindString(R.string.exception_no_rear_camera) String NO_REAR_CAMERA;
 
     @Inject AddPrinterPresenter mPresenter;
     @Inject AnswersHelper mAnswersHelper;
@@ -145,10 +148,19 @@ public class AddPrinterActivity extends BaseActivity<AddPrinterScreen>
 
     @Override
     public void showQrDialogFragment() {
-        if (PlayServiceChecker.isAvailable(this)) {
+        if (PlayServiceChecker.isAvailable(this) && doesRearCameraExist()) {
             DialogFragment df = QrDialogFragment.newInstance();
             df.setCancelable(true);
             df.show(getSupportFragmentManager(), null);
+        }
+    }
+
+    private boolean doesRearCameraExist() {
+        if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+            return true;
+        } else {
+            showSnackbar(NO_REAR_CAMERA);
+            return false;
         }
     }
 
