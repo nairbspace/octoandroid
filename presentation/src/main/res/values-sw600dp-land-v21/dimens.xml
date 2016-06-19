@@ -3,5 +3,7 @@
     <dimen name="nav_horizontal_spacing">32dp</dimen>
     <dimen name="nav_width">320dp</dimen>
     <dimen name="nav_margin">@dimen/nav_width</dimen>
-    <dimen name="fragment_controls_card_elevation">0dp</dimen>
+
+    <!-- Older devices crash with negative dp-->
+    <dimen name="fragment_controls_card_elevation">-1dp</dimen>
 </resources>

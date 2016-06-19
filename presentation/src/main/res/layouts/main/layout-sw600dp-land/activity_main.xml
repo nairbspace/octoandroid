@@ -63,7 +63,7 @@
         android:layout_marginLeft="@dimen/nav_margin"
         android:layout_marginStart="@dimen/nav_margin"
         android:layout_gravity="bottom|center"
-        app:cardElevation="-1dp"
+        app:cardElevation="@dimen/fragment_controls_card_elevation"
         app:layout_behavior="com.nairbspace.octoandroid.views.MoveUpBehavior"/>
     <!--TODO-low possibly fix elevation issue with nav-->
     <!--TODO snackbar doesn't look nice on tablet view-->
