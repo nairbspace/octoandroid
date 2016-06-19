@@ -95,6 +95,7 @@ public class SetupApplication extends Application {
                 return;
             }
 
+            if (Crashlytics.getInstance() == null) return; // Should never happen
             Crashlytics.setInt(CRASHLYTICS_KEY_PRIORITY, priority);
             Crashlytics.setString(CRASHLYTICS_KEY_TAG, tag);
             Crashlytics.setString(CRASHLYTICS_KEY_MESSAGE, message);
