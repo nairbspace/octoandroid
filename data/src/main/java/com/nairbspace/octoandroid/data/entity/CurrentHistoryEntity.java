@@ -31,13 +31,13 @@ public abstract class CurrentHistoryEntity {
         @AutoValue
         @AutoGson(autoValueClass = AutoValue_CurrentHistoryEntity_State_Flags.class)
         public abstract static class Flags {
-            @SerializedName("operational") public abstract boolean operational();
-            @SerializedName("paused") public abstract boolean paused();
-            @SerializedName("printing") public abstract boolean printing();
-            @SerializedName("sdReady") public abstract boolean sdReady();
-            @SerializedName("error") public abstract boolean error();
-            @SerializedName("ready") public abstract boolean ready();
-            @SerializedName("closedOrError") public abstract boolean closedOrError();
+            @Nullable @SerializedName("operational") public abstract Boolean operational();
+            @Nullable @SerializedName("paused") public abstract Boolean paused();
+            @Nullable @SerializedName("printing") public abstract Boolean printing();
+            @Nullable @SerializedName("sdReady") public abstract Boolean sdReady();
+            @Nullable @SerializedName("error") public abstract Boolean error();
+            @Nullable @SerializedName("ready") public abstract Boolean ready();
+            @Nullable @SerializedName("closedOrError") public abstract Boolean closedOrError();
         }
     }
 
