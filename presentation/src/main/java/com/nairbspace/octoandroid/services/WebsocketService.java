@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
@@ -95,36 +96,39 @@ public class WebsocketService extends Service implements WebsocketServiceHelper.
         mNotificationManager.notify(PRINT_NOTIFICATION_ID, mStickyBuilder.build());
     }
 
-    @Override
-    public void showFinishedAndDestroy(String fileName, boolean showFinish) {
-        if (showFinish) showFinishedNotification(fileName);
-        turnOffAlarmAndStopService();
-    }
-
-    private void showFinishedNotification(String fileName) {
-        mFinishedBuilder = new NotificationCompat.Builder(this)
-                .setTicker(getResources().getString(R.string.print_complete))
-                .setSmallIcon(R.drawable.ic_print_white_24dp)
-                .setContentTitle(getResources().getString(R.string.print_complete))
-                .setContentText(fileName)
-                .setDefaults(Notification.DEFAULT_ALL)
-                .setAutoCancel(true);
-
-        mNavigator.createNotificationToDispatchActivity(this, mFinishedBuilder, PRINT_NOTIFICATION_ID);
+    public enum FinishType {
+        REGULAR, ERROR, NONE
     }
 
     @Override
-    public void showErrorAndStopService() {
-        mFinishedBuilder = new NotificationCompat.Builder(this)
-                .setTicker(getResources().getString(R.string.print_stopped))
-                .setSmallIcon(R.drawable.ic_error_white_24dp)
-                .setContentTitle(getResources().getString(R.string.print_stopped))
-                .setContentText(getResources().getString(R.string.print_stopped_description))
-                .setDefaults(Notification.DEFAULT_ALL)
-                .setAutoCancel(true);
-
-        mNavigator.createNotificationToDispatchActivity(this, mFinishedBuilder, PRINT_NOTIFICATION_ID);
+    public void showFinishedAndDestroy(FinishType type, @Nullable String fileName) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        Resources res = getResources();
+        switch (type) {
+            case REGULAR:
+                if (fileName == null) fileName = "";
+                builder.setTicker(res.getString(R.string.print_complete))
+                        .setSmallIcon(R.drawable.ic_print_white_24dp)
+                        .setContentTitle(res.getString(R.string.print_complete))
+                        .setContentText(fileName);
+                break;
+            case ERROR:
+                builder.setTicker(res.getString(R.string.print_stopped))
+                        .setSmallIcon(R.drawable.ic_error_white_24dp)
+                        .setContentTitle(res.getString(R.string.print_stopped))
+                        .setContentText(res.getString(R.string.print_stopped_description));
+                break;
+            case NONE:
+                builder = null;
+                break;
+        }
+        if (builder != null) showFinishedNotification(builder);
         turnOffAlarmAndStopService();
+    }
+
+    private void showFinishedNotification(@NonNull NotificationCompat.Builder builder) {
+        mFinishedBuilder = builder.setAutoCancel(true).setDefaults(Notification.DEFAULT_ALL);
+        mNavigator.createNotificationToDispatchActivity(this, mFinishedBuilder, PRINT_NOTIFICATION_ID);
     }
 
     @Override

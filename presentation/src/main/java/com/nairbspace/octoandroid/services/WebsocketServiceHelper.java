@@ -7,6 +7,7 @@ import com.nairbspace.octoandroid.domain.interactor.GetWebsocket;
 import com.nairbspace.octoandroid.domain.model.Websocket;
 import com.nairbspace.octoandroid.mapper.WebsocketModelMapper;
 import com.nairbspace.octoandroid.model.WebsocketModel;
+import com.nairbspace.octoandroid.services.WebsocketService.FinishType;
 
 import javax.inject.Inject;
 
@@ -40,7 +41,7 @@ public class WebsocketServiceHelper {
     }
 
     protected void onStartCommand() {
-        Timber.d("Websocket service started");
+        Timber.d("onStartCommand");
         mGetWebsocket.execute(new WebsocketSubscriber());
         mGetStickySetting.execute(new StickySubscriber());
     }
@@ -48,7 +49,7 @@ public class WebsocketServiceHelper {
     private final class StickySubscriber extends DefaultSubscriber<Boolean> {
         @Override
         public void onError(Throwable e) {
-            super.onError(e);
+            subscriberError(e);
         }
 
         @Override
@@ -60,7 +61,7 @@ public class WebsocketServiceHelper {
     private final class WebsocketSubscriber extends DefaultSubscriber<Websocket> {
         @Override
         public void onError(Throwable e) {
-            super.onError(e);
+            subscriberError(e);
         }
 
         @Override
@@ -72,7 +73,7 @@ public class WebsocketServiceHelper {
     private final class MapperSubscriber extends DefaultSubscriber<WebsocketModel> {
         @Override
         public void onError(Throwable e) {
-            super.onError(e);
+            subscriberError(e);
         }
 
         @Override
@@ -92,15 +93,11 @@ public class WebsocketServiceHelper {
     private void checkPrintStatus(WebsocketModel model) {
         if (model.completionProgress() == COMPLETE) {
             mGetPushSetting.execute(new PushSubscriber(model.file()));
-        }
-
-        if (model.closedOrError() || model.error()) {
-            mListener.showErrorAndStopService();
-        }
-
-        // TODO-low would be nice in feature to pause/resume print from notification!
-        if (!model.pausedOrPrinting()) {
-            mListener.showFinishedAndDestroy(model.file(), false);
+        } else if (model.closedOrError() || model.error()) {
+            mListener.showFinishedAndDestroy(FinishType.ERROR, null);
+        } else if (!model.pausedOrPrinting()) {
+            // TODO-low would be nice in feature to pause/resume print from notification!
+            mListener.showFinishedAndDestroy(FinishType.NONE, null);
         }
     }
 
@@ -114,13 +111,18 @@ public class WebsocketServiceHelper {
 
         @Override
         public void onError(Throwable e) {
-            super.onError(e);
+            subscriberError(e);
         }
 
         @Override
         public void onNext(Boolean aBoolean) {
-            if (aBoolean != null) mListener.showFinishedAndDestroy(mFileName, aBoolean);
+            if (aBoolean != null) mListener.showFinishedAndDestroy(FinishType.REGULAR, mFileName);
         }
+    }
+
+    private void subscriberError(Throwable t) {
+        Timber.e(t, null);
+        mListener.showFinishedAndDestroy(FinishType.ERROR, null);
     }
 
     protected void onDestroy() {
@@ -135,8 +137,7 @@ public class WebsocketServiceHelper {
     public interface Listener {
         void turnOffAlarmAndStopService();
         void showSticky(WebsocketModel model);
-        void showFinishedAndDestroy(String fileName, boolean showFinish);
+        void showFinishedAndDestroy(FinishType type, String fileName);
         void checkApplicationStatus();
-        void showErrorAndStopService();
     }
 }
