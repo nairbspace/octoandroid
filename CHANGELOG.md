@@ -1,6 +1,17 @@
 Change Log
 ==========
 
+Version 1.5.0 *(2016-06-20)*
+----------------------------
+
+ * Feature: Notifications
+ 
+ * Fixed crashing on pre-Lollipop tablets due to negative dp in CardView
+ * Added check for Play Services and rear camera
+ * Fixed IME action in AddPrinterActivity
+ * Added log data in AddPrinterActivity to see how users login
+ * Updated preview image in README
+
 Version 1.4.7 *(2016-06-15)*
 ----------------------------
 
