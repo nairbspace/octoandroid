@@ -116,4 +116,11 @@
     <string name="in_progress">In Progress</string>
     <string name="print_stopped">Print Stopped</string>
     <string name="print_stopped_description">Printer disconnected or error occurred</string>
+
+    <string name="slicer">Slicer</string>
+    <string name="do_nothing">Do nothing</string>
+    <string name="select_for_printing">Select for printing</string>
+    <string name="start_printing">Start printing</string>
+    <string name="settings">Settings</string>
+
 </resources>

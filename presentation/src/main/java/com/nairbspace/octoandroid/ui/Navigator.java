@@ -26,6 +26,7 @@ import com.nairbspace.octoandroid.ui.dispatch.DispatchActivity;
 import com.nairbspace.octoandroid.ui.printer_controls.PrinterControlsActivity;
 import com.nairbspace.octoandroid.ui.printer_settings.PrinterSettingsActivity;
 import com.nairbspace.octoandroid.ui.settings.SettingsActivity;
+import com.nairbspace.octoandroid.ui.slicer.SlicerActivity;
 import com.nairbspace.octoandroid.ui.status.StatusActivity;
 import com.nairbspace.octoandroid.ui.temp.TempActivity;
 import com.nairbspace.octoandroid.ui.webcam.WebcamActivity;
@@ -115,6 +116,12 @@ public class Navigator {
         Intent i = PrinterControlsActivity.newIntent(activity);
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         activity.startActivity(i);
+    }
+
+    public void navigateToSlicerActivity(Context context) {
+        Intent i = SlicerActivity.newIntent(context);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(i);
     }
 
     public void navigateToSettingsActivity(Activity activity) {

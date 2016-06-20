@@ -18,4 +18,14 @@
         <item>@string/general</item>
     </string-array>
 
+    <string-array name="after_slicing_list">
+        <item>@string/do_nothing</item>
+        <item>@string/select_for_printing</item>
+        <item>@string/start_printing</item>
+    </string-array>
+
+    <string-array name="slice_pager_adapter">
+        <item>@string/settings</item>
+    </string-array>
+
 </resources>

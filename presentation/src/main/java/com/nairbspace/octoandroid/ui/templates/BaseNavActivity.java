@@ -26,6 +26,8 @@ import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.ui.playback.PlaybackFragment;
 import com.nairbspace.octoandroid.ui.printer_controls.PrinterControlsActivity;
 import com.nairbspace.octoandroid.ui.printer_controls.PrinterControlsFragmentPagerAdapter;
+import com.nairbspace.octoandroid.ui.slicer.SlicerActivity;
+import com.nairbspace.octoandroid.ui.slicer.SlicerPagerAdapter;
 import com.nairbspace.octoandroid.ui.status.StatusActivity;
 import com.nairbspace.octoandroid.ui.status.StatusFragmentPagerAdapter;
 import com.nairbspace.octoandroid.ui.temp.TempActivity;
@@ -198,6 +200,12 @@ public abstract class BaseNavActivity<T> extends BaseActivity<T>
                     overridePendingTransition(mFadeIn, mFadeOut);
                 }
                 break;
+            case R.id.nav_slicer:
+                if (!(this instanceof SlicerActivity)) {
+                    getNavigator().navigateToSlicerActivity(this);
+                    overridePendingTransition(mFadeIn, mFadeOut);
+                }
+                break;
             case R.id.nav_webcam:
                 getNavigator().navigateToWebcam(this);
                 break;
@@ -221,6 +229,8 @@ public abstract class BaseNavActivity<T> extends BaseActivity<T>
             mNavView.setCheckedItem(R.id.nav_temp);
         } else if (pagerAdapter instanceof PrinterControlsFragmentPagerAdapter) {
             mNavView.setCheckedItem(R.id.nav_controls);
+        } else if (pagerAdapter instanceof SlicerPagerAdapter) {
+            mNavView.setCheckedItem(R.id.nav_slicer);
         }
     }
 
