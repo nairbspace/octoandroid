@@ -59,6 +59,8 @@ android {
     sourceSets {
         main {
             res.srcDirs = [
+                    'src/main/res',
+                    'src/main/res/layouts',
                     'src/main/res/layouts/main',
                     'src/main/res/layouts/playback_controls',
                     'src/main/res/layouts/connection',
@@ -68,8 +70,7 @@ android {
                     'src/main/res/layouts/temp_graph',
                     'src/main/res/layouts/temp_controls',
                     'src/main/res/layouts/printer_controls',
-                    'src/main/res/layouts',
-                    'src/main/res'
+                    'src/main/res/layouts/printer_settings',
             ]
         }
     }
