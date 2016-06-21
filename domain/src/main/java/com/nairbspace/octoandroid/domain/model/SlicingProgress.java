@@ -13,5 +13,5 @@ public abstract class SlicingProgress {
     @Nullable @SerializedName("source_patch") public abstract String sourcePath();
     @Nullable @SerializedName("dest_location") public abstract String destLocation();
     @Nullable @SerializedName("dest_path") public abstract String destPath();
-    @Nullable @SerializedName("progress") public abstract Float progress();
+    @Nullable @SerializedName("progress") public abstract Double progress();
 }

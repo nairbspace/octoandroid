@@ -8,12 +8,14 @@ import com.nairbspace.octoandroid.domain.model.FileCommand;
 import com.nairbspace.octoandroid.domain.model.Files;
 import com.nairbspace.octoandroid.domain.model.PrintHeadCommand;
 import com.nairbspace.octoandroid.domain.model.Printer;
+import com.nairbspace.octoandroid.domain.model.Slicer;
 import com.nairbspace.octoandroid.domain.model.TempCommand;
 import com.nairbspace.octoandroid.domain.model.ToolCommand;
 import com.nairbspace.octoandroid.domain.model.Websocket;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import rx.Observable;
 
@@ -60,4 +62,6 @@ public interface PrinterRepository {
     Observable<Boolean> isPushNotificationOn();
 
     Observable<Boolean> isStickyNotificationOn();
+
+    Observable<Map<String, Slicer>> getSlicers();
 }

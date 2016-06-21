@@ -5,6 +5,7 @@ import com.nairbspace.octoandroid.data.entity.ConnectEntity;
 import com.nairbspace.octoandroid.data.entity.ConnectionEntity;
 import com.nairbspace.octoandroid.data.entity.FileCommandEntity;
 import com.nairbspace.octoandroid.data.entity.FilesEntity;
+import com.nairbspace.octoandroid.data.entity.SlicerEntity;
 import com.nairbspace.octoandroid.data.entity.ToolCommandEntity;
 import com.nairbspace.octoandroid.data.entity.WebsocketEntity;
 import com.nairbspace.octoandroid.domain.model.AddPrinter;
@@ -15,11 +16,13 @@ import com.nairbspace.octoandroid.domain.model.FileCommand;
 import com.nairbspace.octoandroid.domain.model.Files;
 import com.nairbspace.octoandroid.domain.model.PrintHeadCommand;
 import com.nairbspace.octoandroid.domain.model.Printer;
+import com.nairbspace.octoandroid.domain.model.Slicer;
 import com.nairbspace.octoandroid.domain.model.TempCommand;
 import com.nairbspace.octoandroid.domain.model.ToolCommand;
 import com.nairbspace.octoandroid.domain.model.Websocket;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -93,5 +96,9 @@ public class MapperHelper {
 
     public Object mapToArbitraryCommandEntity(ArbitraryCommand arbitraryCommand) {
         return ArbitraryCommandEntityMapper.mapToArbitraryCommandEntity(arbitraryCommand);
+    }
+
+    public Func1<Map<String, SlicerEntity>, Map<String, Slicer>> mapToSlicer() {
+        return SlicerEntityMapper.mapToSlicer(mEntitySerializer);
     }
 }

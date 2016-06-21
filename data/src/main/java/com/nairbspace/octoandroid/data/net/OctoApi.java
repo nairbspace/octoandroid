@@ -5,9 +5,11 @@ import com.nairbspace.octoandroid.data.entity.ConnectionEntity;
 import com.nairbspace.octoandroid.data.entity.FileCommandEntity;
 import com.nairbspace.octoandroid.data.entity.FilesEntity;
 import com.nairbspace.octoandroid.data.entity.PrinterStateEntity;
+import com.nairbspace.octoandroid.data.entity.SlicerEntity;
 import com.nairbspace.octoandroid.data.entity.VersionEntity;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import okhttp3.MultipartBody;
 import retrofit2.http.Body;
@@ -61,4 +63,7 @@ public interface OctoApi {
 
     @POST("/api/printer/command")
     Observable<Object> sendArbitraryCommand(@Body Object object);
+
+    @GET("/api/slicing")
+    Observable<Map<String, SlicerEntity>> getSlicers();
 }

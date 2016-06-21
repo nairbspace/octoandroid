@@ -7,11 +7,13 @@ import com.nairbspace.octoandroid.data.entity.ConnectionEntity;
 import com.nairbspace.octoandroid.data.entity.FileCommandEntity;
 import com.nairbspace.octoandroid.data.entity.FilesEntity;
 import com.nairbspace.octoandroid.data.entity.PrinterStateEntity;
+import com.nairbspace.octoandroid.data.entity.SlicerEntity;
 import com.nairbspace.octoandroid.data.entity.VersionEntity;
 import com.nairbspace.octoandroid.domain.model.TempCommand;
 import com.nairbspace.octoandroid.domain.model.TempCommand.ToolBedOffsetTemp;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -101,6 +103,11 @@ public class ApiManagerImpl implements ApiManager {
     @Override
     public Observable<Object> sendArbitraryCommand(@Body Object object) {
         return mOctoApi.sendArbitraryCommand(object);
+    }
+
+    @Override
+    public Observable<Map<String, SlicerEntity>> getSlicers() {
+        return mOctoApi.getSlicers();
     }
 
     @Override

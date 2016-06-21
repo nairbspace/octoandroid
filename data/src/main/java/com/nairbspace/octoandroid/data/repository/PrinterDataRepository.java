@@ -14,6 +14,7 @@ import com.nairbspace.octoandroid.domain.model.FileCommand;
 import com.nairbspace.octoandroid.domain.model.Files;
 import com.nairbspace.octoandroid.domain.model.PrintHeadCommand;
 import com.nairbspace.octoandroid.domain.model.Printer;
+import com.nairbspace.octoandroid.domain.model.Slicer;
 import com.nairbspace.octoandroid.domain.model.TempCommand;
 import com.nairbspace.octoandroid.domain.model.ToolCommand;
 import com.nairbspace.octoandroid.domain.model.Websocket;
@@ -21,6 +22,7 @@ import com.nairbspace.octoandroid.domain.repository.PrinterRepository;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -173,5 +175,10 @@ public class PrinterDataRepository implements PrinterRepository {
     @Override
     public Observable<Boolean> isStickyNotificationOn() {
         return mDiskManager.isStickyNotificationOn();
+    }
+
+    @Override
+    public Observable<Map<String, Slicer>> getSlicers() {
+        return mApiManager.getSlicers().map(mMapperHelper.mapToSlicer());
     }
 }
