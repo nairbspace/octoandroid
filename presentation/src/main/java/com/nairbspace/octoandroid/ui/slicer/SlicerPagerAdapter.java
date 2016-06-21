@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.nairbspace.octoandroid.ui.files.FilesFragment;
 import com.nairbspace.octoandroid.ui.slicer.slicing.SlicingFragment;
 
 public class SlicerPagerAdapter extends FragmentPagerAdapter {
@@ -16,7 +17,11 @@ public class SlicerPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return SlicingFragment.newInstance();
+        if (position == 0) {
+            return SlicingFragment.newInstance();
+        } else {
+            return FilesFragment.newInstance();
+        }
     }
 
     @Override

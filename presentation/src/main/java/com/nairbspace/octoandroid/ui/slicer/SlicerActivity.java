@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
+import com.nairbspace.octoandroid.ui.files.FilesFragment;
 import com.nairbspace.octoandroid.ui.playback.PlaybackFragment;
 import com.nairbspace.octoandroid.ui.slicer.slicing.SlicingFragment;
 import com.nairbspace.octoandroid.ui.templates.BaseNavActivity;
@@ -19,7 +20,8 @@ import butterknife.BindArray;
 import butterknife.ButterKnife;
 
 public class SlicerActivity extends BaseNavActivity<SlicerScreen>
-        implements SlicerScreen, PlaybackFragment.Listener, SlicingFragment.Listener {
+        implements SlicerScreen, PlaybackFragment.Listener, SlicingFragment.Listener,
+        FilesFragment.Listener{
 
     @Inject SlicerPresenter mPresenter;
     @BindArray(R.array.slice_pager_adapter) String[] mPagerArray;

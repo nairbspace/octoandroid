@@ -26,6 +26,7 @@
 
     <string-array name="slice_pager_adapter">
         <item>@string/settings</item>
+        <item>@string/files</item>
     </string-array>
 
 </resources>
