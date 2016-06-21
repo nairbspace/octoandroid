@@ -126,5 +126,6 @@
     <string name="after_slicing">After Slicing</string>
     <string name="gcode_filename_colon_space">GCode Filename:&#160;</string>
     <string name="slice">Slice</string>
+    <string name="dot_gco" translatable="false">.gco</string>
 
 </resources>

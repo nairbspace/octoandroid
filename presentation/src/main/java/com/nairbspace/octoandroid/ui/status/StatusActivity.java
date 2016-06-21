@@ -18,6 +18,7 @@ import com.nairbspace.octoandroid.ui.templates.Presenter;
 import javax.inject.Inject;
 
 import butterknife.BindArray;
+import butterknife.BindBool;
 import butterknife.ButterKnife;
 
 public class StatusActivity extends BaseNavActivity<StatusScreen>
@@ -27,6 +28,9 @@ public class StatusActivity extends BaseNavActivity<StatusScreen>
 
     @Inject StatusPresenter mPresenter;
     @BindArray(R.array.status_fragment_pager_adapter) String[] mPagerArray;
+    @BindBool(R.bool.is_tablet_and_landscape) boolean mIsTabletAndLandscape;
+    private int mFadeIn;
+    private int mFadeOut;
 
     public static Intent newIntent(Context context) {
         return new Intent(context, StatusActivity.class);
@@ -39,6 +43,8 @@ public class StatusActivity extends BaseNavActivity<StatusScreen>
         setContentView(R.layout.activity_main);
         onCreateDrawer(ButterKnife.bind(this));
         inflateAdapter(new StatusFragmentPagerAdapter(mPagerArray, getSupportFragmentManager()));
+        mFadeIn = mIsTabletAndLandscape ? 0 : android.R.anim.fade_in;
+        mFadeOut = mIsTabletAndLandscape ? 0 : android.R.anim.fade_out;
     }
 
     @NonNull
@@ -51,5 +57,11 @@ public class StatusActivity extends BaseNavActivity<StatusScreen>
     @Override
     protected StatusScreen setScreen() {
         return this;
+    }
+
+    @Override
+    public void sliceButtonClicked(String apiUrl) {
+        getNavigator().navigateToSlicerActivityWithApiUrl(this, apiUrl);
+        overridePendingTransition(mFadeIn, mFadeOut); // TODO should control in navigator
     }
 }

@@ -124,6 +124,12 @@ public class Navigator {
         context.startActivity(i);
     }
 
+    public void navigateToSlicerActivityWithApiUrl(Context context, String apiUrl) {
+        Intent i = SlicerActivity.newIntent(context, apiUrl);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(i);
+    }
+
     public void navigateToSettingsActivity(Activity activity) {
         Intent i = SettingsActivity.newIntent(activity);
         activity.startActivity(i);

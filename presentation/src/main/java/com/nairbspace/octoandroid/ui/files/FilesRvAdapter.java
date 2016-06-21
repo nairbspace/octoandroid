@@ -106,6 +106,11 @@ public class FilesRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     @Override
+    public void sliceButtonClicked(String apiUrl) {
+        mListener.sliceButtonClicked(apiUrl);
+    }
+
+    @Override
     public void downloadButtonClicked(String downloadUrl) {
         mListener.downloadButtonClicked(downloadUrl);
     }
@@ -127,5 +132,6 @@ public class FilesRvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         void deleteButtonClicked(String apiUrl, int adapterPosition);
         void downloadButtonClicked(String downloadUrl);
         void loadButtonClicked(String apiUrl);
+        void sliceButtonClicked(String apiUrl);
     }
 }

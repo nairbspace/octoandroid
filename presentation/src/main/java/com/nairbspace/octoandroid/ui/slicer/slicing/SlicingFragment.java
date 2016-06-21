@@ -9,7 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
@@ -23,6 +25,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -30,6 +33,8 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
         implements SlicingScreen, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String SLICER_SCREEN_MODEL_KEY = "slicer_screen_model_key";
+    private static final String API_URL_KEY = "api_url_key";
+    @BindString(R.string.dot_gco) String DOT_GCO;
 
     @Inject SlicingPresenter mPresenter;
     private Listener mListener;
@@ -39,13 +44,24 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
     @BindView(R.id.slicer_profile_spinner) Spinner mSlicerProfileSpinner;
     @BindView(R.id.printer_profile_spinner) Spinner mPrinterProfileSpinner;
     @BindView(R.id.after_slicing_spinner) Spinner mAfterSlicingSpinner;
+    @BindView(R.id.slicer_gcode_filename) TextView mFileNameTextView;
+    @BindView(R.id.slice_button) Button mSliceButton;
 
     private int mSpinnerId;
     private Map<String, SlicerModel> mModelMap;
     private HashMap<String, String> mPrinterProfileMap;
+    private String mApiUrl;
 
     public static SlicingFragment newInstance() {
         return new SlicingFragment();
+    }
+
+    public static SlicingFragment newInstance(String apiUrl) {
+        Bundle args = new Bundle();
+        args.putString(API_URL_KEY, apiUrl);
+        SlicingFragment slicingFragment = new SlicingFragment();
+        slicingFragment.setArguments(args);
+        return slicingFragment;
     }
 
     @Override
@@ -62,17 +78,29 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
         setUnbinder(ButterKnife.bind(this, view));
         mRefreshLayout.setOnRefreshListener(this);
         mSlicerSpinner.setOnItemSelectedListener(mSlicerListener);
+        mSliceButton.setEnabled(false);
         if (savedInstanceState != null) restoreSavedInstanceState(savedInstanceState);
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (getArguments() != null) {
+            String apiUrl = getArguments().getString(API_URL_KEY);
+            if (apiUrl != null) setApiUrl(apiUrl);
+        }
     }
 
     private void restoreSavedInstanceState(Bundle savedInstanceState) {
         SlicerScreenModel model = savedInstanceState.getParcelable(SLICER_SCREEN_MODEL_KEY);
         if (model == null) return;
-        mModelMap = model.slicerModelMap();
-        updateSlicer(mModelMap, mPresenter.getSlicerNames(mModelMap));
-        mPrinterProfileMap = model.printerProfileNamesMap();
-        updatePrinterProfile(mPrinterProfileMap, mPresenter.getPrinterProfileNames(mPrinterProfileMap));
+        Map<String, SlicerModel> slicerMap = model.slicerModelMap();
+        updateSlicer(slicerMap, mPresenter.getSlicerNames(slicerMap));
+        HashMap<String, String> printerNameMap = model.printerProfileNamesMap();
+        updatePrinterProfile(printerNameMap, mPresenter.getPrinterProfileNames(printerNameMap));
+        String apiUrl = savedInstanceState.getString(API_URL_KEY);
+        if (apiUrl != null) setApiUrl(apiUrl);
     }
 
     @Override
@@ -81,6 +109,9 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
         if (mModelMap != null && mPrinterProfileMap != null) {
             SlicerScreenModel model = SlicerScreenModel.create(mModelMap, mPrinterProfileMap);
             outState.putParcelable(SLICER_SCREEN_MODEL_KEY, model);
+        }
+        if (mApiUrl != null) {
+            outState.putString(API_URL_KEY, mApiUrl);
         }
     }
 
@@ -100,6 +131,17 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
 
     public ArrayAdapter<String> getNewAdapter(List<String> strings) {
         return new ArrayAdapter<>(getContext(), mSpinnerId, strings);
+    }
+
+    public void setApiUrl(String apiUrl) {
+        mApiUrl = apiUrl;
+        mFileNameTextView.setText(mPresenter.getFileName(mApiUrl));
+        mSliceButton.setEnabled(true);
+    }
+
+    @Override
+    public String getDotGco() {
+        return DOT_GCO;
     }
 
     private SpinnerSelectedListener mSlicerListener = new SpinnerSelectedListener() {

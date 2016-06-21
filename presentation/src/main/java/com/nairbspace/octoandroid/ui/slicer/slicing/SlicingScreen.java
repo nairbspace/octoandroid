@@ -10,4 +10,5 @@ public interface SlicingScreen {
 
     void updateSlicer(Map<String, SlicerModel> modelMap, List<String> slicerNames);
     void updatePrinterProfile(HashMap<String, String> map, List<String> printerProfileNames);
+    String getDotGco();
 }

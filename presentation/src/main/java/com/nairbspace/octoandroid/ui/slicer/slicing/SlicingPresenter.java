@@ -11,6 +11,7 @@ import com.nairbspace.octoandroid.model.ConnectModel;
 import com.nairbspace.octoandroid.model.SlicerModel;
 import com.nairbspace.octoandroid.ui.templates.UseCasePresenter;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -96,6 +97,24 @@ public class SlicingPresenter extends UseCasePresenter<SlicingScreen> {
         public void onNext(ConnectModel connectModel) {
             HashMap<String, String> map = connectModel.printerProfiles();
             mScreen.updatePrinterProfile(map, getPrinterProfileNames(map));
+        }
+    }
+
+    public String getFileName(String apiUrl) {
+        try {
+            File file = new File(apiUrl);
+            return changeFileExtToGco(file.getName());
+        } catch (NullPointerException e) {
+            return "";
+        }
+    }
+
+    private String changeFileExtToGco(String fileName) {
+        try {
+            String fileNameWithOutExt = fileName.substring(0, fileName.lastIndexOf("."));
+            return fileNameWithOutExt + mScreen.getDotGco();
+        } catch (IndexOutOfBoundsException e) {
+            return "";
         }
     }
 

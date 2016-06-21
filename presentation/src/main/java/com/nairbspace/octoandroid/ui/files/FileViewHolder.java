@@ -29,6 +29,9 @@ public class FileViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.file_type_icon) ImageView mFileTypeIcon;
     @BindView(R.id.file_date_text_view) TextView mDateTextView;
     @BindView(R.id.file_time_text_view) TextView mTimeTextView;
+    @BindView(R.id.load_file_icon) ImageView mLoadFileIcon;
+    @BindView(R.id.printer_file_icon) ImageView mPrintFileIcon;
+    @BindView(R.id.slice_file_icon) ImageView mSliceFileIcon;
     @BindDrawable(R.drawable.ic_file_black_24dp) Drawable mFileDrawable;
     @BindDrawable(R.drawable.ic_sd_storage_black_24dp) Drawable mSdDrawable;
     @BindString(R.string.file_origin_sdcard) String SDCARD;
@@ -52,6 +55,7 @@ public class FileViewHolder extends RecyclerView.ViewHolder {
         mDateTextView.setText(fileModel.date());
         mTimeTextView.setText(fileModel.time());
         setFileTypeIcon(fileModel);
+        setSliceFileIcon(fileModel);
     }
 
     public void hideOnClickView() {
@@ -65,6 +69,13 @@ public class FileViewHolder extends RecyclerView.ViewHolder {
         } else {
             mFileTypeIcon.setImageDrawable(mFileDrawable);
         }
+    }
+
+    private void setSliceFileIcon(FilesModel.FileModel fileModel) {
+        boolean isStl = fileModel.isStl();
+        mLoadFileIcon.setVisibility(isStl ? View.GONE : View.VISIBLE);
+        mPrintFileIcon.setVisibility(isStl ? View.GONE : View.VISIBLE);
+        mSliceFileIcon.setVisibility(isStl ? View.VISIBLE : View.GONE);
     }
 
     @OnClick(R.id.file_visible_card_view)
@@ -97,6 +108,9 @@ public class FileViewHolder extends RecyclerView.ViewHolder {
         mListener.downloadButtonClicked(mFileModel.downloadUrl());
     }
 
+    @OnClick(R.id.slice_file_icon)
+    void sliceButtonClicked() {mListener.sliceButtonClicked(mFileModel.apiUrl());}
+
     public void showOnClickView() {
         mOnClickView.setVisibility(View.VISIBLE);
         mView.setBackgroundColor(mBackgroundColor);
@@ -108,5 +122,6 @@ public class FileViewHolder extends RecyclerView.ViewHolder {
         void deleteButtonClicked(String apiPath, int adapterPosition);
         void loadButtonClicked(String apiUrl);
         void printButtonClicked(String apiUrl);
+        void sliceButtonClicked(String apiUrl);
     }
 }

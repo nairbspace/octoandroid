@@ -18,6 +18,7 @@ import rx.Subscriber;
 
 public class FilesMapper extends MapperUseCase<Files, FilesModel> {
     private static final String FOLDER = "folder";
+    private static final String STL = "stl";
 
     @Inject
     public FilesMapper(ThreadExecutor threadExecutor,
@@ -67,6 +68,8 @@ public class FilesMapper extends MapperUseCase<Files, FilesModel> {
     private FileModel mapToFileModel(File file) {
         String name = file.name();
 
+        boolean isStl = isStl(file.name());
+
         String size = "";
         if (file.size() != null) {
             size = ByteConverter.toReadableString(file.size());
@@ -101,6 +104,7 @@ public class FilesMapper extends MapperUseCase<Files, FilesModel> {
 
         return FileModel.builder()
                 .name(name)
+                .isStl(isStl)
                 .size(size)
                 .date(date)
                 .time(time)
@@ -110,6 +114,20 @@ public class FilesMapper extends MapperUseCase<Files, FilesModel> {
                 .estimatedPrintTime(estimatedPrintTime)
                 .type(type)
                 .build();
+    }
+
+    private boolean isStl(String fileName) {
+        String ext = getFileExt(fileName);
+        return ext != null && ext.equals(STL);
+    }
+
+    private String getFileExt(String fileName) {
+        try {
+            String ext = fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length());
+            return ext.toLowerCase();
+        } catch (IndexOutOfBoundsException e) {
+            return null;
+        }
     }
 
     private boolean isGcodeAnalysisNotNull(File file) {

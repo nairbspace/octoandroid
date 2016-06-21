@@ -31,7 +31,7 @@ import butterknife.ButterKnife;
 
 public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
         FilesFragment.Listener> implements FilesScreen, FilesRvAdapter.Listener,
-        SwipeRefreshLayout.OnRefreshListener{
+        SwipeRefreshLayout.OnRefreshListener {
 
     private static final String FILESMODEL_KEY = "filesmodel_key";
     private static final String CLICKED_POSITION_KEY = "clicked_position_key";
@@ -206,6 +206,11 @@ public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
     }
 
     @Override
+    public void sliceButtonClicked(String apiUrl) {
+        mListener.sliceButtonClicked(apiUrl);
+    }
+
+    @Override
     public void showToast(String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
@@ -221,6 +226,6 @@ public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
     }
 
     public interface Listener {
-
+        void sliceButtonClicked(String apiUrl);
     }
 }
