@@ -15,6 +15,7 @@ import com.nairbspace.octoandroid.domain.model.Files;
 import com.nairbspace.octoandroid.domain.model.PrintHeadCommand;
 import com.nairbspace.octoandroid.domain.model.Printer;
 import com.nairbspace.octoandroid.domain.model.Slicer;
+import com.nairbspace.octoandroid.domain.model.SlicingCommand;
 import com.nairbspace.octoandroid.domain.model.TempCommand;
 import com.nairbspace.octoandroid.domain.model.ToolCommand;
 import com.nairbspace.octoandroid.domain.model.Websocket;
@@ -180,5 +181,12 @@ public class PrinterDataRepository implements PrinterRepository {
     @Override
     public Observable<Map<String, Slicer>> getSlicers() {
         return mApiManager.getSlicers().map(mMapperHelper.mapToSlicer());
+    }
+
+    @Override
+    public Observable sendSliceCommand(SlicingCommand slicingCommand) {
+        String url = slicingCommand.apiUrl();
+        return Observable.create(mMapperHelper.mapToSlicingCommandEntity(slicingCommand))
+                .concatMap(mApiManager.funcSendSliceCommand(url));
     }
 }

@@ -16,18 +16,22 @@ import android.widget.TextView;
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
 import com.nairbspace.octoandroid.model.SlicerModel;
+import com.nairbspace.octoandroid.model.SlicingCommandModel;
 import com.nairbspace.octoandroid.ui.templates.BaseFragmentListener;
 import com.nairbspace.octoandroid.ui.templates.Presenter;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
 
+import butterknife.BindArray;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class SlicingFragment extends BaseFragmentListener<SlicingScreen, SlicingFragment.Listener>
         implements SlicingScreen, SwipeRefreshLayout.OnRefreshListener {
@@ -46,11 +50,25 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
     @BindView(R.id.after_slicing_spinner) Spinner mAfterSlicingSpinner;
     @BindView(R.id.slicer_gcode_filename) TextView mFileNameTextView;
     @BindView(R.id.slice_button) Button mSliceButton;
+    @BindArray(R.array.after_slicing_list) String[] mAfterSlicingArray;
 
     private int mSpinnerId;
     private Map<String, SlicerModel> mModelMap;
     private HashMap<String, String> mPrinterProfileMap;
     private String mApiUrl;
+
+    public SlicingCommandModel getSlicingCommandModel() {
+        return SlicingCommandModel.builder()
+                .slicerPosition(mSlicerSpinner.getSelectedItemPosition())
+                .slicingProfilePosition(mSlicerProfileSpinner.getSelectedItemPosition())
+                .printerProfilePosition(mPrinterProfileSpinner.getSelectedItemPosition())
+                .afterSlicingPosition(mAfterSlicingSpinner.getSelectedItemPosition())
+                .apiUrl(mApiUrl)
+                .slicerMap(mModelMap)
+                .printerProfileMap(mPrinterProfileMap)
+                .afterSlicingList(Arrays.asList(mAfterSlicingArray))
+                .build();
+    }
 
     public static SlicingFragment newInstance() {
         return new SlicingFragment();
@@ -114,6 +132,9 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
             outState.putString(API_URL_KEY, mApiUrl);
         }
     }
+
+    @OnClick(R.id.slice_button)
+    void onSliceButtonClicked() {mPresenter.onSliceButtonClicked(getSlicingCommandModel());}
 
     @Override
     public void updateSlicer(Map<String, SlicerModel> modelMap, List<String> slicerNames) {

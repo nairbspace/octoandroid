@@ -8,6 +8,7 @@ import com.nairbspace.octoandroid.data.entity.FileCommandEntity;
 import com.nairbspace.octoandroid.data.entity.FilesEntity;
 import com.nairbspace.octoandroid.data.entity.PrinterStateEntity;
 import com.nairbspace.octoandroid.data.entity.SlicerEntity;
+import com.nairbspace.octoandroid.data.entity.SlicingCommandEntity;
 import com.nairbspace.octoandroid.data.entity.VersionEntity;
 import com.nairbspace.octoandroid.domain.model.TempCommand;
 import com.nairbspace.octoandroid.domain.model.TempCommand.ToolBedOffsetTemp;
@@ -111,6 +112,11 @@ public class ApiManagerImpl implements ApiManager {
     }
 
     @Override
+    public Observable<Object> sendSliceCommand(@Url String url, @Body SlicingCommandEntity slicingCommandEntity) {
+        return mOctoApi.sendSliceCommand(url, slicingCommandEntity);
+    }
+
+    @Override
     public Func1<PrinterDbEntity, Observable<VersionEntity>> funcGetVersion() {
         return new Func1<PrinterDbEntity, Observable<VersionEntity>>() {
             @Override
@@ -191,6 +197,16 @@ public class ApiManagerImpl implements ApiManager {
             @Override
             public Observable call(Object o) {
                 return selectTool(o);
+            }
+        };
+    }
+
+    @Override
+    public Func1<SlicingCommandEntity, Observable<?>> funcSendSliceCommand(final String apiUrl) {
+        return new Func1<SlicingCommandEntity, Observable<?>>() {
+            @Override
+            public Observable call(SlicingCommandEntity slicingCommandEntity) {
+                return sendSliceCommand(apiUrl, slicingCommandEntity);
             }
         };
     }

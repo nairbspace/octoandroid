@@ -3,12 +3,15 @@ package com.nairbspace.octoandroid.ui.slicer.slicing;
 import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
 import com.nairbspace.octoandroid.domain.interactor.GetConnectionDetails;
 import com.nairbspace.octoandroid.domain.interactor.GetSlicers;
+import com.nairbspace.octoandroid.domain.interactor.SendSliceCommand;
 import com.nairbspace.octoandroid.domain.model.Connection;
 import com.nairbspace.octoandroid.domain.model.Slicer;
+import com.nairbspace.octoandroid.domain.model.SlicingCommand;
 import com.nairbspace.octoandroid.mapper.ConnectionMapper;
 import com.nairbspace.octoandroid.mapper.SlicerModelMapper;
 import com.nairbspace.octoandroid.model.ConnectModel;
 import com.nairbspace.octoandroid.model.SlicerModel;
+import com.nairbspace.octoandroid.model.SlicingCommandModel;
 import com.nairbspace.octoandroid.ui.templates.UseCasePresenter;
 
 import java.io.File;
@@ -19,22 +22,31 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import timber.log.Timber;
+
 public class SlicingPresenter extends UseCasePresenter<SlicingScreen> {
 
     private final GetSlicers mGetSlicers;
     private final SlicerModelMapper mSlicerModelMapper;
     private final GetConnectionDetails mConnectionDetails;
     private final ConnectionMapper mConnectionMapper;
+    private final SlicerModelMapper.Command mCommandMapper;
+    private final SendSliceCommand mSendSliceCommand;
     private SlicingScreen mScreen;
 
     @Inject
     public SlicingPresenter(GetSlicers getSlicers, SlicerModelMapper slicerModelMapper,
-                            GetConnectionDetails connectionDetails, ConnectionMapper connectionMapper) {
+                            GetConnectionDetails connectionDetails,
+                            ConnectionMapper connectionMapper,
+                            SlicerModelMapper.Command commandMapper,
+                            SendSliceCommand sendSliceCommand) {
         super(getSlicers);
         mGetSlicers = getSlicers;
         mSlicerModelMapper = slicerModelMapper;
         mConnectionDetails = connectionDetails;
         mConnectionMapper = connectionMapper;
+        mCommandMapper = commandMapper;
+        mSendSliceCommand = sendSliceCommand;
     }
 
     @Override
@@ -181,11 +193,40 @@ public class SlicingPresenter extends UseCasePresenter<SlicingScreen> {
         return profileNames;
     }
 
+    protected void onSliceButtonClicked(SlicingCommandModel model) {
+        mCommandMapper.execute(new CommandMapper(), model);
+    }
+
+    private final class CommandMapper extends DefaultSubscriber<SlicingCommand> {
+        @Override
+        public void onError(Throwable e) {
+            super.onError(e);
+        }
+
+        @Override
+        public void onNext(SlicingCommand slicingCommand) {
+            mSendSliceCommand.execute(new SliceCommandSubscriber(), slicingCommand);
+        }
+    }
+
+    private final class SliceCommandSubscriber extends DefaultSubscriber {
+        @Override
+        public void onError(Throwable e) {
+            super.onError(e);
+        }
+
+        @Override
+        public void onNext(Object o) {
+            if (o != null) Timber.d(o.toString());
+        }
+    }
+
     @Override
     protected void onDestroy(SlicingScreen slicingScreen) {
         super.onDestroy(slicingScreen);
         mSlicerModelMapper.unsubscribe();
         mConnectionDetails.unsubscribe();
         mConnectionMapper.unsubscribe();
+        mSendSliceCommand.unsubscribe();
     }
 }

@@ -6,6 +6,7 @@ import com.nairbspace.octoandroid.data.entity.ConnectionEntity;
 import com.nairbspace.octoandroid.data.entity.FileCommandEntity;
 import com.nairbspace.octoandroid.data.entity.FilesEntity;
 import com.nairbspace.octoandroid.data.entity.SlicerEntity;
+import com.nairbspace.octoandroid.data.entity.SlicingCommandEntity;
 import com.nairbspace.octoandroid.data.entity.ToolCommandEntity;
 import com.nairbspace.octoandroid.data.entity.WebsocketEntity;
 import com.nairbspace.octoandroid.domain.model.AddPrinter;
@@ -17,6 +18,7 @@ import com.nairbspace.octoandroid.domain.model.Files;
 import com.nairbspace.octoandroid.domain.model.PrintHeadCommand;
 import com.nairbspace.octoandroid.domain.model.Printer;
 import com.nairbspace.octoandroid.domain.model.Slicer;
+import com.nairbspace.octoandroid.domain.model.SlicingCommand;
 import com.nairbspace.octoandroid.domain.model.TempCommand;
 import com.nairbspace.octoandroid.domain.model.ToolCommand;
 import com.nairbspace.octoandroid.domain.model.Websocket;
@@ -100,5 +102,9 @@ public class MapperHelper {
 
     public Func1<Map<String, SlicerEntity>, Map<String, Slicer>> mapToSlicer() {
         return SlicerEntityMapper.mapToSlicer(mEntitySerializer);
+    }
+
+    public Observable.OnSubscribe<SlicingCommandEntity> mapToSlicingCommandEntity(SlicingCommand slicingCommand) {
+        return SlicingCommandEntityMapper.mapToEntity(slicingCommand);
     }
 }

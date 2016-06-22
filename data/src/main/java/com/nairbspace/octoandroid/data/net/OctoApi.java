@@ -6,6 +6,7 @@ import com.nairbspace.octoandroid.data.entity.FileCommandEntity;
 import com.nairbspace.octoandroid.data.entity.FilesEntity;
 import com.nairbspace.octoandroid.data.entity.PrinterStateEntity;
 import com.nairbspace.octoandroid.data.entity.SlicerEntity;
+import com.nairbspace.octoandroid.data.entity.SlicingCommandEntity;
 import com.nairbspace.octoandroid.data.entity.VersionEntity;
 
 import java.util.HashMap;
@@ -66,4 +67,7 @@ public interface OctoApi {
 
     @GET("/api/slicing")
     Observable<Map<String, SlicerEntity>> getSlicers();
+
+    @POST
+    Observable<Object> sendSliceCommand(@Url String url, @Body SlicingCommandEntity slicingCommandEntity);
 }
