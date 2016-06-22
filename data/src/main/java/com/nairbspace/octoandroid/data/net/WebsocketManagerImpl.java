@@ -1,10 +1,13 @@
 package com.nairbspace.octoandroid.data.net;
 
+import android.support.annotation.NonNull;
+
 import com.appunite.websocket.rx.object.RxObjectWebSockets;
 import com.appunite.websocket.rx.object.messages.RxObjectEventMessage;
 import com.nairbspace.octoandroid.data.entity.WebsocketEntity;
 
-import javax.annotation.Nonnull;
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
 
 import rx.Observable;
@@ -22,12 +25,13 @@ public class WebsocketManagerImpl implements WebsocketManager {
     @Override
     public Observable<WebsocketEntity> getWebsocketObservable() {
         return mRxObjectWebSockets.webSocketObservable()
+                .sample(1, TimeUnit.SECONDS)
                 .compose(filterAndMap(RxObjectEventMessage.class))
                 .compose(RxObjectEventMessage.filterAndMap(WebsocketEntity.class));
     }
 
-    @Nonnull
-    private <T> Observable.Transformer<Object, T> filterAndMap(@Nonnull final Class<T> clazz) {
+    @NonNull
+    private <T> Observable.Transformer<Object, T> filterAndMap(@NonNull final Class<T> clazz) {
         return new Observable.Transformer<Object, T>() {
             @Override
             public Observable<T> call(Observable<Object> observable) {

@@ -24,7 +24,6 @@ import com.nairbspace.octoandroid.domain.repository.PrinterRepository;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -107,7 +106,6 @@ public class PrinterDataRepository implements PrinterRepository {
     public Observable<Websocket> getWebsocket() {
         return mWebsocket.getWebsocketObservable()
                 .map(mMapperHelper.mapToWebsocket())
-                .sample(1, TimeUnit.SECONDS)
                 .retry();
     }
 
