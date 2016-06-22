@@ -25,7 +25,6 @@ import com.nairbspace.octoandroid.ui.templates.Presenter;
 
 import javax.inject.Inject;
 
-import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -42,7 +41,6 @@ public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
     @BindView(R.id.file_list_recyclerview) RecyclerView mRecyclerView;
     @BindView(R.id.empty_files_textview) TextView mEmptyTextView;
     @BindView(R.id.files_progress_bar) ProgressBar mProgressBar;
-    @BindString(R.string.status) String STATUS;
 
     private Listener mListener;
     private FilesModel mFilesModel;
@@ -64,7 +62,6 @@ public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_files_list, container, false);
         setUnbinder(ButterKnife.bind(this, view));
-        setActionBarTitle(STATUS);
         showEmptyScreen();
         mRefreshLayout.setOnRefreshListener(this);
         if (savedInstanceState != null && savedInstanceState.getParcelable(FILESMODEL_KEY) != null) {
