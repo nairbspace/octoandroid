@@ -70,7 +70,7 @@ public class PlaybackPresenter extends UseCasePresenter<PlaybackScreen> {
 
     @Override
     protected void execute() {
-        mGetWebsocket.execute(new WebsocketSubscriber());
+        mGetWebsocket.executeUnsubBg(new WebsocketSubscriber());
     }
 
     private final class WebsocketSubscriber extends DefaultSubscriber<Websocket> {

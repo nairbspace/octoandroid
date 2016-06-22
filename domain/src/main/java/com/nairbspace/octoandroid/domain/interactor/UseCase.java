@@ -31,6 +31,25 @@ public abstract class UseCase {
                 .subscribe(useCaseSubscriber);
     }
 
+    @SuppressWarnings("unchecked")
+    public void executeAllBg(Subscriber useCaseSubscriber) {
+        unsubscribe();
+        mSubscription = buildUseCaseObservable()
+                .subscribeOn(Schedulers.from(mThreadExecutor))
+                .observeOn(Schedulers.from(mThreadExecutor))
+                .subscribe(useCaseSubscriber);
+    }
+
+    @SuppressWarnings("unchecked")
+    public void executeUnsubBg(Subscriber useCaseSubscriber) {
+        unsubscribe();
+        mSubscription = buildUseCaseObservable()
+                .subscribeOn(Schedulers.from(mThreadExecutor))
+                .observeOn(mPostExecutionThread.getScheduler())
+                .unsubscribeOn(Schedulers.from(mThreadExecutor))
+                .subscribe(useCaseSubscriber);
+    }
+
     public void unsubscribe() {
         if (!mSubscription.isUnsubscribed()) {
             mSubscription.unsubscribe();

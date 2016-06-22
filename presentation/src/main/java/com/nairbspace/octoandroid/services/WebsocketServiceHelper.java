@@ -42,8 +42,8 @@ public class WebsocketServiceHelper {
 
     protected void onStartCommand() {
         Timber.d("onStartCommand");
-        mGetWebsocket.execute(new WebsocketSubscriber());
-        mGetStickySetting.execute(new StickySubscriber());
+        mGetWebsocket.executeAllBg(new WebsocketSubscriber());
+        mGetStickySetting.executeAllBg(new StickySubscriber());
     }
 
     private final class StickySubscriber extends DefaultSubscriber<Boolean> {
@@ -66,7 +66,7 @@ public class WebsocketServiceHelper {
 
         @Override
         public void onNext(Websocket websocket) {
-            mWebsocketModelMapper.execute(new MapperSubscriber(), websocket);
+            mWebsocketModelMapper.executeAllBg(new MapperSubscriber(), websocket);
         }
     }
 
@@ -92,7 +92,7 @@ public class WebsocketServiceHelper {
      */
     private void checkPrintStatus(WebsocketModel model) {
         if (model.completionProgress() == COMPLETE) {
-            mGetPushSetting.execute(new PushSubscriber(model.file()));
+            mGetPushSetting.executeAllBg(new PushSubscriber(model.file()));
         } else if (model.closedOrError() || model.error()) {
             mListener.showFinishedAndDestroy(FinishType.ERROR, null);
         } else if (!model.pausedOrPrinting()) {

@@ -33,6 +33,25 @@ public abstract class UseCaseInput<I> extends UseCase {
                 .subscribe(useCaseSubscriber);
     }
 
+    @SuppressWarnings("unchecked")
+    public void executeAllBg(Subscriber useCaseSubscriber, I i) {
+        unsubscribe();
+        mSubscription = buildUseCaseObservableInput(i)
+                .subscribeOn(Schedulers.from(mThreadExecutor))
+                .observeOn(Schedulers.from(mThreadExecutor))
+                .subscribe(useCaseSubscriber);
+    }
+
+    @SuppressWarnings("unchecked")
+    public void executeUnsubBg(Subscriber useCaseSubscriber, I i) {
+        unsubscribe();
+        mSubscription = buildUseCaseObservableInput(i)
+                .subscribeOn(Schedulers.from(mThreadExecutor))
+                .observeOn(mPostExecutionThread.getScheduler())
+                .unsubscribeOn(Schedulers.from(mThreadExecutor))
+                .subscribe(useCaseSubscriber);
+    }
+
     @Override
     public void unsubscribe() {
         if (!mSubscription.isUnsubscribed()) {
@@ -42,11 +61,31 @@ public abstract class UseCaseInput<I> extends UseCase {
 
     /**
      * Do not use this if extending from this class
-     * @param useCaseSubscriber
+     * @param useCaseSubscriber the subscriber class
      */
     @Deprecated
     @Override
     public void execute(Subscriber useCaseSubscriber) {
+        throw new RuntimeException(new NullUseCaseBuilderException());
+    }
+
+    /**
+     * Do not use this if extending from this class
+     * @param useCaseSubscriber the subscriber class
+     */
+    @Deprecated
+    @Override
+    public void executeAllBg(Subscriber useCaseSubscriber) {
+        throw new RuntimeException(new NullUseCaseBuilderException());
+    }
+
+    /**
+     * Do not use this if extending from this class
+     * @param useCaseSubscriber the subscriber class
+     */
+    @Deprecated
+    @Override
+    public void executeUnsubBg(Subscriber useCaseSubscriber) {
         throw new RuntimeException(new NullUseCaseBuilderException());
     }
 
