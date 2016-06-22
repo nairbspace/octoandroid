@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+Version 1.5.1 *(2016-06-21)*
+----------------------------
+
+ * Hotfix. Run observables in WebsocketService to all run in background including observeOn.
+ 
 Version 1.5.0 *(2016-06-20)*
 ----------------------------
 
