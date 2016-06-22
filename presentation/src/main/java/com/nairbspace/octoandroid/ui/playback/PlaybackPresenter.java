@@ -4,9 +4,13 @@ import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
 import com.nairbspace.octoandroid.domain.interactor.GetPushNotificationSetting;
 import com.nairbspace.octoandroid.domain.interactor.GetWebsocket;
 import com.nairbspace.octoandroid.domain.interactor.SendJobCommand;
+import com.nairbspace.octoandroid.domain.model.CurrentHistory;
+import com.nairbspace.octoandroid.domain.model.SlicingProgress;
 import com.nairbspace.octoandroid.domain.model.Websocket;
+import com.nairbspace.octoandroid.mapper.SlicingProgressModelMapper;
 import com.nairbspace.octoandroid.mapper.WebsocketModelMapper;
 import com.nairbspace.octoandroid.model.JobCommandModel;
+import com.nairbspace.octoandroid.model.SlicingProgressModel;
 import com.nairbspace.octoandroid.model.WebsocketModel;
 import com.nairbspace.octoandroid.ui.templates.UseCasePresenter;
 
@@ -24,17 +28,21 @@ public class PlaybackPresenter extends UseCasePresenter<PlaybackScreen> {
     private final WebsocketModelMapper mMapper;
     private final SendJobCommand mSendJobCommand;
     private final GetPushNotificationSetting mGetPushSetting;
+    private final SlicingProgressModelMapper mProgressModelMapper;
     private final EventBus mEventBus;
     private boolean mIsPushOn;
 
     @Inject
     public PlaybackPresenter(GetWebsocket getWebsocket, WebsocketModelMapper mapper,
-                             SendJobCommand sendJobCommand, GetPushNotificationSetting getPushSetting, EventBus eventBus) {
+                             SendJobCommand sendJobCommand,
+                             GetPushNotificationSetting getPushSetting,
+                             SlicingProgressModelMapper progressModelMapper, EventBus eventBus) {
         super(getWebsocket);
         mGetWebsocket = getWebsocket;
         mMapper = mapper;
         mSendJobCommand = sendJobCommand;
         mGetPushSetting = getPushSetting;
+        mProgressModelMapper = progressModelMapper;
         mEventBus = eventBus;
     }
 
@@ -83,8 +91,27 @@ public class PlaybackPresenter extends UseCasePresenter<PlaybackScreen> {
 
         @Override
         public void onNext(Websocket websocket) {
-            mMapper.execute(new TransformSubscriber(), websocket);
-            if (websocket != null) Timber.d(websocket.toString());
+            if (websocket == null) return;
+
+            SlicingProgress progress = websocket.slicingProgress();
+            if (progress != null) mProgressModelMapper.execute(new ProgressSubscriber(), progress);
+
+            CurrentHistory current = websocket.current();
+            if (current != null) mMapper.execute(new TransformSubscriber(), websocket);
+
+            Timber.d(websocket.toString());
+        }
+    }
+
+    private final class ProgressSubscriber extends DefaultSubscriber<SlicingProgressModel> {
+        @Override
+        public void onError(Throwable e) {
+            super.onError(e);
+        }
+
+        @Override
+        public void onNext(SlicingProgressModel slicingProgressModel) {
+            mEventBus.post(slicingProgressModel);
         }
     }
 

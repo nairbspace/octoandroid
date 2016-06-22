@@ -128,4 +128,11 @@
     <string name="slice">Slice</string>
     <string name="dot_gco" translatable="false">.gco</string>
 
+    <string name="colon_space" translatable="false">:&#160;</string>
+    <string name="slicing_in_progress">Slicing In Progress</string>
+    <string name="source_location">Source Location</string>
+    <string name="source_file">Source File</string>
+    <string name="destination_location">Destination Location</string>
+    <string name="destination_file">Destination File</string>
+
 </resources>

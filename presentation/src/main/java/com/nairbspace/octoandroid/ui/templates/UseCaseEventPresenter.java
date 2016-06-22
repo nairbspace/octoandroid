@@ -29,11 +29,16 @@ public abstract class UseCaseEventPresenter<T, U> extends UseCasePresenter<T> {
     /**
      * Public method needed for EventBus. Do not override this method. Do all the coding
      * on {@link #onEvent} method.
-     * @param u Event object
+     * @param o Event object
      */
+    @SuppressWarnings("unchecked")
     @Subscribe
-    public void subscribedEvent(U u) {
-        onEvent(u);
+    public void subscribedEvent(Object o) {
+        try {
+            onEvent((U) o);
+        } catch (ClassCastException e) {
+            // Do nothing
+        }
     }
 
     /**

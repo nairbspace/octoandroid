@@ -12,7 +12,10 @@ import com.nairbspace.octoandroid.mapper.SlicerModelMapper;
 import com.nairbspace.octoandroid.model.ConnectModel;
 import com.nairbspace.octoandroid.model.SlicerModel;
 import com.nairbspace.octoandroid.model.SlicingCommandModel;
-import com.nairbspace.octoandroid.ui.templates.UseCasePresenter;
+import com.nairbspace.octoandroid.model.SlicingProgressModel;
+import com.nairbspace.octoandroid.ui.templates.UseCaseEventPresenter;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -24,7 +27,8 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-public class SlicingPresenter extends UseCasePresenter<SlicingScreen> {
+public class SlicingPresenter extends UseCaseEventPresenter<SlicingScreen, SlicingProgressModel> {
+    private static final int COMPLETE = 100;
 
     private final GetSlicers mGetSlicers;
     private final SlicerModelMapper mSlicerModelMapper;
@@ -39,8 +43,8 @@ public class SlicingPresenter extends UseCasePresenter<SlicingScreen> {
                             GetConnectionDetails connectionDetails,
                             ConnectionMapper connectionMapper,
                             SlicerModelMapper.Command commandMapper,
-                            SendSliceCommand sendSliceCommand) {
-        super(getSlicers);
+                            SendSliceCommand sendSliceCommand, EventBus eventBus) {
+        super(getSlicers, eventBus);
         mGetSlicers = getSlicers;
         mSlicerModelMapper = slicerModelMapper;
         mConnectionDetails = connectionDetails;
@@ -59,6 +63,15 @@ public class SlicingPresenter extends UseCasePresenter<SlicingScreen> {
     protected void execute() {
         mGetSlicers.execute(new SlicerSubscriber());
         mConnectionDetails.execute(new ConnectionSubscriber());
+    }
+
+    @Override
+    protected void onEvent(SlicingProgressModel progressModel) {
+        if (progressModel.progress() == COMPLETE) {
+            mScreen.showProgress(false);
+        } else {
+            mScreen.updateProgress(progressModel);
+        }
     }
 
     private final class SlicerSubscriber extends DefaultSubscriber<Map<String, Slicer>> {

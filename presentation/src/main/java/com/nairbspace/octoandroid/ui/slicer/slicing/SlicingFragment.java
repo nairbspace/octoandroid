@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -17,6 +18,7 @@ import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
 import com.nairbspace.octoandroid.model.SlicerModel;
 import com.nairbspace.octoandroid.model.SlicingCommandModel;
+import com.nairbspace.octoandroid.model.SlicingProgressModel;
 import com.nairbspace.octoandroid.ui.templates.BaseFragmentListener;
 import com.nairbspace.octoandroid.ui.templates.Presenter;
 
@@ -39,6 +41,12 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
     private static final String SLICER_SCREEN_MODEL_KEY = "slicer_screen_model_key";
     private static final String API_URL_KEY = "api_url_key";
     @BindString(R.string.dot_gco) String DOT_GCO;
+    @BindString(R.string.colon_space) String COLON_SPACE;
+    @BindString(R.string.slicer) String SLICER;
+    @BindString(R.string.source_location) String SOURCE_LOCATION;
+    @BindString(R.string.source_file) String SOURCE_FILE;
+    @BindString(R.string.destination_location) String DEST_LOCATION;
+    @BindString(R.string.destination_file) String DEST_FILE;
 
     @Inject SlicingPresenter mPresenter;
     private Listener mListener;
@@ -51,6 +59,40 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
     @BindView(R.id.slicer_gcode_filename) TextView mFileNameTextView;
     @BindView(R.id.slice_button) Button mSliceButton;
     @BindArray(R.array.after_slicing_list) String[] mAfterSlicingArray;
+
+    @BindView(R.id.slicing_config_layout) View mConfigView;
+    @BindView(R.id.slicing_progress_layout) View mProgressView;
+
+    @BindView(R.id.slicing_slicer) TextView mSlicerText;
+    @BindView(R.id.slicing_source_location) TextView mSrcLocText;
+    @BindView(R.id.slicing_source_file) TextView mSrcFileText;
+    @BindView(R.id.slicing_destination_location) TextView mDestLocText;
+    @BindView(R.id.slicing_destination_file) TextView mDestFileText;
+    @BindView(R.id.slicing_progress_bar) ProgressBar mProgressBar;
+
+    @Override
+    public void updateProgress(SlicingProgressModel progressModel) {
+        showProgress(true);
+
+        String slicer = SLICER + COLON_SPACE + progressModel.slicer();
+        String srcLoc = SOURCE_LOCATION + COLON_SPACE + progressModel.sourceLocation();
+        String srcFile = SOURCE_FILE + COLON_SPACE + progressModel.sourcePath();
+        String destLoc = DEST_LOCATION + COLON_SPACE + progressModel.destLocation();
+        String destFile = DEST_FILE + COLON_SPACE + progressModel.destPath();
+
+        mSlicerText.setText(slicer);
+        mSrcLocText.setText(srcLoc);
+        mSrcFileText.setText(srcFile);
+        mDestLocText.setText(destLoc);
+        mDestFileText.setText(destFile);
+        mProgressBar.setProgress(progressModel.progress());
+    }
+
+    @Override
+    public void showProgress(boolean show) {
+        mConfigView.setVisibility(show ? View.GONE : View.VISIBLE);
+        mProgressView.setVisibility(show? View.VISIBLE: View.GONE);
+    }
 
     private int mSpinnerId;
     private Map<String, SlicerModel> mModelMap;
