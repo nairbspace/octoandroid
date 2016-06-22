@@ -17,4 +17,5 @@
         \'system trusted\' certificates which requires root access.</string>
     <string name="exception_invalid_api_key">Invalid API key</string>
     <string name="exception_no_rear_camera">No rear camera found</string>
+    <string name="exception_camera_error">Error accessing camera</string>
 </resources>

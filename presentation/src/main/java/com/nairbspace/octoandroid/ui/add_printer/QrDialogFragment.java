@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
@@ -22,11 +23,11 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.nairbspace.octoandroid.R;
 
-import java.io.IOException;
-
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import timber.log.Timber;
 
 public class QrDialogFragment extends BaseDialogFragment<QrDialogFragment.Listener> {
 
@@ -38,6 +39,7 @@ public class QrDialogFragment extends BaseDialogFragment<QrDialogFragment.Listen
     @BindView(R.id.camera_view) SurfaceView mCameraView;
     @BindView(R.id.qr_close) ImageView mCloseButton;
     @BindView(R.id.qr_frame) ImageView mQrFrame;
+    @BindString(R.string.exception_camera_error) String CAMERA_ERROR;
 
     private Listener mListener;
 
@@ -136,8 +138,10 @@ public class QrDialogFragment extends BaseDialogFragment<QrDialogFragment.Listen
                     return;
                 }
                 mCameraSource.start(mCameraView.getHolder());
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                Timber.e(e, null);
+                Toast.makeText(getContext(), CAMERA_ERROR, Toast.LENGTH_SHORT).show();
+                dismiss();
             }
         }
 
