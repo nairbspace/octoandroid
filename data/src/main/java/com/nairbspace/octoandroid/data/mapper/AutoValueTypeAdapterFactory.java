@@ -4,7 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.reflect.TypeToken;
+import com.nairbspace.octoandroid.data.entity.SlicingProgressEntity;
 import com.nairbspace.octoandroid.domain.model.AutoGson;
+import com.nairbspace.octoandroid.domain.model.SlicingProgress;
 
 public class AutoValueTypeAdapterFactory implements TypeAdapterFactory {
 
@@ -16,7 +18,11 @@ public class AutoValueTypeAdapterFactory implements TypeAdapterFactory {
         // Only deserialize classes decorated with @AutoGson.
         AutoGson annotation = rawType.getAnnotation(AutoGson.class);
         if (annotation != null) {
-            return (TypeAdapter<T>) gson.getAdapter(annotation.autoValueClass());
+            return (TypeAdapter<T>) gson.getAdapter(annotation.autoValueClass()).nullSafe();
+        } else if (rawType.equals(SlicingProgressEntity.class)) {
+            return (TypeAdapter<T>) SlicingProgressEntity.typeAdapter(gson).nullSafe();
+        } else if (rawType.equals(SlicingProgress.class)) {
+            return (TypeAdapter<T>) SlicingProgress.typeAdapter(gson).nullSafe();
         }
         return null;
     }

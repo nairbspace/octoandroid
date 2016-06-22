@@ -19,6 +19,7 @@ dependencies {
     compile domainDependencies.rxJava
     compile domainDependencies.autoValue
     apt domainDependencies.autoValue // Annotation processing for AutoValue_*
+    apt domainDependencies.autoValueGson
     compile domainDependencies.androidSupportAnnotations // For Nullable annotation
     compile domainDependencies.gson
 
