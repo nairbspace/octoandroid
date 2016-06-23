@@ -18,7 +18,7 @@ public class NavPresenter extends UseCasePresenter<NavScreen> {
 
     @Inject
     public NavPresenter(GetPrinterDetails getPrinterDetails, PrinterModelMapper printerModelMapper) {
-        super(getPrinterDetails);
+        super(getPrinterDetails, printerModelMapper);
         mGetPrinterDetails = getPrinterDetails;
         mPrinterModelMapper = printerModelMapper;
     }
@@ -67,16 +67,5 @@ public class NavPresenter extends UseCasePresenter<NavScreen> {
         public void onNext(PrinterModel printerModel) {
             mScreen.updateNavHeader(printerModel.name(), printerModel.host());
         }
-    }
-
-    @Override
-    protected void onDestroy(NavScreen navScreen) {
-        super.onDestroy(navScreen);
-        unsubscribeAll();
-    }
-
-    private void unsubscribeAll() {
-        mGetPrinterDetails.unsubscribe();
-        mPrinterModelMapper.unsubscribe();
     }
 }

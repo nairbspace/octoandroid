@@ -20,7 +20,7 @@ public class AddPrinterModelMapper extends MapperUseCase<AddPrinterModel, AddPri
     }
 
     @Override
-    protected Observable<AddPrinter> buildUseCaseObservable(final AddPrinterModel addPrinterModel) {
+    protected Observable<AddPrinter> buildUseCaseObservableInput(final AddPrinterModel addPrinterModel) {
         return Observable.create(new Observable.OnSubscribe<AddPrinter>() {
             @Override
             public void call(Subscriber<? super AddPrinter> subscriber) {

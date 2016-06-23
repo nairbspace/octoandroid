@@ -35,7 +35,8 @@ public class FilesPresenter extends UseCaseEventPresenter<FilesScreen, Websocket
                           FileCommandModelMapper fileCommandModelMapper,
                           SendFileCommand sendFileCommand, DeleteFile deleteFile,
                           UploadFile uploadFile, EventBus eventBus) {
-        super(getFiles, eventBus);
+        super(eventBus, getFiles, filesMapper, fileCommandModelMapper,
+                sendFileCommand, deleteFile, uploadFile);
         mGetFiles = getFiles;
         mFilesMapper = filesMapper;
         mFileCommandModelMapper = fileCommandModelMapper;
@@ -84,15 +85,6 @@ public class FilesPresenter extends UseCaseEventPresenter<FilesScreen, Websocket
 
     private void renderScreen(FilesModel filesModel) {
         mScreen.updateUi(filesModel);
-    }
-
-    private void unsubscribeAll() {
-        mGetFiles.unsubscribe();
-        mFilesMapper.unsubscribe();
-        mFileCommandModelMapper.unsubscribe();
-        mSendFileCommand.unsubscribe();
-        mDeleteFile.unsubscribe();
-        mUploadFile.unsubscribe();
     }
 
     public void executePrint(String apiUrl) {
@@ -206,13 +198,8 @@ public class FilesPresenter extends UseCaseEventPresenter<FilesScreen, Websocket
     }
 
     private void showErrorMessage(Throwable t) {
-        String message = ErrorMessageFactory.create(mScreen.context(), (Exception) t);
+        String message = ErrorMessageFactory.create(mScreen.context(), t);
         mScreen.showToast(message);
     }
 
-    @Override
-    protected void onDestroy(FilesScreen filesScreen) {
-        super.onDestroy(filesScreen);
-        unsubscribeAll();
-    }
 }

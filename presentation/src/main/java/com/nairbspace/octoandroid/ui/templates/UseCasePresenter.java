@@ -7,10 +7,10 @@ import com.nairbspace.octoandroid.domain.interactor.UseCase;
  */
 public abstract class UseCasePresenter<T> extends Presenter<T> {
 
-    private final UseCase mUseCase;
+    private final UseCase[] mUseCases;
 
-    public UseCasePresenter(UseCase useCase) {
-        mUseCase = useCase;
+    public UseCasePresenter(UseCase... useCases) {
+        mUseCases = useCases;
     }
 
     protected void execute() {
@@ -19,6 +19,12 @@ public abstract class UseCasePresenter<T> extends Presenter<T> {
     @Override
     protected void onDestroy(T t) {
         super.onDestroy(t);
-        mUseCase.unsubscribe();
+        unsubscribeAll();
+    }
+
+    protected void unsubscribeAll() {
+        for (UseCase useCase : mUseCases) {
+            useCase.unsubscribe();
+        }
     }
 }

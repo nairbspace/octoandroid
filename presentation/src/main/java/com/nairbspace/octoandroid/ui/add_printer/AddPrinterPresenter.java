@@ -24,7 +24,7 @@ public class AddPrinterPresenter extends UseCasePresenter<AddPrinterScreen> {
     public AddPrinterPresenter(VerifyPrinterDetails verifyPrinterDetails,
                                AddPrinterModelMapper addPrinterModelMapper,
                                AddPrinterDetails addPrinterDetails) {
-        super(verifyPrinterDetails);
+        super(verifyPrinterDetails, addPrinterModelMapper, addPrinterDetails);
         mVerifyPrinterDetails = verifyPrinterDetails;
         mAddPrinterModelMapper = addPrinterModelMapper;
         mAddPrinterDetails = addPrinterDetails;

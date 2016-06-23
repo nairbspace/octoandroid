@@ -28,7 +28,7 @@ public class ConnectionMapper extends MapperUseCase<Connection, ConnectModel> {
     }
 
     @Override
-    protected Observable<ConnectModel> buildUseCaseObservable(final Connection connection) {
+    protected Observable<ConnectModel> buildUseCaseObservableInput(final Connection connection) {
         return Observable.create(new Observable.OnSubscribe<ConnectModel>() {
             @Override
             public void call(Subscriber<? super ConnectModel> subscriber) {

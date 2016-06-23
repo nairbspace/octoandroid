@@ -48,7 +48,7 @@ public class WebsocketModelMapper extends MapperUseCase<Websocket, WebsocketMode
     }
 
     @Override
-    protected Observable<WebsocketModel> buildUseCaseObservable(final Websocket websocket) {
+    protected Observable<WebsocketModel> buildUseCaseObservableInput(final Websocket websocket) {
         return Observable.create(new Observable.OnSubscribe<WebsocketModel>() {
             @Override
             public void call(Subscriber<? super WebsocketModel> subscriber) {

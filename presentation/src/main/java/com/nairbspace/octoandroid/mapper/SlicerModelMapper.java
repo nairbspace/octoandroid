@@ -30,7 +30,7 @@ public class SlicerModelMapper extends MapperUseCase<Map<String, Slicer>, Map<St
     }
 
     @Override
-    protected Observable<Map<String, SlicerModel>> buildUseCaseObservable(final Map<String, Slicer> slicerMap) {
+    protected Observable<Map<String, SlicerModel>> buildUseCaseObservableInput(final Map<String, Slicer> slicerMap) {
         return Observable.create(new Observable.OnSubscribe<Map<String, SlicerModel>>() {
             @Override
             public void call(Subscriber<? super Map<String, SlicerModel>> subscriber) {
@@ -65,7 +65,7 @@ public class SlicerModelMapper extends MapperUseCase<Map<String, Slicer>, Map<St
         }
 
         @Override
-        protected Observable<SlicingCommand> buildUseCaseObservable(final SlicingCommandModel model) {
+        protected Observable<SlicingCommand> buildUseCaseObservableInput(final SlicingCommandModel model) {
             return Observable.create(new Observable.OnSubscribe<SlicingCommand>() {
                 @Override
                 public void call(Subscriber<? super SlicingCommand> subscriber) {

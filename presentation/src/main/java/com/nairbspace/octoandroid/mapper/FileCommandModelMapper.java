@@ -20,7 +20,7 @@ public class FileCommandModelMapper extends MapperUseCase<FileCommandModel, File
     }
 
     @Override
-    protected Observable<FileCommand> buildUseCaseObservable(final FileCommandModel fileCommandModel) {
+    protected Observable<FileCommand> buildUseCaseObservableInput(final FileCommandModel fileCommandModel) {
         return Observable.create(new Observable.OnSubscribe<FileCommand>() {
             @Override
             public void call(Subscriber<? super FileCommand> subscriber) {

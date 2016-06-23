@@ -37,7 +37,7 @@ public class PlaybackPresenter extends UseCasePresenter<PlaybackScreen> {
                              SendJobCommand sendJobCommand,
                              GetPushNotificationSetting getPushSetting,
                              SlicingProgressModelMapper progressModelMapper, EventBus eventBus) {
-        super(getWebsocket);
+        super(getWebsocket, mapper, sendJobCommand, getPushSetting, progressModelMapper);
         mGetWebsocket = getWebsocket;
         mMapper = mapper;
         mSendJobCommand = sendJobCommand;
@@ -198,13 +198,5 @@ public class PlaybackPresenter extends UseCasePresenter<PlaybackScreen> {
         public void onNext(Boolean aBoolean) {
             if (aBoolean != null) mIsPushOn = aBoolean;
         }
-    }
-
-    @Override
-    protected void onDestroy(PlaybackScreen playbackScreen) {
-        super.onDestroy(playbackScreen);
-        mMapper.unsubscribe();
-        mSendJobCommand.unsubscribe();
-        mGetPushSetting.unsubscribe();
     }
 }

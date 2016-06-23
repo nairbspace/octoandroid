@@ -20,7 +20,7 @@ public class SlicingProgressModelMapper extends MapperUseCase<SlicingProgress, S
     }
 
     @Override
-    protected Observable<SlicingProgressModel> buildUseCaseObservable(final SlicingProgress slicingProgress) {
+    protected Observable<SlicingProgressModel> buildUseCaseObservableInput(final SlicingProgress slicingProgress) {
         return Observable.create(new Observable.OnSubscribe<SlicingProgressModel>() {
             @Override
             public void call(Subscriber<? super SlicingProgressModel> subscriber) {

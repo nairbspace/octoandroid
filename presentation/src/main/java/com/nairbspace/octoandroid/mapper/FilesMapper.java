@@ -27,7 +27,7 @@ public class FilesMapper extends MapperUseCase<Files, FilesModel> {
     }
 
     @Override
-    protected Observable<FilesModel> buildUseCaseObservable(final Files files) {
+    protected Observable<FilesModel> buildUseCaseObservableInput(final Files files) {
         return Observable.create(new Observable.OnSubscribe<FilesModel>() {
             @Override
             public void call(Subscriber<? super FilesModel> subscriber) {

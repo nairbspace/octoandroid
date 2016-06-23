@@ -9,8 +9,8 @@ public abstract class UseCaseEventPresenter<T, U> extends UseCasePresenter<T> {
 
     private final EventBus mEventBus;
 
-    public UseCaseEventPresenter(UseCase useCase, EventBus eventBus) {
-        super(useCase);
+    public UseCaseEventPresenter(EventBus eventBus, UseCase... useCases) {
+        super(useCases);
         mEventBus = eventBus;
     }
 

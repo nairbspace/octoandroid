@@ -20,7 +20,7 @@ public class TempControlsPresenter extends UseCaseEventPresenter<TempControlsScr
 
     @Inject
     public TempControlsPresenter(SendTempCommand sendTempCommand, EventBus eventBus) {
-        super(sendTempCommand, eventBus);
+        super(eventBus, sendTempCommand);
         mSendTempCommand = sendTempCommand;
     }
 

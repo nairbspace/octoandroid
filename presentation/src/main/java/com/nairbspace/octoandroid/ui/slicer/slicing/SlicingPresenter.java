@@ -45,7 +45,8 @@ public class SlicingPresenter extends UseCaseEventPresenter<SlicingScreen, Slici
                             ConnectionMapper connectionMapper,
                             SlicerModelMapper.Command commandMapper,
                             SendSliceCommand sendSliceCommand, EventBus eventBus) {
-        super(getSlicers, eventBus);
+        super(eventBus, getSlicers, slicerModelMapper, connectionDetails,
+                connectionMapper, commandMapper, sendSliceCommand);
         mGetSlicers = getSlicers;
         mSlicerModelMapper = slicerModelMapper;
         mConnectionDetails = connectionDetails;
@@ -243,15 +244,5 @@ public class SlicingPresenter extends UseCaseEventPresenter<SlicingScreen, Slici
         Timber.e(t, null);
         String message = ErrorMessageFactory.create(mScreen.context(), t);
         mScreen.toastMessage(message);
-    }
-
-    @Override
-    protected void onDestroy(SlicingScreen slicingScreen) {
-        super.onDestroy(slicingScreen);
-        mSlicerModelMapper.unsubscribe();
-        mConnectionDetails.unsubscribe();
-        mConnectionMapper.unsubscribe();
-        mCommandMapper.unsubscribe();
-        mSendSliceCommand.unsubscribe();
     }
 }

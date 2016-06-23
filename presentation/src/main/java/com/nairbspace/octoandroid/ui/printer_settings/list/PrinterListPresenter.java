@@ -19,7 +19,7 @@ public class PrinterListPresenter extends UseCasePresenter<PrinterListScreen> {
 
     @Inject
     public PrinterListPresenter(GetPrinters getPrinters, PrinterModelMapper.ListMapper listMapper) {
-        super(getPrinters);
+        super(getPrinters, listMapper);
         mGetPrinters = getPrinters;
         mListMapper = listMapper;
     }
@@ -57,11 +57,5 @@ public class PrinterListPresenter extends UseCasePresenter<PrinterListScreen> {
         public void onNext(List<PrinterModel> printerModels) {
             mScreen.updateUi(printerModels);
         }
-    }
-
-    @Override
-    protected void onDestroy(PrinterListScreen printerListScreen) {
-        super.onDestroy(printerListScreen);
-        mListMapper.unsubscribe();
     }
 }

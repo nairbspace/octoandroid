@@ -18,7 +18,7 @@ public class ToolPresenter extends UseCasePresenter<ToolScreen> {
 
     @Inject
     public ToolPresenter(SelectTool selectTool, SendToolCommand sendToolCommand) {
-        super(selectTool);
+        super(selectTool, sendToolCommand);
         mSelectTool = selectTool;
         mSendToolCommand = sendToolCommand;
     }
@@ -113,16 +113,5 @@ public class ToolPresenter extends UseCasePresenter<ToolScreen> {
             super.onError(e);
             mScreen.showToast("Error sending command");
         }
-    }
-
-    public void unsubscribeAll() {
-        mSelectTool.unsubscribe();
-        mSendToolCommand.unsubscribe();
-    }
-
-    @Override
-    protected void onDestroy(ToolScreen toolScreen) {
-        super.onDestroy(toolScreen);
-        unsubscribeAll();
     }
 }

@@ -23,7 +23,7 @@ public class PrinterModelMapper extends MapperUseCase<Printer, PrinterModel> {
     }
 
     @Override
-    protected Observable<PrinterModel> buildUseCaseObservable(final Printer printer) {
+    protected Observable<PrinterModel> buildUseCaseObservableInput(final Printer printer) {
         return Observable.create(new Observable.OnSubscribe<PrinterModel>() {
             @Override
             public void call(Subscriber<? super PrinterModel> subscriber) {
@@ -59,7 +59,7 @@ public class PrinterModelMapper extends MapperUseCase<Printer, PrinterModel> {
         }
 
         @Override
-        protected Observable<List<PrinterModel>> buildUseCaseObservable(final List<Printer> printers) {
+        protected Observable<List<PrinterModel>> buildUseCaseObservableInput(final List<Printer> printers) {
             return Observable.create(new Observable.OnSubscribe<List<PrinterModel>>() {
                 @Override
                 public void call(Subscriber<? super List<PrinterModel>> subscriber) {

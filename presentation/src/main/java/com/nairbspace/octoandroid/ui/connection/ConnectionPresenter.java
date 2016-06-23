@@ -31,7 +31,7 @@ public class ConnectionPresenter extends UseCaseEventPresenter<ConnectionScreen,
                                ConnectionMapper connectionMapper,
                                ConnectModelMapper connectModelMapper,
                                EventBus eventBus) {
-        super(getConnectionDetails, eventBus);
+        super(eventBus, getConnectionDetails, connectToPrinter, connectionMapper, connectModelMapper);
         mGetConnectionDetails = getConnectionDetails;
         mConnectToPrinter = connectToPrinter;
         mConnectionMapper = connectionMapper;
@@ -151,14 +151,6 @@ public class ConnectionPresenter extends UseCaseEventPresenter<ConnectionScreen,
     @Override
     protected void onDestroy(ConnectionScreen connectionScreen) {
         super.onDestroy(connectionScreen);
-        unsubscribeAll();
         mIsFirstTime = true;
-    }
-
-    private void unsubscribeAll() {
-        mGetConnectionDetails.unsubscribe();
-        mConnectToPrinter.unsubscribe();
-        mConnectionMapper.unsubscribe();
-        mConnectModelMapper.unsubscribe();
     }
 }

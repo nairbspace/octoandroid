@@ -2,57 +2,16 @@ package com.nairbspace.octoandroid.mapper;
 
 import com.nairbspace.octoandroid.domain.executor.PostExecutionThread;
 import com.nairbspace.octoandroid.domain.executor.ThreadExecutor;
+import com.nairbspace.octoandroid.domain.interactor.UseCaseInput;
 
 import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.Subscriptions;
 
-public abstract class MapperUseCase<I, O> {
-
-    private final ThreadExecutor mThreadExecutor;
-    private final PostExecutionThread mPostExecutionThread;
-    private Subscription mSubscription = Subscriptions.unsubscribed();
+public abstract class MapperUseCase<I, O> extends UseCaseInput<I> {
 
     public MapperUseCase(ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
-        mThreadExecutor = threadExecutor;
-        mPostExecutionThread = postExecutionThread;
+        super(threadExecutor, postExecutionThread);
     }
 
-    protected abstract Observable<O> buildUseCaseObservable(final I i);
-
-    @SuppressWarnings("unchecked")
-    public void execute(Subscriber useCaseSubscriber, I i) {
-        unsubscribe();
-        mSubscription = buildUseCaseObservable(i)
-                .subscribeOn(Schedulers.from(mThreadExecutor))
-                .observeOn(mPostExecutionThread.getScheduler())
-                .subscribe(useCaseSubscriber);
-    }
-
-    @SuppressWarnings("unchecked")
-    public void executeAllBg(Subscriber useCaseSubscriber, I i) {
-        unsubscribe();
-        mSubscription = buildUseCaseObservable(i)
-                .subscribeOn(Schedulers.from(mThreadExecutor))
-                .observeOn(Schedulers.from(mThreadExecutor))
-                .subscribe(useCaseSubscriber);
-    }
-
-    @SuppressWarnings("unchecked")
-    public void executeUnsubBg(Subscriber useCaseSubscriber, I i) {
-        unsubscribe();
-        mSubscription = buildUseCaseObservable(i)
-                .subscribeOn(Schedulers.from(mThreadExecutor))
-                .observeOn(mPostExecutionThread.getScheduler())
-                .unsubscribeOn(Schedulers.from(mThreadExecutor))
-                .subscribe(useCaseSubscriber);
-    }
-
-    public void unsubscribe() {
-        if (!mSubscription.isUnsubscribed()) {
-            mSubscription.unsubscribe();
-        }
-    }
+    @Override
+    protected abstract Observable<O> buildUseCaseObservableInput(final I i);
 }
