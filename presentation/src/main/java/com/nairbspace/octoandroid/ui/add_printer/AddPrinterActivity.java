@@ -195,7 +195,6 @@ public class AddPrinterActivity extends BaseActivity<AddPrinterScreen>
         SslErrorDialogFragment sslDialog = SslErrorDialogFragment.newInstance();
         sslDialog.setCancelable(true);
         sslDialog.show(getSupportFragmentManager(), null);
-        mAnswersHelper.sslAlertDialog();
     }
 
     @Override
@@ -235,9 +234,11 @@ public class AddPrinterActivity extends BaseActivity<AddPrinterScreen>
     }
 
     @Override
-    public void tryUnsecureConnection() {
-        mSslCheckBox.setChecked(false);
-        onAddPrinterButtonClicked();
-        mAnswersHelper.userTriedUnsecureConnection();
+    public void tryUnsecureConnection(boolean ok) {
+        if (ok) {
+            mSslCheckBox.setChecked(false);
+            onAddPrinterButtonClicked();
+        }
+        mAnswersHelper.userTriedUnsecureConnection(ok);
     }
 }

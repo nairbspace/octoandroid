@@ -35,12 +35,8 @@ public class AnswersHelperBlank implements AnswersHelper {
     }
 
     @Override
-    public void userTriedUnsecureConnection() {
+    public void userTriedUnsecureConnection(boolean ok) {
 
     }
 
-    @Override
-    public void sslAlertDialog() {
-
-    }
 }

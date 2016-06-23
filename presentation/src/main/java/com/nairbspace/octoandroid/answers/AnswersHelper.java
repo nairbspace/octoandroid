@@ -5,6 +5,5 @@ public interface AnswersHelper {
     void loginSuccessWithSsl(boolean isSslChecked);
     void qrClicked();
     void qrWasSuccess();
-    void userTriedUnsecureConnection();
-    void sslAlertDialog();
+    void userTriedUnsecureConnection(boolean ok);
 }

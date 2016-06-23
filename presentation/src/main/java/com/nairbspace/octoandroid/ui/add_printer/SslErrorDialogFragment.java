@@ -44,9 +44,10 @@ public class SslErrorDialogFragment extends BaseDialogFragment<SslErrorDialogFra
     public void onClick(DialogInterface dialog, int which) {
         switch (which) {
             case DialogInterface.BUTTON_NEGATIVE:
+                mListener.tryUnsecureConnection(false);
                 break;
             case DialogInterface.BUTTON_POSITIVE:
-                mListener.tryUnsecureConnection();
+                mListener.tryUnsecureConnection(true);
                 break;
         }
     }
@@ -79,6 +80,6 @@ public class SslErrorDialogFragment extends BaseDialogFragment<SslErrorDialogFra
     }
 
     public interface Listener {
-        void tryUnsecureConnection();
+        void tryUnsecureConnection(boolean ok);
     }
 }
