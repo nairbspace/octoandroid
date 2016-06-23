@@ -25,8 +25,6 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import timber.log.Timber;
-
 public class SlicingPresenter extends UseCaseEventPresenter<SlicingScreen, SlicingProgressModel> {
     private static final int COMPLETE = 100;
 
@@ -69,6 +67,7 @@ public class SlicingPresenter extends UseCaseEventPresenter<SlicingScreen, Slici
     protected void onEvent(SlicingProgressModel progressModel) {
         if (progressModel.progress() == COMPLETE) {
             mScreen.showProgress(false);
+            mScreen.showSliceCompleteAndUpdateFiles();
         } else {
             mScreen.updateProgress(progressModel);
         }
@@ -230,7 +229,9 @@ public class SlicingPresenter extends UseCaseEventPresenter<SlicingScreen, Slici
 
         @Override
         public void onNext(Object o) {
-            if (o != null) Timber.d(o.toString());
+            if (o == null) return;
+            // TODO should show response from octoprint + data from slice command as inital progress
+            mScreen.updateProgress(SlicingProgressModel.initial());
         }
     }
 
@@ -240,6 +241,7 @@ public class SlicingPresenter extends UseCaseEventPresenter<SlicingScreen, Slici
         mSlicerModelMapper.unsubscribe();
         mConnectionDetails.unsubscribe();
         mConnectionMapper.unsubscribe();
+        mCommandMapper.unsubscribe();
         mSendSliceCommand.unsubscribe();
     }
 }

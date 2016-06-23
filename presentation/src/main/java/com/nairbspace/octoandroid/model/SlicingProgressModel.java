@@ -11,6 +11,17 @@ public abstract class SlicingProgressModel {
     public abstract String destPath();
     public abstract int progress();
 
+    public static SlicingProgressModel initial() {
+        return new AutoValue_SlicingProgressModel.Builder()
+                .slicer("")
+                .sourceLocation("")
+                .sourcePath("")
+                .destLocation("")
+                .destPath("")
+                .progress(0)
+                .build();
+    }
+
     public static Builder builder() {
         return new AutoValue_SlicingProgressModel.Builder();
     }

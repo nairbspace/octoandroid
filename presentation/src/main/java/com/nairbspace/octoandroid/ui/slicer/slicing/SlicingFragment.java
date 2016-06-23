@@ -1,10 +1,14 @@
 package com.nairbspace.octoandroid.ui.slicer.slicing;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -13,6 +17,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
@@ -38,6 +43,8 @@ import butterknife.OnClick;
 public class SlicingFragment extends BaseFragmentListener<SlicingScreen, SlicingFragment.Listener>
         implements SlicingScreen, SwipeRefreshLayout.OnRefreshListener {
 
+    private static final int UPDATE_FILES_TIMER = 2000; // in milliseconds
+
     private static final String SLICER_SCREEN_MODEL_KEY = "slicer_screen_model_key";
     private static final String API_URL_KEY = "api_url_key";
     @BindString(R.string.dot_gco) String DOT_GCO;
@@ -47,6 +54,8 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
     @BindString(R.string.source_file) String SOURCE_FILE;
     @BindString(R.string.destination_location) String DEST_LOCATION;
     @BindString(R.string.destination_file) String DEST_FILE;
+    @BindString(R.string.exception_slicing_parameters_missing) String SLICING_PARAMETERS_MISSING;
+    @BindString(R.string.slice_complete) String SLICE_COMPLETE;
 
     @Inject SlicingPresenter mPresenter;
     private Listener mListener;
@@ -129,6 +138,7 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
         super.onCreate(savedInstanceState);
         SetupApplication.get(getContext()).getAppComponent().inject(this);
         mSpinnerId = android.R.layout.simple_spinner_dropdown_item;
+        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -139,13 +149,13 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
         mRefreshLayout.setOnRefreshListener(this);
         mSlicerSpinner.setOnItemSelectedListener(mSlicerListener);
         mSliceButton.setEnabled(false);
-        if (savedInstanceState != null) restoreSavedInstanceState(savedInstanceState);
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (savedInstanceState != null) restoreSavedInstanceState(savedInstanceState);
         if (getArguments() != null) {
             String apiUrl = getArguments().getString(API_URL_KEY);
             if (apiUrl != null) setApiUrl(apiUrl);
@@ -176,10 +186,34 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
     }
 
     @OnClick(R.id.slice_button)
-    void onSliceButtonClicked() {mPresenter.onSliceButtonClicked(getSlicingCommandModel());}
+    void onSliceButtonClicked() {
+        try {
+            mPresenter.onSliceButtonClicked(getSlicingCommandModel());
+        } catch (IllegalStateException e) {
+            toastMessage(SLICING_PARAMETERS_MISSING);
+        }
+    }
+
+    @Override
+    public void toastMessage(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showSliceCompleteAndUpdateFiles() {
+        toastMessage(SLICE_COMPLETE);
+
+        // After slice complete, wait couple seconds before updating FilesFragment.
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {mListener.updateFiles();
+            }
+        }, UPDATE_FILES_TIMER);
+    }
 
     @Override
     public void updateSlicer(Map<String, SlicerModel> modelMap, List<String> slicerNames) {
+        showProgress(false);
         mRefreshLayout.setRefreshing(false);
         mModelMap = modelMap;
         mSlicerSpinner.setAdapter(getNewAdapter(slicerNames));
@@ -187,6 +221,7 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
 
     @Override
     public void updatePrinterProfile(HashMap<String, String> map, List<String> printerProfileNames) {
+        showProgress(false);
         mRefreshLayout.setRefreshing(false);
         mPrinterProfileMap = map;
         mPrinterProfileSpinner.setAdapter(getNewAdapter(printerProfileNames));
@@ -218,6 +253,24 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
         }
     };
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_slicing, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.refresh_slicing_menu_item:
+                onRefresh();
+                mRefreshLayout.setRefreshing(true);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     @NonNull
     @Override
     protected Presenter setPresenter() {
@@ -243,6 +296,6 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
     }
 
     public interface Listener {
-
+        void updateFiles();
     }
 }

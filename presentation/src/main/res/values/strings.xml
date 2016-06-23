@@ -134,5 +134,6 @@
     <string name="source_file">Source File</string>
     <string name="destination_location">Destination Location</string>
     <string name="destination_file">Destination File</string>
+    <string name="slice_complete">Slice complete</string>
 
 </resources>

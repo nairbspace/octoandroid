@@ -14,4 +14,6 @@ public interface SlicingScreen {
     String getDotGco();
     void updateProgress(SlicingProgressModel progressModel);
     void showProgress(boolean show);
+    void toastMessage(String message);
+    void showSliceCompleteAndUpdateFiles();
 }

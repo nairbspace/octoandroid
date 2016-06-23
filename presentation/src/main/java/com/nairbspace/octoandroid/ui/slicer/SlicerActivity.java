@@ -18,6 +18,7 @@ import javax.inject.Inject;
 
 import butterknife.BindArray;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 public class SlicerActivity extends BaseNavActivity<SlicerScreen>
         implements SlicerScreen, PlaybackFragment.Listener, SlicingFragment.Listener,
@@ -73,10 +74,24 @@ public class SlicerActivity extends BaseNavActivity<SlicerScreen>
     }
 
     public void sendApiUrl(@NonNull String apiUrl) {
-        SlicerPagerAdapter adapter = (SlicerPagerAdapter) getViewPager().getAdapter();
-        SlicingFragment slicingFragment = adapter.getSlicingFragment();
-        if (slicingFragment == null) return;
-        slicingFragment.setApiUrl(apiUrl);
-        getViewPager().setCurrentItem(adapter.getSlicingFragmentPosition());
+        try {
+            SlicerPagerAdapter adapter = (SlicerPagerAdapter) getViewPager().getAdapter();
+            SlicingFragment slicingFragment = adapter.getSlicingFragment();
+            slicingFragment.setApiUrl(apiUrl);
+            getViewPager().setCurrentItem(adapter.getSlicingFragmentPosition());
+        } catch (ClassCastException | NullPointerException | IndexOutOfBoundsException e) {
+            Timber.e(e, null); // Shouldn't happen.
+        }
+    }
+
+    @Override
+    public void updateFiles() {
+        try {
+            SlicerPagerAdapter adapter = (SlicerPagerAdapter) getViewPager().getAdapter();
+            FilesFragment filesFragment = adapter.getFilesFragment();
+            filesFragment.onRefresh();
+        } catch (ClassCastException | NullPointerException e) {
+            Timber.e(e, null); // Shouldn't happen.
+        }
     }
 }

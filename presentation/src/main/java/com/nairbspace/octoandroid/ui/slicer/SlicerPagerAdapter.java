@@ -43,6 +43,14 @@ public class SlicerPagerAdapter extends FragmentPagerAdapter {
         return 0;
     }
 
+    public FilesFragment getFilesFragment() {
+        return (FilesFragment) mRegisteredFragments.get(getFilesFragementPosition());
+    }
+
+    public int getFilesFragementPosition() {
+        return 1;
+    }
+
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         Fragment fragment = (Fragment) super.instantiateItem(container, position);
