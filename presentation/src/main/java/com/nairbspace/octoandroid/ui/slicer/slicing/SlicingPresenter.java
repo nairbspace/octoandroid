@@ -56,13 +56,23 @@ public class SlicingPresenter extends UseCaseEventPresenter<SlicingScreen, Slici
     @Override
     protected void onInitialize(SlicingScreen slicingScreen) {
         mScreen = slicingScreen;
-        execute();
     }
 
     @Override
     protected void execute() {
         mGetSlicers.execute(new SlicerSubscriber());
         mConnectionDetails.execute(new ConnectionSubscriber());
+    }
+
+    @Override
+    protected void onNetworkSwitched() {
+        mScreen.enableSliceButton(true);
+        execute();
+    }
+
+    @Override
+    protected void networkNowInactive() {
+        mScreen.enableSliceButton(false);
     }
 
     @Override
@@ -193,6 +203,7 @@ public class SlicingPresenter extends UseCaseEventPresenter<SlicingScreen, Slici
         // TODO possibly display better error message
         Timber.e(t, null);
         String message = ErrorMessageFactory.create(mScreen.context(), t);
+        mScreen.setRefresh(false);
         mScreen.toastMessage(message);
     }
 }

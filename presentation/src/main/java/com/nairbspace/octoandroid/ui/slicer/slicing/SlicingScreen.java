@@ -20,4 +20,6 @@ public interface SlicingScreen {
     void showSliceCompleteAndUpdateFiles();
     Context context();
     int getInvalidPosition();
+    void enableSliceButton(boolean enable);
+    void setRefresh(boolean enable);
 }

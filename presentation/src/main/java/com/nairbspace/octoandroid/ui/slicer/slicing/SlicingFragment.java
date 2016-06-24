@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -44,6 +45,7 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
         implements SlicingScreen, SwipeRefreshLayout.OnRefreshListener {
 
     private static final int UPDATE_FILES_TIMER = 2000; // in milliseconds
+    private static final int UPDATE_SLICER_PROFILE_DELAY = 100; // in milliseconds
 
     private static final String SLICER_SCREEN_MODEL_KEY = "slicer_screen_model_key";
     private static final String API_URL_KEY = "api_url_key";
@@ -103,12 +105,11 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
         mProgressView.setVisibility(show? View.VISIBLE: View.GONE);
     }
 
-    private int mSpinnerId;
     private List<SlicerModel> mSlicerModels;
     private List<SpinnerModel> mPrinterProfiles;
     private String mApiUrl;
 
-    private SlicingCommandModel.Builder getSlicingCommandModel() {
+    private SlicingCommandModel.Builder getSlicingCommandModelBuilder() {
         return SlicingCommandModel.builder()
                 .slicerPosition(mSlicerSpinner.getSelectedItemPosition())
                 .slicingProfilePosition(mSlicerProfileSpinner.getSelectedItemPosition())
@@ -136,7 +137,6 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SetupApplication.get(getContext()).getAppComponent().inject(this);
-        mSpinnerId = android.R.layout.simple_spinner_dropdown_item;
         setHasOptionsMenu(true);
     }
 
@@ -158,34 +158,44 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
             String apiUrl = getArguments().getString(API_URL_KEY);
             if (apiUrl != null) setApiUrl(apiUrl);
         }
-        if (savedInstanceState != null) restoreSavedInstanceState(savedInstanceState);
+        if (savedInstanceState == null) mPresenter.execute();
+        else restoreSavedInstanceState(savedInstanceState);
     }
 
     private void restoreSavedInstanceState(Bundle savedInstanceState) {
-        SlicerScreenModel model = savedInstanceState.getParcelable(SLICER_SCREEN_MODEL_KEY);
+        SlicingCommandModel model = savedInstanceState.getParcelable(SLICER_SCREEN_MODEL_KEY);
         if (model == null) return;
-        List<SlicerModel> slicerModels = model.slicerModels();
-        updateSlicer(slicerModels);
+        updateSlicer(model.slicerModels());
         updatePrinterProfile(model.printerProfiles());
-        String apiUrl = savedInstanceState.getString(API_URL_KEY);
-        if (apiUrl != null) setApiUrl(apiUrl);
+        restoreSpinnerPositions(model);
+        String apiUrl = model.apiUrl();
+        if (!TextUtils.isEmpty(apiUrl)) setApiUrl(apiUrl);
+    }
+
+    private void restoreSpinnerPositions(final SlicingCommandModel model) {
+        mSlicerSpinner.setSelection(model.slicerPosition());
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mSlicerProfileSpinner.setSelection(model.slicingProfilePosition());
+            }
+        }, UPDATE_SLICER_PROFILE_DELAY);
+        mPrinterProfileSpinner.setSelection(model.printerProfilePosition());
+        mAfterSlicingSpinner.setSelection(model.afterSlicingPosition());
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (mSlicerModels != null && mPrinterProfiles != null) {
-            SlicerScreenModel model = SlicerScreenModel.create(mSlicerModels, mPrinterProfiles);
-            outState.putParcelable(SLICER_SCREEN_MODEL_KEY, model);
-        }
-        if (mApiUrl != null) {
-            outState.putString(API_URL_KEY, mApiUrl);
-        }
+        if (mSlicerModels == null || mPrinterProfiles == null) return;
+        SlicingCommandModel.Builder builder = getSlicingCommandModelBuilder();
+        if (mApiUrl == null) builder.apiUrl(""); // IllegalStateException if mApiUrl is null.
+        outState.putParcelable(SLICER_SCREEN_MODEL_KEY, builder.build());
     }
 
     @OnClick(R.id.slice_button)
     void onSliceButtonClicked() {
-        mPresenter.onSliceButtonClicked(getSlicingCommandModel());
+        mPresenter.onSliceButtonClicked(getSlicingCommandModelBuilder());
     }
 
     @Override
@@ -227,13 +237,20 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
     }
 
     public <T> ArrayAdapter<T> getNewAdapter(List<T> strings) {
-        return new ArrayAdapter<>(getContext(), mSpinnerId, strings);
+        int spinnerId = android.R.layout.simple_spinner_dropdown_item;
+        return new ArrayAdapter<>(getContext(), spinnerId, strings);
     }
 
     public void setApiUrl(String apiUrl) {
         mApiUrl = apiUrl;
         mFileNameTextView.setText(mPresenter.getFileName(mApiUrl));
-        mSliceButton.setEnabled(true);
+        enableSliceButton(true);
+    }
+
+    @Override
+    public void enableSliceButton(boolean enable) {
+        if (!enable) mSliceButton.setEnabled(false);
+        else mSliceButton.setEnabled(mApiUrl != null);
     }
 
     @Override
@@ -295,6 +312,11 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
     protected Listener setListener() {
         mListener = (Listener) getContext();
         return mListener;
+    }
+
+    @Override
+    public void setRefresh(boolean enable) {
+        mRefreshLayout.setRefreshing(enable);
     }
 
     @Override
