@@ -15,6 +15,10 @@ public abstract class Slicer {
     @Nullable @SerializedName("default") public abstract Boolean isDefault();
     @Nullable @SerializedName("profiles") public abstract Map<String, Profile> profiles();
 
+    public static Slicer create(String key, String displayName, Boolean isDefualt, Map<String, Profile> profileMap) {
+        return new AutoValue_Slicer(key, displayName, isDefualt, profileMap);
+    }
+
     @AutoValue
     @AutoGson(autoValueClass = AutoValue_Slicer_Profile.class)
     public static abstract class Profile {
@@ -22,5 +26,9 @@ public abstract class Slicer {
         @Nullable @SerializedName("displayName") public abstract String displayName();
         @Nullable @SerializedName("default") public abstract Boolean isDefault();
         @Nullable @SerializedName("resource") public abstract String resource();
+
+        public static Profile create(String key, String displayName, Boolean isDefault, String resource) {
+            return new AutoValue_Slicer_Profile(key, displayName, isDefault, resource);
+        }
     }
 }

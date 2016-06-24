@@ -31,7 +31,6 @@ import com.nairbspace.octoandroid.ui.templates.Presenter;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -105,7 +104,7 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
     }
 
     private int mSpinnerId;
-    private Map<String, SlicerModel> mModelMap;
+    private List<SlicerModel> mSlicerModels;
     private List<SpinnerModel> mPrinterProfiles;
     private String mApiUrl;
 
@@ -116,7 +115,7 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
                 .printerProfilePosition(mPrinterProfileSpinner.getSelectedItemPosition())
                 .afterSlicingPosition(mAfterSlicingSpinner.getSelectedItemPosition())
                 .apiUrl(mApiUrl)
-                .slicerMap(mModelMap)
+                .slicerModels(mSlicerModels)
                 .printerProfiles(mPrinterProfiles)
                 .afterSlicingList(Arrays.asList(mAfterSlicingArray));
     }
@@ -165,8 +164,8 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
     private void restoreSavedInstanceState(Bundle savedInstanceState) {
         SlicerScreenModel model = savedInstanceState.getParcelable(SLICER_SCREEN_MODEL_KEY);
         if (model == null) return;
-        Map<String, SlicerModel> slicerMap = model.slicerModelMap();
-        updateSlicer(slicerMap, mPresenter.getSlicerNames(slicerMap));
+        List<SlicerModel> slicerModels = model.slicerModels();
+        updateSlicer(slicerModels);
         updatePrinterProfile(model.printerProfiles());
         String apiUrl = savedInstanceState.getString(API_URL_KEY);
         if (apiUrl != null) setApiUrl(apiUrl);
@@ -175,8 +174,8 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (mModelMap != null && mPrinterProfiles != null) {
-            SlicerScreenModel model = SlicerScreenModel.create(mModelMap, mPrinterProfiles);
+        if (mSlicerModels != null && mPrinterProfiles != null) {
+            SlicerScreenModel model = SlicerScreenModel.create(mSlicerModels, mPrinterProfiles);
             outState.putParcelable(SLICER_SCREEN_MODEL_KEY, model);
         }
         if (mApiUrl != null) {
@@ -212,11 +211,11 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
     }
 
     @Override
-    public void updateSlicer(Map<String, SlicerModel> modelMap, List<String> slicerNames) {
+    public void updateSlicer(List<SlicerModel> slicerModels) {
         showProgress(false);
         mRefreshLayout.setRefreshing(false);
-        mModelMap = modelMap;
-        mSlicerSpinner.setAdapter(getNewAdapter(slicerNames));
+        mSlicerModels = slicerModels;
+        mSlicerSpinner.setAdapter(getNewAdapter(slicerModels));
     }
 
     @Override
@@ -250,10 +249,9 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
     private SpinnerSelectedListener mSlicerListener = new SpinnerSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            if (mModelMap == null) return;
-            List<String> profileNames = mPresenter.getProfileNames(mModelMap, position);
-            if (profileNames == null) return;
-            mSlicerProfileSpinner.setAdapter(getNewAdapter(profileNames));
+            if (mSlicerModels == null) return;
+            List<SlicerModel.Profile> profiles = mSlicerModels.get(position).profiles();
+            mSlicerProfileSpinner.setAdapter(getNewAdapter(profiles));
         }
     };
 

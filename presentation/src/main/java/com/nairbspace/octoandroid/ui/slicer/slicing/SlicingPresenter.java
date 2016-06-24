@@ -19,7 +19,6 @@ import com.nairbspace.octoandroid.ui.templates.UseCaseEventPresenter;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -89,7 +88,7 @@ public class SlicingPresenter extends UseCaseEventPresenter<SlicingScreen, Slici
         }
     }
 
-    private final class SlicerModelSubscriber extends DefaultSubscriber<Map<String, SlicerModel>> {
+    private final class SlicerModelSubscriber extends DefaultSubscriber<List<SlicerModel>> {
 
         @Override
         public void onError(Throwable e) {
@@ -97,8 +96,8 @@ public class SlicingPresenter extends UseCaseEventPresenter<SlicingScreen, Slici
         }
 
         @Override
-        public void onNext(Map<String, SlicerModel> map) {
-            mScreen.updateSlicer(map, getSlicerNames(map));
+        public void onNext(List<SlicerModel> models) {
+            mScreen.updateSlicer(models);
         }
     }
 
@@ -142,63 +141,6 @@ public class SlicingPresenter extends UseCaseEventPresenter<SlicingScreen, Slici
         } catch (IndexOutOfBoundsException e) {
             return "";
         }
-    }
-
-    public List<String> getProfileNames(Map<String, SlicerModel> modelMap, int position) {
-        SlicerModel slicerModel = getSlicerModel(modelMap, position);
-        List<SlicerModel.Profile> profiles = getProfiles(slicerModel);
-        if (profiles == null) return null;
-        return getProfileNames(profiles);
-    }
-
-    private List<SlicerModel.Profile> getProfiles(SlicerModel slicerModel) {
-        Map<String, SlicerModel.Profile> profileMap = slicerModel.profiles();
-        if (profileMap == null) return null;
-        List<SlicerModel.Profile> profiles = new ArrayList<>();
-        profiles.addAll(profileMap.values());
-        return profiles;
-    }
-
-    private List<SlicerModel> getSlicerModels(Map<String, SlicerModel> map) {
-        List<SlicerModel> slicerModels = new ArrayList<>();
-        slicerModels.addAll(map.values());
-        return slicerModels;
-    }
-
-    private SlicerModel getSlicerModel(Map<String, SlicerModel> map, int position) {
-        List<SlicerModel> slicerModels = getSlicerModels(map);
-        return getSlicerModel(slicerModels, position);
-    }
-
-    private SlicerModel getSlicerModel(List<SlicerModel> models, int position) {
-        try {
-            return models.get(position);
-        } catch (IndexOutOfBoundsException e) {
-            return null;
-        }
-    }
-
-    public List<String> getSlicerNames(Map<String, SlicerModel> modelMap) {
-        List<SlicerModel> models = new ArrayList<>();
-        models.addAll(modelMap.values());
-        return getSlicerNames(models);
-    }
-
-    private List<String> getSlicerNames(List<SlicerModel> models) {
-        List<String> slicerNames = new ArrayList<>();
-        for (SlicerModel slicerModel : models) {
-            String name = slicerModel.displayName();
-            if (name != null) slicerNames.add(name);
-        }
-        return slicerNames;
-    }
-    private List<String> getProfileNames(List<SlicerModel.Profile> profiles) {
-        List<String> profileNames = new ArrayList<>();
-        for (SlicerModel.Profile profile : profiles) {
-            String name = profile.displayName();
-            if (name != null) profileNames.add(name);
-        }
-        return profileNames;
     }
 
     protected void onSliceButtonClicked(SlicingCommandModel.Builder builder) {

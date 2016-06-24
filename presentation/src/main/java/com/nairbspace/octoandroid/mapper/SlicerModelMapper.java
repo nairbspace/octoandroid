@@ -1,16 +1,14 @@
 package com.nairbspace.octoandroid.mapper;
 
-import com.google.gson.reflect.TypeToken;
 import com.nairbspace.octoandroid.domain.executor.PostExecutionThread;
 import com.nairbspace.octoandroid.domain.executor.ThreadExecutor;
 import com.nairbspace.octoandroid.domain.model.Slicer;
 import com.nairbspace.octoandroid.domain.model.SlicingCommand;
-import com.nairbspace.octoandroid.exception.TransformErrorException;
 import com.nairbspace.octoandroid.model.SlicerModel;
 import com.nairbspace.octoandroid.model.SlicingCommandModel;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,30 +17,22 @@ import javax.inject.Inject;
 import rx.Observable;
 import rx.Subscriber;
 
-public class SlicerModelMapper extends MapperUseCase<Map<String, Slicer>, Map<String, SlicerModel>> {
-
-    private final ModelSerializer mSerializer;
+public class SlicerModelMapper extends MapperUseCase<Map<String, Slicer>, List<SlicerModel>> {
 
     @Inject
     public SlicerModelMapper(ThreadExecutor threadExecutor,
-                             PostExecutionThread postExecutionThread,
-                             ModelSerializer serializer) {
+                             PostExecutionThread postExecutionThread) {
         super(threadExecutor, postExecutionThread);
-        mSerializer = serializer;
     }
 
     @Override
-    protected Observable<Map<String, SlicerModel>> buildUseCaseObservableInput(final Map<String, Slicer> slicerMap) {
-        return Observable.create(new Observable.OnSubscribe<Map<String, SlicerModel>>() {
+    protected Observable<List<SlicerModel>> buildUseCaseObservableInput(final Map<String, Slicer> slicerMap) {
+        return Observable.create(new Observable.OnSubscribe<List<SlicerModel>>() {
             @Override
-            public void call(Subscriber<? super Map<String, SlicerModel>> subscriber) {
+            public void call(Subscriber<? super List<SlicerModel>> subscriber) {
                 try {
-                    // TODO null check slicer models across modules!
-                    if (slicerMap == null) subscriber.onError(new TransformErrorException());
-                    else {
-                        subscriber.onNext(mapToSlicerModelMap(slicerMap));
-                        subscriber.onCompleted();
-                    }
+                    subscriber.onNext(maptoSlicerModel(slicerMap));
+                    subscriber.onCompleted();
                 } catch (Exception e) {
                     subscriber.onError(e);
                 }
@@ -50,20 +40,45 @@ public class SlicerModelMapper extends MapperUseCase<Map<String, Slicer>, Map<St
         });
     }
 
-    private Map<String, SlicerModel> mapToSlicerModelMap(Map<String, Slicer> slicerMap) {
-        Type type = new TypeToken<Map<String, SlicerModel>>(){}.getType();
-        return mSerializer.transform(slicerMap, type);
+    private List<SlicerModel> maptoSlicerModel(Map<String, Slicer> slicerMap) {
+        List<String> keys = new ArrayList<>();
+        keys.addAll(slicerMap.keySet());
+        List<SlicerModel> slicerModels = new ArrayList<>();
+        for (String key : keys) {
+            Slicer slicer = slicerMap.get(key);
+            List<SlicerModel.Profile> profiles = mapToProfiles(slicer.profiles());
+            Boolean getIsDefault = slicer.isDefault();
+            boolean isDefault = false;
+            if (getIsDefault != null) isDefault = getIsDefault;
+            SlicerModel slicerModel = new SlicerModel(slicer.key(), slicer.displayName(), isDefault, profiles);
+            slicerModels.add(slicerModel);
+        }
+
+        return slicerModels;
+    }
+
+    private List<SlicerModel.Profile> mapToProfiles(Map<String, Slicer.Profile> profileMap) {
+        List<String> keys = new ArrayList<>();
+        keys.addAll(profileMap.keySet());
+        List<SlicerModel.Profile> profiles = new ArrayList<>();
+        for (String key : keys) {
+            Slicer.Profile profile = profileMap.get(key);
+            Boolean getIsDefault = profile.isDefault();
+            boolean isDefault = false;
+            if (getIsDefault != null) isDefault = getIsDefault;
+            SlicerModel.Profile profileModel = new SlicerModel.Profile(profile.key(),
+                    profile.displayName(), isDefault, profile.resource());
+            profiles.add(profileModel);
+        }
+
+        return profiles;
     }
 
     public static class Command extends MapperUseCase<SlicingCommandModel, SlicingCommand> {
 
-        private final ModelSerializer mSerializer;
-
         @Inject
-        public Command(ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread,
-                       ModelSerializer serializer) {
+        public Command(ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
             super(threadExecutor, postExecutionThread);
-            mSerializer = serializer;
         }
 
         @Override
@@ -106,20 +121,39 @@ public class SlicerModelMapper extends MapperUseCase<Map<String, Slicer>, Map<St
                 }
             }
 
+            Map<String, Slicer> slicerMap = mapToSlicerMap(model.slicerModels());
+
             return SlicingCommand.builder()
                     .slicerPosition(model.slicerPosition())
                     .slicingProfilePosition(model.slicingProfilePosition())
                     .printerProfilePosition(selectedPrinterProfileId)
                     .apiUrl(model.apiUrl())
-                    .slicerMap(mapToSlicerMap(model.slicerMap()))
+                    .slicerMap(slicerMap)
                     .printerProfilesIds(printerProfileIds)
                     .after(after)
                     .build();
         }
 
-        private Map<String, Slicer> mapToSlicerMap(Map<String, SlicerModel> modelMap) {
-            Type type = new TypeToken<Map<String, Slicer>>(){}.getType();
-            return mSerializer.transform(modelMap, type);
+        private Map<String, Slicer> mapToSlicerMap(List<SlicerModel> models) {
+            Map<String, Slicer> map = new HashMap<>();
+            for (SlicerModel model : models) {
+                Map<String, Slicer.Profile> profileMap = mapToSlicerProfileMap(model.profiles());
+                Slicer slicer = Slicer.create(model.key(), model.displayName(), model.isDefault(), profileMap);
+                map.put(model.key(), slicer);
+            }
+
+            return map;
+        }
+
+        private Map<String, Slicer.Profile> mapToSlicerProfileMap(List<SlicerModel.Profile> profiles) {
+            Map<String, Slicer.Profile> map = new HashMap<>();
+            for (SlicerModel.Profile profileModel : profiles) {
+                Slicer.Profile profile = Slicer.Profile.create(profileModel.key(), profileModel.displayName(),
+                        profileModel.isDefault(), profileModel.resource());
+                map.put(profileModel.key(), profile);
+            }
+
+            return map;
         }
     }
 }

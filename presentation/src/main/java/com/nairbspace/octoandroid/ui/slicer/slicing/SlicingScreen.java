@@ -7,11 +7,10 @@ import com.nairbspace.octoandroid.model.SlicingProgressModel;
 import com.nairbspace.octoandroid.model.SpinnerModel;
 
 import java.util.List;
-import java.util.Map;
 
 public interface SlicingScreen {
 
-    void updateSlicer(Map<String, SlicerModel> modelMap, List<String> slicerNames);
+    void updateSlicer(List<SlicerModel> slicerModels);
     void updatePrinterProfile(List<SpinnerModel> printerProfiles);
     String getDotGco();
     void updateProgress(SlicingProgressModel progressModel);
