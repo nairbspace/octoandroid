@@ -4,10 +4,6 @@ import com.nairbspace.octoandroid.data.entity.ConnectEntity;
 import com.nairbspace.octoandroid.data.exception.EntityMapperException;
 import com.nairbspace.octoandroid.domain.model.Connect;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import rx.Observable;
 import rx.Subscriber;
 
@@ -26,16 +22,8 @@ public class ConnectEntityMapper {
 
                 String port = connect.ports().get(connect.selectedPortId());
                 int baudrate = connect.baudrates().get(connect.selectedBaudrateId());
-
-                Collection<String> printerProfileCollection = connect.printerProfiles().keySet();
-                List<String> printerProfileIds;
-                if (printerProfileCollection instanceof List) {
-                    printerProfileIds = (List<String>) printerProfileCollection;
-                } else {
-                    printerProfileIds = new ArrayList<>(printerProfileCollection);
-                }
-
-                String printerProfileId = printerProfileIds.get(connect.selectedPrinterProfileId());
+                int printerProfile = connect.selectedPrinterProfileId();
+                String printerProfileId = connect.printerProfiles().get(printerProfile).id();
 
                 try {
                     ConnectEntity connectEntity = ConnectEntity.builder()

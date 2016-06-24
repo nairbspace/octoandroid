@@ -21,13 +21,12 @@ import android.widget.SpinnerAdapter;
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
 import com.nairbspace.octoandroid.model.ConnectModel;
+import com.nairbspace.octoandroid.model.SpinnerModel;
 import com.nairbspace.octoandroid.ui.templates.BasePagerFragmentListener;
 import com.nairbspace.octoandroid.ui.templates.Presenter;
 import com.nairbspace.octoandroid.views.SetEnableView;
 import com.nairbspace.octoandroid.views.SetShowView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -76,8 +75,8 @@ public class ConnectionFragment extends BasePagerFragmentListener<ConnectionScre
     private ArrayAdapter<String> mSerialPortAdapter;
     private List<Integer> mBaudrates;
     private ArrayAdapter<Integer> mBaudrateAdapter;
-    private ArrayAdapter<String> mPrinterProfileAdapter;
-    private HashMap<String, String> mPrinterProfiles;
+    private List<SpinnerModel> mPrinterProfiles;
+    private ArrayAdapter<SpinnerModel> mPrinterProfileAdapter;
 
     public static ConnectionFragment newInstance() {
         return new ConnectionFragment();
@@ -116,12 +115,12 @@ public class ConnectionFragment extends BasePagerFragmentListener<ConnectionScre
         super.onSaveInstanceState(outState);
         try {
             outState.putParcelable(CONNECT_MODEL_KEY, getConnectModel());
-        } catch (NullPointerException e) {
-            outState.putParcelable(CONNECT_MODEL_KEY, mConnectModel);
+        } catch (NullPointerException | IllegalStateException e) {
+            if (mConnectModel != null) outState.putParcelable(CONNECT_MODEL_KEY, mConnectModel);
         }
     }
 
-    private ConnectModel getConnectModel() throws NullPointerException {
+    private ConnectModel getConnectModel() {
         int selectedPortId = mSerialPortSpinner.getSelectedItemPosition();
         int selectedBaudrateId = mBaudrateSpinner.getSelectedItemPosition();
         int selectedPrinterProfileId = mPrinterProfileSpinner.getSelectedItemPosition();
@@ -197,7 +196,7 @@ public class ConnectionFragment extends BasePagerFragmentListener<ConnectionScre
 
     private void updateSerialPortSpinner(List<String> ports) {
         mPorts = ports;
-        mSerialPortAdapter = updateAdapter(mSerialPortAdapter, mPorts);
+        mSerialPortAdapter = updateAdapter(mSerialPortAdapter, ports);
         mSerialPortSpinner = updateSpinner(mSerialPortAdapter, mSerialPortSpinner);
     }
 
@@ -207,16 +206,9 @@ public class ConnectionFragment extends BasePagerFragmentListener<ConnectionScre
         mBaudrateSpinner = updateSpinner(mBaudrateAdapter, mBaudrateSpinner);
     }
 
-    private void updatePrinterProfileSpinner(HashMap<String, String> printerProfiles) {
+    private void updatePrinterProfileSpinner(List<SpinnerModel> printerProfiles) {
         mPrinterProfiles = printerProfiles;
-        List<String> printerProfileNames;
-        if (printerProfiles.values() instanceof List) {
-            printerProfileNames = (List<String>) printerProfiles.values();
-        } else {
-            printerProfileNames = new ArrayList<>(printerProfiles.values());
-        }
-
-        mPrinterProfileAdapter = updateAdapter(mPrinterProfileAdapter, printerProfileNames);
+        mPrinterProfileAdapter = updateAdapter(mPrinterProfileAdapter, printerProfiles);
         mPrinterProfileSpinner = updateSpinner(mPrinterProfileAdapter, mPrinterProfileSpinner);
     }
 

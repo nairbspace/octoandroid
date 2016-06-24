@@ -52,6 +52,10 @@ public abstract class Connection {
         @SerializedName("printerDetails") public abstract String id();
         @SerializedName("name") public abstract String name();
 
+        public static PrinterProfile create(String id, String name) {
+            return new AutoValue_Connection_PrinterProfile(id, name);
+        }
+
 //        public static TypeAdapter<PrinterProfile> typeAdapter(Gson gson) {
 //            return new AutoValue_Connection_PrinterProfile.GsonTypeAdapter(gson);
 //        }

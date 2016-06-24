@@ -10,6 +10,8 @@ import com.nairbspace.octoandroid.model.SlicerModel;
 import com.nairbspace.octoandroid.model.SlicingCommandModel;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -90,13 +92,27 @@ public class SlicerModelMapper extends MapperUseCase<Map<String, Slicer>, Map<St
                 after = SlicingCommand.After.NOTHING;
             }
 
+            List<String> printerProfileIds = new ArrayList<>();
+            for (int i = 0; i < model.printerProfiles().size(); i++) {
+                printerProfileIds.add(model.printerProfiles().get(i).id());
+            }
+
+            int spinnerSelectedPrinterProfile = model.printerProfilePosition();
+            String id = model.printerProfiles().get(spinnerSelectedPrinterProfile).id();
+            int selectedPrinterProfileId = 0;
+            for (int i = 0; i < printerProfileIds.size(); i++) {
+                if (printerProfileIds.get(i).equals(id)) {
+                    selectedPrinterProfileId = i;
+                }
+            }
+
             return SlicingCommand.builder()
                     .slicerPosition(model.slicerPosition())
                     .slicingProfilePosition(model.slicingProfilePosition())
-                    .printerProfilePosition(model.printerProfilePosition())
+                    .printerProfilePosition(selectedPrinterProfileId)
                     .apiUrl(model.apiUrl())
                     .slicerMap(mapToSlicerMap(model.slicerMap()))
-                    .printerProfileMap(model.printerProfileMap())
+                    .printerProfilesIds(printerProfileIds)
                     .after(after)
                     .build();
         }

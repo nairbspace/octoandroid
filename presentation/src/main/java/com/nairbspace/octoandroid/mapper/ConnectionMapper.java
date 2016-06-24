@@ -6,8 +6,9 @@ import com.nairbspace.octoandroid.domain.executor.ThreadExecutor;
 import com.nairbspace.octoandroid.domain.model.Connection;
 import com.nairbspace.octoandroid.exception.TransformErrorException;
 import com.nairbspace.octoandroid.model.ConnectModel;
+import com.nairbspace.octoandroid.model.SpinnerModel;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -56,9 +57,10 @@ public class ConnectionMapper extends MapperUseCase<Connection, ConnectModel> {
         List<Integer> baudrates = options.baudrates();
 
         List<Connection.PrinterProfile> printerProfileList = options.printerProfiles();
-        HashMap<String, String> printerProfiles = new HashMap<>();
+        List<SpinnerModel> printerProfiles = new ArrayList<>();
         for (Connection.PrinterProfile printerProfile : printerProfileList) {
-            printerProfiles.put(printerProfile.id(), printerProfile.name());
+            SpinnerModel spinnerModel = new SpinnerModel(printerProfile.id(), printerProfile.name());
+            printerProfiles.add(spinnerModel);
         }
 
         int defaultPortId = 0;
@@ -76,8 +78,8 @@ public class ConnectionMapper extends MapperUseCase<Connection, ConnectModel> {
         }
 
         int defaultPrinterProfileId = 0;
-        for (int i = 0; i < printerProfileList.size(); i++) {
-            if (printerProfileList.get(i).id().equals(options.printerProfilePreference())) {
+        for (int i = 0; i < printerProfiles.size(); i++) {
+            if (printerProfiles.get(i).id().equals(options.printerProfilePreference())) {
                 defaultPrinterProfileId = i;
             }
         }

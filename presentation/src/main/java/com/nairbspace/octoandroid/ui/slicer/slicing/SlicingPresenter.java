@@ -20,7 +20,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -123,8 +122,7 @@ public class SlicingPresenter extends UseCaseEventPresenter<SlicingScreen, Slici
 
         @Override
         public void onNext(ConnectModel connectModel) {
-            HashMap<String, String> map = connectModel.printerProfiles();
-            mScreen.updatePrinterProfile(map, getPrinterProfileNames(map));
+            mScreen.updatePrinterProfile(connectModel.printerProfiles());
         }
     }
 
@@ -144,12 +142,6 @@ public class SlicingPresenter extends UseCaseEventPresenter<SlicingScreen, Slici
         } catch (IndexOutOfBoundsException e) {
             return "";
         }
-    }
-
-    public List<String> getPrinterProfileNames(HashMap<String, String> map) {
-        List<String> names = new ArrayList<>();
-        names.addAll(map.values());
-        return names;
     }
 
     public List<String> getProfileNames(Map<String, SlicerModel> modelMap, int position) {

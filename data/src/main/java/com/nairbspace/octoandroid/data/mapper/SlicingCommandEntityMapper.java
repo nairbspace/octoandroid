@@ -6,7 +6,6 @@ import com.nairbspace.octoandroid.domain.model.Slicer;
 import com.nairbspace.octoandroid.domain.model.SlicingCommand;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,7 +38,7 @@ public class SlicingCommandEntityMapper {
         String slicerKey = slicer.key();
         List<Slicer.Profile> profileList = getProfiles(slicer);
         String slicerProfileKey = getSlicerProfileKey(profileList, slicerProfilePosition);
-        String printerProfileKey = getPrinterProfileKey(slicingCommand.printerProfileMap(), printerProfilePosition);
+        String printerProfileKey = slicingCommand.printerProfilesIds().get(printerProfilePosition);
         boolean select = false;
         boolean print = false;
 
@@ -59,12 +58,6 @@ public class SlicingCommandEntityMapper {
                 .select(select)
                 .print(print)
                 .build();
-    }
-
-    public static String getPrinterProfileKey(HashMap<String, String> map, int position) {
-        List<String> printerProfilesKeysList = new ArrayList<>();
-        printerProfilesKeysList.addAll(map.keySet());
-        return printerProfilesKeysList.get(position);
     }
 
     public static String getSlicerProfileKey(List<Slicer.Profile> profileList, int position) {

@@ -2,7 +2,7 @@ package com.nairbspace.octoandroid.domain.model;
 
 import com.google.auto.value.AutoValue;
 
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @AutoValue
@@ -15,7 +15,7 @@ public abstract class SlicingCommand {
     public abstract int printerProfilePosition();
     public abstract String apiUrl();
     public abstract Map<String, Slicer> slicerMap();
-    public abstract HashMap<String, String> printerProfileMap();
+    public abstract List<String> printerProfilesIds();
     public abstract After after();
 
     public static Builder builder() {
@@ -29,7 +29,7 @@ public abstract class SlicingCommand {
         public abstract Builder printerProfilePosition(int printerProfilePosition);
         public abstract Builder apiUrl(String apiUrl);
         public abstract Builder slicerMap(Map<String, Slicer> slicerMap);
-        public abstract Builder printerProfileMap(HashMap<String, String> printerProfileMap);
+        public abstract Builder printerProfilesIds(List<String> printerProfilesIds);
         public abstract Builder after(After after);
         public abstract SlicingCommand build();
     }
