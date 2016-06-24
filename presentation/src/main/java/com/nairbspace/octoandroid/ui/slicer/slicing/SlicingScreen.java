@@ -17,6 +17,8 @@ public interface SlicingScreen {
     void updateProgress(SlicingProgressModel progressModel);
     void showProgress(boolean show);
     void toastMessage(String message);
+    void toastSlicingParamtersMissing();
     void showSliceCompleteAndUpdateFiles();
     Context context();
+    int getInvalidPosition();
 }

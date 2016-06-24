@@ -109,7 +109,7 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
     private HashMap<String, String> mPrinterProfileMap;
     private String mApiUrl;
 
-    public SlicingCommandModel getSlicingCommandModel() {
+    private SlicingCommandModel.Builder getSlicingCommandModel() {
         return SlicingCommandModel.builder()
                 .slicerPosition(mSlicerSpinner.getSelectedItemPosition())
                 .slicingProfilePosition(mSlicerProfileSpinner.getSelectedItemPosition())
@@ -118,8 +118,7 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
                 .apiUrl(mApiUrl)
                 .slicerMap(mModelMap)
                 .printerProfileMap(mPrinterProfileMap)
-                .afterSlicingList(Arrays.asList(mAfterSlicingArray))
-                .build();
+                .afterSlicingList(Arrays.asList(mAfterSlicingArray));
     }
 
     public static SlicingFragment newInstance() {
@@ -156,11 +155,11 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (savedInstanceState != null) restoreSavedInstanceState(savedInstanceState);
         if (getArguments() != null) {
             String apiUrl = getArguments().getString(API_URL_KEY);
             if (apiUrl != null) setApiUrl(apiUrl);
         }
+        if (savedInstanceState != null) restoreSavedInstanceState(savedInstanceState);
     }
 
     private void restoreSavedInstanceState(Bundle savedInstanceState) {
@@ -188,16 +187,17 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
 
     @OnClick(R.id.slice_button)
     void onSliceButtonClicked() {
-        try {
-            mPresenter.onSliceButtonClicked(getSlicingCommandModel());
-        } catch (IllegalStateException e) {
-            toastMessage(SLICING_PARAMETERS_MISSING);
-        }
+        mPresenter.onSliceButtonClicked(getSlicingCommandModel());
     }
 
     @Override
     public void toastMessage(String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void toastSlicingParamtersMissing() {
+        toastMessage(SLICING_PARAMETERS_MISSING);
     }
 
     @Override
@@ -236,6 +236,11 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
         mApiUrl = apiUrl;
         mFileNameTextView.setText(mPresenter.getFileName(mApiUrl));
         mSliceButton.setEnabled(true);
+    }
+
+    @Override
+    public int getInvalidPosition() {
+        return AdapterView.INVALID_POSITION;
     }
 
     @Override

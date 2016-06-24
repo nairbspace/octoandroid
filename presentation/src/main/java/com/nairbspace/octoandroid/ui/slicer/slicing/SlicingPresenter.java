@@ -209,8 +209,24 @@ public class SlicingPresenter extends UseCaseEventPresenter<SlicingScreen, Slici
         return profileNames;
     }
 
-    protected void onSliceButtonClicked(SlicingCommandModel model) {
-        mCommandMapper.execute(new CommandMapper(), model);
+    protected void onSliceButtonClicked(SlicingCommandModel.Builder builder) {
+        try {
+            SlicingCommandModel model = builder.build();
+            if (arePositionsInvalid(model)) mScreen.toastSlicingParamtersMissing();
+            else mCommandMapper.execute(new CommandMapper(), model);
+        } catch (IllegalStateException e) {
+            mScreen.toastSlicingParamtersMissing();
+        }
+    }
+
+    private boolean arePositionsInvalid(SlicingCommandModel model) {
+        final int invalidPosition = mScreen.getInvalidPosition();
+        final int slicerPosition = model.slicerPosition();
+        final int slicingProfilePosition = model.slicingProfilePosition();
+        final int printerProfilePosition = model.printerProfilePosition();
+        final int afterSlicingPosition = model.afterSlicingPosition();
+        return (slicerPosition == invalidPosition || slicingProfilePosition == invalidPosition ||
+                printerProfilePosition == invalidPosition || afterSlicingPosition == invalidPosition);
     }
 
     private final class CommandMapper extends DefaultSubscriber<SlicingCommand> {
