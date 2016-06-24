@@ -26,14 +26,18 @@ public class NavPresenter extends UseCasePresenter<NavScreen> {
     @Override
     protected void onInitialize(NavScreen navigatorScreen) {
         mScreen = navigatorScreen;
-        mGetPrinterDetails.execute(new PrinterDetailsSubscriber());
+        execute();
     }
 
     @Override
     protected void onNetworkSwitched() {
-        super.onNetworkSwitched();
         mScreen.hideSnackbar();
         execute();
+    }
+
+    @Override
+    protected void execute() {
+        mGetPrinterDetails.execute(new PrinterDetailsSubscriber());
     }
 
     @Override
