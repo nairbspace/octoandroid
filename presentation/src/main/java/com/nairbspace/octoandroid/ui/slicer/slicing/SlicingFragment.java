@@ -1,5 +1,6 @@
 package com.nairbspace.octoandroid.ui.slicer.slicing;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -252,6 +253,11 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
             mSlicerProfileSpinner.setAdapter(adapter);
         }
     };
+
+    @Override
+    public Context context() {
+        return getContext();
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

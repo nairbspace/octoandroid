@@ -10,6 +10,7 @@ import com.nairbspace.octoandroid.data.exception.NoActivePrinterException;
 import com.nairbspace.octoandroid.data.exception.PrinterDataNotFoundException;
 
 import java.net.ConnectException;
+import java.net.SocketTimeoutException;
 
 public class ErrorMessageFactory {
 
@@ -24,7 +25,7 @@ public class ErrorMessageFactory {
             message = context.getString(R.string.exception_ip_address_blank);
         } else if (t instanceof IncorrectAddPrinterFormattingException) {
             message = context.getString(R.string.exception_incorrect_ip_address_formatting);
-        } else if (t instanceof ConnectException) {
+        } else if (t instanceof ConnectException || t instanceof SocketTimeoutException) {
             message = context.getString(R.string.exception_message_connecting);
         }
 

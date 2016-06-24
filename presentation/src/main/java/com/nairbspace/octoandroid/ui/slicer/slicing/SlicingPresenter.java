@@ -7,6 +7,7 @@ import com.nairbspace.octoandroid.domain.interactor.SendSliceCommand;
 import com.nairbspace.octoandroid.domain.model.Connection;
 import com.nairbspace.octoandroid.domain.model.Slicer;
 import com.nairbspace.octoandroid.domain.model.SlicingCommand;
+import com.nairbspace.octoandroid.exception.ErrorMessageFactory;
 import com.nairbspace.octoandroid.mapper.ConnectionMapper;
 import com.nairbspace.octoandroid.mapper.SlicerModelMapper;
 import com.nairbspace.octoandroid.model.ConnectModel;
@@ -24,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
+
+import timber.log.Timber;
 
 public class SlicingPresenter extends UseCaseEventPresenter<SlicingScreen, SlicingProgressModel> {
     private static final int COMPLETE = 100;
@@ -77,7 +80,7 @@ public class SlicingPresenter extends UseCaseEventPresenter<SlicingScreen, Slici
 
         @Override
         public void onError(Throwable e) {
-            super.onError(e);
+            handleError(e);
         }
 
         @Override
@@ -90,7 +93,7 @@ public class SlicingPresenter extends UseCaseEventPresenter<SlicingScreen, Slici
 
         @Override
         public void onError(Throwable e) {
-            super.onError(e);
+            handleError(e);
         }
 
         @Override
@@ -102,7 +105,7 @@ public class SlicingPresenter extends UseCaseEventPresenter<SlicingScreen, Slici
     private final class ConnectionSubscriber extends DefaultSubscriber<Connection> {
         @Override
         public void onError(Throwable e) {
-            super.onError(e);
+            handleError(e);
         }
 
         @Override
@@ -114,7 +117,7 @@ public class SlicingPresenter extends UseCaseEventPresenter<SlicingScreen, Slici
     private final class ConnectMapperSubscriber extends DefaultSubscriber<ConnectModel> {
         @Override
         public void onError(Throwable e) {
-            super.onError(e);
+            handleError(e);
         }
 
         @Override
@@ -212,7 +215,7 @@ public class SlicingPresenter extends UseCaseEventPresenter<SlicingScreen, Slici
     private final class CommandMapper extends DefaultSubscriber<SlicingCommand> {
         @Override
         public void onError(Throwable e) {
-            super.onError(e);
+            handleError(e);
         }
 
         @Override
@@ -224,7 +227,7 @@ public class SlicingPresenter extends UseCaseEventPresenter<SlicingScreen, Slici
     private final class SliceCommandSubscriber extends DefaultSubscriber {
         @Override
         public void onError(Throwable e) {
-            super.onError(e);
+            handleError(e);
         }
 
         @Override
@@ -233,6 +236,13 @@ public class SlicingPresenter extends UseCaseEventPresenter<SlicingScreen, Slici
             // TODO should show response from octoprint + data from slice command as inital progress
             mScreen.updateProgress(SlicingProgressModel.initial());
         }
+    }
+
+    private void handleError(Throwable t) {
+        // TODO possibly display better error message
+        Timber.e(t, null);
+        String message = ErrorMessageFactory.create(mScreen.context(), t);
+        mScreen.toastMessage(message);
     }
 
     @Override

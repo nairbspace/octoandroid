@@ -1,5 +1,7 @@
 package com.nairbspace.octoandroid.ui.slicer.slicing;
 
+import android.content.Context;
+
 import com.nairbspace.octoandroid.model.SlicerModel;
 import com.nairbspace.octoandroid.model.SlicingProgressModel;
 
@@ -16,4 +18,5 @@ public interface SlicingScreen {
     void showProgress(boolean show);
     void toastMessage(String message);
     void showSliceCompleteAndUpdateFiles();
+    Context context();
 }
