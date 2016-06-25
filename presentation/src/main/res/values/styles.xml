@@ -6,17 +6,27 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:buttonStyle">@style/DefaultButton</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="metaSelectableItemBackground">?android:attr/selectableItemBackground</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+        <item name="buttonStyle">@style/DefaultButton</item>
     </style>
 
     <style name="DefaultButton" parent="Widget.AppCompat.Button.Colored">
-        <item name="android:textColor">@color/disabled_button_text_color</item>
+        <item name="colorButtonNormal">@color/colorAccent</item>
+        <item name="android:textColor">@color/default_button_text_color</item>
+    </style>
+
+    <style name="DefaultProgressBarHorizontal" parent="Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/default_horizontal_progress</item>
+        <item name="android:minHeight">4dp</item>
+        <item name="android:maxHeight">4dp</item>
+        <item name="android:layout_marginTop">6dp</item>
+        <item name="android:layout_marginBottom">6dp</item>
     </style>
 
     <style name="FullscreenTheme" parent="AppTheme">
@@ -34,10 +44,5 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
-
-    <style name="AddPrinterButtonStyle" parent="AppTheme">
-        <item name="colorButtonNormal">@color/colorPrimary</item>
-        <item name="android:textColor">@android:color/white</item>
-    </style>
 
 </resources>
