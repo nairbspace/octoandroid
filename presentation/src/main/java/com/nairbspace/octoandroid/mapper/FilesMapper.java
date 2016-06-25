@@ -19,6 +19,9 @@ import rx.Subscriber;
 public class FilesMapper extends MapperUseCase<Files, FilesModel> {
     private static final String FOLDER = "folder";
     private static final String STL = "stl";
+    private static final String GCODE = "gcode";
+    private static final String GCO = "gco";
+    private static final String X3G = "x3g";
 
     @Inject
     public FilesMapper(ThreadExecutor threadExecutor,
@@ -68,6 +71,8 @@ public class FilesMapper extends MapperUseCase<Files, FilesModel> {
     private FileModel mapToFileModel(File file) {
         String name = file.name();
 
+        FileModel.FileExt fileExt = getFileExtType(file.name());
+
         boolean isStl = isStl(file.name());
 
         String size = "";
@@ -104,6 +109,7 @@ public class FilesMapper extends MapperUseCase<Files, FilesModel> {
 
         return FileModel.builder()
                 .name(name)
+                .fileExt(fileExt)
                 .isStl(isStl)
                 .size(size)
                 .date(date)
@@ -114,6 +120,21 @@ public class FilesMapper extends MapperUseCase<Files, FilesModel> {
                 .estimatedPrintTime(estimatedPrintTime)
                 .type(type)
                 .build();
+    }
+
+    private FilesModel.FileModel.FileExt getFileExtType(String fileName) {
+        String ext = getFileExt(fileName);
+        if (ext == null) {
+            return FileModel.FileExt.OTHER;
+        } else if (ext.equals(STL)) {
+            return FileModel.FileExt.STL;
+        } else if (ext.equals(GCO) || ext.equals(GCODE)) {
+            return FileModel.FileExt.GCO;
+        } else if (ext.equals(X3G)) {
+            return FileModel.FileExt.X3G;
+        } else {
+            return FileModel.FileExt.OTHER;
+        }
     }
 
     private boolean isStl(String fileName) {

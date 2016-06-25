@@ -33,7 +33,13 @@ public class FileViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.printer_file_icon) ImageView mPrintFileIcon;
     @BindView(R.id.slice_file_icon) ImageView mSliceFileIcon;
     @BindDrawable(R.drawable.ic_file_black_24dp) Drawable mFileDrawable;
+    @BindDrawable(R.drawable.ic_file_gco_black_24dp) Drawable mFileGcoDrawable;
+    @BindDrawable(R.drawable.ic_file_x3g_black_24dp) Drawable mFileX3gDrawable;
+    @BindDrawable(R.drawable.ic_file_stl_black_24dp) Drawable mFileStlDrawable;
     @BindDrawable(R.drawable.ic_sd_storage_black_24dp) Drawable mSdDrawable;
+    @BindDrawable(R.drawable.ic_sd_gco_storage_black_24dp) Drawable mSdGcoDrawable;
+    @BindDrawable(R.drawable.ic_sd_x3g_storage_black_24dp) Drawable mSdX3gDrawable;
+    @BindDrawable(R.drawable.ic_sd_stl_storage_black_24dp) Drawable mSdStlDrawable;
     @BindString(R.string.file_origin_sdcard) String SDCARD;
     @BindInt(android.R.integer.config_longAnimTime) int mLongAnimTime;
     @BindColor(R.color.fileSelected) int mBackgroundColor;
@@ -65,9 +71,43 @@ public class FileViewHolder extends RecyclerView.ViewHolder {
 
     private void setFileTypeIcon(FilesModel.FileModel fileModel) {
         if (fileModel.origin().equals(SDCARD)) {
-            mFileTypeIcon.setImageDrawable(mSdDrawable);
+            setSdFileExtTypeIcon(fileModel.fileExt());
         } else {
-            mFileTypeIcon.setImageDrawable(mFileDrawable);
+            setFileExtTypeIcon(fileModel.fileExt());
+        }
+    }
+
+    private void setSdFileExtTypeIcon(FilesModel.FileModel.FileExt ext) {
+        switch (ext) {
+            case GCO:
+//                mFileTypeIcon.setImageDrawable(mSdGcoDrawable);
+//                break;
+            case X3G:
+//                mFileTypeIcon.setImageDrawable(mSdX3gDrawable);
+//                break;
+            case STL:
+//                mFileTypeIcon.setImageDrawable(mSdStlDrawable);
+//                break;
+            default:
+                mFileTypeIcon.setImageDrawable(mSdDrawable);
+                break;
+        }
+    }
+
+    private void setFileExtTypeIcon(FilesModel.FileModel.FileExt ext) {
+        switch (ext) {
+            case GCO:
+//                mFileTypeIcon.setImageDrawable(mFileGcoDrawable);
+//                break;
+            case X3G:
+//                mFileTypeIcon.setImageDrawable(mFileX3gDrawable);
+//                break;
+            case STL:
+//                mFileTypeIcon.setImageDrawable(mFileStlDrawable);
+//                break;
+            default:
+                mFileTypeIcon.setImageDrawable(mFileDrawable);
+                break;
         }
     }
 

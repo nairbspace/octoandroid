@@ -26,7 +26,9 @@ public abstract class FilesModel implements Parcelable {
 
     @AutoValue
     public static abstract class FileModel implements Parcelable {
+        public enum FileExt { GCO, X3G, STL, OTHER }
         public abstract String name();
+        public abstract FileExt fileExt();
         public abstract boolean isStl();
         public abstract String size(); // Need to format to human readable
         public abstract String date();
@@ -43,6 +45,7 @@ public abstract class FilesModel implements Parcelable {
         @AutoValue.Builder
         public static abstract class Builder {
             public abstract Builder name(String name);
+            public abstract Builder fileExt(FileExt fileExt);
             public abstract Builder isStl(boolean isStl);
             public abstract Builder size(String size);
             public abstract Builder date(String date);
