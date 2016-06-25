@@ -1,6 +1,16 @@
 Change Log
 ==========
 
+Version 1.6.0 *(2016-06-25)*
+----------------------------
+
+ * Feature: Slicer controls and slicing progress display
+ * Feature: Slicer command button for STL files in FilesFragment
+ 
+ * Switched models for connection to List type instead of HashMap for displaying in Spinner
+ * Fixed UI for ImageView onClicks, Button style, and horizontal ProgressBar based on SDK
+ * Fixed NavPresenter not refreshing on network changes
+ 
 Version 1.5.1 *(2016-06-21)*
 ----------------------------
 
