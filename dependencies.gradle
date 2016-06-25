@@ -15,7 +15,7 @@ ext {
     websocketsRxJavaVersion = "4.0.1"
     autoValueVersion = "1.2"
     autoValueParcelVersion = "0.2.1" // 0.2.2 Doesn't compile
-    autoValueGsonVersion = "0.3.2-rc1"
+    autoValueGsonVersion = "0.2.5"
     androidSupportVersion = "23.4.0"
     gsonVersion = "2.6.2"
     greenDaoVersion = "2.2.1"
