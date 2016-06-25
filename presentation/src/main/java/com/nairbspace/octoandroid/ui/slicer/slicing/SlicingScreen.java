@@ -16,10 +16,11 @@ public interface SlicingScreen {
     void updateProgress(SlicingProgressModel progressModel);
     void showProgress(boolean show);
     void toastMessage(String message);
-    void toastSlicingParamtersMissing();
+    void toastSlicingParametersMissing();
     void showSliceCompleteAndUpdateFiles();
     Context context();
     int getInvalidPosition();
     void enableSliceButton(boolean enable);
     void setRefresh(boolean enable);
+    boolean isSlicingInProgress();
 }

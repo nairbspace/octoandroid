@@ -21,6 +21,8 @@ import org.greenrobot.eventbus.EventBus;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.inject.Inject;
 
@@ -28,6 +30,9 @@ import timber.log.Timber;
 
 public class SlicingPresenter extends UseCaseEventPresenter<SlicingScreen, SlicingProgressModel> {
     private static final int COMPLETE = 100;
+
+    private Timer mTimer = new Timer();
+    private static final int PROGRESS_DELAY = 4000; // in milliseconds
 
     private final GetSlicers mGetSlicers;
     private final SlicerModelMapper mSlicerModelMapper;
@@ -78,11 +83,44 @@ public class SlicingPresenter extends UseCaseEventPresenter<SlicingScreen, Slici
     @Override
     protected void onEvent(SlicingProgressModel progressModel) {
         if (progressModel.progress() == COMPLETE) {
+            mTimer.cancel();
             mScreen.showProgress(false);
             mScreen.showSliceCompleteAndUpdateFiles();
         } else {
             mScreen.updateProgress(progressModel);
         }
+
+        // Websocket might miss 100% mark, if so manually refresh screen after
+        // certain amount of time with no update.
+        if (progressModel.progress() > 0) {
+            mTimer.cancel();
+            startTimer();
+        }
+    }
+
+    private void startTimer() {
+        mTimer = new Timer();
+        mTimer.schedule(new ProgressTask(), PROGRESS_DELAY);
+    }
+
+    private final class ProgressTask extends TimerTask {
+
+        @Override
+        public void run() {
+            execute();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mScreen.isSlicingInProgress()) startTimer();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mTimer.cancel();
     }
 
     private final class SlicerSubscriber extends DefaultSubscriber<Map<String, Slicer>> {
@@ -156,10 +194,10 @@ public class SlicingPresenter extends UseCaseEventPresenter<SlicingScreen, Slici
     protected void onSliceButtonClicked(SlicingCommandModel.Builder builder) {
         try {
             SlicingCommandModel model = builder.build();
-            if (arePositionsInvalid(model)) mScreen.toastSlicingParamtersMissing();
+            if (arePositionsInvalid(model)) mScreen.toastSlicingParametersMissing();
             else mCommandMapper.execute(new CommandMapper(), model);
         } catch (IllegalStateException e) {
-            mScreen.toastSlicingParamtersMissing();
+            mScreen.toastSlicingParametersMissing();
         }
     }
 
@@ -205,5 +243,11 @@ public class SlicingPresenter extends UseCaseEventPresenter<SlicingScreen, Slici
         String message = ErrorMessageFactory.create(mScreen.context(), t);
         mScreen.setRefresh(false);
         mScreen.toastMessage(message);
+    }
+
+    @Override
+    protected void onDestroy(SlicingScreen slicingScreen) {
+        super.onDestroy(slicingScreen);
+        mTimer.cancel();
     }
 }

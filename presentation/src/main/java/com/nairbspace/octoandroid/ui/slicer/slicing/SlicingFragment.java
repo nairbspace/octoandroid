@@ -204,7 +204,7 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
     }
 
     @Override
-    public void toastSlicingParamtersMissing() {
+    public void toastSlicingParametersMissing() {
         toastMessage(SLICING_PARAMETERS_MISSING);
     }
 
@@ -317,6 +317,11 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
     @Override
     public void setRefresh(boolean enable) {
         mRefreshLayout.setRefreshing(enable);
+    }
+
+    @Override
+    public boolean isSlicingInProgress() {
+        return mProgressView.getVisibility() == View.VISIBLE;
     }
 
     @Override
