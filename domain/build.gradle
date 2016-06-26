@@ -17,7 +17,7 @@ dependencies {
 
     compile domainDependencies.javaxInject // Inject annotation for Dagger2
     compile domainDependencies.rxJava
-    compile domainDependencies.autoValue
+    compile domainDependencies.autoValueAnnotations // This will get compiled in APK currently, but only annotations
     apt domainDependencies.autoValue // Annotation processing for AutoValue_*
     apt domainDependencies.autoValueGson
     compile domainDependencies.androidSupportAnnotations // For Nullable annotation

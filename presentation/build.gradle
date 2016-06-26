@@ -101,6 +101,7 @@ dependencies {
     debugCompile presentationDependencies.leakCanary
     releaseCompile presentationDependencies.leakCanaryNoOp
     testCompile presentationDependencies.leakCanaryNoOp
+    provided presentationDependencies.autoValueAnnotations
     apt presentationDependencies.autoValueParcel // AutoValue Parcelable
     compile presentationDependencies.mpAndroidChart
     compile(presentationDependencies.crashlytics) { transitive = true; }

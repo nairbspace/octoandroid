@@ -39,6 +39,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile project(':domain')
 
+    provided dataDependencies.javaxInject
     compile dataDependencies.greenDao
     compile dataDependencies.rxAndroid
     compile dataDependencies.websocketsRxJava
@@ -47,6 +48,7 @@ dependencies {
     compile dataDependencies.retrofitRxJavaAdapter
     compile dataDependencies.okHttpLoggingInterceptor
     compile dataDependencies.okHttpWebsocket
+    provided dataDependencies.autoValueAnnotations
     apt dataDependencies.autoValue
     apt dataDependencies.autoValueGson
 }

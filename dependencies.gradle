@@ -14,6 +14,7 @@ ext {
     rxAndroidVersion = '1.2.0'
     websocketsRxJavaVersion = "4.0.1"
     autoValueVersion = "1.2"
+    autoValueAnnotationsVersion = "1.2-update1"
     autoValueParcelVersion = "0.2.1" // 0.2.2 Doesn't compile
     autoValueGsonVersion = "0.2.5"
     androidSupportVersion = "23.4.0"
@@ -50,6 +51,7 @@ ext {
             javaxInject:                "javax.inject:javax.inject:${javaxInjectVersion}",
             rxJava:                     "io.reactivex:rxjava:${rxJavaVersion}",
             autoValue:                  "com.google.auto.value:auto-value:${autoValueVersion}",
+            autoValueAnnotations:       "com.jakewharton.auto.value:auto-value-annotations:${autoValueAnnotationsVersion}",
             androidSupportAnnotations:  "com.android.support:support-annotations:${androidSupportVersion}",
             gson:                       "com.google.code.gson:gson:${gsonVersion}",
             autoValueGson:              "com.ryanharter.auto.value:auto-value-gson:${autoValueGsonVersion}",
@@ -61,6 +63,7 @@ ext {
     ]
 
     dataDependencies = [
+            javaxInject:                "javax.inject:javax.inject:${javaxInjectVersion}",
             greenDao:                   "org.greenrobot:greendao:${greenDaoVersion}",
             rxAndroid:                  "io.reactivex:rxandroid:${rxAndroidVersion}",
             websocketsRxJava:           "com.appunite:websockets-rxjava:${websocketsRxJavaVersion}",
@@ -70,6 +73,7 @@ ext {
             okHttpLoggingInterceptor:   "com.squareup.okhttp3:logging-interceptor:${okHttpVersion}",
             okHttpWebsocket:            "com.squareup.okhttp3:okhttp-ws:${okHttpVersion}",
             autoValue:                  "com.google.auto.value:auto-value:${autoValueVersion}",
+            autoValueAnnotations:       "com.jakewharton.auto.value:auto-value-annotations:${autoValueAnnotationsVersion}",
             autoValueGson:              "com.ryanharter.auto.value:auto-value-gson:${autoValueGsonVersion}",
     ]
 
@@ -96,7 +100,9 @@ ext {
             leakCanaryNoOp:             "com.squareup.leakcanary:leakcanary-android-no-op:${leakcanaryVersion}",
             autoValueParcel:            "com.ryanharter.auto.value:auto-value-parcel:${autoValueParcelVersion}",
             mpAndroidChart:             "com.github.PhilJay:MPAndroidChart:${mpAndroidChartVersion}",
-            crashlytics:                "com.crashlytics.sdk.android:crashlytics:${crashlyticsVersion}"
+            crashlytics:                "com.crashlytics.sdk.android:crashlytics:${crashlyticsVersion}",
+            autoValueAnnotations:       "com.jakewharton.auto.value:auto-value-annotations:${autoValueAnnotationsVersion}",
+            autoValue:                  "com.google.auto.value:auto-value:${autoValueVersion}",
     ]
 
     presentationTestDependencies = [

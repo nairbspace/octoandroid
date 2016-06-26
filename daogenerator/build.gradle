@@ -1,7 +1,7 @@
 apply plugin: 'java'
 
 dependencies {
-    def greenDaoGeneratorDependencies = rootProject.ext.daoGeneratorDependencies
+    def daoGeneratorDependencies = rootProject.ext.daoGeneratorDependencies
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile daoGeneratorDependencies.greenDaoGenerator
 }
