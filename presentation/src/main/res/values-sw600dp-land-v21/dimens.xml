@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <dimen name="nav_horizontal_spacing">32dp</dimen>
-    <dimen name="nav_width">320dp</dimen>
-    <dimen name="nav_margin">@dimen/nav_width</dimen>
-
-    <!-- Older devices crash with negative dp-->
-    <dimen name="fragment_controls_card_elevation">-1dp</dimen>
-</resources>

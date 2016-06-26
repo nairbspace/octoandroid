@@ -3,5 +3,8 @@
     <dimen name="nav_horizontal_spacing">32dp</dimen>
     <dimen name="nav_width">320dp</dimen>
     <dimen name="nav_margin">@dimen/nav_width</dimen>
-    <dimen name="fragment_controls_card_elevation">0dp</dimen>
+
+    <!--nav_margin + activity_horizontal_margin-->
+    <dimen name="fragment_controls_margin_start">384dp</dimen>
+    <dimen name="fragment_controls_margin_end">@dimen/activity_horizontal_margin</dimen>
 </resources>

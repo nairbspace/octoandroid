@@ -60,12 +60,12 @@
         android:id="@+id/fragment_controls"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/nav_margin"
-        android:layout_marginStart="@dimen/nav_margin"
+        android:layout_marginLeft="@dimen/fragment_controls_margin_start"
+        android:layout_marginStart="@dimen/fragment_controls_margin_start"
+        android:layout_marginRight="@dimen/fragment_controls_margin_end"
+        android:layout_marginEnd="@dimen/fragment_controls_margin_end"
         android:layout_gravity="bottom|center"
-        app:cardElevation="@dimen/fragment_controls_card_elevation"
         app:layout_behavior="com.nairbspace.octoandroid.views.MoveUpBehavior"/>
-    <!--TODO-low possibly fix elevation issue with nav-->
     <!--TODO snackbar doesn't look nice on tablet view-->
 
     <android.support.design.widget.FloatingActionButton
