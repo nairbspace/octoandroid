@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+Version 1.6.1 *(2016-06-26)*
+----------------------------
+
+ * Fixed playback_controls fragment not clickable due to negative dp and added margin due to shadow clash with navigation view.
+ 
 Version 1.6.0 *(2016-06-25)*
 ----------------------------
 
