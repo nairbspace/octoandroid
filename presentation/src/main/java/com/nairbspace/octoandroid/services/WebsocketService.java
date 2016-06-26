@@ -17,7 +17,14 @@ import com.nairbspace.octoandroid.app.SetupApplication;
 import com.nairbspace.octoandroid.model.WebsocketModel;
 import com.nairbspace.octoandroid.ui.Navigator;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
+
+import rx.Observable;
+import rx.Subscription;
+import rx.functions.Action1;
+import rx.subscriptions.Subscriptions;
 
 public class WebsocketService extends Service implements WebsocketServiceHelper.Listener {
     private static final int PRINT_NOTIFICATION_ID = 1;
@@ -29,6 +36,7 @@ public class WebsocketService extends Service implements WebsocketServiceHelper.
     private NotificationCompat.Builder mStickyBuilder;
     private NotificationCompat.Builder mFinishedBuilder;
     private NotificationManagerCompat mNotificationManager;
+    private Subscription mDelayedSub = Subscriptions.unsubscribed();
 
     @Nullable
     @Override
@@ -58,7 +66,24 @@ public class WebsocketService extends Service implements WebsocketServiceHelper.
      */
     @Override
     public void checkApplicationStatus() {
-        if (LifecycleHandler.isApplicationInForeground()) turnOffAlarmAndStopService();
+        if (LifecycleHandler.isApplicationInForeground()) executeDelayedStop();
+    }
+
+    // TODO figure out why notification isn't getting canceled unless delay.
+    private void executeDelayedStop() {
+        unsubDelayedSub();
+        mDelayedSub = Observable.just(null)
+                .delay(25, TimeUnit.MILLISECONDS)
+                .subscribe(new Action1<Object>() {
+            @Override
+            public void call(Object o) {
+                turnOffAlarmAndStopService();
+            }
+        });
+    }
+
+    private void unsubDelayedSub() {
+        if (!mDelayedSub.isUnsubscribed()) mDelayedSub.unsubscribe();
     }
 
     /**
@@ -145,6 +170,7 @@ public class WebsocketService extends Service implements WebsocketServiceHelper.
     @Override
     public void onDestroy() {
         if (mFinishedBuilder == null) mNotificationManager.cancel(PRINT_NOTIFICATION_ID);
+        unsubDelayedSub();
         mServiceHelper.onDestroy();
         super.onDestroy();
     }
