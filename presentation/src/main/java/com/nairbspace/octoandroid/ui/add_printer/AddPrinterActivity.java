@@ -13,6 +13,8 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -219,6 +221,22 @@ public class AddPrinterActivity extends BaseActivity<AddPrinterScreen>
     public void onQrSuccess(String apiKey) {
         mApiKeyEditText.setText(apiKey);
         mAnswersHelper.qrWasSuccess();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_add_printer, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.add_printer_help_menu_item:
+                getNavigator().navigateToAddPrinterHelpActivity(this);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @NonNull

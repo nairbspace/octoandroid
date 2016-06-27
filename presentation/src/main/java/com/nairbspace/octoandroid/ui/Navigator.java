@@ -23,6 +23,7 @@ import android.support.v7.app.AlertDialog;
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.services.WebsocketService;
 import com.nairbspace.octoandroid.ui.add_printer.AddPrinterActivity;
+import com.nairbspace.octoandroid.ui.add_printer.AddPrinterHelpActivity;
 import com.nairbspace.octoandroid.ui.dispatch.DispatchActivity;
 import com.nairbspace.octoandroid.ui.printer_controls.PrinterControlsActivity;
 import com.nairbspace.octoandroid.ui.printer_settings.PrinterSettingsActivity;
@@ -65,6 +66,11 @@ public class Navigator {
     public void navigateToAddPrinterActivityForResult(Activity activity) {
         Intent intentToLaunch = AddPrinterActivity.newIntent(activity);
         activity.startActivityForResult(intentToLaunch, ADD_PRINTER_REQUEST_CODE);
+    }
+
+    public void navigateToAddPrinterHelpActivity(Context context) {
+        Intent i = AddPrinterHelpActivity.newIntent(context);
+        context.startActivity(i);
     }
 
     public boolean wasAddPrinterResultOk(int requestCode, int resultCode) {

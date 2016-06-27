@@ -44,6 +44,9 @@
             android:name=".ui.add_printer.AddPrinterActivity"
             android:label="@string/add_printer"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.add_printer.AddPrinterHelpActivity"
+                  android:label="@string/help_colon_add_printer"
+                  android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".ui.status.StatusActivity"
             android:label="@string/status"

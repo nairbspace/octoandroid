@@ -136,4 +136,20 @@
     <string name="destination_file">Destination File</string>
     <string name="slice_complete">Slice complete</string>
 
+    <string name="cant_login">Can\'t login?</string>
+    <string name="help_colon_add_printer">Help: Add Printer</string>
+    <string name="bullet_point">\u2022</string>
+    <string name="add_printer_help_1_0">Where the hell do I get the API key?</string>
+    <string name="add_printer_help_1_1">API key can be found in OctoPrint\'s Settings > Features > API section</string>
+    <string name="add_printer_help_1_2">OctoAndroid is able to scan the QR code directly with the camera</string>
+    <string name="add_printer_help_1_3"><a href="http://docs.octoprint.org/en/master/api/general.html">See official OctoPrint docs for more info</a></string>
+    <string name="add_printer_help_2_0">Trouble adding printer?</string>
+    <string name="add_printer_help_2_1">If using octopi.local try adding the actual IP address instead</string>
+    <string name="add_printer_help_2_2">Try unchecking SSL. If security is an issue,
+        you will need to verify that the certificate is added to your device\'s
+        \'system-trusted\' certificates. This requires root access.
+        This is due to OctoPrint\'s certificate being self-signed.</string>
+    <string name="add_printer_help_2_3"><a href ="http://wiki.cacert.org/FAQ/ImportRootCert#CAcert_system_trusted_certificates_.28without_lockscreen.29">Click here for more info</a></string>
+    <string name="add_printer_help_2_4"><a href="mailto:nairbspace+octoandroid@gmail.com">Feel free to contact the developer via email for any help</a></string>
+
 </resources>
