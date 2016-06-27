@@ -29,11 +29,7 @@ public class SlicerActivity extends BaseNavActivity<SlicerScreen>
     @Inject SlicerPresenter mPresenter;
     @BindArray(R.array.slice_pager_adapter) String[] mPagerArray;
 
-    public static Intent newIntent(Context context) {
-        return new Intent(context, SlicerActivity.class);
-    }
-
-    public static Intent newIntent(Context context, String apiUrl) {
+    public static Intent newIntent(Context context, @Nullable String apiUrl) {
         Intent intent = new Intent(context, SlicerActivity.class);
         intent.putExtra(API_URL_KEY, apiUrl);
         return intent;

@@ -13,6 +13,7 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
 import android.os.SystemClock;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationCompat;
@@ -119,12 +120,10 @@ public class Navigator {
     }
 
     public void navigateToSlicerActivity(Context context) {
-        Intent i = SlicerActivity.newIntent(context);
-        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        context.startActivity(i);
+        navigateToSlicerActivity(context, null);
     }
 
-    public void navigateToSlicerActivityWithApiUrl(Context context, String apiUrl) {
+    public void navigateToSlicerActivity(Context context, @Nullable String apiUrl) {
         Intent i = SlicerActivity.newIntent(context, apiUrl);
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(i);
@@ -140,10 +139,16 @@ public class Navigator {
         activity.startActivity(i);
     }
 
-    public void navigateToDownloadFile(Fragment fragment, String url) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        if ((intent.resolveActivity(fragment.getActivity().getPackageManager()) != null)) {
-            fragment.startActivity(intent);
+    public boolean navigateToDownloadFile(Fragment fragment, String url) {
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            if ((intent.resolveActivity(fragment.getActivity().getPackageManager()) != null)) {
+                fragment.startActivity(intent);
+                return true;
+            }
+            return false;
+        } catch (NullPointerException e) {
+            return false;
         }
     }
 

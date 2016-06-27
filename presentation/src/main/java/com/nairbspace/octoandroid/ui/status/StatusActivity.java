@@ -61,7 +61,7 @@ public class StatusActivity extends BaseNavActivity<StatusScreen>
 
     @Override
     public void sliceButtonClicked(String apiUrl) {
-        getNavigator().navigateToSlicerActivityWithApiUrl(this, apiUrl);
+        getNavigator().navigateToSlicerActivity(this, apiUrl);
         overridePendingTransition(mFadeIn, mFadeOut); // TODO should control in navigator
     }
 }

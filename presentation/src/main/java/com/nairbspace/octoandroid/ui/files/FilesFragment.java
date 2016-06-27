@@ -25,6 +25,7 @@ import com.nairbspace.octoandroid.ui.templates.Presenter;
 
 import javax.inject.Inject;
 
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -34,6 +35,7 @@ public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
 
     private static final String FILESMODEL_KEY = "filesmodel_key";
     private static final String CLICKED_POSITION_KEY = "clicked_position_key";
+    @BindString(R.string.exception_download_file_error) String DOWNLOAD_ERROR;
 
     @Inject FilesPresenter mPresenter;
 
@@ -194,7 +196,8 @@ public class FilesFragment extends BasePagerFragmentListener<FilesScreen,
 
     @Override
     public void downloadButtonClicked(String downloadUrl) {
-        getNavigator().navigateToDownloadFile(this, downloadUrl);
+        boolean result = getNavigator().navigateToDownloadFile(this, downloadUrl);
+        if (!result) showToast(DOWNLOAD_ERROR);
     }
 
     @Override
