@@ -105,7 +105,7 @@ public class WebcamActivity extends BaseActivity<WebcamScreen> implements Webcam
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                onBackPressed();
+                finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
