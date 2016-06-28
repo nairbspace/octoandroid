@@ -72,21 +72,21 @@ public class PrinterDataRepository implements PrinterRepository {
 
     @Override
     public Observable addPrinterDetails(AddPrinter addPrinter) {
-        return Observable.create(mMapperHelper.mapAddPrinterToPrinterDbEntity(addPrinter))
+        Observable entityObs = Observable
+                .create(mMapperHelper.mapAddPrinterToPrinterDbEntity(addPrinter))
                 .map(mDiskManager.putPrinterInDb());
+
+        Observable verifyObs = mApiManager.getVersion()
+                .map(mDiskManager.putVersionInDb())
+                .doOnError(mDiskManager.deleteUnverifiedPrinter());
+
+        return Observable.concat(entityObs, verifyObs);
     }
 
     @Override
     public Observable setPrinterPrefs(long id) {
         return Observable.create(mDiskManager.getPrinterById(id))
                 .map(mDiskManager.putPrinterInPrefs());
-    }
-
-    @Override
-    public Observable verifyPrinterDetails() {
-        return mApiManager.getVersion()
-                .map(mDiskManager.putVersionInDb())
-                .doOnError(mDiskManager.deleteUnverifiedPrinter());
     }
 
     @Override

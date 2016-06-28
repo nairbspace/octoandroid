@@ -32,8 +32,6 @@ public interface PrinterRepository {
 
     Observable setPrinterPrefs(long id);
 
-    Observable verifyPrinterDetails();
-
     Observable<Boolean> deletePrinterByName(String name);
 
     Observable<Boolean> deletePrinterById(long id);

@@ -2,7 +2,6 @@ package com.nairbspace.octoandroid.ui.add_printer;
 
 import com.nairbspace.octoandroid.domain.interactor.AddPrinterDetails;
 import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
-import com.nairbspace.octoandroid.domain.interactor.VerifyPrinterDetails;
 import com.nairbspace.octoandroid.domain.model.AddPrinter;
 import com.nairbspace.octoandroid.exception.ErrorMessageFactory;
 import com.nairbspace.octoandroid.mapper.AddPrinterModelMapper;
@@ -15,17 +14,14 @@ import timber.log.Timber;
 
 public class AddPrinterPresenter extends UseCasePresenter<AddPrinterScreen> {
 
-    private final VerifyPrinterDetails mVerifyPrinterDetails;
     private final AddPrinterModelMapper mAddPrinterModelMapper;
     private final AddPrinterDetails mAddPrinterDetails;
     private AddPrinterScreen mScreen;
 
     @Inject
-    public AddPrinterPresenter(VerifyPrinterDetails verifyPrinterDetails,
-                               AddPrinterModelMapper addPrinterModelMapper,
+    public AddPrinterPresenter(AddPrinterModelMapper addPrinterModelMapper,
                                AddPrinterDetails addPrinterDetails) {
-        super(verifyPrinterDetails, addPrinterModelMapper, addPrinterDetails);
-        mVerifyPrinterDetails = verifyPrinterDetails;
+        super(addPrinterModelMapper, addPrinterDetails);
         mAddPrinterModelMapper = addPrinterModelMapper;
         mAddPrinterDetails = addPrinterDetails;
     }
@@ -71,21 +67,8 @@ public class AddPrinterPresenter extends UseCasePresenter<AddPrinterScreen> {
 
         @Override
         public void onCompleted() {
-            mVerifyPrinterDetails.execute(new VerifyPrinterSubscriber());
-        }
-    }
-
-    private final class VerifyPrinterSubscriber extends DefaultSubscriber {
-
-        @Override
-        public void onCompleted() {
             showLoading(false);
             mScreen.navigateToPreviousScreen();
-        }
-
-        @Override
-        public void onError(Throwable e) {
-            showError(e);
         }
     }
 
