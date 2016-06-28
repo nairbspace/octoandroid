@@ -11,4 +11,6 @@ public interface PrinterListScreen {
     void updateUi(List<PrinterModel> printerModels);
 
     void showSnackbar(String message);
+
+    void navigateToStatusActivity();
 }

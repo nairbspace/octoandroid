@@ -10,6 +10,8 @@ import com.nairbspace.octoandroid.model.PrinterModel;
 
 import javax.inject.Inject;
 
+import timber.log.Timber;
+
 public class NavPresenter extends UseCasePresenter<NavScreen> {
 
     private final GetPrinterDetails mGetPrinterDetails;
@@ -52,11 +54,11 @@ public class NavPresenter extends UseCasePresenter<NavScreen> {
 
         @Override
         public void onError(Throwable e) {
-            e.printStackTrace();
-            // TODO should prob have error message
-//            Exception exception = (Exception) e;
-//            String error = ErrorMessageFactory.create(mScreen.context(), exception);
-//            mScreen.displaySnackBar(error);
+            if (ErrorMessageFactory.isThereNoActivePrinter(e)) {
+                mScreen.displayNoActivePrinterSnackBar();
+            } else {
+                Timber.e(e, null);
+            }
         }
 
         @Override

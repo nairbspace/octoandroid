@@ -45,4 +45,6 @@ public interface DiskManager {
     Observable<Boolean> isPushNotificationOn();
 
     Observable<Boolean> isStickyNotificationOn();
+
+    long setActivePrinter(long id);
 }

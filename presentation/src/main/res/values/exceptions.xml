@@ -20,4 +20,5 @@
     <string name="exception_camera_error">Error accessing camera</string>
     <string name="exception_slicing_parameters_missing">Slicing parameters missing</string>
     <string name="exception_download_file_error">Error trying to download file</string>
+    <string name="exception_no_active_printer">No active printer set</string>
 </resources>

@@ -135,6 +135,17 @@ public class PrinterListActivity extends BaseActivity<PrinterListScreen>
     }
 
     @Override
+    public void printerSetActiveClicked(long id) {
+        mPresenter.printerSetActiveClicked(id);
+    }
+
+    @Override
+    public void navigateToStatusActivity() {
+        getNavigator().navigateToStatusActivity(this);
+        overridePendingTransition(R.anim.right_in, R.anim.left_out);
+    }
+
+    @Override
     public void showSnackbar(String message) {
         mSnackbar.setText(message);
         mSnackbar.show();

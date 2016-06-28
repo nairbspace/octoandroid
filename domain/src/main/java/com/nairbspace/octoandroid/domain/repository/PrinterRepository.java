@@ -71,4 +71,6 @@ public interface PrinterRepository {
     Observable<Map<String, Slicer>> getSlicers();
 
     Observable sendSliceCommand(SlicingCommand slicingCommand);
+
+    Observable setActivePrinter(long id);
 }

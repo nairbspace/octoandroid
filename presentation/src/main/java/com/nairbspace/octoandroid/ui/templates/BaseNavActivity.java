@@ -37,6 +37,7 @@ import com.nairbspace.octoandroid.views.LockSwipeViewPager;
 import javax.inject.Inject;
 
 import butterknife.BindBool;
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -44,6 +45,9 @@ import timber.log.Timber;
 
 public abstract class BaseNavActivity<T> extends BaseActivity<T>
         implements NavigationView.OnNavigationItemSelectedListener, NavScreen {
+
+    @BindString(R.string.exception_no_active_printer) String NO_ACTIVE_PRINTER;
+    @BindString(R.string.set) String SET;
 
     @Inject NavPresenter mPresenter;
 
@@ -89,11 +93,11 @@ public abstract class BaseNavActivity<T> extends BaseActivity<T>
     private View.OnClickListener mPrinterSettingsClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            navigateToPrinterSettingsActivity();
+            navigateToPrinterListActivity();
         }
     };
 
-    private void navigateToPrinterSettingsActivity() {
+    private void navigateToPrinterListActivity() {
         getNavigator().navigateToPrinterListActivity(this);
     }
 
@@ -317,5 +321,17 @@ public abstract class BaseNavActivity<T> extends BaseActivity<T>
     public void displaySnackBar(String message) {
         mSnackbar = Snackbar.make(mToolbar, message, Snackbar.LENGTH_INDEFINITE);
         mSnackbar.show();
+    }
+
+    @Override
+    public void displayNoActivePrinterSnackBar() {
+        Snackbar.make(mToolbar, NO_ACTIVE_PRINTER, Snackbar.LENGTH_INDEFINITE)
+                .setAction(SET, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        navigateToPrinterListActivity();
+                    }
+                })
+                .show();
     }
 }

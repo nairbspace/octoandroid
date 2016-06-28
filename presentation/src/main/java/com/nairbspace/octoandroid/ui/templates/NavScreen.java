@@ -8,6 +8,8 @@ public interface NavScreen {
 
     void displaySnackBar(String message);
 
+    void displayNoActivePrinterSnackBar();
+
     void hideSnackbar();
 
     Context context();

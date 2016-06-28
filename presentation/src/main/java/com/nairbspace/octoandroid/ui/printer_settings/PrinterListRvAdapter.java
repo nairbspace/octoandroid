@@ -55,8 +55,14 @@ public class PrinterListRvAdapter extends RecyclerView.Adapter<PrinterViewHolder
         mListener.printerDeleteClicked(id, position);
     }
 
+    @Override
+    public void printerSetActiveClicked(long id) {
+        mListener.printerSetActiveClicked(id);
+    }
+
     public interface Listener {
         void printerEditClicked(long id, int position);
         void printerDeleteClicked(long id, int position);
+        void printerSetActiveClicked(long id);
     }
 }

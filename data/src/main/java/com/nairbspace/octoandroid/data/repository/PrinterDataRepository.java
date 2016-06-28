@@ -204,4 +204,9 @@ public class PrinterDataRepository implements PrinterRepository {
         return Observable.create(mMapperHelper.mapToSlicingCommandEntity(slicingCommand))
                 .concatMap(mApiManager.funcSendSliceCommand(url));
     }
+
+    @Override
+    public Observable setActivePrinter(long id) {
+        return Observable.just(mDiskManager.setActivePrinter(id));
+    }
 }

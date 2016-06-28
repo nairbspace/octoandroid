@@ -6,5 +6,8 @@
     <item
         android:id="@+id/printer_settings_delete_menu_item"
         android:title="@string/delete"/>
+    <item
+        android:id="@+id/printer_settings_set_active"
+        android:title="@string/set_as_active_printer"/>
 
 </menu>

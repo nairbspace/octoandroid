@@ -2,6 +2,7 @@ package com.nairbspace.octoandroid.ui.printer_settings;
 
 import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
 import com.nairbspace.octoandroid.domain.interactor.GetPrinters;
+import com.nairbspace.octoandroid.domain.interactor.SetActivePrinter;
 import com.nairbspace.octoandroid.domain.interactor.SetPrinterPrefs;
 import com.nairbspace.octoandroid.domain.model.Printer;
 import com.nairbspace.octoandroid.mapper.PrinterModelMapper;
@@ -17,16 +18,19 @@ public class PrinterListPresenter extends UseCasePresenter<PrinterListScreen> {
     private final PrinterModelMapper.ListMapper mListMapper;
     private final SetPrinterPrefs mSetPrinterPrefs;
     private final GetPrinters mGetPrinters;
+    private final SetActivePrinter mSetActivePrinter;
     private PrinterListScreen mScreen;
 
     @Inject
     public PrinterListPresenter(GetPrinters getPrinters,
                                 PrinterModelMapper.ListMapper listMapper,
-                                SetPrinterPrefs setPrinterPrefs) {
-        super(getPrinters, listMapper, setPrinterPrefs);
+                                SetPrinterPrefs setPrinterPrefs,
+                                SetActivePrinter setActivePrinter) {
+        super(getPrinters, listMapper, setPrinterPrefs, setActivePrinter);
         mSetPrinterPrefs = setPrinterPrefs;
         mGetPrinters = getPrinters;
         mListMapper = listMapper;
+        mSetActivePrinter = setActivePrinter;
     }
 
     @Override
@@ -87,5 +91,17 @@ public class PrinterListPresenter extends UseCasePresenter<PrinterListScreen> {
 //        } else {
 //            // Delete printer
 //        }
+    }
+
+    public void printerSetActiveClicked(long id) {
+        mSetActivePrinter.execute(new SetActiveSubscriber(), id);
+    }
+
+    private final class SetActiveSubscriber extends DefaultSubscriber {
+
+        @Override
+        public void onCompleted() {
+            mScreen.navigateToStatusActivity();
+        }
     }
 }

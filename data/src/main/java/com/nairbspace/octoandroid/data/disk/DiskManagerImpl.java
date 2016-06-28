@@ -337,4 +337,10 @@ public class DiskManagerImpl implements DiskManager {
             }
         });
     }
+
+    @Override
+    public long setActivePrinter(long id) {
+        mPrefHelper.setActivePrinter(id);
+        return id;
+    }
 }

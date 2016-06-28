@@ -9,23 +9,33 @@ import android.widget.TextView;
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.model.PrinterModel;
 
+import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class PrinterViewHolder extends RecyclerView.ViewHolder implements PopupMenu.OnMenuItemClickListener {
+public class PrinterViewHolder extends RecyclerView.ViewHolder
+        implements View.OnClickListener, PopupMenu.OnMenuItemClickListener {
 
     private final Listener mListener;
 
     @BindView(R.id.printer_name_text_view) TextView mPrinterName;
     @BindView(R.id.printer_ip_address_text_view) TextView mIpAddress;
+    @BindColor(R.color.fileSelected) int mBackgroundColor;
 
     private PrinterModel mPrinterModel;
 
     public PrinterViewHolder(View itemView, Listener listener) {
         super(itemView);
+        itemView.setOnClickListener(this);
         ButterKnife.bind(this, itemView);
         mListener = listener;
+    }
+
+    @Override
+    public void onClick(View v) {
+        v.setBackgroundColor(mBackgroundColor);
+        mListener.printerSetActiveClicked(mPrinterModel.id());
     }
 
     public void bindPrinterModel(PrinterModel printerModel) {
@@ -52,6 +62,9 @@ public class PrinterViewHolder extends RecyclerView.ViewHolder implements PopupM
             case R.id.printer_settings_delete_menu_item:
                 mListener.printerDeleteClicked(id, position);
                 return true;
+            case R.id.printer_settings_set_active:
+                mListener.printerSetActiveClicked(id);
+                return true;
         }
         return false;
     }
@@ -59,5 +72,6 @@ public class PrinterViewHolder extends RecyclerView.ViewHolder implements PopupM
     public interface Listener {
         void printerEditClicked(long id, int position);
         void printerDeleteClicked(long id, int position);
+        void printerSetActiveClicked(long id);
     }
 }
