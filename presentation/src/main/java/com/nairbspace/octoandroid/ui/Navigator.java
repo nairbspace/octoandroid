@@ -27,7 +27,7 @@ import com.nairbspace.octoandroid.ui.add_printer.AddPrinterHelpActivity;
 import com.nairbspace.octoandroid.ui.dispatch.DispatchActivity;
 import com.nairbspace.octoandroid.ui.printer_controls.PrinterControlsActivity;
 import com.nairbspace.octoandroid.ui.printer_settings.PrinterListActivity;
-import com.nairbspace.octoandroid.ui.printer_settings.details.PrinterSettingsActivity;
+import com.nairbspace.octoandroid.ui.printer_settings.PrinterDetailsActivity;
 import com.nairbspace.octoandroid.ui.settings.SettingsActivity;
 import com.nairbspace.octoandroid.ui.slicer.SlicerActivity;
 import com.nairbspace.octoandroid.ui.status.StatusActivity;
@@ -151,8 +151,8 @@ public class Navigator {
         activity.startActivity(i);
     }
 
-    public void navigateToPrinterSettingsActivity(Activity activity) {
-        Intent i = PrinterSettingsActivity.newIntent(activity);
+    public void navigateToPrinterDetailsActivity(Activity activity) {
+        Intent i = PrinterDetailsActivity.newIntent(activity);
         activity.startActivityForResult(i, PRINTER_SETTINGS_REQUEST_CODE);
     }
 

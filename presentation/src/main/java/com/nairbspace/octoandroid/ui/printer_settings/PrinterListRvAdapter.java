@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.ui.printer_settings.list;
+package com.nairbspace.octoandroid.ui.printer_settings;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -31,7 +31,7 @@ public class PrinterListRvAdapter extends RecyclerView.Adapter<PrinterViewHolder
     @Override
     public PrinterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_printer_list_item, parent, false);
+                .inflate(R.layout.activity_printer_list_item, parent, false);
         return new PrinterViewHolder(view, this);
     }
 

@@ -17,7 +17,6 @@ import com.nairbspace.octoandroid.ui.printer_controls.PrinterControlsActivity;
 import com.nairbspace.octoandroid.ui.printer_controls_general.GeneralFragment;
 import com.nairbspace.octoandroid.ui.printer_controls_tool.ToolFragment;
 import com.nairbspace.octoandroid.ui.printer_settings.PrinterListActivity;
-import com.nairbspace.octoandroid.ui.printer_settings.list.PrinterListFragment;
 import com.nairbspace.octoandroid.ui.slicer.SlicerActivity;
 import com.nairbspace.octoandroid.ui.slicer.slicing.SlicingFragment;
 import com.nairbspace.octoandroid.ui.state.StateFragment;
@@ -68,8 +67,6 @@ public interface AppComponent {
     void inject(GeneralFragment generalFragment);
 
     void inject(PrinterListActivity printerListActivity);
-
-    void inject(PrinterListFragment printerListFragment);
 
     void inject(WebsocketService websocketService);
 

@@ -72,7 +72,7 @@
         <activity android:name=".ui.printer_settings.PrinterListActivity"
                   android:label="@string/printers"
                   android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".ui.printer_settings.details.PrinterSettingsActivity"
+        <activity android:name=".ui.printer_settings.PrinterDetailsActivity"
                   android:label="@string/printer_settings"
                   android:theme="@style/AppTheme"/>
         <!-- Services -->

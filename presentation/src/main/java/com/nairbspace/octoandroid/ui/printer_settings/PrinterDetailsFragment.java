@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.ui.printer_settings.details;
+package com.nairbspace.octoandroid.ui.printer_settings;
 
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -8,10 +8,10 @@ import android.preference.PreferenceManager;
 
 import com.nairbspace.octoandroid.R;
 
-public class PrinterSettingsFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
+public class PrinterDetailsFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
 
-    public static PrinterSettingsFragment newInstance() {
-        return new PrinterSettingsFragment();
+    public static PrinterDetailsFragment newInstance() {
+        return new PrinterDetailsFragment();
     }
 
     @Override

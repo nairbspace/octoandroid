@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.ui.printer_settings.details;
+package com.nairbspace.octoandroid.ui.printer_settings;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,10 +6,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-public class PrinterSettingsActivity extends AppCompatActivity {
+public class PrinterDetailsActivity extends AppCompatActivity {
 
     public static Intent newIntent(Context context) {
-        return new Intent(context, PrinterSettingsActivity.class);
+        return new Intent(context, PrinterDetailsActivity.class);
     }
 
     @Override
@@ -20,7 +20,7 @@ public class PrinterSettingsActivity extends AppCompatActivity {
 
         // Display the fragment as the main content.
         getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, PrinterSettingsFragment.newInstance())
+                .replace(android.R.id.content, PrinterDetailsFragment.newInstance())
                 .commit();
     }
 

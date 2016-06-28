@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.ui.printer_settings.list;
+package com.nairbspace.octoandroid.ui.printer_settings;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
