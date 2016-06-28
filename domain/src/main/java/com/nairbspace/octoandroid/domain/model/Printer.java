@@ -1,12 +1,10 @@
 package com.nairbspace.octoandroid.domain.model;
 
-import android.support.annotation.Nullable;
-
 import com.google.auto.value.AutoValue;
 
 @AutoValue
 public abstract class Printer {
-    @Nullable public abstract Long id();
+    public abstract Long id();
     public abstract String name();
     public abstract String apiKey();
     public abstract String scheme();

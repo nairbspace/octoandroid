@@ -1,13 +1,12 @@
 package com.nairbspace.octoandroid.model;
 
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 
 @AutoValue
 public abstract class PrinterModel implements Parcelable {
-    @Nullable public abstract Long id(); // TODO Printer id shouldn't be nullable anymore
+    public abstract Long id();
     public abstract String name();
     public abstract String apiKey();
     public abstract String scheme();
