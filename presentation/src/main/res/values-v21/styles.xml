@@ -8,7 +8,7 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:buttonStyle">@style/DefaultButton</item>
         <item name="metaSelectableItemBackground">?android:attr/selectableItemBackgroundBorderless</item>
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+        <!--<item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>-->
     </style>
 
     <style name="DefaultButton" parent="Widget.AppCompat.Button.Colored">
