@@ -18,6 +18,8 @@ public interface DiskManager {
 
     Observable.OnSubscribe<PrinterDbEntity> getPrinterByName(String name);
 
+    Observable.OnSubscribe<PrinterDbEntity> getPrinterById(long id);
+
     Func1<PrinterDbEntity, PrinterDbEntity> putPrinterInDb();
 
     Func1<PrinterDbEntity, PrinterDbEntity> putPrinterInPrefs();
@@ -27,6 +29,8 @@ public interface DiskManager {
     Action1<ConnectionEntity> putConnectionInDb();
 
     Func1<PrinterDbEntity, Boolean> deletePrinterByName();
+
+    Func1<PrinterDbEntity, Boolean> deletePrinterById();
 
     Action1<Throwable> deleteUnverifiedPrinter();
 

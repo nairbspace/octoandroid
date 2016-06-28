@@ -16,18 +16,15 @@ public class PrinterListPresenter extends UseCasePresenter<PrinterListScreen> {
 
     private final PrinterModelMapper.ListMapper mListMapper;
     private final SetPrinterPrefs mSetPrinterPrefs;
-    private final PrinterModelMapper.DomainMapper mDomainMapper;
     private final GetPrinters mGetPrinters;
     private PrinterListScreen mScreen;
 
     @Inject
     public PrinterListPresenter(GetPrinters getPrinters,
                                 PrinterModelMapper.ListMapper listMapper,
-                                SetPrinterPrefs setPrinterPrefs,
-                                PrinterModelMapper.DomainMapper domainMapper) {
-        super(getPrinters, listMapper, setPrinterPrefs, domainMapper);
+                                SetPrinterPrefs setPrinterPrefs) {
+        super(getPrinters, listMapper, setPrinterPrefs);
         mSetPrinterPrefs = setPrinterPrefs;
-        mDomainMapper = domainMapper;
         mGetPrinters = getPrinters;
         mListMapper = listMapper;
     }
@@ -67,21 +64,8 @@ public class PrinterListPresenter extends UseCasePresenter<PrinterListScreen> {
         }
     }
 
-    public void printerSettingsClicked(PrinterModel printerModel) {
-        mDomainMapper.execute(new DomainMapperSubscriber(), printerModel);
-    }
-
-    private final class DomainMapperSubscriber extends DefaultSubscriber<Printer> {
-
-        @Override
-        public void onError(Throwable e) {
-            super.onError(e);
-        }
-
-        @Override
-        public void onNext(Printer printer) {
-            mSetPrinterPrefs.execute(new SetPrefsSubscriber(), printer);
-        }
+    public void printerEditClicked(long id) {
+        mSetPrinterPrefs.execute(new SetPrefsSubscriber(), id);
     }
 
     private final class SetPrefsSubscriber extends DefaultSubscriber {
@@ -95,5 +79,13 @@ public class PrinterListPresenter extends UseCasePresenter<PrinterListScreen> {
         public void onError(Throwable e) {
             super.onError(e);
         }
+    }
+
+    public void printerDeleteClicked(long id) {
+//        if (printerModels.size() == 1) {
+//            mScreen.showSnackbar("Need atleast one printer");
+//        } else {
+//            // Delete printer
+//        }
     }
 }

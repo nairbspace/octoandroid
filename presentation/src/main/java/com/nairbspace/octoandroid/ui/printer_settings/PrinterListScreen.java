@@ -9,4 +9,6 @@ public interface PrinterListScreen {
     void navigateToPrinterDetailsActivity();
 
     void updateUi(List<PrinterModel> printerModels);
+
+    void showSnackbar(String message);
 }

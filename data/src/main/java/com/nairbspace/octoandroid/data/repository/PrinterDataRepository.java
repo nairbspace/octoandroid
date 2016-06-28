@@ -72,8 +72,8 @@ public class PrinterDataRepository implements PrinterRepository {
     }
 
     @Override
-    public Observable setPrinterPrefs(Printer printer) {
-        return Observable.create(mMapperHelper.mapPrinterToPrinterDbEntity(printer))
+    public Observable setPrinterPrefs(long id) {
+        return Observable.create(mDiskManager.getPrinterById(id))
                 .map(mDiskManager.putPrinterInPrefs());
     }
 
@@ -88,6 +88,12 @@ public class PrinterDataRepository implements PrinterRepository {
     public Observable<Boolean> deletePrinterByName(String name) {
         return Observable.create(mDiskManager.getPrinterByName(name))
                 .map(mDiskManager.deletePrinterByName());
+    }
+
+    @Override
+    public Observable<Boolean> deletePrinterById(long id) {
+        return Observable.create(mDiskManager.getPrinterById(id))
+                .map(mDiskManager.deletePrinterById());
     }
 
     @Override

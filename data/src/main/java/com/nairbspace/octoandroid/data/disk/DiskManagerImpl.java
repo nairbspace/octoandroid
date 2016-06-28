@@ -101,6 +101,22 @@ public class DiskManagerImpl implements DiskManager {
     }
 
     @Override
+    public Observable.OnSubscribe<PrinterDbEntity> getPrinterById(final long id) {
+        return new Observable.OnSubscribe<PrinterDbEntity>() {
+            @Override
+            public void call(Subscriber<? super PrinterDbEntity> subscriber) {
+                PrinterDbEntity printerDbEntity = mDbHelper.getPrinterFromDbById(id);
+                if (printerDbEntity == null) {
+                    subscriber.onError(new PrinterDataNotFoundException());
+                }
+
+                subscriber.onNext(printerDbEntity);
+                subscriber.onCompleted();
+            }
+        };
+    }
+
+    @Override
     public Func1<PrinterDbEntity, PrinterDbEntity> putPrinterInDb() {
         return new Func1<PrinterDbEntity, PrinterDbEntity>() {
             @Override
@@ -182,6 +198,27 @@ public class DiskManagerImpl implements DiskManager {
                 PrinterDbEntity oldPrinterDbEntity = mDbHelper
                         .getPrinterFromDbByName(printerDbEntity.getName());
 
+                if (oldPrinterDbEntity == null) {
+                    throw Exceptions.propagate(new PrinterDataNotFoundException());
+                }
+
+                if (mPrefHelper.isPrinterActive(oldPrinterDbEntity)) {
+                    //TODO need to handle this when there's multiple printers!!
+                    mPrefHelper.resetActivePrinter();
+                }
+
+                mDbHelper.deletePrinterInDb(oldPrinterDbEntity);
+                return true;
+            }
+        };
+    }
+
+    @Override
+    public Func1<PrinterDbEntity, Boolean> deletePrinterById() {
+        return new Func1<PrinterDbEntity, Boolean>() {
+            @Override
+            public Boolean call(PrinterDbEntity printerDbEntity) {
+                PrinterDbEntity oldPrinterDbEntity = mDbHelper.getPrinterFromDbById(printerDbEntity.getId());
                 if (oldPrinterDbEntity == null) {
                     throw Exceptions.propagate(new PrinterDataNotFoundException());
                 }

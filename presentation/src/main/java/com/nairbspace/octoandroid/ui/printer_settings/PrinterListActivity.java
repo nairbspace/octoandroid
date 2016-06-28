@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -30,8 +32,8 @@ public class PrinterListActivity extends BaseActivity<PrinterListScreen>
     @Inject PrinterListPresenter mPresenter;
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.printer_list_recyclerview) RecyclerView mRecyclerView;
-
-    private List<PrinterModel> mPrinterModels;
+    @BindView(R.id.add_printer_fab) FloatingActionButton mFab;
+    private Snackbar mSnackbar;
 
     private boolean mPrinterWasAdded = false;
 
@@ -48,6 +50,8 @@ public class PrinterListActivity extends BaseActivity<PrinterListScreen>
         setSupportActionBar(mToolbar);
         setUpArrow(getSupportActionBar());
         mRecyclerView.setAdapter(new PrinterListRvAdapter(this, null));
+        mSnackbar = Snackbar.make(mFab, "", Snackbar.LENGTH_SHORT);
+        mSnackbar.setCallback(new SnackbarCallback());
     }
 
     private void setUpArrow(ActionBar actionBar) {
@@ -69,7 +73,6 @@ public class PrinterListActivity extends BaseActivity<PrinterListScreen>
 
     @Override
     public void updateUi(List<PrinterModel> printerModels) {
-        mPrinterModels = printerModels;
         RecyclerView.Adapter adapter = mRecyclerView.getAdapter();
         if (adapter == null) {
             mRecyclerView.setAdapter(new PrinterListRvAdapter(this, printerModels));
@@ -122,7 +125,37 @@ public class PrinterListActivity extends BaseActivity<PrinterListScreen>
     }
 
     @Override
-    public void printerSettingsClicked(int position) {
-        mPresenter.printerSettingsClicked(mPrinterModels.get(position));
+    public void printerEditClicked(long id, int position) {
+        mPresenter.printerEditClicked(id);
+    }
+
+    @Override
+    public void printerDeleteClicked(long id, int position) {
+        mPresenter.printerDeleteClicked(id);
+    }
+
+    @Override
+    public void showSnackbar(String message) {
+        mSnackbar.setText(message);
+        mSnackbar.show();
+    }
+
+    /**
+     * FAB in this layout has {@link com.nairbspace.octoandroid.views.ScrollHideBehavior} as behavior.
+     * {@link com.nairbspace.octoandroid.views.ScrollHideBehavior} currently cannot extend from
+     * {@link android.support.design.widget.FloatingActionButton.Behavior} or it will crash so
+     * have to hide FAB instead when Snackbar is shown.
+     */
+    private final class SnackbarCallback extends Snackbar.Callback {
+
+        @Override
+        public void onDismissed(Snackbar snackbar, int event) {
+            mFab.show();
+        }
+
+        @Override
+        public void onShown(Snackbar snackbar) {
+            mFab.hide();
+        }
     }
 }

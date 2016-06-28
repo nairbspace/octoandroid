@@ -153,4 +153,7 @@
     <string name="add_printer_help_2_3"><a href ="http://wiki.cacert.org/FAQ/ImportRootCert#CAcert_system_trusted_certificates_.28without_lockscreen.29">Click here for more info</a></string>
     <string name="add_printer_help_2_4"><a href="mailto:nairbspace+octoandroid@gmail.com">Feel free to contact the developer via email for any help</a></string>
 
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+
 </resources>
