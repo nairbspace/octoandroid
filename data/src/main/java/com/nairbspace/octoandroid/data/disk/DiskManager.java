@@ -12,6 +12,8 @@ import rx.functions.Func1;
 
 public interface DiskManager {
 
+    boolean isDbEmpty();
+
     Observable.OnSubscribe<PrinterDbEntity> getPrinterInDb();
 
     Observable.OnSubscribe<List<PrinterDbEntity>> getPrintersInDb();

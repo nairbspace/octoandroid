@@ -1,20 +1,20 @@
 package com.nairbspace.octoandroid.ui.dispatch;
 
+import com.nairbspace.octoandroid.domain.interactor.CheckIfDbIsEmpty;
 import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
-import com.nairbspace.octoandroid.domain.interactor.GetPrinterDetails;
 import com.nairbspace.octoandroid.ui.templates.UseCasePresenter;
 
 import javax.inject.Inject;
 
 public class DispatchPresenter extends UseCasePresenter<DispatchScreen> {
 
-    private final GetPrinterDetails mGetPrinterDetails;
+    private final CheckIfDbIsEmpty mCheckIfDbIsEmpty;
     private DispatchScreen mScreen;
 
     @Inject
-    public DispatchPresenter(GetPrinterDetails getPrinterDetails) {
-        super(getPrinterDetails);
-        mGetPrinterDetails = getPrinterDetails;
+    public DispatchPresenter(CheckIfDbIsEmpty checkIfDbIsEmpty) {
+        super(checkIfDbIsEmpty);
+        mCheckIfDbIsEmpty = checkIfDbIsEmpty;
     }
 
     @Override
@@ -25,19 +25,18 @@ public class DispatchPresenter extends UseCasePresenter<DispatchScreen> {
 
     @Override
     protected void execute() {
-        mGetPrinterDetails.execute(new PrinterDetailsSubscriber());
+        mCheckIfDbIsEmpty.execute(new DbEmptySubscriber());
     }
 
-    private final class PrinterDetailsSubscriber extends DefaultSubscriber {
-        @Override
-        public void onError(Throwable e) {
-            super.onError(e);
-            mScreen.navigateToAddPrinterActivityForResult();
-        }
+    private final class DbEmptySubscriber extends DefaultSubscriber<Boolean> {
 
         @Override
-        public void onCompleted() {
-            mScreen.navigateToStatusActivity();
+        public void onNext(Boolean aBoolean) {
+            if (aBoolean) {
+                mScreen.navigateToAddPrinterActivityForResult();
+            } else {
+                mScreen.navigateToStatusActivity();
+            }
         }
     }
 }

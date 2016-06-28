@@ -54,6 +54,11 @@ public class PrinterDataRepository implements PrinterRepository {
     }
 
     @Override
+    public Observable<Boolean> isDbEmpty() {
+        return Observable.just(mDiskManager.isDbEmpty());
+    }
+
+    @Override
     public Observable<Printer> printerDetails() {
         return Observable.create(mDiskManager.getPrinterInDb())
                 .map(mMapperHelper.maptoPrinter());

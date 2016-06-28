@@ -22,6 +22,8 @@ import rx.Observable;
 
 public interface PrinterRepository {
 
+    Observable<Boolean> isDbEmpty();
+
     Observable<Printer> printerDetails();
 
     Observable<List<Printer>> getPrinters();

@@ -38,6 +38,12 @@ public class DiskManagerImpl implements DiskManager {
     }
 
     @Override
+    public boolean isDbEmpty() {
+        List<PrinterDbEntity> printerDbEntities = mDbHelper.getPrintersFromDb();
+        return printerDbEntities == null || printerDbEntities.isEmpty();
+    }
+
+    @Override
     public Observable.OnSubscribe<PrinterDbEntity> getPrinterInDb() {
         return new Observable.OnSubscribe<PrinterDbEntity>() {
             @Override
