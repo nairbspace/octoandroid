@@ -72,6 +72,12 @@ public class PrinterDataRepository implements PrinterRepository {
     }
 
     @Override
+    public Observable setPrinterPrefs(Printer printer) {
+        return Observable.create(mMapperHelper.mapPrinterToPrinterDbEntity(printer))
+                .map(mDiskManager.putPrinterInPrefs());
+    }
+
+    @Override
     public Observable verifyPrinterDetails() {
         return mApiManager.getVersion()
                 .map(mDiskManager.putVersionInDb())

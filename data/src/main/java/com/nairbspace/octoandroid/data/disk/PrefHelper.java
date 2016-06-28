@@ -24,6 +24,10 @@ public class PrefHelper {
                 mResManager.getDefaultUploadLocationValue());
     }
 
+    public void resetActivePrinter() {
+        setActivePrinter(mResManager.getNoActivePrinterValue());
+    }
+
     public void setActivePrinter(long printerId) {
         mPreferences.edit().putLong(mResManager.getActivePrinterKey(), printerId).apply();
     }

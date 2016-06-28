@@ -51,6 +51,20 @@ public class PrinterModelMapper extends MapperUseCase<Printer, PrinterModel> {
                 .build();
     }
 
+    public static Printer printerModelToPrinter(PrinterModel printerModel) {
+         return Printer.builder()
+                .id(printerModel.id())
+                .name(printerModel.name())
+                .apiKey(printerModel.apiKey())
+                .scheme(printerModel.scheme())
+                .host(printerModel.host())
+                .port(printerModel.port())
+                .websocketPath(printerModel.websocketPath())
+                .webcamPathQuery(printerModel.webcamPathQuery())
+                .uploadLocation(printerModel.uploadLocation())
+                .build();
+    }
+
     public static class ListMapper extends MapperUseCase<List<Printer>, List<PrinterModel>> {
 
         @Inject
@@ -69,6 +83,29 @@ public class PrinterModelMapper extends MapperUseCase<Printer, PrinterModel> {
                             printerModels.add(PrinterModelMapper.printerToPrinterModel(printer));
                         }
                         subscriber.onNext(printerModels);
+                        subscriber.onCompleted();
+                    } catch (Exception e) {
+                        subscriber.onError(new TransformErrorException());
+                    }
+                }
+            });
+        }
+    }
+
+    public static class DomainMapper extends MapperUseCase<PrinterModel, Printer> {
+
+        @Inject
+        public DomainMapper(ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
+            super(threadExecutor, postExecutionThread);
+        }
+
+        @Override
+        protected Observable<Printer> buildUseCaseObservableInput(final PrinterModel printerModel) {
+            return Observable.create(new Observable.OnSubscribe<Printer>() {
+                @Override
+                public void call(Subscriber<? super Printer> subscriber) {
+                    try {
+                        subscriber.onNext(printerModelToPrinter(printerModel));
                         subscriber.onCompleted();
                     } catch (Exception e) {
                         subscriber.onError(new TransformErrorException());

@@ -27,17 +27,14 @@ public class DiskManagerImpl implements DiskManager {
     private final AccountHelper mAccountHelper;
     private final DbHelper mDbHelper;
     private final EntitySerializer mEntitySerializer;
-    private final ResManager mResManager;
 
     @Inject
     public DiskManagerImpl(PrefHelper prefHelper, AccountHelper accountHelper,
-                           DbHelper dbHelper, EntitySerializer entitySerializer,
-                           ResManager resManager) {
+                           DbHelper dbHelper, EntitySerializer entitySerializer) {
         mPrefHelper = prefHelper;
         mAccountHelper = accountHelper;
         mDbHelper = dbHelper;
         mEntitySerializer = entitySerializer;
-        mResManager = resManager;
     }
 
     @Override
@@ -59,7 +56,7 @@ public class DiskManagerImpl implements DiskManager {
                     // TODO need better way to delete data
                     mDbHelper.deletePrinterInDb(printerDbEntity);
                     mAccountHelper.removeAccount(printerDbEntity);
-                    mPrefHelper.setActivePrinter(mResManager.getNoActivePrinterValue());
+                    mPrefHelper.resetActivePrinter();
                     subscriber.onError(new PrinterDataNotFoundException());
                 }
 
@@ -128,6 +125,21 @@ public class DiskManagerImpl implements DiskManager {
     }
 
     @Override
+    public Func1<PrinterDbEntity, PrinterDbEntity> putPrinterInPrefs() {
+        return new Func1<PrinterDbEntity, PrinterDbEntity>() {
+            @Override
+            public PrinterDbEntity call(PrinterDbEntity printerDbEntity) {
+                try {
+                    mPrefHelper.setPrinterDbEntityToPrefs(printerDbEntity);
+                    return printerDbEntity;
+                } catch (Exception e) {
+                    throw Exceptions.propagate(new ErrorSavingException());
+                }
+            }
+        };
+    }
+
+    @Override
     public Func1<VersionEntity, VersionEntity> putVersionInDb() {
         return new Func1<VersionEntity, VersionEntity>() {
             @Override
@@ -176,7 +188,7 @@ public class DiskManagerImpl implements DiskManager {
 
                 if (mPrefHelper.isPrinterActive(oldPrinterDbEntity)) {
                     //TODO need to handle this when there's multiple printers!!
-                    mPrefHelper.setActivePrinter(mResManager.getNoActivePrinterValue());
+                    mPrefHelper.resetActivePrinter();
                 }
 
                 mDbHelper.deletePrinterInDb(oldPrinterDbEntity);
@@ -194,7 +206,7 @@ public class DiskManagerImpl implements DiskManager {
                     PrinterDbEntity printerDbEntity = mDbHelper.getActivePrinterDbEntity();
                     mDbHelper.deletePrinterInDb(printerDbEntity);
                     mAccountHelper.removeAccount(printerDbEntity);
-                    mPrefHelper.setActivePrinter(mResManager.getNoActivePrinterValue());
+                    mPrefHelper.resetActivePrinter();
                 } catch (Exception e) {
                     throw Exceptions.propagate(new PrinterDataNotFoundException(e));
                 }

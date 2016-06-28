@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -13,7 +14,6 @@ import android.view.MenuItem;
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
 import com.nairbspace.octoandroid.model.PrinterModel;
-import com.nairbspace.octoandroid.ui.printer_settings.details.PrinterDetailsFragment;
 import com.nairbspace.octoandroid.ui.printer_settings.list.PrinterListFragment;
 import com.nairbspace.octoandroid.ui.templates.BaseActivity;
 import com.nairbspace.octoandroid.ui.templates.Presenter;
@@ -22,17 +22,18 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-public class PrinterSettingsActivity extends BaseActivity<PrinterSettingsScreen>
-        implements PrinterSettingsScreen, PrinterListFragment.Listener, PrinterDetailsFragment.Listener {
+public class PrinterListActivity extends BaseActivity<PrinterListActivityScreen>
+        implements PrinterListActivityScreen, PrinterListFragment.Listener {
 
-    @Inject PrinterSettingsPresenter mPresenter;
+    @Inject PrinterListActivityPresenter mPresenter;
     @BindView(R.id.toolbar) Toolbar mToolbar;
 
     private boolean mPrinterWasAdded = false;
 
     public static Intent newIntent(Context context) {
-        return new Intent(context, PrinterSettingsActivity.class);
+        return new Intent(context, PrinterListActivity.class);
     }
 
     @Override
@@ -53,25 +54,25 @@ public class PrinterSettingsActivity extends BaseActivity<PrinterSettingsScreen>
         }
     }
 
-    private void inflatePrinterList() {
-        Fragment fragment = PrinterListFragment.newInstance();
-        getSupportFragmentManager().beginTransaction()
-                    .add(R.id.printer_settings_fragment, fragment)
-                    .commit();
+    @OnClick(R.id.add_printer_fab)
+    void addPrinter() {
+        getNavigator().navigateToAddPrinterActivityForResult(this);
     }
 
-    @Override
-    public void inflatePrinterDetails(PrinterModel printerModel) {
-        Fragment fragment = PrinterDetailsFragment.newInstance(printerModel);
+    private void inflatePrinterList() {
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.printer_settings_fragment, fragment)
-                .addToBackStack(null)
+                .add(R.id.printer_settings_fragment, PrinterListFragment.newInstance())
                 .commit();
     }
 
     @Override
-    public void addPrinter() {
-        getNavigator().navigateToAddPrinterActivityForResult(this);
+    public void printerSettingsClicked(PrinterModel printerModel) {
+        mPresenter.printerSettingsClicked(printerModel);
+    }
+
+    @Override
+    public void navigateToPrinterDetailsActivity() {
+        getNavigator().navigateToPrinterSettingsActivity(this);
     }
 
     @Override
@@ -79,14 +80,28 @@ public class PrinterSettingsActivity extends BaseActivity<PrinterSettingsScreen>
         if (getNavigator().wasAddPrinterResultOk(requestCode, resultCode)) {
             mPrinterWasAdded = true;
         }
+
+        if (requestCode == getNavigator().getPrinterSettingsRequestCode()) {
+            // update list
+        }
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
         if (mPrinterWasAdded) {
             mPrinterWasAdded = false;
+            updatePrinterList();
+        }
+    }
+
+    private void updatePrinterList() {
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment fragment = fm.findFragmentById(R.id.printer_settings_fragment);
+        if (fragment == null) {
             inflatePrinterList();
+        } else if (fragment instanceof PrinterListFragment) {
+            ((PrinterListFragment) fragment).updateList();
         }
     }
 
@@ -109,7 +124,7 @@ public class PrinterSettingsActivity extends BaseActivity<PrinterSettingsScreen>
 
     @NonNull
     @Override
-    protected PrinterSettingsScreen setScreen() {
+    protected PrinterListActivityScreen setScreen() {
         return this;
     }
 }

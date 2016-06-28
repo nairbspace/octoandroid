@@ -104,6 +104,30 @@ public class PrinterDbEntityMapper {
         };
     }
 
+    public static Observable.OnSubscribe<PrinterDbEntity> mapPrinterToPrinterDbEntity(final Printer printer) {
+        return new Observable.OnSubscribe<PrinterDbEntity>() {
+            @Override
+            public void call(Subscriber<? super PrinterDbEntity> subscriber) {
+                try {
+                    PrinterDbEntity printerDbEntity = new PrinterDbEntity();
+                    printerDbEntity.setId(printer.id());
+                    printerDbEntity.setName(printer.name());
+                    printerDbEntity.setApiKey(printer.apiKey());
+                    printerDbEntity.setScheme(printer.scheme());
+                    printerDbEntity.setHost(printer.host());
+                    printerDbEntity.setPort(printer.port());
+                    printerDbEntity.setWebsocketPath(printer.websocketPath());
+                    printerDbEntity.setWebcamPathQuery(printer.webcamPathQuery());
+                    printerDbEntity.setUploadLocation(printer.uploadLocation());
+                    subscriber.onNext(printerDbEntity);
+                    subscriber.onCompleted();
+                } catch (Exception e) {
+                    subscriber.onError(new EntityMapperException());
+                }
+            }
+        };
+    }
+
     private static String extractHost(String ipAddress) {
         // If user inputted http:// or https:// try to extract only IP Address
         HttpUrl ipAddressUrl = HttpUrl.parse(ipAddress);

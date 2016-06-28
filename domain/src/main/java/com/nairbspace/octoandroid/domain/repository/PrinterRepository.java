@@ -28,6 +28,8 @@ public interface PrinterRepository {
 
     Observable addPrinterDetails(AddPrinter addPrinter);
 
+    Observable setPrinterPrefs(Printer printer);
+
     Observable verifyPrinterDetails();
 
     Observable<Boolean> deletePrinterByName(String name);

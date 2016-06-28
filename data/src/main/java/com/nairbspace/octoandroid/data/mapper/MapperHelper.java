@@ -56,6 +56,10 @@ public class MapperHelper {
         return PrinterDbEntityMapper.mapAddPrinterToPrinterDbEntity(addPrinter);
     }
 
+    public Observable.OnSubscribe<PrinterDbEntity> mapPrinterToPrinterDbEntity(Printer printer) {
+        return PrinterDbEntityMapper.mapPrinterToPrinterDbEntity(printer);
+    }
+
     public Func1<ConnectionEntity, Connection> mapToConnection() {
         return ConnectionEntityMapper.mapToConnection(mEntitySerializer);
     }

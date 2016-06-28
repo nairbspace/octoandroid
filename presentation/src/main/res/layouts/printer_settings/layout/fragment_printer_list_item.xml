@@ -70,9 +70,11 @@
 
             <ImageView
                 android:id="@+id/printer_settings_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="12dp"
                 android:alpha="@dimen/drawable_active_opacity"
+                android:background="?attr/metaSelectableItemBackground"
                 android:src="@drawable/ic_settings_black_24dp"/>
 
         </LinearLayout>

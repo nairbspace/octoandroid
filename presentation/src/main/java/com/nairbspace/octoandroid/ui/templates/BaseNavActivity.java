@@ -94,7 +94,7 @@ public abstract class BaseNavActivity<T> extends BaseActivity<T>
     };
 
     private void navigateToPrinterSettingsActivity() {
-        getNavigator().navigateToPrinterSettingsActivity(this);
+        getNavigator().navigateToPrinterListActivity(this);
     }
 
     public LockSwipeViewPager getViewPager() {

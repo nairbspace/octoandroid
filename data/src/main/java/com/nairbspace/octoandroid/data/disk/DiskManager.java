@@ -20,6 +20,8 @@ public interface DiskManager {
 
     Func1<PrinterDbEntity, PrinterDbEntity> putPrinterInDb();
 
+    Func1<PrinterDbEntity, PrinterDbEntity> putPrinterInPrefs();
+
     Func1<VersionEntity, VersionEntity> putVersionInDb();
 
     Action1<ConnectionEntity> putConnectionInDb();

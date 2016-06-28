@@ -11,19 +11,17 @@ import com.nairbspace.octoandroid.ui.add_printer.AddPrinterActivity;
 import com.nairbspace.octoandroid.ui.connection.ConnectionFragment;
 import com.nairbspace.octoandroid.ui.dispatch.DispatchActivity;
 import com.nairbspace.octoandroid.ui.files.FilesFragment;
+import com.nairbspace.octoandroid.ui.playback.PlaybackFragment;
 import com.nairbspace.octoandroid.ui.print_head.PrintHeadFragment;
 import com.nairbspace.octoandroid.ui.printer_controls.PrinterControlsActivity;
 import com.nairbspace.octoandroid.ui.printer_controls_general.GeneralFragment;
 import com.nairbspace.octoandroid.ui.printer_controls_tool.ToolFragment;
-import com.nairbspace.octoandroid.ui.printer_settings.PrinterSettingsActivity;
-import com.nairbspace.octoandroid.ui.printer_settings.details.PrinterDetailsFragment;
+import com.nairbspace.octoandroid.ui.printer_settings.PrinterListActivity;
 import com.nairbspace.octoandroid.ui.printer_settings.list.PrinterListFragment;
-import com.nairbspace.octoandroid.ui.settings.SettingsActivity;
 import com.nairbspace.octoandroid.ui.slicer.SlicerActivity;
 import com.nairbspace.octoandroid.ui.slicer.slicing.SlicingFragment;
-import com.nairbspace.octoandroid.ui.status.StatusActivity;
-import com.nairbspace.octoandroid.ui.playback.PlaybackFragment;
 import com.nairbspace.octoandroid.ui.state.StateFragment;
+import com.nairbspace.octoandroid.ui.status.StatusActivity;
 import com.nairbspace.octoandroid.ui.temp.TempActivity;
 import com.nairbspace.octoandroid.ui.temp_controls.TempControlsFragment;
 import com.nairbspace.octoandroid.ui.temp_graph.TempGraphFragment;
@@ -69,11 +67,9 @@ public interface AppComponent {
 
     void inject(GeneralFragment generalFragment);
 
-    void inject(PrinterSettingsActivity printerSettingsActivity);
+    void inject(PrinterListActivity printerListActivity);
 
     void inject(PrinterListFragment printerListFragment);
-
-    void inject(PrinterDetailsFragment printerDetailsFragment);
 
     void inject(WebsocketService websocketService);
 

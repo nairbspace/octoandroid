@@ -15,10 +15,12 @@ public class PrinterListRvAdapter extends RecyclerView.Adapter<PrinterViewHolder
         implements PrinterViewHolder.Listener {
 
     private final Listener mListener;
-    private List<PrinterModel> mPrinterModels = new ArrayList<>();
+    private List<PrinterModel> mPrinterModels;
 
-    public PrinterListRvAdapter(Listener listener) {
+    public PrinterListRvAdapter(Listener listener, List<PrinterModel> printerModels) {
         mListener = listener;
+        if (printerModels == null) mPrinterModels = new ArrayList<>();
+        else mPrinterModels = printerModels;
     }
 
     public void setPrinterModels(List<PrinterModel> printerModels) {
