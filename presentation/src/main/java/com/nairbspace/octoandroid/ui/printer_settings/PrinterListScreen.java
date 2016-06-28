@@ -13,4 +13,6 @@ public interface PrinterListScreen {
     void showSnackbar(String message);
 
     void navigateToStatusActivity();
+
+    void deleteFromAdapter(int position);
 }

@@ -1,6 +1,7 @@
 package com.nairbspace.octoandroid.ui.printer_settings;
 
 import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
+import com.nairbspace.octoandroid.domain.interactor.DeletePrinterById;
 import com.nairbspace.octoandroid.domain.interactor.GetPrinters;
 import com.nairbspace.octoandroid.domain.interactor.SetActivePrinter;
 import com.nairbspace.octoandroid.domain.interactor.SetPrinterPrefs;
@@ -19,18 +20,21 @@ public class PrinterListPresenter extends UseCasePresenter<PrinterListScreen> {
     private final SetPrinterPrefs mSetPrinterPrefs;
     private final GetPrinters mGetPrinters;
     private final SetActivePrinter mSetActivePrinter;
+    private final DeletePrinterById mDeletePrinterById;
     private PrinterListScreen mScreen;
 
     @Inject
     public PrinterListPresenter(GetPrinters getPrinters,
                                 PrinterModelMapper.ListMapper listMapper,
                                 SetPrinterPrefs setPrinterPrefs,
-                                SetActivePrinter setActivePrinter) {
-        super(getPrinters, listMapper, setPrinterPrefs, setActivePrinter);
+                                SetActivePrinter setActivePrinter,
+                                DeletePrinterById deletePrinterById) {
+        super(getPrinters, listMapper, setPrinterPrefs, setActivePrinter, deletePrinterById);
         mSetPrinterPrefs = setPrinterPrefs;
         mGetPrinters = getPrinters;
         mListMapper = listMapper;
         mSetActivePrinter = setActivePrinter;
+        mDeletePrinterById = deletePrinterById;
     }
 
     @Override
@@ -85,12 +89,22 @@ public class PrinterListPresenter extends UseCasePresenter<PrinterListScreen> {
         }
     }
 
-    public void printerDeleteClicked(long id) {
-//        if (printerModels.size() == 1) {
-//            mScreen.showSnackbar("Need atleast one printer");
-//        } else {
-//            // Delete printer
-//        }
+    public void printerDeleteClicked(long id, int position) {
+        mDeletePrinterById.execute(new DeleteSubscriber(position), id);
+    }
+
+    private final class DeleteSubscriber extends DefaultSubscriber {
+
+        private final int mPosition;
+
+        private DeleteSubscriber(int position) {
+            mPosition = position;
+        }
+
+        @Override
+        public void onCompleted() {
+            mScreen.deleteFromAdapter(mPosition);
+        }
     }
 
     public void printerSetActiveClicked(long id) {

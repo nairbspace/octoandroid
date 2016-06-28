@@ -63,6 +63,7 @@ public class PrinterListActivity extends BaseActivity<PrinterListScreen>
 
     @OnClick(R.id.add_printer_fab)
     void addPrinter() {
+        // TODO if printer fails to add will lose active printer
         getNavigator().navigateToAddPrinterActivityForResult(this);
     }
 
@@ -131,7 +132,13 @@ public class PrinterListActivity extends BaseActivity<PrinterListScreen>
 
     @Override
     public void printerDeleteClicked(long id, int position) {
-        mPresenter.printerDeleteClicked(id);
+        mPresenter.printerDeleteClicked(id, position);
+    }
+
+    @Override
+    public void deleteFromAdapter(int position) {
+        PrinterListRvAdapter adapter = (PrinterListRvAdapter) mRecyclerView.getAdapter();
+        adapter.deletePrinterModel(position);
     }
 
     @Override

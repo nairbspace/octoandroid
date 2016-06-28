@@ -28,6 +28,11 @@ public class PrinterListRvAdapter extends RecyclerView.Adapter<PrinterViewHolder
         notifyDataSetChanged();
     }
 
+    public void deletePrinterModel(int position) {
+        mPrinterModels.remove(position);
+        notifyItemRemoved(position);
+    }
+
     @Override
     public PrinterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())

@@ -209,7 +209,6 @@ public class DiskManagerImpl implements DiskManager {
                 }
 
                 if (mPrefHelper.isPrinterActive(oldPrinterDbEntity)) {
-                    //TODO need to handle this when there's multiple printers!!
                     mPrefHelper.resetActivePrinter();
                 }
 
@@ -229,8 +228,9 @@ public class DiskManagerImpl implements DiskManager {
                     throw Exceptions.propagate(new PrinterDataNotFoundException());
                 }
 
+                mAccountHelper.removeAccount(oldPrinterDbEntity);
+
                 if (mPrefHelper.isPrinterActive(oldPrinterDbEntity)) {
-                    //TODO need to handle this when there's multiple printers!!
                     mPrefHelper.resetActivePrinter();
                 }
 
