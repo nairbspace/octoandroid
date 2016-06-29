@@ -49,6 +49,7 @@ dependencies {
     compile dataDependencies.okHttpLoggingInterceptor
     compile dataDependencies.okHttpWebsocket
     provided dataDependencies.autoValueAnnotations
+    provided dataDependencies.timber
     apt dataDependencies.autoValue
     apt dataDependencies.autoValueGson
 }

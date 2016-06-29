@@ -127,6 +127,7 @@ public class PrinterDataRepository implements PrinterRepository {
     public Observable<Websocket> getWebsocket() {
         return mWebsocket.getWebsocketObservable()
                 .map(mMapperHelper.mapToWebsocket())
+                .doOnError(mWebsocket.logOnError())
                 .retry();
     }
 

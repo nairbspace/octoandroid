@@ -6,16 +6,21 @@ import com.appunite.websocket.rx.object.RxObjectWebSockets;
 import com.appunite.websocket.rx.object.messages.RxObjectEventMessage;
 import com.nairbspace.octoandroid.data.entity.WebsocketEntity;
 
+import java.net.ProtocolException;
+import java.net.SocketException;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import rx.Observable;
+import rx.functions.Action1;
 import rx.functions.Func1;
+import timber.log.Timber;
 
 public class WebsocketManagerImpl implements WebsocketManager {
 
     private final RxObjectWebSockets mRxObjectWebSockets;
+    private boolean mProtocolException = false;
 
     @Inject
     public WebsocketManagerImpl(RxObjectWebSockets rxObjectWebSockets) {
@@ -49,6 +54,20 @@ public class WebsocketManagerImpl implements WebsocketManager {
                                 return (T) o;
                             }
                         });
+            }
+        };
+    }
+
+    @Override
+    public Action1<Throwable> logOnError() {
+        return new Action1<Throwable>() {
+            @Override
+            public void call(Throwable t) {
+                if (t instanceof SocketException) return;
+                if (t instanceof ProtocolException && !mProtocolException) {
+                    mProtocolException = true;
+                    Timber.e(t, null);
+                }
             }
         };
     }

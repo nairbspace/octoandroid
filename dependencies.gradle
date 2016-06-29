@@ -75,6 +75,7 @@ ext {
             autoValue:                  "com.google.auto.value:auto-value:${autoValueVersion}",
             autoValueAnnotations:       "com.jakewharton.auto.value:auto-value-annotations:${autoValueAnnotationsVersion}",
             autoValueGson:              "com.ryanharter.auto.value:auto-value-gson:${autoValueGsonVersion}",
+            timber:                     "com.jakewharton.timber:timber:${timberVersion}",
     ]
 
     dataTestDependencies = [
