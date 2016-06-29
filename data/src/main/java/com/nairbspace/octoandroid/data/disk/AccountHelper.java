@@ -2,10 +2,15 @@ package com.nairbspace.octoandroid.data.disk;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.accounts.AccountManagerFuture;
+import android.accounts.AuthenticatorException;
+import android.accounts.OperationCanceledException;
 import android.os.Build;
 import android.text.TextUtils;
 
 import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
+
+import java.io.IOException;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -56,25 +61,29 @@ public class AccountHelper {
      *
      * @param printerDbEntity the printer to delete
      */
-    public void removeAccount(PrinterDbEntity printerDbEntity) {
+    public boolean removeAccount(PrinterDbEntity printerDbEntity) {
         Account account = findPrinterAccount(printerDbEntity);
-        if (account != null) {
-            removeAccount(account);
-        }
+        return account != null && removeAccount(account);
     }
 
-    private void removeAccount(Account account) {
+    private boolean removeAccount(Account account) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-            mAccountManager.removeAccountExplicitly(account);
+            return mAccountManager.removeAccountExplicitly(account);
         } else {
             //noinspection deprecation
-            mAccountManager.removeAccount(account, null, null);
+            AccountManagerFuture<Boolean> feature = mAccountManager.removeAccount(account, null, null);
+            try {
+                return feature.getResult();
+            } catch (OperationCanceledException | IOException | AuthenticatorException e) {
+                e.printStackTrace();
+                return false;
+            }
         }
     }
 
-    public void addAccount(PrinterDbEntity printerDbEntity) {
+    public boolean addAccount(PrinterDbEntity printerDbEntity) {
         String accountType = "";
         Account account = new Account(printerDbEntity.getName(), validateAccountType(accountType));
-        mAccountManager.addAccountExplicitly(account, null, null);
+        return mAccountManager.addAccountExplicitly(account, null, null);
     }
 }

@@ -43,7 +43,6 @@ public class Navigator {
     private static final int PICK_FILE_REQUEST_CODE = 1;
     private static final int READ_EXTERNAL_STORAGE_REQUEST_CODE = 2;
     private static final int CAMERA_REQUEST_CODE = 3;
-    private static final int PRINTER_SETTINGS_REQUEST_CODE = 4;
 
     private static final String READ_EXTERNAL_STORAGE_PERMISSION = Manifest.permission.READ_EXTERNAL_STORAGE;
     private static final String CAMERA_PERMISSION = Manifest.permission.CAMERA;
@@ -63,10 +62,6 @@ public class Navigator {
 
     public int getPickFileRequestCode() {
         return PICK_FILE_REQUEST_CODE;
-    }
-
-    public int getPrinterSettingsRequestCode() {
-        return PRINTER_SETTINGS_REQUEST_CODE;
     }
 
     public void navigateToAddPrinterActivityForResult(Activity activity) {
@@ -153,7 +148,7 @@ public class Navigator {
 
     public void navigateToPrinterDetailsActivity(Activity activity) {
         Intent i = PrinterDetailsActivity.newIntent(activity);
-        activity.startActivityForResult(i, PRINTER_SETTINGS_REQUEST_CODE);
+        activity.startActivity(i);
     }
 
     public boolean navigateToDownloadFile(Fragment fragment, String url) {

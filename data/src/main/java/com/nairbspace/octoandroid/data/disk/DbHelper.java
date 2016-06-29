@@ -22,7 +22,7 @@ public class DbHelper {
     }
 
     public PrinterDbEntity getActivePrinterDbEntity() {
-        long id = mPrefHelper.getActivePrinter();
+        long id = mPrefHelper.getActivePrinterId();
         return getPrinterFromDbById(id);
     }
 

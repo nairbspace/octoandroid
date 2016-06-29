@@ -33,7 +33,7 @@ public class ResManager {
         return mResources.getString(R.string.account_type);
     }
 
-    public String getPrinterLongId() {return mResources.getString(R.string.prefs_printer_id_key);}
+    public String getPrinterLongIdKey() {return mResources.getString(R.string.prefs_printer_id_key);}
 
     public String getPrinterNameKey() {return mResources.getString(R.string.prefs_printer_name_key);}
 

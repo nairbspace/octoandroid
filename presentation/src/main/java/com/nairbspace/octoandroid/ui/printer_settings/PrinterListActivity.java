@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -22,20 +23,25 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class PrinterListActivity extends BaseActivity<PrinterListScreen>
-        implements PrinterListScreen, PrinterListRvAdapter.Listener {
+        implements PrinterListScreen, PrinterListRvAdapter.Listener, SwipeRefreshLayout.OnRefreshListener {
+
+    @BindString(R.string.exception_printer_edit_failed) String EDIT_FAILED;
 
     @Inject PrinterListPresenter mPresenter;
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.printer_list_recyclerview) RecyclerView mRecyclerView;
     @BindView(R.id.add_printer_fab) FloatingActionButton mFab;
+    @BindView(R.id.rainbow_refresh) SwipeRefreshLayout mRefreshLayout;
     private Snackbar mSnackbar;
 
     private boolean mPrinterWasAdded = false;
+    private int mEditPosition = -1;
 
     public static Intent newIntent(Context context) {
         return new Intent(context, PrinterListActivity.class);
@@ -50,6 +56,7 @@ public class PrinterListActivity extends BaseActivity<PrinterListScreen>
         setSupportActionBar(mToolbar);
         setUpArrow(getSupportActionBar());
         mRecyclerView.setAdapter(new PrinterListRvAdapter(this, null));
+        mRefreshLayout.setOnRefreshListener(this);
         mSnackbar = Snackbar.make(mFab, "", Snackbar.LENGTH_SHORT);
         mSnackbar.setCallback(new SnackbarCallback());
     }
@@ -67,7 +74,8 @@ public class PrinterListActivity extends BaseActivity<PrinterListScreen>
     }
 
     @Override
-    public void navigateToPrinterDetailsActivity() {
+    public void navigateToPrinterDetailsActivity(int position) {
+        mEditPosition = position;
         getNavigator().navigateToPrinterDetailsActivity(this);
     }
 
@@ -86,10 +94,6 @@ public class PrinterListActivity extends BaseActivity<PrinterListScreen>
         if (getNavigator().wasAddPrinterResultOk(requestCode, resultCode)) {
             mPrinterWasAdded = true;
         }
-
-        if (requestCode == getNavigator().getPrinterSettingsRequestCode()) {
-            // update list
-        }
     }
 
     @Override
@@ -99,17 +103,27 @@ public class PrinterListActivity extends BaseActivity<PrinterListScreen>
             mPrinterWasAdded = false;
             mPresenter.execute();
         }
+
+        if (mEditPosition > -1) {
+            mPresenter.verifyEdit(mEditPosition);
+            mEditPosition = -1;
+        }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                navigateToStatusActivity();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        navigateToStatusActivity();
     }
 
     @NonNull
@@ -126,7 +140,7 @@ public class PrinterListActivity extends BaseActivity<PrinterListScreen>
 
     @Override
     public void printerEditClicked(long id, int position) {
-        mPresenter.printerEditClicked(id);
+        mPresenter.printerEditClicked(id, position);
     }
 
     @Override
@@ -155,6 +169,21 @@ public class PrinterListActivity extends BaseActivity<PrinterListScreen>
     public void showSnackbar(String message) {
         mSnackbar.setText(message);
         mSnackbar.show();
+    }
+
+    @Override
+    public void showEditFailure() {
+        showSnackbar(EDIT_FAILED);
+    }
+
+    @Override
+    public void onRefresh() {
+        mPresenter.execute();
+    }
+
+    @Override
+    public void setRefreshing(boolean enable) {
+        mRefreshLayout.setRefreshing(enable);
     }
 
     /**

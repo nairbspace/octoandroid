@@ -6,13 +6,17 @@ import java.util.List;
 
 public interface PrinterListScreen {
 
-    void navigateToPrinterDetailsActivity();
+    void navigateToPrinterDetailsActivity(int position);
 
     void updateUi(List<PrinterModel> printerModels);
 
     void showSnackbar(String message);
 
+    void showEditFailure();
+
     void navigateToStatusActivity();
 
     void deleteFromAdapter(int position);
+
+    void setRefreshing(boolean enable);
 }

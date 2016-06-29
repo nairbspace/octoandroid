@@ -5,6 +5,7 @@ import com.nairbspace.octoandroid.domain.interactor.DeletePrinterById;
 import com.nairbspace.octoandroid.domain.interactor.GetPrinters;
 import com.nairbspace.octoandroid.domain.interactor.SetActivePrinter;
 import com.nairbspace.octoandroid.domain.interactor.SetPrinterPrefs;
+import com.nairbspace.octoandroid.domain.interactor.VerifyPrinterEdit;
 import com.nairbspace.octoandroid.domain.model.Printer;
 import com.nairbspace.octoandroid.mapper.PrinterModelMapper;
 import com.nairbspace.octoandroid.model.PrinterModel;
@@ -21,6 +22,7 @@ public class PrinterListPresenter extends UseCasePresenter<PrinterListScreen> {
     private final GetPrinters mGetPrinters;
     private final SetActivePrinter mSetActivePrinter;
     private final DeletePrinterById mDeletePrinterById;
+    private final VerifyPrinterEdit mVerifyPrinterEdit;
     private PrinterListScreen mScreen;
 
     @Inject
@@ -28,13 +30,16 @@ public class PrinterListPresenter extends UseCasePresenter<PrinterListScreen> {
                                 PrinterModelMapper.ListMapper listMapper,
                                 SetPrinterPrefs setPrinterPrefs,
                                 SetActivePrinter setActivePrinter,
-                                DeletePrinterById deletePrinterById) {
-        super(getPrinters, listMapper, setPrinterPrefs, setActivePrinter, deletePrinterById);
+                                DeletePrinterById deletePrinterById,
+                                VerifyPrinterEdit verifyPrinterEdit) {
+        super(getPrinters, listMapper, setPrinterPrefs,
+                setActivePrinter, deletePrinterById, verifyPrinterEdit);
         mSetPrinterPrefs = setPrinterPrefs;
         mGetPrinters = getPrinters;
         mListMapper = listMapper;
         mSetActivePrinter = setActivePrinter;
         mDeletePrinterById = deletePrinterById;
+        mVerifyPrinterEdit = verifyPrinterEdit;
     }
 
     @Override
@@ -45,6 +50,7 @@ public class PrinterListPresenter extends UseCasePresenter<PrinterListScreen> {
 
     @Override
     protected void execute() {
+        mScreen.setRefreshing(true);
         mGetPrinters.execute(new ListSubscriber());
     }
 
@@ -52,6 +58,7 @@ public class PrinterListPresenter extends UseCasePresenter<PrinterListScreen> {
         @Override
         public void onError(Throwable e) {
             super.onError(e); // TODO error handling
+            mScreen.setRefreshing(false);
         }
 
         @Override
@@ -64,28 +71,63 @@ public class PrinterListPresenter extends UseCasePresenter<PrinterListScreen> {
         @Override
         public void onError(Throwable e) {
             super.onError(e);
+            mScreen.setRefreshing(false);
         }
 
         @Override
         public void onNext(List<PrinterModel> printerModels) {
+            mScreen.setRefreshing(false);
             mScreen.updateUi(printerModels);
         }
     }
 
-    public void printerEditClicked(long id) {
-        mSetPrinterPrefs.execute(new SetPrefsSubscriber(), id);
+    public void printerEditClicked(long id, int position) {
+        mSetPrinterPrefs.execute(new SetPrefsSubscriber(position), id);
     }
 
     private final class SetPrefsSubscriber extends DefaultSubscriber {
 
+        private final int mPosition;
+
+        private SetPrefsSubscriber(int position) {
+            mPosition = position;
+        }
+
         @Override
         public void onCompleted() {
-            mScreen.navigateToPrinterDetailsActivity();
+            mScreen.navigateToPrinterDetailsActivity(mPosition);
         }
 
         @Override
         public void onError(Throwable e) {
             super.onError(e);
+        }
+    }
+
+    public void verifyEdit(int position) {
+        mScreen.setRefreshing(true);
+        mVerifyPrinterEdit.execute(new VerifyEditSubscriber(position));
+    }
+
+    private final class VerifyEditSubscriber extends DefaultSubscriber {
+
+        private final int mPosition;
+
+        private VerifyEditSubscriber(int position) {
+            mPosition = position;
+        }
+
+        @Override
+        public void onCompleted() {
+            mScreen.setRefreshing(false);
+            // TODO need nice way to update only item...
+            execute();
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            mScreen.setRefreshing(false);
+            mScreen.showEditFailure();
         }
     }
 

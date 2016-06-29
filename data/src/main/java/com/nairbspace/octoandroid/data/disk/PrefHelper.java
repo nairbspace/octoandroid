@@ -32,13 +32,13 @@ public class PrefHelper {
         mPreferences.edit().putLong(mResManager.getActivePrinterKey(), printerId).apply();
     }
 
-    public long getActivePrinter() {
+    public long getActivePrinterId() {
         return mPreferences.getLong(mResManager.getActivePrinterKey(),
                 mResManager.getNoActivePrinterValue());
     }
 
     public boolean isPrinterActive(long printerId) {
-        return printerId == getActivePrinter();
+        return printerId == getActivePrinterId();
     }
 
     public boolean isPrinterActive(PrinterDbEntity printerDbEntity) {
@@ -46,7 +46,7 @@ public class PrefHelper {
     }
 
     public boolean doesActivePrinterExist() {
-        return getActivePrinter() != mResManager.getNoActivePrinterValue();
+        return getActivePrinterId() != mResManager.getNoActivePrinterValue();
     }
 
     public void setSaveTimeMillis(long currentMillis) {
@@ -59,9 +59,8 @@ public class PrefHelper {
     }
 
     public void setPrinterDbEntityToPrefs(PrinterDbEntity printerDbEntity) {
-        mPreferences.edit().putLong(mResManager.getPrinterLongId(), printerDbEntity.getId()).apply();
+        mPreferences.edit().putLong(mResManager.getPrinterLongIdKey(), printerDbEntity.getId()).apply();
         mPreferences.edit().putString(mResManager.getPrinterNameKey(), printerDbEntity.getName()).apply();
-        mPreferences.edit().putString(mResManager.getPrinterApiKey(), printerDbEntity.getApiKey()).apply();
         mPreferences.edit().putString(mResManager.getPrinterApiKey(), printerDbEntity.getApiKey()).apply();
         mPreferences.edit().putString(mResManager.getPrinterSchemeKey(), printerDbEntity.getScheme()).apply();
         mPreferences.edit().putString(mResManager.getPrinterHostKey(), printerDbEntity.getHost()).apply();
@@ -72,6 +71,37 @@ public class PrefHelper {
         mPreferences.edit().putString(mResManager.getWebsocketPathKey(), printerDbEntity.getWebsocketPath()).apply();
         mPreferences.edit().putString(mResManager.getWebcamPathQueryKey(), printerDbEntity.getWebcamPathQuery()).apply();
         mPreferences.edit().putString(mResManager.getPrinterUploadLocationKey(), printerDbEntity.getUploadLocation()).apply();
+    }
+
+    public PrinterDbEntity getEditPrinterDbEntity() {
+        long id = mPreferences.getLong(mResManager.getPrinterLongIdKey(), mResManager.getNoActivePrinterValue());
+        String name = mPreferences.getString(mResManager.getPrinterNameKey(), null);
+        String apiKey = mPreferences.getString(mResManager.getPrinterApiKey(), null);
+        String scheme = mPreferences.getString(mResManager.getPrinterSchemeKey(), null);
+        String host = mPreferences.getString(mResManager.getPrinterHostKey(), null);
+
+        int port = Integer.valueOf(mPreferences.getString(mResManager.getPrinterPortKey(), null));
+
+        String websocketPath = mPreferences.getString(mResManager.getWebsocketPathKey(), null);
+        String webcamPathQuery = mPreferences.getString(mResManager.getWebcamPathQueryKey(), null);
+        String upload = mPreferences.getString(mResManager.getPrinterUploadLocationKey(),
+                mResManager.getDefaultUploadLocationValue());
+
+        PrinterDbEntity entity = new PrinterDbEntity();
+        entity.setId(id);
+        entity.setName(name);
+        entity.setApiKey(apiKey);
+        entity.setScheme(scheme);
+        entity.setHost(host);
+        entity.setPort(port);
+        entity.setWebsocketPath(websocketPath);
+        entity.setWebcamPathQuery(webcamPathQuery);
+        entity.setUploadLocation(upload);
+        return entity;
+    }
+
+    public long getEditPrefsId() {
+        return mPreferences.getLong(mResManager.getPrinterLongIdKey(), mResManager.getNoActivePrinterValue());
     }
 
     public boolean isPushNotificationOn() {

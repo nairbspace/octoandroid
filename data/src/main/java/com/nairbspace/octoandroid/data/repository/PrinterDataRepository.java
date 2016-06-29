@@ -1,5 +1,6 @@
 package com.nairbspace.octoandroid.data.repository;
 
+import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
 import com.nairbspace.octoandroid.data.disk.DiskManager;
 import com.nairbspace.octoandroid.data.mapper.MapperHelper;
 import com.nairbspace.octoandroid.data.net.ApiManager;
@@ -80,10 +81,10 @@ public class PrinterDataRepository implements PrinterRepository {
                 .map(mDiskManager.putPrinterInDb());
 
         Observable verifyObs = mApiManager.getVersion()
-                .map(mDiskManager.putVersionInDb())
-                .doOnError(mDiskManager.deleteUnverifiedPrinter(id));
+                .map(mDiskManager.putVersionInDb());
 
-        return Observable.concat(entityObs, verifyObs);
+        return Observable.concat(entityObs, verifyObs)
+                .doOnError(mDiskManager.deleteUnverifiedPrinter(id));
     }
 
     @Override
@@ -211,5 +212,19 @@ public class PrinterDataRepository implements PrinterRepository {
     @Override
     public Observable setActivePrinter(long id) {
         return Observable.just(mDiskManager.setActivePrinter(id));
+    }
+
+    @Override
+    public Observable verifyPrinterDetailsEdit() {
+        final long activeId = mDiskManager.getActivePrinterId();
+        PrinterDbEntity old = mDiskManager.getPrinterByEditPrefId();
+
+        Observable putEditInDb = mDiskManager.putEditPrinterDbEntityInDb();
+
+        Observable verifyObs = mApiManager.getVersion().map(mDiskManager.putVersionInDb());
+
+        return Observable.concat(putEditInDb, verifyObs)
+                .doOnError(mDiskManager.deleteFailedEdit(old, activeId))
+                .doOnCompleted(mDiskManager.resetActivePrinter(activeId));
     }
 }

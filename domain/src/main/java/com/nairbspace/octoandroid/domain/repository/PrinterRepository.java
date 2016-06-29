@@ -73,4 +73,6 @@ public interface PrinterRepository {
     Observable sendSliceCommand(SlicingCommand slicingCommand);
 
     Observable setActivePrinter(long id);
+
+    Observable verifyPrinterDetailsEdit();
 }

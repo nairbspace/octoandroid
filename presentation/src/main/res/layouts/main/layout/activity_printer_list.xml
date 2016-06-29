@@ -23,18 +23,25 @@
     </android.support.design.widget.AppBarLayout>
 
     <!-- large bottom padding is so fab doesn't block view -->
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/printer_list_recyclerview"
+
+    <com.nairbspace.octoandroid.views.RainbowRefresh
+        android:id="@+id/rainbow_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingBottom="72dp"
-        android:paddingEnd="@dimen/activity_horizontal_margin"
-        android:paddingStart="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        app:layoutManager="LinearLayoutManager"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:listitem="@layout/activity_printer_list_item"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/printer_list_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="72dp"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            app:layoutManager="LinearLayoutManager"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:listitem="@layout/activity_printer_list_item"/>
+    </com.nairbspace.octoandroid.views.RainbowRefresh>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/add_printer_fab"
