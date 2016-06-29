@@ -53,11 +53,20 @@ public class DbHelper {
     }
 
     public List<PrinterDbEntity> getPrintersFromDb() {
-        return mPrinterDbEntityDao.queryBuilder().list();
+        try {
+            return mPrinterDbEntityDao.queryBuilder().list();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public void deletePrinterInDb(PrinterDbEntity printerDbEntity) {
-        PrinterDbEntity oldPrinterDbEntity = getPrinterFromDbByName(printerDbEntity.getName());
+        PrinterDbEntity oldPrinterDbEntity;
+        if (printerDbEntity.getId() != null) {
+            oldPrinterDbEntity = getPrinterFromDbById(printerDbEntity.getId());
+        } else {
+            oldPrinterDbEntity = getPrinterFromDbByName(printerDbEntity.getName());
+        }
         if (oldPrinterDbEntity != null) {
             mPrinterDbEntityDao.delete(oldPrinterDbEntity);
         }
@@ -66,5 +75,25 @@ public class DbHelper {
     public long insertOrReplace(PrinterDbEntity printerDbEntity) {
         mPrefHelper.setSaveTimeMillis(System.currentTimeMillis());
         return mPrinterDbEntityDao.insertOrReplace(printerDbEntity);
+    }
+
+    /**
+     *
+     * @param entity the entity to be checked
+     * @return the result if entity name already exists as with a different id
+     */
+    public boolean doesPrinterNameExist(PrinterDbEntity entity) {
+        List<PrinterDbEntity> list = getPrintersFromDb();
+        if (list == null) return false;
+        for (PrinterDbEntity printerDbEntity : list) {
+            String dbName = printerDbEntity.getName();
+            String editName = entity.getName();
+            long dbId = printerDbEntity.getId();
+            long editId = entity.getId();
+            if (dbName.equals(editName) && dbId != editId) {
+                return true;
+            }
+        }
+        return false;
     }
 }

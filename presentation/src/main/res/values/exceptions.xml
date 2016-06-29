@@ -22,4 +22,5 @@
     <string name="exception_download_file_error">Error trying to download file</string>
     <string name="exception_no_active_printer">No active printer set</string>
     <string name="exception_printer_edit_failed">Edit failed</string>
+    <string name="exception_printer_name_exists">Printer name already exists</string>
 </resources>

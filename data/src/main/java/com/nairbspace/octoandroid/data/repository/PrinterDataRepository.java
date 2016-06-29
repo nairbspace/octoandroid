@@ -179,7 +179,6 @@ public class PrinterDataRepository implements PrinterRepository {
     public Observable sendToolCommand(ToolCommand toolCommand) {
         return Observable.create(mMapperHelper.mapToToolCommandEntity(toolCommand))
                 .concatMap(mApiManager.funcSendToolCommand());
-
     }
 
     @Override
@@ -189,12 +188,12 @@ public class PrinterDataRepository implements PrinterRepository {
 
     @Override
     public Observable<Boolean> isPushNotificationOn() {
-        return mDiskManager.isPushNotificationOn();
+        return Observable.just(mDiskManager.isPushNotificationOn());
     }
 
     @Override
     public Observable<Boolean> isStickyNotificationOn() {
-        return mDiskManager.isStickyNotificationOn();
+        return Observable.just(mDiskManager.isStickyNotificationOn());
     }
 
     @Override

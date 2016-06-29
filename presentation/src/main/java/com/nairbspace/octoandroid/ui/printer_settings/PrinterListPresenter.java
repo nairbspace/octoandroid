@@ -7,6 +7,7 @@ import com.nairbspace.octoandroid.domain.interactor.SetActivePrinter;
 import com.nairbspace.octoandroid.domain.interactor.SetPrinterPrefs;
 import com.nairbspace.octoandroid.domain.interactor.VerifyPrinterEdit;
 import com.nairbspace.octoandroid.domain.model.Printer;
+import com.nairbspace.octoandroid.exception.ErrorMessageFactory;
 import com.nairbspace.octoandroid.mapper.PrinterModelMapper;
 import com.nairbspace.octoandroid.model.PrinterModel;
 import com.nairbspace.octoandroid.ui.templates.UseCasePresenter;
@@ -127,7 +128,11 @@ public class PrinterListPresenter extends UseCasePresenter<PrinterListScreen> {
         @Override
         public void onError(Throwable e) {
             mScreen.setRefreshing(false);
-            mScreen.showEditFailure();
+            if (ErrorMessageFactory.doesPrinterNameExists(e)) {
+                mScreen.showNameExists();
+            } else {
+                mScreen.showEditFailure();
+            }
         }
     }
 

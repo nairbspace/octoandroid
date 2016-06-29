@@ -6,6 +6,7 @@ import com.nairbspace.octoandroid.data.entity.VersionEntity;
 import com.nairbspace.octoandroid.data.exception.ErrorSavingException;
 import com.nairbspace.octoandroid.data.exception.NoActivePrinterException;
 import com.nairbspace.octoandroid.data.exception.PrinterDataNotFoundException;
+import com.nairbspace.octoandroid.data.exception.PrinterNameNotUniqueException;
 import com.nairbspace.octoandroid.data.mapper.EntitySerializer;
 
 import java.util.List;
@@ -56,17 +57,6 @@ public class DiskManagerImpl implements DiskManager {
                 PrinterDbEntity printerDbEntity = mDbHelper.getActivePrinterDbEntity();
                 if (printerDbEntity == null) {
                     subscriber.onError(new PrinterDataNotFoundException());
-                }
-
-                // If version info is null that means never verified connection
-                if (printerDbEntity != null && printerDbEntity.getVersionJson() == null) {
-                    mAccountHelper.removeAccount(printerDbEntity); // This calls syncDbAndAccountDeletion()
-                    mPrefHelper.resetActivePrinter();
-                    subscriber.onError(new PrinterDataNotFoundException());
-                }
-
-                if (!mAccountHelper.doesPrinterExistInAccountManager(printerDbEntity)) {
-                    mAccountHelper.addAccount(printerDbEntity);
                 }
 
                 subscriber.onNext(printerDbEntity);
@@ -127,8 +117,7 @@ public class DiskManagerImpl implements DiskManager {
             @Override
             public PrinterDbEntity call(PrinterDbEntity printerDbEntity) {
                 try {
-                    syncDbActiveAndAccount(printerDbEntity);
-                    return printerDbEntity;
+                    return syncAddPrinter(printerDbEntity);
                 } catch (Exception e) {
                     throw Exceptions.propagate(new ErrorSavingException());
                 }
@@ -136,7 +125,11 @@ public class DiskManagerImpl implements DiskManager {
         };
     }
 
-    private void syncDbActiveAndAccount(PrinterDbEntity printerDbEntity) {
+    /**
+     * @param printerDbEntity the entity to be added to db, account manager, and active printer
+     * @return the entity with an id
+     */
+    private PrinterDbEntity syncAddPrinter(PrinterDbEntity printerDbEntity) {
         mAccountHelper.removeAccount(printerDbEntity); // This calls syncDbAndAccountDeletion()
         long id = mDbHelper.insertOrReplace(printerDbEntity);
 
@@ -144,9 +137,21 @@ public class DiskManagerImpl implements DiskManager {
         printerDbEntity = mDbHelper.getPrinterFromDbById(id);
 
         mPrefHelper.setActivePrinter(printerDbEntity.getId());
-        mPrefHelper.setSaveTimeMillis(System.currentTimeMillis());
-
         mAccountHelper.addAccount(printerDbEntity);
+        return printerDbEntity;
+    }
+
+    /**
+     * @param printerDbEntity the entity to be deleted in db, account manager, and if active printer
+     * @return the result of it was successful
+     */
+    private boolean syncDeletePrinter(PrinterDbEntity printerDbEntity) {
+        mAccountHelper.removeAccount(printerDbEntity); // This calls syncDbAndAccountDeletion()
+        mDbHelper.deletePrinterInDb(printerDbEntity);
+        if (printerDbEntity.getId() == null) return false;
+        long id = printerDbEntity.getId();
+        if (mPrefHelper.isPrinterActive(id)) mPrefHelper.resetActivePrinter();
+        return true;
     }
 
     @Override
@@ -207,21 +212,16 @@ public class DiskManagerImpl implements DiskManager {
         return new Func1<PrinterDbEntity, Boolean>() {
             @Override
             public Boolean call(PrinterDbEntity printerDbEntity) {
-                PrinterDbEntity oldPrinterDbEntity = mDbHelper
-                        .getPrinterFromDbByName(printerDbEntity.getName());
-
-                if (oldPrinterDbEntity == null) {
+                PrinterDbEntity old = mDbHelper.getPrinterFromDbByName(printerDbEntity.getName());
+                if (old == null) {
                     throw Exceptions.propagate(new PrinterDataNotFoundException());
                 }
 
                 // DO NOT CALL any methods related to deleting from account or you will infinite loop!
                 // ie: mAccountManager.removeAccount()
 
-                if (mPrefHelper.isPrinterActive(oldPrinterDbEntity)) {
-                    mPrefHelper.resetActivePrinter();
-                }
-
-                mDbHelper.deletePrinterInDb(oldPrinterDbEntity);
+                if (mPrefHelper.isPrinterActive(old)) mPrefHelper.resetActivePrinter();
+                mDbHelper.deletePrinterInDb(old);
                 return true;
             }
         };
@@ -232,33 +232,25 @@ public class DiskManagerImpl implements DiskManager {
         return new Func1<PrinterDbEntity, Boolean>() {
             @Override
             public Boolean call(PrinterDbEntity printerDbEntity) {
-                PrinterDbEntity oldPrinterDbEntity = mDbHelper.getPrinterFromDbById(printerDbEntity.getId());
-                if (oldPrinterDbEntity == null) {
-                    throw Exceptions.propagate(new PrinterDataNotFoundException());
+                try {
+                    syncDeletePrinter(printerDbEntity);
+                    return true;
+                } catch (Exception e) {
+                    throw Exceptions.propagate(e);
                 }
-
-                mAccountHelper.removeAccount(oldPrinterDbEntity);
-
-                if (mPrefHelper.isPrinterActive(oldPrinterDbEntity)) {
-                    mPrefHelper.resetActivePrinter();
-                }
-
-                mDbHelper.deletePrinterInDb(oldPrinterDbEntity);
-                return true;
             }
         };
     }
 
     @Override
-    public Action1<Throwable> deleteUnverifiedPrinter(final long id) {
+    public Action1<Throwable> deleteUnverifiedPrinter(final long previousActiveId) {
         return new Action1<Throwable>() {
             @Override
             public void call(Throwable throwable) {
                 try {
                     PrinterDbEntity printerDbEntity = mDbHelper.getActivePrinterDbEntity();
-                    mDbHelper.deletePrinterInDb(printerDbEntity);
-                    mAccountHelper.removeAccount(printerDbEntity);
-                    mPrefHelper.setActivePrinter(id);
+                    syncDeletePrinter(printerDbEntity);
+                    mPrefHelper.setActivePrinter(previousActiveId);
                 } catch (Exception e) {
                     throw Exceptions.propagate(new PrinterDataNotFoundException(e));
                 }
@@ -290,7 +282,6 @@ public class DiskManagerImpl implements DiskManager {
     public boolean isExpired() {
         long currentTime = System.currentTimeMillis();
         long lastUpdateTime = mPrefHelper.getLastSaveTimeMillis();
-
         return ((currentTime - lastUpdateTime) > EXPIRATION_TIME);
     }
 
@@ -301,13 +292,9 @@ public class DiskManagerImpl implements DiskManager {
             public ConnectionEntity call(PrinterDbEntity printerDbEntity) {
                 try {
                     String json = printerDbEntity.getConnectionJson();
-                    ConnectionEntity connectionEntity = mEntitySerializer
-                            .deserialize(json, ConnectionEntity.class);
-                    if (connectionEntity != null) {
-                        return connectionEntity;
-                    } else {
-                        throw Exceptions.propagate(new PrinterDataNotFoundException());
-                    }
+                    ConnectionEntity entity = mEntitySerializer.deserialize(json, ConnectionEntity.class);
+                    if (entity == null) throw Exceptions.propagate(new PrinterDataNotFoundException());
+                    return entity;
                 } catch (Exception e) {
                     throw Exceptions.propagate(new PrinterDataNotFoundException(e));
                 }
@@ -316,35 +303,13 @@ public class DiskManagerImpl implements DiskManager {
     }
 
     @Override
-    public Observable<Boolean> isPushNotificationOn() {
-        return Observable.create(new Observable.OnSubscribe<Boolean>() {
-            @Override
-            public void call(Subscriber<? super Boolean> subscriber) {
-                try {
-                    boolean isPushNotificationOn = mPrefHelper.isPushNotificationOn();
-                    subscriber.onNext(isPushNotificationOn);
-                    subscriber.onCompleted();
-                } catch (Exception e) {
-                    subscriber.onError(e);
-                }
-            }
-        });
+    public boolean isPushNotificationOn() {
+        return mPrefHelper.isPushNotificationOn();
     }
 
     @Override
-    public Observable<Boolean> isStickyNotificationOn() {
-        return Observable.create(new Observable.OnSubscribe<Boolean>() {
-            @Override
-            public void call(Subscriber<? super Boolean> subscriber) {
-                try {
-                    boolean isStickyNotificationOn = mPrefHelper.isStickyNotificationOn();
-                    subscriber.onNext(isStickyNotificationOn);
-                    subscriber.onCompleted();
-                } catch (Exception e) {
-                    subscriber.onError(e);
-                }
-            }
-        });
+    public boolean isStickyNotificationOn() {
+        return mPrefHelper.isStickyNotificationOn();
     }
 
     @Override
@@ -370,12 +335,16 @@ public class DiskManagerImpl implements DiskManager {
             @Override
             public void call(Subscriber<? super Object> subscriber) {
                 try {
+                    PrinterDbEntity entity = mPrefHelper.getEditPrinterDbEntity();
+                    if (mDbHelper.doesPrinterNameExist(entity)) {
+                        subscriber.onError(new PrinterNameNotUniqueException());
+                    }
+
                     // Need to delete from AccountManager or will get multiple accounts
                     PrinterDbEntity old = getPrinterByEditPrefId();
-                    mAccountHelper.removeAccount(old); // This calls syncDbAndAccountDeletion()
+                    syncDeletePrinter(old);
 
-                    PrinterDbEntity entity = mPrefHelper.getEditPrinterDbEntity();
-                    syncDbActiveAndAccount(entity);
+                    syncAddPrinter(entity);
                     subscriber.onCompleted();
                 } catch (Exception e) {
                     subscriber.onError(e);
@@ -385,22 +354,22 @@ public class DiskManagerImpl implements DiskManager {
     }
 
     @Override
-    public Action1<Throwable> deleteFailedEdit(final PrinterDbEntity oldEntity, final long activeId) {
+    public Action1<Throwable> deleteFailedEdit(final PrinterDbEntity oldEntity, final long previousActiveId) {
         return new Action1<Throwable>() {
             @Override
             public void call(Throwable throwable) {
-                syncDbActiveAndAccount(oldEntity);
-                mPrefHelper.setActivePrinter(activeId);
+                syncAddPrinter(oldEntity);
+                mPrefHelper.setActivePrinter(previousActiveId);
             }
         };
     }
 
     @Override
-    public Action0 resetActivePrinter(final long activeId) {
+    public Action0 resetActivePrinter(final long previousActiveId) {
         return new Action0() {
             @Override
             public void call() {
-                mPrefHelper.setActivePrinter(activeId);
+                mPrefHelper.setActivePrinter(previousActiveId);
             }
         };
     }

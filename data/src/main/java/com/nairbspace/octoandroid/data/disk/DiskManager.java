@@ -43,9 +43,9 @@ public interface DiskManager {
 
     Func1<PrinterDbEntity, ConnectionEntity> getConnectionInDb();
 
-    Observable<Boolean> isPushNotificationOn();
+    boolean isPushNotificationOn();
 
-    Observable<Boolean> isStickyNotificationOn();
+    boolean isStickyNotificationOn();
 
     long setActivePrinter(long id);
 

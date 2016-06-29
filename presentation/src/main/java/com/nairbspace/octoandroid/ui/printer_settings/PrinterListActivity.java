@@ -32,6 +32,7 @@ public class PrinterListActivity extends BaseActivity<PrinterListScreen>
         implements PrinterListScreen, PrinterListRvAdapter.Listener, SwipeRefreshLayout.OnRefreshListener {
 
     @BindString(R.string.exception_printer_edit_failed) String EDIT_FAILED;
+    @BindString(R.string.exception_printer_name_exists) String NAME_EXISTS;
 
     @Inject PrinterListPresenter mPresenter;
     @BindView(R.id.toolbar) Toolbar mToolbar;
@@ -174,6 +175,11 @@ public class PrinterListActivity extends BaseActivity<PrinterListScreen>
     @Override
     public void showEditFailure() {
         showSnackbar(EDIT_FAILED);
+    }
+
+    @Override
+    public void showNameExists() {
+        showSnackbar(NAME_EXISTS);
     }
 
     @Override

@@ -14,6 +14,8 @@ public interface PrinterListScreen {
 
     void showEditFailure();
 
+    void showNameExists();
+
     void navigateToStatusActivity();
 
     void deleteFromAdapter(int position);

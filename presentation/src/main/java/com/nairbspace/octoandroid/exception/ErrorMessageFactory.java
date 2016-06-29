@@ -8,9 +8,12 @@ import com.nairbspace.octoandroid.data.exception.IpAddressEmptyException;
 import com.nairbspace.octoandroid.data.exception.NetworkConnectionException;
 import com.nairbspace.octoandroid.data.exception.NoActivePrinterException;
 import com.nairbspace.octoandroid.data.exception.PrinterDataNotFoundException;
+import com.nairbspace.octoandroid.data.exception.PrinterNameNotUniqueException;
 
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
+
+import javax.net.ssl.SSLHandshakeException;
 
 public class ErrorMessageFactory {
 
@@ -55,6 +58,11 @@ public class ErrorMessageFactory {
     }
 
     public static boolean ifSslError(Context context, Throwable t) {
-        return t.getMessage() != null && t.getMessage().contains(context.getResources().getString(R.string.exception_ssl_error));
+        return t instanceof SSLHandshakeException || t.getMessage() != null &&
+                t.getMessage().contains(context.getResources().getString(R.string.exception_ssl_error));
+    }
+
+    public static boolean doesPrinterNameExists(Throwable t) {
+        return t instanceof PrinterNameNotUniqueException;
     }
 }
