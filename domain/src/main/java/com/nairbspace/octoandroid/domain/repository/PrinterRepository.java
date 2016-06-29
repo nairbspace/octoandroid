@@ -32,7 +32,7 @@ public interface PrinterRepository {
 
     Observable setPrinterPrefs(long id);
 
-    Observable<Boolean> deletePrinterByName(String name);
+    Observable<Boolean> syncDbAndAccountDeletion(String name);
 
     Observable<Boolean> deletePrinterById(long id);
 

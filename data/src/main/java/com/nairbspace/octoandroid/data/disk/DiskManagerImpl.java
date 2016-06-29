@@ -196,8 +196,11 @@ public class DiskManagerImpl implements DiskManager {
         };
     }
 
+    /**
+     * This is used to sync the database when deleting from account manager.
+     */
     @Override
-    public Func1<PrinterDbEntity, Boolean> deletePrinterByName() {
+    public Func1<PrinterDbEntity, Boolean> syncDbAndAccountDeletion() {
         return new Func1<PrinterDbEntity, Boolean>() {
             @Override
             public Boolean call(PrinterDbEntity printerDbEntity) {
@@ -207,6 +210,9 @@ public class DiskManagerImpl implements DiskManager {
                 if (oldPrinterDbEntity == null) {
                     throw Exceptions.propagate(new PrinterDataNotFoundException());
                 }
+
+                // DO NOT CALL any methods related to deleting from account or you will infinite loop!
+                // ie: mAccountManager.removeAccount()
 
                 if (mPrefHelper.isPrinterActive(oldPrinterDbEntity)) {
                     mPrefHelper.resetActivePrinter();

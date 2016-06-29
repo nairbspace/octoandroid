@@ -8,20 +8,20 @@ import javax.inject.Inject;
 
 import rx.Observable;
 
-public class DeletePrinterByName extends UseCaseInput<String> {
+public class SyncDbAndAccountDeletion extends UseCaseInput<String> {
 
     private final PrinterRepository mPrinterRepository;
 
     @Inject
-    public DeletePrinterByName(ThreadExecutor threadExecutor,
-                               PostExecutionThread postExecutionThread,
-                               PrinterRepository printerRepository) {
+    public SyncDbAndAccountDeletion(ThreadExecutor threadExecutor,
+                                    PostExecutionThread postExecutionThread,
+                                    PrinterRepository printerRepository) {
         super(threadExecutor, postExecutionThread);
         mPrinterRepository = printerRepository;
     }
 
     @Override
     protected Observable buildUseCaseObservableInput(String s) {
-        return mPrinterRepository.deletePrinterByName(s);
+        return mPrinterRepository.syncDbAndAccountDeletion(s);
     }
 }

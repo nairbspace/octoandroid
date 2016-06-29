@@ -8,13 +8,10 @@ import android.accounts.NetworkErrorException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.widget.Toast;
 
-import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
 import com.nairbspace.octoandroid.domain.interactor.DefaultSubscriber;
-import com.nairbspace.octoandroid.domain.interactor.DeletePrinterByName;
+import com.nairbspace.octoandroid.domain.interactor.SyncDbAndAccountDeletion;
 import com.nairbspace.octoandroid.ui.add_printer.AddPrinterActivity;
 
 import javax.inject.Inject;
@@ -22,13 +19,13 @@ import javax.inject.Inject;
 public class Authenticator extends AbstractAccountAuthenticator {
 
     private final Context mContext;
-    private final Handler mHandler;
-    @Inject DeletePrinterByName mPrinterDetailsByName;
+//    private final Handler mHandler;
+    @Inject SyncDbAndAccountDeletion mSyncWithDb;
 
     public Authenticator(Context context) {
         super(context);
         mContext = context;
-        mHandler = new Handler();
+//        mHandler = new Handler();
         SetupApplication.get(context).getAppComponent().inject(this);
     }
 
@@ -87,30 +84,16 @@ public class Authenticator extends AbstractAccountAuthenticator {
 //        }
 
         String name = account.name;
-        mPrinterDetailsByName.execute(new GetPrinterDetailsSubscriber(), name);
+        mSyncWithDb.execute(new DefaultSubscriber() {}, name);
         result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, true);
         return result;
     }
 
-    private Runnable toastRunnable = new Runnable() {
-        @Override
-        public void run() {
-            String message = mContext.getString(R.string.app_running_cannot_delete_account);
-            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-        }
-    };
-
-    private final class GetPrinterDetailsSubscriber extends DefaultSubscriber<Boolean> {
-
-        @Override
-        public void onError(Throwable e) {
-            e.printStackTrace();
-            // TODO should log this somehow in case to try later
-        }
-
-        @Override
-        public void onNext(Boolean printer) {
-
-        }
-    }
+//    private Runnable toastRunnable = new Runnable() {
+//        @Override
+//        public void run() {
+//            String message = mContext.getString(R.string.app_running_cannot_delete_account);
+//            Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+//        }
+//    };
 }

@@ -30,7 +30,7 @@ public interface DiskManager {
 
     Action1<ConnectionEntity> putConnectionInDb();
 
-    Func1<PrinterDbEntity, Boolean> deletePrinterByName();
+    Func1<PrinterDbEntity, Boolean> syncDbAndAccountDeletion();
 
     Func1<PrinterDbEntity, Boolean> deletePrinterById();
 

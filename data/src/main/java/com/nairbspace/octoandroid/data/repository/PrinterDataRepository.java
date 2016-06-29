@@ -90,9 +90,9 @@ public class PrinterDataRepository implements PrinterRepository {
     }
 
     @Override
-    public Observable<Boolean> deletePrinterByName(String name) {
+    public Observable<Boolean> syncDbAndAccountDeletion(String name) {
         return Observable.create(mDiskManager.getPrinterByName(name))
-                .map(mDiskManager.deletePrinterByName());
+                .map(mDiskManager.syncDbAndAccountDeletion());
     }
 
     @Override
