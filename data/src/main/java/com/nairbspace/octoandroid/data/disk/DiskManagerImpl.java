@@ -247,7 +247,7 @@ public class DiskManagerImpl implements DiskManager {
     }
 
     @Override
-    public Action1<Throwable> deleteUnverifiedPrinter() {
+    public Action1<Throwable> deleteUnverifiedPrinter(final long id) {
         return new Action1<Throwable>() {
             @Override
             public void call(Throwable throwable) {
@@ -255,7 +255,7 @@ public class DiskManagerImpl implements DiskManager {
                     PrinterDbEntity printerDbEntity = mDbHelper.getActivePrinterDbEntity();
                     mDbHelper.deletePrinterInDb(printerDbEntity);
                     mAccountHelper.removeAccount(printerDbEntity);
-                    mPrefHelper.resetActivePrinter();
+                    mPrefHelper.setActivePrinter(id);
                 } catch (Exception e) {
                     throw Exceptions.propagate(new PrinterDataNotFoundException(e));
                 }
@@ -348,5 +348,10 @@ public class DiskManagerImpl implements DiskManager {
     public long setActivePrinter(long id) {
         mPrefHelper.setActivePrinter(id);
         return id;
+    }
+
+    @Override
+    public long getActivePrinterId() {
+        return mPrefHelper.getActivePrinter();
     }
 }

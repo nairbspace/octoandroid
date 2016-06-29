@@ -63,7 +63,6 @@ public class PrinterListActivity extends BaseActivity<PrinterListScreen>
 
     @OnClick(R.id.add_printer_fab)
     void addPrinter() {
-        // TODO if printer fails to add will lose active printer
         getNavigator().navigateToAddPrinterActivityForResult(this);
     }
 

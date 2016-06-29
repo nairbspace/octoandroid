@@ -34,7 +34,7 @@ public interface DiskManager {
 
     Func1<PrinterDbEntity, Boolean> deletePrinterById();
 
-    Action1<Throwable> deleteUnverifiedPrinter();
+    Action1<Throwable> deleteUnverifiedPrinter(long id);
 
     boolean isSaved();
 
@@ -47,4 +47,6 @@ public interface DiskManager {
     Observable<Boolean> isStickyNotificationOn();
 
     long setActivePrinter(long id);
+
+    long getActivePrinterId();
 }
