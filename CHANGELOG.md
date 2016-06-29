@@ -1,6 +1,14 @@
 Change Log
 ==========
 
+Version 1.7.0 *(2016-06-29)*
+----------------------------
+
+ * Feature: Able to add/edit/delete multiple printers
+ 
+ * Added help guide for adding printer
+ * Added additional checks for some edge case crashes
+ 
 Version 1.6.1 *(2016-06-26)*
 ----------------------------
 
