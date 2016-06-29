@@ -31,4 +31,8 @@ public interface ApiManager extends OctoApi {
     Func1<Object, Observable<?>> funcSendToolCommand();
 
     Func1<SlicingCommandEntity, Observable<?>> funcSendSliceCommand(String apiUrl);
+
+    Func1<Object, Observable<?>> funcSendArbitraryCommand();
+
+    Func1<Object, Observable<?>> funcSelectTool();
 }

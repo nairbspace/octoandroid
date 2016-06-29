@@ -172,7 +172,8 @@ public class PrinterDataRepository implements PrinterRepository {
 
     @Override
     public Observable selectTool(int tool) {
-        return mApiManager.selectTool(mMapperHelper.mapToToolCommandEntitySelect(tool));
+        return Observable.just(mMapperHelper.mapToToolCommandEntitySelect(tool))
+                .concatMap(mApiManager.funcSelectTool());
     }
 
     @Override
@@ -183,7 +184,8 @@ public class PrinterDataRepository implements PrinterRepository {
 
     @Override
     public Observable sendArbitraryCommand(ArbitraryCommand arbitraryCommand) {
-        return mApiManager.sendArbitraryCommand(mMapperHelper.mapToArbitraryCommandEntity(arbitraryCommand));
+        return Observable.just(mMapperHelper.mapToArbitraryCommandEntity(arbitraryCommand))
+                .concatMap(mApiManager.funcSendArbitraryCommand());
     }
 
     @Override

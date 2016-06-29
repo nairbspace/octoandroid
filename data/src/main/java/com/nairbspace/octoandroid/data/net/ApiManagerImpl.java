@@ -210,4 +210,24 @@ public class ApiManagerImpl implements ApiManager {
             }
         };
     }
+
+    @Override
+    public Func1<Object, Observable<?>> funcSendArbitraryCommand() {
+        return new Func1<Object, Observable<?>>() {
+            @Override
+            public Observable<?> call(Object o) {
+                return sendArbitraryCommand(o);
+            }
+        };
+    }
+
+    @Override
+    public Func1<Object, Observable<?>> funcSelectTool() {
+        return new Func1<Object, Observable<?>>() {
+            @Override
+            public Observable<?> call(Object o) {
+                return selectTool(o);
+            }
+        };
+    }
 }
