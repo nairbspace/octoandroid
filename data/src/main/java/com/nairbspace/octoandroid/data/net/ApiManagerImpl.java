@@ -1,7 +1,7 @@
 package com.nairbspace.octoandroid.data.net;
 
 import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
-import com.nairbspace.octoandroid.data.disk.PrefHelper;
+import com.nairbspace.octoandroid.data.disk.DbHelper;
 import com.nairbspace.octoandroid.data.entity.ConnectEntity;
 import com.nairbspace.octoandroid.data.entity.ConnectionEntity;
 import com.nairbspace.octoandroid.data.entity.FileCommandEntity;
@@ -33,12 +33,12 @@ public class ApiManagerImpl implements ApiManager {
     private static final String BED_PATH = "bed";
 
     private final OctoApi mOctoApi;
-    private final PrefHelper mPrefHelper;
+    private final DbHelper mDbHelper;
 
     @Inject
-    public ApiManagerImpl(OctoApi octoApi, PrefHelper prefHelper) {
+    public ApiManagerImpl(OctoApi octoApi, DbHelper dbHelper) {
         mOctoApi = octoApi;
-        mPrefHelper = prefHelper;
+        mDbHelper = dbHelper;
     }
 
     @Override
@@ -157,10 +157,10 @@ public class ApiManagerImpl implements ApiManager {
 
     @Override
     public Func1<MultipartBody.Part, Observable<?>> funcUploadFile() {
-        final String location = mPrefHelper.getUploadLocation();
         return new Func1<MultipartBody.Part, Observable<?>>() {
             @Override
             public Observable call(MultipartBody.Part part) {
+                String location = mDbHelper.getActivePrinterDbEntity().getUploadLocation();
                 return uploadFile(location, part);
             }
         };

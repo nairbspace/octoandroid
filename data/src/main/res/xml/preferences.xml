@@ -2,17 +2,6 @@
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- TODO this won't work with multiple printers -->
-    <PreferenceCategory
-        android:title="@string/prefs_server_settings_category_title">
-        <ListPreference
-            android:title="@string/prefs_printer_upload_location_title"
-            android:key="@string/prefs_printer_upload_location_key"
-            android:defaultValue="@string/prefs_printer_upload_location_local_value"
-            android:entryValues="@array/prefs_upload_location_values"
-            android:entries="@array/prefs_upload_location_options"/>
-    </PreferenceCategory>
-
     <PreferenceCategory
         android:title="@string/prefs_update_settings_category_title">
         <SwitchPreference
