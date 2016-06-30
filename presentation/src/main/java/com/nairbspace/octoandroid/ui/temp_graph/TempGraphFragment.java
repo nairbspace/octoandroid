@@ -181,7 +181,6 @@ public class TempGraphFragment extends BasePagerFragmentListener<TempGraphScreen
         addEntry(getIndex(TARGET_TEMP_TOOL0_LABEL), websocketModel.targetTempTool0());
         addEntry(getIndex(ACTUAL_TEMP_TOOL1_LABEL), websocketModel.actualTempTool1());
         addEntry(getIndex(TARGET_TEMP_TOOL1_LABEL), websocketModel.targetTempTool1());
-
         updateChart();
     }
 
@@ -195,9 +194,7 @@ public class TempGraphFragment extends BasePagerFragmentListener<TempGraphScreen
     public void updateChart() {
         mLineChart.notifyDataSetChanged();
         mLineChart.setVisibleXRangeMaximum(VISIBLE_X_RANGE_MAX);
-
-        // Not sure why -2 works, should be -1
-        mLineChart.moveViewToX(mLineChart.getData().getXValCount() - VISIBLE_X_RANGE_MAX - 2); // Calls invalidate
+        mLineChart.moveViewToX(mLineChart.getData().getXValCount() - VISIBLE_X_RANGE_MAX - 1); // Calls invalidate
     }
 
     @Override
