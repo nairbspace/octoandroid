@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/console_lock_menu_item"
+        android:icon="@drawable/ic_lock_open_white_24dp"
+        android:title="@string/unlock"
+        app:showAsAction="ifRoom|withText"/>
+    <item
+        android:id="@+id/console_stop_auto_scroll_menu_item"
+        android:icon="@drawable/ic_close_white_24dp"
+        android:title="@string/disable_autoscroll"
+        app:showAsAction="ifRoom|withText"/>
+
+</menu>

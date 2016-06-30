@@ -14,4 +14,6 @@
     <color name="chart_target_temp_tool_zero_color">#FFCC80</color>
     <color name="chart_actual_temp_tool_one_color">#2196F3</color>
     <color name="chart_target_temp_tool_one_color">#90CAF9</color>
+
+    <color name="terminal_background">#E0E0E0</color>
 </resources>
