@@ -18,6 +18,10 @@
             android:id="@+id/nav_slicer"
             android:icon="@drawable/ic_content_cut_black_24dp"
             android:title="@string/slicer"/>
+        <item
+            android:id="@+id/nav_terminal"
+            android:icon="@drawable/ic_settings_overscan_black_24px_terminal"
+            android:title="@string/terminal"/>
         <!--<item-->
             <!--android:id="@+id/nav_slideshow"-->
             <!--android:icon="@android:drawable/ic_menu_slideshow"-->

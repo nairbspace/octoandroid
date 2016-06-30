@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.ui.terminal;
+package com.nairbspace.octoandroid.ui.terminal.console;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;

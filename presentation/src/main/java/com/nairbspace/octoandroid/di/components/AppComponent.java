@@ -24,7 +24,8 @@ import com.nairbspace.octoandroid.ui.status.StatusActivity;
 import com.nairbspace.octoandroid.ui.temp.TempActivity;
 import com.nairbspace.octoandroid.ui.temp_controls.TempControlsFragment;
 import com.nairbspace.octoandroid.ui.temp_graph.TempGraphFragment;
-import com.nairbspace.octoandroid.ui.terminal.ConsoleFragment;
+import com.nairbspace.octoandroid.ui.terminal.TerminalActivity;
+import com.nairbspace.octoandroid.ui.terminal.console.ConsoleFragment;
 import com.nairbspace.octoandroid.ui.webcam.WebcamActivity;
 
 import javax.inject.Singleton;
@@ -76,4 +77,6 @@ public interface AppComponent {
     void inject(SlicingFragment slicingFragment);
 
     void inject(ConsoleFragment consoleFragment);
+
+    void inject(TerminalActivity terminalActivity);
 }

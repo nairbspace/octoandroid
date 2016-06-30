@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.ui.terminal;
+package com.nairbspace.octoandroid.ui.terminal.console;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

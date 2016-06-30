@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.ui.terminal;
+package com.nairbspace.octoandroid.ui.terminal.console;
 
 public interface ConsoleScreen {
 

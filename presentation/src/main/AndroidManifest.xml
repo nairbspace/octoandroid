@@ -64,6 +64,9 @@
         <activity android:name=".ui.slicer.SlicerActivity"
                   android:label="@string/slicer"
                   android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.terminal.TerminalActivity"
+                  android:label="@string/terminal"
+                  android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".ui.settings.SettingsActivity"
             android:theme="@style/AppTheme"

@@ -1,4 +1,4 @@
-package com.nairbspace.octoandroid.ui.terminal;
+package com.nairbspace.octoandroid.ui.terminal.console;
 
 import com.nairbspace.octoandroid.model.WebsocketModel;
 import com.nairbspace.octoandroid.ui.templates.EventPresenter;

@@ -32,6 +32,8 @@ import com.nairbspace.octoandroid.ui.status.StatusActivity;
 import com.nairbspace.octoandroid.ui.status.StatusFragmentPagerAdapter;
 import com.nairbspace.octoandroid.ui.temp.TempActivity;
 import com.nairbspace.octoandroid.ui.temp.TempFragmentPagerAdapter;
+import com.nairbspace.octoandroid.ui.terminal.TerminalActivity;
+import com.nairbspace.octoandroid.ui.terminal.TerminalPagerAdapter;
 import com.nairbspace.octoandroid.views.LockSwipeViewPager;
 
 import javax.inject.Inject;
@@ -210,6 +212,12 @@ public abstract class BaseNavActivity<T> extends BaseActivity<T>
                     overridePendingTransition(mFadeIn, mFadeOut);
                 }
                 break;
+            case R.id.nav_terminal:
+                if (!(this instanceof TerminalActivity)) {
+                    getNavigator().navigateToTerminalActivity(this);
+                    overridePendingTransition(mFadeIn, mFadeOut);
+                }
+                break;
             case R.id.nav_webcam:
                 getNavigator().navigateToWebcam(this);
                 break;
@@ -235,6 +243,8 @@ public abstract class BaseNavActivity<T> extends BaseActivity<T>
             mNavView.setCheckedItem(R.id.nav_controls);
         } else if (pagerAdapter instanceof SlicerPagerAdapter) {
             mNavView.setCheckedItem(R.id.nav_slicer);
+        } else if (pagerAdapter instanceof TerminalPagerAdapter) {
+            mNavView.setCheckedItem(R.id.nav_terminal);
         }
     }
 

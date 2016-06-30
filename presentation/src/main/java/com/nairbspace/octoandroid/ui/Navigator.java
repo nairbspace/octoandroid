@@ -32,6 +32,7 @@ import com.nairbspace.octoandroid.ui.settings.SettingsActivity;
 import com.nairbspace.octoandroid.ui.slicer.SlicerActivity;
 import com.nairbspace.octoandroid.ui.status.StatusActivity;
 import com.nairbspace.octoandroid.ui.temp.TempActivity;
+import com.nairbspace.octoandroid.ui.terminal.TerminalActivity;
 import com.nairbspace.octoandroid.ui.webcam.WebcamActivity;
 
 import javax.inject.Inject;
@@ -132,6 +133,12 @@ public class Navigator {
 
     public void navigateToSlicerActivity(Context context, @Nullable String apiUrl) {
         Intent i = SlicerActivity.newIntent(context, apiUrl);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(i);
+    }
+
+    public void navigateToTerminalActivity(Context context) {
+        Intent i = TerminalActivity.newIntent(context);
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(i);
     }
