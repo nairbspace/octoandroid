@@ -3,7 +3,6 @@ package com.nairbspace.octoandroid.ui.add_printer;
 import android.content.Context;
 
 import com.nairbspace.octoandroid.domain.interactor.AddPrinterDetails;
-import com.nairbspace.octoandroid.domain.interactor.VerifyPrinterDetails;
 import com.nairbspace.octoandroid.mapper.AddPrinterModelMapper;
 import com.nairbspace.octoandroid.model.AddPrinterModel;
 
@@ -23,7 +22,6 @@ public class AddPrinterPresenterTest {
 
     private AddPrinterPresenter mAddPrinterPresenter;
 
-    @Mock VerifyPrinterDetails mVerifyPrinterDetails;
     @Mock AddPrinterModelMapper mAddPrinterModelMapper;
     @Mock AddPrinterDetails mAddPrinterDetails;
     @Mock AddPrinterScreen mScreen;
@@ -40,8 +38,7 @@ public class AddPrinterPresenterTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        mAddPrinterPresenter = new AddPrinterPresenter(
-                mVerifyPrinterDetails, mAddPrinterModelMapper, mAddPrinterDetails);
+        mAddPrinterPresenter = new AddPrinterPresenter(mAddPrinterModelMapper, mAddPrinterDetails);
         mAddPrinterPresenter.onInitialize(mScreen);
     }
 
@@ -59,7 +56,6 @@ public class AddPrinterPresenterTest {
 
     private void noInteractions() {
         verifyNoMoreInteractions(mAddPrinterModelMapper);
-        verifyNoMoreInteractions(mVerifyPrinterDetails);
         verifyNoMoreInteractions(mAddPrinterDetails);
         verifyNoMoreInteractions(mScreen);
     }

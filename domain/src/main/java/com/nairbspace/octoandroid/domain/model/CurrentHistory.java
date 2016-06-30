@@ -17,7 +17,7 @@ public abstract class CurrentHistory {
 //    @Nullable @SerializedName("currentZ") public abstract Double currentZ();
 //    @Nullable @SerializedName("offsets") public abstract Offsets offsets();
     @Nullable @SerializedName("temps") public abstract List<Temps> temps();
-//    @Nullable @SerializedName("logs") public abstract List<String> logs();
+    @Nullable @SerializedName("logs") public abstract List<String> logs();
 //    @Nullable @SerializedName("messages") public abstract List<String> messages();
 //    @Nullable @SerializedName("serverTime") public abstract Double serverTime(); // Pretty sure unix time, not in doc
 //    @Nullable @SerializedName("busyFiles") public abstract List<BusyFiles> busyFiles(); // Not in docs

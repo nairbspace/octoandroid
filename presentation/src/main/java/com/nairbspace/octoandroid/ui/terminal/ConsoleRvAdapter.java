@@ -22,6 +22,10 @@ public class ConsoleRvAdapter extends RecyclerView.Adapter<ConsoleViewHolder> {
         notifyItemInserted(mLogList.size());
     }
 
+    public List<String> getLogList() {
+        return mLogList;
+    }
+
     @Override
     public ConsoleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())

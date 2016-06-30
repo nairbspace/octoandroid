@@ -7,6 +7,7 @@ import com.nairbspace.octoandroid.domain.model.Websocket;
 import com.nairbspace.octoandroid.exception.TransformErrorException;
 import com.nairbspace.octoandroid.model.WebsocketModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -16,6 +17,7 @@ import rx.Subscriber;
 
 public class WebsocketModelMapper extends MapperUseCase<Websocket, WebsocketModel> {
 
+    private List<String> mLogs;
     private String mState = "";
     private String mFile = "";
     private String mApproxTotalPrintTime = "";
@@ -84,6 +86,10 @@ public class WebsocketModelMapper extends MapperUseCase<Websocket, WebsocketMode
 
         List<CurrentHistory.Temps> temps = currentHistory.temps();
         if (temps != null) parseTemps(temps);
+
+        List<String> logs = currentHistory.logs();
+        if (logs == null) mLogs = new ArrayList<>();
+        else mLogs = logs;
     }
 
     private void parseState(CurrentHistory.State state, Subscriber subscriber) {
@@ -181,6 +187,7 @@ public class WebsocketModelMapper extends MapperUseCase<Websocket, WebsocketMode
 
     private WebsocketModel mapToWebsocketModel() {
         return WebsocketModel.builder()
+                .logs(mLogs)
                 .state(mState)
                 .file(mFile)
                 .approxTotalPrintTime(mApproxTotalPrintTime)

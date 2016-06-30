@@ -4,8 +4,11 @@ import android.os.Parcelable;
 
 import com.google.auto.value.AutoValue;
 
+import java.util.List;
+
 @AutoValue
 public abstract class WebsocketModel implements Parcelable {
+    public abstract List<String> logs();
     public abstract String state();
     public abstract String file();
     public abstract String approxTotalPrintTime();
@@ -37,6 +40,7 @@ public abstract class WebsocketModel implements Parcelable {
 
     @AutoValue.Builder
     public static abstract class Builder {
+        public abstract Builder logs(List<String> logs);
         public abstract Builder state(String state);
         public abstract Builder file(String file);
         public abstract Builder approxTotalPrintTime(String approxTotalPrintTime);

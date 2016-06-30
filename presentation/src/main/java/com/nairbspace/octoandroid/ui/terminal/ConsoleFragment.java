@@ -19,6 +19,7 @@ import com.nairbspace.octoandroid.ui.templates.BasePagerFragmentListener;
 import com.nairbspace.octoandroid.ui.templates.Presenter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -48,8 +49,6 @@ public class ConsoleFragment extends BasePagerFragmentListener<ConsoleScreen, Co
     @BindDrawable(R.drawable.ic_lock_open_white_24dp) Drawable mUnlockDrawable;
     @BindDrawable(R.drawable.ic_lock_outline_white_24dp) Drawable mLockDrawable;
     private View mMainView;
-    private ArrayList<String> mLogList;
-    private ConsoleRvAdapter mAdapter;
     private boolean mIsAutoScrollEnabled = true;
 
     public static ConsoleFragment newInstance() {
@@ -68,35 +67,50 @@ public class ConsoleFragment extends BasePagerFragmentListener<ConsoleScreen, Co
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mMainView = inflater.inflate(R.layout.fragment_console, container, false);
         setUnbinder(ButterKnife.bind(this, mMainView));
-        if (savedInstanceState == null) mLogList = new ArrayList<>();
-        else mLogList = restoreInstance(savedInstanceState);
-        mAdapter = new ConsoleRvAdapter(mLogList); // Passes field instance
-        mRecyclerView.setAdapter(mAdapter);
+        List<String> logList;
+        if (savedInstanceState == null) logList = new ArrayList<>();
+        else logList = restoreInstance(savedInstanceState);
+        ConsoleRvAdapter adapter = new ConsoleRvAdapter(logList);
+        mRecyclerView.setAdapter(adapter);
         return mMainView;
     }
 
-    private ArrayList<String> restoreInstance(Bundle savedInstanceState) {
+    private List<String> restoreInstance(Bundle savedInstanceState) {
         mIsAutoScrollEnabled = savedInstanceState.getBoolean(AUTO_SCROLL_KEY);
         boolean lock = savedInstanceState.getBoolean(LOCK_KEY);
         ViewCompat.setNestedScrollingEnabled(mMainView, lock);
-        return savedInstanceState.getStringArrayList(LOG_LIST_KEY);
+        List<String> logList = savedInstanceState.getStringArrayList(LOG_LIST_KEY);
+        if (logList == null) return new ArrayList<>();
+        else return logList;
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        // This list is updated from within adapter since it was passed in constructor
-        outState.putStringArrayList(LOG_LIST_KEY, mLogList);
         outState.putBoolean(LOCK_KEY, ViewCompat.isNestedScrollingEnabled(mMainView));
         outState.putBoolean(AUTO_SCROLL_KEY, mIsAutoScrollEnabled);
+        if (mRecyclerView.getAdapter() == null) return;
+        ConsoleRvAdapter adapter = ((ConsoleRvAdapter) mRecyclerView.getAdapter());
+        ArrayList<String> logLost = (ArrayList<String>) adapter.getLogList();
+        outState.putStringArrayList(LOG_LIST_KEY, logLost);
     }
 
     @Override
     public void updateUi(String log) {
-        mAdapter.addLogItem(log);
+        ConsoleRvAdapter adapter;
+        if (mRecyclerView.getAdapter() == null) {
+            List<String> logList = new ArrayList<>();
+            logList.add(log);
+            adapter = new ConsoleRvAdapter(logList);
+            mRecyclerView.setAdapter(adapter);
+        } else {
+            adapter = ((ConsoleRvAdapter) mRecyclerView.getAdapter());
+            adapter.addLogItem(log);
+        }
+
         if (mIsAutoScrollEnabled) {
             mRecyclerView.setVerticalScrollBarEnabled(false);
-            mRecyclerView.scrollToPosition(mAdapter.getItemCount() - 1);
+            mRecyclerView.scrollToPosition(adapter.getItemCount() - 1);
             mRecyclerView.setVerticalScrollBarEnabled(true);
         }
     }
