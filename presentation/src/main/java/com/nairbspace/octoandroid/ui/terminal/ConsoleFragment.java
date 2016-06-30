@@ -5,20 +5,20 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
-import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
 import com.nairbspace.octoandroid.ui.templates.BasePagerFragmentListener;
 import com.nairbspace.octoandroid.ui.templates.Presenter;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -30,6 +30,10 @@ import butterknife.ButterKnife;
 public class ConsoleFragment extends BasePagerFragmentListener<ConsoleScreen, ConsoleFragment.Listener>
         implements ConsoleScreen {
 
+    private static final String LOG_LIST_KEY = "log_list_key";
+    private static final String AUTO_SCROLL_KEY = "auto_scroll_key";
+    private static final String LOCK_KEY = "lock_key";
+
     @BindString(R.string.lock) String LOCK;
     @BindString(R.string.unlock) String UNLOCK;
     @BindString(R.string.disable_autoscroll) String DISABLE_AUTOSCROLL;
@@ -38,14 +42,14 @@ public class ConsoleFragment extends BasePagerFragmentListener<ConsoleScreen, Co
     @Inject ConsolePresenter mPresenter;
     private Listener mListener;
 
-    @BindView(R.id.console_scrollview) NestedScrollView mScrollView;
-    @BindView(R.id.console_layout) LinearLayout mLinearLayout;
+    @BindView(R.id.console_recyclerview) RecyclerView mRecyclerView;
     @BindDrawable(R.drawable.ic_close_white_24dp) Drawable mCloseDrawable;
     @BindDrawable(R.drawable.ic_expand_more_white_24dp) Drawable mExpandDrawable;
     @BindDrawable(R.drawable.ic_lock_open_white_24dp) Drawable mUnlockDrawable;
     @BindDrawable(R.drawable.ic_lock_outline_white_24dp) Drawable mLockDrawable;
     private View mMainView;
-    private LayoutInflater mInflater;
+    private ArrayList<String> mLogList;
+    private ConsoleRvAdapter mAdapter;
     private boolean mIsAutoScrollEnabled = true;
 
     public static ConsoleFragment newInstance() {
@@ -62,19 +66,39 @@ public class ConsoleFragment extends BasePagerFragmentListener<ConsoleScreen, Co
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mInflater = inflater;
         mMainView = inflater.inflate(R.layout.fragment_console, container, false);
         setUnbinder(ButterKnife.bind(this, mMainView));
+        if (savedInstanceState == null) mLogList = new ArrayList<>();
+        else mLogList = restoreInstance(savedInstanceState);
+        mAdapter = new ConsoleRvAdapter(mLogList); // Passes field instance
+        mRecyclerView.setAdapter(mAdapter);
         return mMainView;
+    }
+
+    private ArrayList<String> restoreInstance(Bundle savedInstanceState) {
+        mIsAutoScrollEnabled = savedInstanceState.getBoolean(AUTO_SCROLL_KEY);
+        boolean lock = savedInstanceState.getBoolean(LOCK_KEY);
+        ViewCompat.setNestedScrollingEnabled(mMainView, lock);
+        return savedInstanceState.getStringArrayList(LOG_LIST_KEY);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // This list is updated from within adapter since it was passed in constructor
+        outState.putStringArrayList(LOG_LIST_KEY, mLogList);
+        outState.putBoolean(LOCK_KEY, ViewCompat.isNestedScrollingEnabled(mMainView));
+        outState.putBoolean(AUTO_SCROLL_KEY, mIsAutoScrollEnabled);
     }
 
     @Override
     public void updateUi(String log) {
-        View view = mInflater.inflate(R.layout.fragment_console_text, mLinearLayout, false);
-        TextView textView = ButterKnife.findById(view, R.id.console_text);
-        textView.setText(log);
-        mLinearLayout.addView(textView);
-        if (mIsAutoScrollEnabled) mScrollView.fullScroll(View.FOCUS_DOWN);
+        mAdapter.addLogItem(log);
+        if (mIsAutoScrollEnabled) {
+            mRecyclerView.setVerticalScrollBarEnabled(false);
+            mRecyclerView.scrollToPosition(mAdapter.getItemCount() - 1);
+            mRecyclerView.setVerticalScrollBarEnabled(true);
+        }
     }
 
     @Override

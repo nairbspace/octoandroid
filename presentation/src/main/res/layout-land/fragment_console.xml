@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <android.support.percent.PercentFrameLayout
@@ -16,27 +17,14 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <!--suppress AndroidDomInspection -->
-        <android.support.v4.widget.NestedScrollView
-            android:id="@+id/console_scrollview"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/console_recyclerview"
             app:layout_widthPercent="100%"
             app:layout_aspectRatio="200%"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-            <LinearLayout
-                android:id="@+id/console_layout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="8dp"
-                android:background="@color/terminal_background">
-                <!--<TextView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:typeface="monospace"-->
-                    <!--android:layout_margin="4dp"-->
-                    <!--android:textColor="@android:color/black"-->
-                    <!--android:text="Recv: ok T:0.93 /0.00 B:0.96 /0.00 @:64"/>-->
-
-            </LinearLayout>
-        </android.support.v4.widget.NestedScrollView>
+            android:scrollbars="vertical"
+            android:padding="8dp"
+            app:layoutManager="LinearLayoutManager"
+            android:background="@color/terminal_background"
+            tools:listitem="@layout/fragment_console_text"/>
     </android.support.percent.PercentFrameLayout>
 </android.support.v4.widget.NestedScrollView>
