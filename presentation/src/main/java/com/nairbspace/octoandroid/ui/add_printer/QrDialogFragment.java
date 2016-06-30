@@ -22,6 +22,7 @@ import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.nairbspace.octoandroid.R;
+import com.nairbspace.octoandroid.ui.templates.BaseDialogFragment;
 
 import butterknife.BindString;
 import butterknife.BindView;

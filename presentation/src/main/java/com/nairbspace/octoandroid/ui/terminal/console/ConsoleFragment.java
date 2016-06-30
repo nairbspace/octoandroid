@@ -12,6 +12,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.SetupApplication;
@@ -27,6 +29,7 @@ import butterknife.BindDrawable;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class ConsoleFragment extends BasePagerFragmentListener<ConsoleScreen, ConsoleFragment.Listener>
         implements ConsoleScreen {
@@ -39,11 +42,14 @@ public class ConsoleFragment extends BasePagerFragmentListener<ConsoleScreen, Co
     @BindString(R.string.unlock) String UNLOCK;
     @BindString(R.string.disable_autoscroll) String DISABLE_AUTOSCROLL;
     @BindString(R.string.enable_autoscroll) String ENABLE_AUTOSCROLL;
+    @BindString(R.string.command_sent) String COMMAND_SENT;
+    @BindString(R.string.exception_command_error) String COMMAND_ERROR;
 
     @Inject ConsolePresenter mPresenter;
     private Listener mListener;
 
     @BindView(R.id.console_recyclerview) RecyclerView mRecyclerView;
+    @BindView(R.id.console_command_edit) EditText mCommandEditText;
     @BindDrawable(R.drawable.ic_close_white_24dp) Drawable mCloseDrawable;
     @BindDrawable(R.drawable.ic_expand_more_white_24dp) Drawable mExpandDrawable;
     @BindDrawable(R.drawable.ic_lock_open_white_24dp) Drawable mUnlockDrawable;
@@ -115,6 +121,38 @@ public class ConsoleFragment extends BasePagerFragmentListener<ConsoleScreen, Co
         }
     }
 
+    @OnClick(R.id.console_command_edit) void editClicked() {
+        mListener.openCommandDialogFragment(getCommand());
+    }
+
+    @OnClick(R.id.console_send_button) void sendClicked() {
+        mPresenter.sendClicked(getCommand());
+    }
+
+    public void updateCommand(String command, boolean send) {
+        mCommandEditText.setText(command);
+        if (send) sendClicked();
+    }
+
+    private String getCommand() {
+        return mCommandEditText.getText().toString();
+    }
+
+    @Override
+    public void toastMessage(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void toastSent() {
+        toastMessage(COMMAND_SENT);
+    }
+
+    @Override
+    public void toastError() {
+        toastMessage(COMMAND_ERROR);
+    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -177,6 +215,6 @@ public class ConsoleFragment extends BasePagerFragmentListener<ConsoleScreen, Co
     }
 
     public interface Listener {
-
+        void openCommandDialogFragment(String command);
     }
 }

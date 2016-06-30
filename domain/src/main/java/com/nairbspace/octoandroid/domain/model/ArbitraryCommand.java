@@ -19,11 +19,11 @@ public abstract class ArbitraryCommand {
         return new AutoValue_ArbitraryCommand(type, "", new ArrayList<String>());
     }
 
-    public static ArbitraryCommand createSingle(Type type, String string) {
-        return new AutoValue_ArbitraryCommand(type, string, new ArrayList<String>());
+    public static ArbitraryCommand createSingle(String string) {
+        return new AutoValue_ArbitraryCommand(Type.SINGLE, string, new ArrayList<String>());
     }
 
-    public static ArbitraryCommand createMultiple(Type type, List<String> strings) {
-        return new AutoValue_ArbitraryCommand(type, "", strings);
+    public static ArbitraryCommand createMultiple(List<String> strings) {
+        return new AutoValue_ArbitraryCommand(Type.MULTIPLE, "", strings);
     }
 }

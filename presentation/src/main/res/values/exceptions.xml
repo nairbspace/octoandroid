@@ -23,4 +23,5 @@
     <string name="exception_no_active_printer">No active printer set</string>
     <string name="exception_printer_edit_failed">Edit failed</string>
     <string name="exception_printer_name_exists">Printer name already exists</string>
+    <string name="exception_command_error">Error sending command</string>
 </resources>

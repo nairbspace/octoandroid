@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.nairbspace.octoandroid.R;
+import com.nairbspace.octoandroid.ui.templates.BaseDialogFragment;
 
 public class SslErrorDialogFragment extends BaseDialogFragment<SslErrorDialogFragment.Listener>
         implements Dialog.OnClickListener {

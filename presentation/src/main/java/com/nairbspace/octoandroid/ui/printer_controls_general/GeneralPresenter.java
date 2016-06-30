@@ -46,10 +46,10 @@ public class GeneralPresenter extends UseCasePresenter<GeneralScreen> {
                 arbitraryCommand = ArbitraryCommand.createGeneral(type);
                 break;
             case SINGLE:
-                arbitraryCommand = ArbitraryCommand.createSingle(type, command);
+                arbitraryCommand = ArbitraryCommand.createSingle(command);
                 break;
             case MULTIPLE:
-                arbitraryCommand = ArbitraryCommand.createMultiple(type, commands);
+                arbitraryCommand = ArbitraryCommand.createMultiple(commands);
                 break;
         }
 

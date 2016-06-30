@@ -161,5 +161,11 @@
     <string name="enable_autoscroll">Enable Autoscroll</string>
     <string name="disable_autoscroll">Disable Autoscroll</string>
     <string name="console">Console</string>
+    <string name="send">Send</string>
+    <string name="command">Command</string>
+    <string name="edit_command">Edit Command</string>
+    <string name="command_hint">Ex: M18, M106 S0</string>
+    <string name="command_instructions">Separate multiple commands with a comma</string>
+    <string name="command_sent">Command Sent</string>
 
 </resources>
