@@ -41,4 +41,10 @@
     <integer name="flowrate_y_intercept">75</integer>
     <dimen name="flowrate_slope">0.5px</dimen>
     <integer name="flowrate_default">100</integer>
+
+    <fraction name="console_widthPercent">100%</fraction>
+    <fraction name="console_aspectRatio">120%</fraction>
+
+    <fraction name="temp_line_widthPercent">100%</fraction>
+    <fraction name="temp_line_aspectRatio">100%</fraction>
 </resources>

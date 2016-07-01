@@ -17,8 +17,8 @@
         <!--suppress AndroidDomInspection -->
         <com.nairbspace.octoandroid.ui.temp_graph.TempChart
             android:id="@+id/temp_line_chart"
-            app:layout_widthPercent="100%"
-            app:layout_aspectRatio="100%"/>
+            app:layout_widthPercent="@fraction/temp_line_widthPercent"
+            app:layout_aspectRatio="@fraction/temp_line_aspectRatio"/>
     </android.support.percent.PercentFrameLayout>
 
 </android.support.v4.widget.NestedScrollView>

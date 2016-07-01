@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <fraction name="console_widthPercent">100%</fraction>
+    <fraction name="console_aspectRatio">250%</fraction>
+
+    <fraction name="temp_line_widthPercent">100%</fraction>
+    <fraction name="temp_line_aspectRatio">200%</fraction>
+</resources>

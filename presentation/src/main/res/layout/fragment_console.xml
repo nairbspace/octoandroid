@@ -24,8 +24,8 @@
             <!--suppress AndroidDomInspection -->
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/console_recyclerview"
-                app:layout_widthPercent="100%"
-                app:layout_aspectRatio="120%"
+                app:layout_widthPercent="@fraction/console_widthPercent"
+                app:layout_aspectRatio="@fraction/console_aspectRatio"
                 android:scrollbars="vertical"
                 android:padding="8dp"
                 app:layoutManager="LinearLayoutManager"
