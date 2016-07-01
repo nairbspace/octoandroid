@@ -47,8 +47,7 @@
                 android:layout_weight="1"
                 android:maxLines="1"
                 android:ellipsize="end"
-                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789, "
-                android:inputType="textCapCharacters"
+                android:inputType="textVisiblePassword"
                 android:focusableInTouchMode="false"
                 android:hint="@string/command"/>
             <Button

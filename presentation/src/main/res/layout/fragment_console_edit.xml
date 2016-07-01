@@ -8,16 +8,20 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_vertical_margin"
     android:orientation="vertical">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/command_instructions"/>
     <EditText
         android:id="@+id/console_command_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789, "
-        android:inputType="textCapCharacters"
+        android:imeOptions="actionDone"
+        android:inputType="textVisiblePassword"
         android:hint="@string/command_hint"/>
-    <TextView
+    <CheckBox
+        android:id="@+id/command_uppercase_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:text="@string/command_instructions"/>
+        android:text="@string/uppercase"/>
 </LinearLayout>

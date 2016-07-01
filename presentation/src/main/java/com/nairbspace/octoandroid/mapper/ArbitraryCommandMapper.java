@@ -51,7 +51,7 @@ public class ArbitraryCommandMapper extends MapperUseCase<String, ArbitraryComma
     private static List<String> parseSingle(String command) {
         List<String> commandList = new ArrayList<>();
         String trim = command.trim();
-        if (!TextUtils.isEmpty(trim)) commandList.add(trim.toUpperCase());
+        if (!TextUtils.isEmpty(trim)) commandList.add(trim);
         return commandList;
     }
 
@@ -60,7 +60,7 @@ public class ArbitraryCommandMapper extends MapperUseCase<String, ArbitraryComma
         String[] commands = command.split(",");
         for (String s : commands) {
             String trim = s.trim();
-            if (!TextUtils.isEmpty(trim)) commandList.add(trim.toUpperCase());
+            if (!TextUtils.isEmpty(trim)) commandList.add(trim);
         }
         return commandList;
     }
