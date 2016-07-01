@@ -168,4 +168,6 @@
     <string name="command_instructions">Separate multiple commands with a comma</string>
     <string name="command_sent">Command Sent</string>
 
+    <string name="ssl_warning">Warning: SSL may cause issues since certificate is self-signed</string>
+
 </resources>

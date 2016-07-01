@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -53,6 +54,7 @@ public class AddPrinterActivity extends BaseActivity<AddPrinterScreen>
     @BindView(R.id.port_edit_text) TextInputEditText mPortEditText;
     @BindView(R.id.api_key_edit_text) TextInputEditText mApiKeyEditText;
     @BindView(R.id.ssl_checkbox) CheckBox mSslCheckBox;
+    @BindView(R.id.ssl_warning_text) TextView mSslWarningTextView;
 
     public static Intent newIntent(Context context) {
         return new Intent(context, AddPrinterActivity.class);
@@ -68,7 +70,16 @@ public class AddPrinterActivity extends BaseActivity<AddPrinterScreen>
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
         mApiKeyEditText.setOnEditorActionListener(mApiEditorListener);
+        mSslCheckBox.setOnCheckedChangeListener(mSslCheckedListener);
     }
+
+    private CompoundButton.OnCheckedChangeListener mSslCheckedListener =
+            new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    mSslWarningTextView.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+                }
+    };
 
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
