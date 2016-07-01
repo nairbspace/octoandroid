@@ -1,5 +1,6 @@
 package com.nairbspace.octoandroid.data.net;
 
+import com.nairbspace.octoandroid.data.entity.ArbitraryCommandEntity;
 import com.nairbspace.octoandroid.data.entity.ConnectEntity;
 import com.nairbspace.octoandroid.data.entity.ConnectionEntity;
 import com.nairbspace.octoandroid.data.entity.FileCommandEntity;
@@ -63,7 +64,7 @@ public interface OctoApi {
     Observable<Object> selectTool(@Body Object object);
 
     @POST("/api/printer/command")
-    Observable<Object> sendArbitraryCommand(@Body Object object);
+    Observable<Object> sendArbitraryCommand(@Body ArbitraryCommandEntity entity);
 
     @GET("/api/slicing")
     Observable<Map<String, SlicerEntity>> getSlicers();

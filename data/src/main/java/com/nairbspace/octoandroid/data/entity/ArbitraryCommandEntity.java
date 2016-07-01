@@ -4,42 +4,43 @@ import com.google.auto.value.AutoValue;
 import com.google.gson.annotations.SerializedName;
 import com.nairbspace.octoandroid.domain.model.AutoGson;
 
+import java.util.ArrayList;
 import java.util.List;
 
+@AutoValue
+@AutoGson(autoValueClass = AutoValue_ArbitraryCommandEntity.class)
 public abstract class ArbitraryCommandEntity {
     private static final String COMMAND_MOTORS_OFF = "M18";
     private static final String COMMAND_FAN_ON = "M105";
     private static final String COMMAND_FAN_OFF = "M106 S0";
 
-    @AutoValue
-    @AutoGson(autoValueClass = AutoValue_ArbitraryCommandEntity_Single.class)
-    public static abstract class Single extends ArbitraryCommandEntity {
-        @SerializedName("command") public abstract String command();
+    @SerializedName("commands") public abstract List<String> commands();
 
-        public static Single motorsOff() {
-            return new AutoValue_ArbitraryCommandEntity_Single(COMMAND_MOTORS_OFF);
-        }
-
-        public static Single fanOn() {
-            return new AutoValue_ArbitraryCommandEntity_Single(COMMAND_FAN_ON);
-        }
-
-        public static Single fanOff() {
-            return new AutoValue_ArbitraryCommandEntity_Single(COMMAND_FAN_OFF);
-        }
-
-        public static Single create(String s) {
-            return new AutoValue_ArbitraryCommandEntity_Single(s);
-        }
+    public static ArbitraryCommandEntity motorsOff() {
+        List<String> commandList = new ArrayList<>();
+        commandList.add(COMMAND_MOTORS_OFF);
+        return new AutoValue_ArbitraryCommandEntity(commandList);
     }
 
-    @AutoValue
-    @AutoGson(autoValueClass = AutoValue_ArbitraryCommandEntity_Multiple.class)
-    public static abstract class Multiple extends ArbitraryCommandEntity {
-        @SerializedName("commands") public abstract List<String> commands();
+    public static ArbitraryCommandEntity fanOn() {
+        List<String> commandList = new ArrayList<>();
+        commandList.add(COMMAND_FAN_ON);
+        return new AutoValue_ArbitraryCommandEntity(commandList);
+    }
 
-        public static Multiple create(List<String> strings) {
-            return new AutoValue_ArbitraryCommandEntity_Multiple(strings);
-        }
+    public static ArbitraryCommandEntity fanOff() {
+        List<String> commandList = new ArrayList<>();
+        commandList.add(COMMAND_FAN_OFF);
+        return new AutoValue_ArbitraryCommandEntity(commandList);
+    }
+
+    public static ArbitraryCommandEntity createSingle(String command) {
+        List<String> commandList = new ArrayList<>();
+        commandList.add(command);
+        return new AutoValue_ArbitraryCommandEntity(commandList);
+    }
+
+    public static ArbitraryCommandEntity create(List<String> commandList) {
+        return new AutoValue_ArbitraryCommandEntity(commandList);
     }
 }

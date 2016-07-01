@@ -5,25 +5,25 @@ import com.nairbspace.octoandroid.domain.model.ArbitraryCommand;
 
 public class ArbitraryCommandEntityMapper {
 
-    public static Object mapToArbitraryCommandEntity(ArbitraryCommand arbitraryCommand) {
-        Object o = null;
+    public static ArbitraryCommandEntity mapToArbitraryCommandEntity(ArbitraryCommand arbitraryCommand) {
+        ArbitraryCommandEntity entity = null;
         switch (arbitraryCommand.type()) {
             case MOTORS_OFF:
-                o = ArbitraryCommandEntity.Single.motorsOff();
+                entity = ArbitraryCommandEntity.motorsOff();
                 break;
             case FAN_ON:
-                o = ArbitraryCommandEntity.Single.fanOn();
+                entity = ArbitraryCommandEntity.fanOn();
                 break;
             case FAN_OFF:
-                o = ArbitraryCommandEntity.Single.fanOff();
+                entity = ArbitraryCommandEntity.fanOff();
                 break;
             case SINGLE:
-                o = ArbitraryCommandEntity.Single.create(arbitraryCommand.command());
+                entity = ArbitraryCommandEntity.createSingle(arbitraryCommand.command());
                 break;
             case MULTIPLE:
-                o = ArbitraryCommandEntity.Multiple.create(arbitraryCommand.commands());
+                entity = ArbitraryCommandEntity.create(arbitraryCommand.commands());
                 break;
         }
-        return o;
+        return entity;
     }
 }

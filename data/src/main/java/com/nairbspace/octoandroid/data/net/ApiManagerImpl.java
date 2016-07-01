@@ -2,6 +2,7 @@ package com.nairbspace.octoandroid.data.net;
 
 import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
 import com.nairbspace.octoandroid.data.disk.DbHelper;
+import com.nairbspace.octoandroid.data.entity.ArbitraryCommandEntity;
 import com.nairbspace.octoandroid.data.entity.ConnectEntity;
 import com.nairbspace.octoandroid.data.entity.ConnectionEntity;
 import com.nairbspace.octoandroid.data.entity.FileCommandEntity;
@@ -102,8 +103,8 @@ public class ApiManagerImpl implements ApiManager {
     }
 
     @Override
-    public Observable<Object> sendArbitraryCommand(@Body Object object) {
-        return mOctoApi.sendArbitraryCommand(object);
+    public Observable<Object> sendArbitraryCommand(@Body ArbitraryCommandEntity entity) {
+        return mOctoApi.sendArbitraryCommand(entity);
     }
 
     @Override
@@ -212,11 +213,11 @@ public class ApiManagerImpl implements ApiManager {
     }
 
     @Override
-    public Func1<Object, Observable<?>> funcSendArbitraryCommand() {
-        return new Func1<Object, Observable<?>>() {
+    public Func1<ArbitraryCommandEntity, Observable<?>> funcSendArbitraryCommand() {
+        return new Func1<ArbitraryCommandEntity, Observable<?>>() {
             @Override
-            public Observable<?> call(Object o) {
-                return sendArbitraryCommand(o);
+            public Observable<?> call(ArbitraryCommandEntity entity) {
+                return sendArbitraryCommand(entity);
             }
         };
     }

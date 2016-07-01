@@ -1,6 +1,7 @@
 package com.nairbspace.octoandroid.data.mapper;
 
 import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
+import com.nairbspace.octoandroid.data.entity.ArbitraryCommandEntity;
 import com.nairbspace.octoandroid.data.entity.ConnectEntity;
 import com.nairbspace.octoandroid.data.entity.ConnectionEntity;
 import com.nairbspace.octoandroid.data.entity.FileCommandEntity;
@@ -100,7 +101,7 @@ public class MapperHelper {
         return ToolCommandEntityMapper.mapToToolCommandEntity(toolCommand);
     }
 
-    public Object mapToArbitraryCommandEntity(ArbitraryCommand arbitraryCommand) {
+    public ArbitraryCommandEntity mapToArbitraryCommandEntity(ArbitraryCommand arbitraryCommand) {
         return ArbitraryCommandEntityMapper.mapToArbitraryCommandEntity(arbitraryCommand);
     }
 
