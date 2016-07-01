@@ -42,13 +42,8 @@ public class SlicerActivity extends BaseNavActivity<SlicerScreen>
         setContentView(R.layout.activity_main);
         onCreateDrawer(ButterKnife.bind(this));
 
-        SlicerPagerAdapter adapter;
         String apiUrl = getIntent().getStringExtra(API_URL_KEY);
-        if (apiUrl == null) {
-            adapter = new SlicerPagerAdapter(mPagerArray, getSupportFragmentManager());
-        } else {
-            adapter = new SlicerPagerAdapter(mPagerArray, getSupportFragmentManager(), apiUrl);
-        }
+        SlicerPagerAdapter adapter = new SlicerPagerAdapter(mPagerArray, getSupportFragmentManager(), apiUrl);
         inflateAdapter(adapter);
     }
 

@@ -12,12 +12,7 @@ import com.nairbspace.octoandroid.ui.slicer.slicing.SlicingFragment;
 public class SlicerPagerAdapter extends FragmentPagerAdapter {
     SparseArray<Fragment> mRegisteredFragments = new SparseArray<>();
     private final String[] mTabTitles;
-    private String mApiUrl;
-
-    public SlicerPagerAdapter(String[] array, FragmentManager fm) {
-        super(fm);
-        mTabTitles = array;
-    }
+    private final String mApiUrl;
 
     public SlicerPagerAdapter(String[] array, FragmentManager fm, String apiUrl) {
         super(fm);
@@ -28,8 +23,7 @@ public class SlicerPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         if (position == 0) {
-            if (mApiUrl == null) return SlicingFragment.newInstance();
-            else return SlicingFragment.newInstance(mApiUrl);
+            return SlicingFragment.newInstance(mApiUrl);
         } else {
             return FilesFragment.newInstance();
         }

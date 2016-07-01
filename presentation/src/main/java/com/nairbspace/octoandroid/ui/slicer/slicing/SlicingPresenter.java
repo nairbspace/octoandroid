@@ -19,6 +19,8 @@ import com.nairbspace.octoandroid.ui.templates.UseCaseEventPresenter;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
@@ -175,9 +177,10 @@ public class SlicingPresenter extends UseCaseEventPresenter<SlicingScreen, Slici
 
     public String getFileName(String apiUrl) {
         try {
+            apiUrl = URLDecoder.decode(apiUrl, "UTF-8"); // StandardCharsets.UTF_8.name() > SDK 19, lame.
             File file = new File(apiUrl);
             return changeFileExtToGco(file.getName());
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | UnsupportedEncodingException e) {
             return "";
         }
     }

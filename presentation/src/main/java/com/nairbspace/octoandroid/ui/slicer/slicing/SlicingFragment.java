@@ -121,11 +121,7 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
                 .afterSlicingList(Arrays.asList(mAfterSlicingArray));
     }
 
-    public static SlicingFragment newInstance() {
-        return new SlicingFragment();
-    }
-
-    public static SlicingFragment newInstance(String apiUrl) {
+    public static SlicingFragment newInstance(@Nullable String apiUrl) {
         Bundle args = new Bundle();
         args.putString(API_URL_KEY, apiUrl);
         SlicingFragment slicingFragment = new SlicingFragment();
@@ -154,9 +150,9 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (getArguments() != null) {
+        if (getArguments() != null && getArguments().getString(API_URL_KEY) != null) {
             String apiUrl = getArguments().getString(API_URL_KEY);
-            if (apiUrl != null) setApiUrl(apiUrl);
+            setApiUrl(apiUrl);
         }
         if (savedInstanceState == null) mPresenter.execute();
         else restoreSavedInstanceState(savedInstanceState);
