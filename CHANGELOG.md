@@ -1,6 +1,14 @@
 Change Log
 ==========
 
+Version 1.8.0 *(2016-07-01)*
+----------------------------
+
+ * Feature: Terminal console
+ 
+ * Fixed slicing output filename displaying incorrectly
+ * Fixed temperature graph margins
+ 
 Version 1.7.0 *(2016-06-29)*
 ----------------------------
 

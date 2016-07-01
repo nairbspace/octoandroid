@@ -22,8 +22,8 @@ buildscript {
 allprojects {
     ext {
         androidApplicationId = "com.nairbspace.octoandroid"
-        androidVersionCode = 16
-        androidVersionName = "1.7.0"
+        androidVersionCode = 17
+        androidVersionName = "1.8.0"
         androidBuildToolsVersion = "23.0.3"
         androidCompileSdkVersion = 23
         androidMinSdkVersion = 16
