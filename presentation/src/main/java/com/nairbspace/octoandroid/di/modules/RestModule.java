@@ -33,20 +33,21 @@ public class RestModule {
 
     @Provides
     @Singleton
-    Retrofit.Builder provideRetrofitBuilder(GsonConverterFactory converterFactory,
+    Retrofit provideRetrofitBuilder(GsonConverterFactory converterFactory,
                                             @Named("rest") OkHttpClient okHttpClient,
                                             RxJavaCallAdapterFactory rxJavaCallAdapterFactory) {
         return new Retrofit.Builder()
                 .addConverterFactory(converterFactory)
                 .client(okHttpClient)
                 .addCallAdapterFactory(rxJavaCallAdapterFactory)
-                .baseUrl(DUMMY_URL);
+                .baseUrl(DUMMY_URL)
+                .build();
     }
 
     @Provides
     @Singleton
-    OctoApi provideOctoprintApi(Retrofit.Builder builder) {
-        return builder.build().create(OctoApi.class);
+    OctoApi provideOctoprintApi(Retrofit retrofit) {
+        return retrofit.create(OctoApi.class);
     }
 
     @Provides

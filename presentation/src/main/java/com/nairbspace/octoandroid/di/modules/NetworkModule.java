@@ -5,6 +5,7 @@ import android.net.ConnectivityManager;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapterFactory;
 import com.nairbspace.octoandroid.BuildConfig;
 import com.nairbspace.octoandroid.data.mapper.AutoValueTypeAdapterFactory;
 import com.nairbspace.octoandroid.data.net.OctoInterceptor;
@@ -46,7 +47,7 @@ public class NetworkModule {
                                      HttpLoggingInterceptor loggingInterceptor) {
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .addInterceptor(interceptor);
-//        .cache(cache) // TODO-low: implement cache
+//        .cache(cache) // // OctoPrint API does not implement caching.
         if (BuildConfig.DEBUG) {
             builder.addInterceptor(loggingInterceptor);
         }
@@ -63,7 +64,7 @@ public class NetworkModule {
     @Provides
     @Singleton
     @Named("websocket")
-    OkHttpClient provideRegularOkHttpClient(@Named("websocket") Interceptor websocketInterceptor) {
+    OkHttpClient provideWebsocketOkHttpClient(@Named("websocket") Interceptor websocketInterceptor) {
         return new OkHttpClient.Builder()
                 .addInterceptor(websocketInterceptor)
                 .build();
@@ -71,16 +72,16 @@ public class NetworkModule {
 
     @Provides
     @Singleton
-    AutoValueTypeAdapterFactory provideAutoValueTypeAdapterFactory() {
+    TypeAdapterFactory provideAutoValueTypeAdapterFactory() {
         return new AutoValueTypeAdapterFactory();
     }
 
     @Provides
     @Singleton
-    Gson provideGson(AutoValueTypeAdapterFactory typeAdapterFactory) {
+    Gson provideGson(TypeAdapterFactory typeAdapterFactory) {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapterFactory(typeAdapterFactory);
-//        gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES); // TODO-LOW: Change field naming policies
+//        gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
         return gsonBuilder.create();
     }
 

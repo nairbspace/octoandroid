@@ -1,7 +1,6 @@
 package com.nairbspace.octoandroid.di.modules;
 
 import android.accounts.AccountManager;
-import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
@@ -25,8 +24,8 @@ public class StorageModule {
 
     @Provides
     @Singleton
-    SharedPreferences provideSharedPreferences(Application application) {
-        return PreferenceManager.getDefaultSharedPreferences(application);
+    SharedPreferences provideSharedPreferences(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     @Provides
@@ -37,8 +36,8 @@ public class StorageModule {
 
     @Provides
     @Singleton
-    AccountManager provideAccountManager(Application application) {
-        return AccountManager.get(application);
+    AccountManager provideAccountManager(Context context) {
+        return AccountManager.get(context);
     }
 
     @Provides
