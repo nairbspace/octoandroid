@@ -38,8 +38,8 @@ public class ConsoleFragment extends BasePagerFragmentListener<ConsoleScreen, Co
     private static final String AUTO_SCROLL_KEY = "auto_scroll_key";
     private static final String LOCK_KEY = "lock_key";
 
-    @BindString(R.string.lock) String LOCK;
-    @BindString(R.string.unlock) String UNLOCK;
+    @BindString(R.string.lock_screen) String LOCK;
+    @BindString(R.string.unlock_screen) String UNLOCK;
     @BindString(R.string.disable_autoscroll) String DISABLE_AUTOSCROLL;
     @BindString(R.string.enable_autoscroll) String ENABLE_AUTOSCROLL;
     @BindString(R.string.command_sent) String COMMAND_SENT;
@@ -54,7 +54,6 @@ public class ConsoleFragment extends BasePagerFragmentListener<ConsoleScreen, Co
     @BindDrawable(R.drawable.ic_expand_more_white_24dp) Drawable mExpandDrawable;
     @BindDrawable(R.drawable.ic_lock_open_white_24dp) Drawable mUnlockDrawable;
     @BindDrawable(R.drawable.ic_lock_outline_white_24dp) Drawable mLockDrawable;
-    private View mMainView;
     private boolean mIsAutoScrollEnabled = true;
 
     public static ConsoleFragment newInstance() {
@@ -71,20 +70,20 @@ public class ConsoleFragment extends BasePagerFragmentListener<ConsoleScreen, Co
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mMainView = inflater.inflate(R.layout.fragment_console, container, false);
-        setUnbinder(ButterKnife.bind(this, mMainView));
+        View view = inflater.inflate(R.layout.fragment_console, container, false);
+        setUnbinder(ButterKnife.bind(this, view));
         List<String> logList;
         if (savedInstanceState == null) logList = new ArrayList<>();
-        else logList = restoreInstance(savedInstanceState);
+        else logList = restoreInstance(savedInstanceState, view);
         ConsoleRvAdapter adapter = new ConsoleRvAdapter(logList);
         mRecyclerView.setAdapter(adapter);
-        return mMainView;
+        return view;
     }
 
-    private List<String> restoreInstance(Bundle savedInstanceState) {
+    private List<String> restoreInstance(Bundle savedInstanceState, View rootView) {
         mIsAutoScrollEnabled = savedInstanceState.getBoolean(AUTO_SCROLL_KEY);
         boolean lock = savedInstanceState.getBoolean(LOCK_KEY);
-        ViewCompat.setNestedScrollingEnabled(mMainView, lock);
+        ViewCompat.setNestedScrollingEnabled(rootView, lock);
         List<String> logList = savedInstanceState.getStringArrayList(LOG_LIST_KEY);
         if (logList == null) return new ArrayList<>();
         else return logList;
@@ -93,7 +92,7 @@ public class ConsoleFragment extends BasePagerFragmentListener<ConsoleScreen, Co
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(LOCK_KEY, ViewCompat.isNestedScrollingEnabled(mMainView));
+        if (getView() != null) outState.putBoolean(LOCK_KEY, ViewCompat.isNestedScrollingEnabled(getView()));
         outState.putBoolean(AUTO_SCROLL_KEY, mIsAutoScrollEnabled);
         if (mRecyclerView.getAdapter() == null) return;
         ConsoleRvAdapter adapter = ((ConsoleRvAdapter) mRecyclerView.getAdapter());
@@ -164,14 +163,16 @@ public class ConsoleFragment extends BasePagerFragmentListener<ConsoleScreen, Co
     }
 
     private void updateLockIcon(@NonNull MenuItem menuItem) {
-        boolean isEnabled = ViewCompat.isNestedScrollingEnabled(mMainView);
+        if (getView() == null) return;
+        boolean isEnabled = ViewCompat.isNestedScrollingEnabled(getView());
         menuItem.setTitle(isEnabled ? UNLOCK : LOCK);
         menuItem.setIcon(isEnabled ? mUnlockDrawable : mLockDrawable);
     }
 
     private void toggleLock() {
-        boolean isEnabled = ViewCompat.isNestedScrollingEnabled(mMainView);
-        ViewCompat.setNestedScrollingEnabled(mMainView, !isEnabled);
+        if (getView() == null) return;
+        boolean isEnabled = ViewCompat.isNestedScrollingEnabled(getView());
+        ViewCompat.setNestedScrollingEnabled(getView(), !isEnabled);
     }
 
     private void updateScrollIcon(@NonNull MenuItem menuItem) {

@@ -87,8 +87,8 @@
     <string name="offset">Offset</string>
     <string name="set">Set</string>
 
-    <string name="lock">Lock</string>
-    <string name="unlock">Unlock</string>
+    <string name="lock_screen">Lock Screen</string>
+    <string name="unlock_screen">Unlock Screen</string>
 
     <string name="print_head">Print Head</string>
     <string name="x_y_label">X/Y</string>
