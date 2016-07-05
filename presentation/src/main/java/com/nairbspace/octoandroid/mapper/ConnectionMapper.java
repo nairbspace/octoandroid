@@ -59,7 +59,7 @@ public class ConnectionMapper extends MapperUseCase<Connection, ConnectModel> {
         List<Connection.PrinterProfile> printerProfileList = options.printerProfiles();
         List<SpinnerModel> printerProfiles = new ArrayList<>();
         for (Connection.PrinterProfile printerProfile : printerProfileList) {
-            SpinnerModel spinnerModel = new SpinnerModel(printerProfile.id(), printerProfile.name());
+            SpinnerModel spinnerModel = SpinnerModel.create(printerProfile.id(), printerProfile.name());
             printerProfiles.add(spinnerModel);
         }
 

@@ -50,7 +50,12 @@ public class SlicerModelMapper extends MapperUseCase<Map<String, Slicer>, List<S
             Boolean getIsDefault = slicer.isDefault();
             boolean isDefault = false;
             if (getIsDefault != null) isDefault = getIsDefault;
-            SlicerModel slicerModel = new SlicerModel(slicer.key(), slicer.displayName(), isDefault, profiles);
+            SlicerModel slicerModel = SlicerModel.builder()
+                    .key(slicer.key())
+                    .displayName(slicer.displayName())
+                    .isDefault(isDefault)
+                    .profiles(profiles)
+                    .build();
             slicerModels.add(slicerModel);
         }
 
@@ -66,8 +71,12 @@ public class SlicerModelMapper extends MapperUseCase<Map<String, Slicer>, List<S
             Boolean getIsDefault = profile.isDefault();
             boolean isDefault = false;
             if (getIsDefault != null) isDefault = getIsDefault;
-            SlicerModel.Profile profileModel = new SlicerModel.Profile(profile.key(),
-                    profile.displayName(), isDefault, profile.resource());
+            SlicerModel.Profile profileModel = SlicerModel.Profile.builder()
+                    .key(profile.key())
+                    .displayName(profile.displayName())
+                    .isDefault(isDefault)
+                    .resource(profile.resource())
+                    .build();
             profiles.add(profileModel);
         }
 
