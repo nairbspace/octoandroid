@@ -42,7 +42,7 @@ public class ConsolePresenter extends UseCaseEventPresenter<ConsoleScreen, Webso
 
     public void sendClicked(String command) {
         if (command.isEmpty()) mScreen.toastMessage("Brb sending nothing");
-        mListMapper.execute(new ListMapperSubscriber(), command);
+        else mListMapper.execute(new ListMapperSubscriber(), command);
     }
 
     private final class ListMapperSubscriber extends DefaultSubscriber<ArbitraryCommand> {
