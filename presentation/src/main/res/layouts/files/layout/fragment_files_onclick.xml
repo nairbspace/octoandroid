@@ -17,7 +17,7 @@
         android:paddingBottom="4dp"
         android:layout_weight="1"
         android:alpha="@dimen/drawable_active_opacity"
-        android:background="?attr/metaSelectableItemBackground"
+        style="@style/SelectableItemBackground"
         android:contentDescription="@string/download"
         android:src="@drawable/ic_file_download_black_24dp"/>
 
@@ -29,7 +29,7 @@
         android:paddingBottom="4dp"
         android:layout_weight="1"
         android:alpha="@dimen/drawable_active_opacity"
-        android:background="?attr/metaSelectableItemBackground"
+        style="@style/SelectableItemBackground"
         android:contentDescription="@string/delete_file"
         android:src="@drawable/ic_delete_black_24dp"/>
 
@@ -41,7 +41,7 @@
         android:paddingBottom="4dp"
         android:layout_weight="1"
         android:alpha="@dimen/drawable_active_opacity"
-        android:background="?attr/metaSelectableItemBackground"
+        style="@style/SelectableItemBackground"
         android:contentDescription="@string/file_details"
         android:src="@drawable/ic_more_vert_black_24dp"/>
 
@@ -53,7 +53,7 @@
         android:paddingBottom="4dp"
         android:layout_weight="1"
         android:alpha="@dimen/drawable_active_opacity"
-        android:background="?attr/metaSelectableItemBackground"
+        style="@style/SelectableItemBackground"
         android:contentDescription="@string/slice"
         android:src="@drawable/ic_content_cut_black_24dp"/>
 
@@ -65,7 +65,7 @@
         android:paddingBottom="4dp"
         android:layout_weight="1"
         android:alpha="@dimen/drawable_active_opacity"
-        android:background="?attr/metaSelectableItemBackground"
+        style="@style/SelectableItemBackground"
         android:contentDescription="@string/load"
         android:src="@drawable/ic_folder_black_24dp"/>
 
@@ -77,7 +77,7 @@
         android:paddingBottom="4dp"
         android:layout_weight="1"
         android:alpha="@dimen/drawable_active_opacity"
-        android:background="?attr/metaSelectableItemBackground"
+        style="@style/SelectableItemBackground"
         android:contentDescription="@string/print"
         android:src="@drawable/ic_print_black_24dp"/>
 

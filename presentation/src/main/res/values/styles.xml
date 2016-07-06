@@ -11,9 +11,12 @@
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="metaSelectableItemBackground">?android:attr/selectableItemBackground</item>
         <!--<item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>-->
         <item name="buttonStyle">@style/DefaultButton</item>
+    </style>
+
+    <style name="SelectableItemBackground">
+        <item name="android:background">?android:attr/selectableItemBackground</item>
     </style>
 
     <style name="DefaultButton" parent="Widget.AppCompat.Button.Colored">

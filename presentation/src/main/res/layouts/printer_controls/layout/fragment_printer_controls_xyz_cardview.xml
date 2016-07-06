@@ -45,7 +45,7 @@
                     android:src="@drawable/ic_expand_less_black_24dp"
                     android:tint="@color/colorAccent"
                     android:contentDescription="@string/jog_y_axis_up"
-                    android:background="?metaSelectableItemBackground"/>
+                    style="@style/SelectableItemBackground"/>
 
                 <com.nairbspace.octoandroid.views.HintedImageView
                     android:id="@+id/jog_xy_home_imageview"
@@ -57,7 +57,7 @@
                     android:padding="@dimen/jog_home_padding"
                     android:src="@drawable/ic_home_black_24dp"
                     android:contentDescription="@string/home_x_y_axes"
-                    android:background="?metaSelectableItemBackground"/>
+                    style="@style/SelectableItemBackground"/>
 
                 <com.nairbspace.octoandroid.views.HintedImageView
                     android:id="@+id/jog_xy_left_imageview"
@@ -69,7 +69,7 @@
                     android:src="@drawable/ic_chevron_left_black_24dp"
                     android:tint="@color/colorAccent"
                     android:contentDescription="@string/jog_x_axis_left"
-                    android:background="?metaSelectableItemBackground"/>
+                    style="@style/SelectableItemBackground"/>
 
                 <com.nairbspace.octoandroid.views.HintedImageView
                     android:id="@+id/jog_xy_right_imageview"
@@ -81,7 +81,7 @@
                     android:src="@drawable/ic_chevron_right_black_24dp"
                     android:tint="@color/colorAccent"
                     android:contentDescription="@string/jog_x_axis_right"
-                    android:background="?metaSelectableItemBackground"/>
+                    style="@style/SelectableItemBackground"/>
 
                 <com.nairbspace.octoandroid.views.HintedImageView
                     android:id="@+id/jog_xy_down_imageview"
@@ -92,7 +92,7 @@
                     android:src="@drawable/ic_expand_more_black_24dp"
                     android:tint="@color/colorAccent"
                     android:contentDescription="@string/jog_y_axis_down"
-                    android:background="?metaSelectableItemBackground"/>
+                    style="@style/SelectableItemBackground"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -120,7 +120,7 @@
                     android:src="@drawable/ic_expand_less_black_24dp"
                     android:tint="@color/colorAccent"
                     android:contentDescription="@string/jog_z_axis_up"
-                    android:background="?metaSelectableItemBackground"/>
+                    style="@style/SelectableItemBackground"/>
 
                 <com.nairbspace.octoandroid.views.HintedImageView
                     android:id="@+id/jog_z_home_imageview"
@@ -134,7 +134,7 @@
                     android:paddingBottom="@dimen/jog_home_padding"
                     android:src="@drawable/ic_home_black_24dp"
                     android:contentDescription="@string/home_z_axis"
-                    android:background="?metaSelectableItemBackground"/>
+                    style="@style/SelectableItemBackground"/>
 
                 <com.nairbspace.octoandroid.views.HintedImageView
                     android:id="@+id/jog_z_down_imageview"
@@ -145,7 +145,7 @@
                     android:src="@drawable/ic_expand_more_black_24dp"
                     android:tint="@color/colorAccent"
                     android:contentDescription="@string/jog_z_axis_down"
-                    android:background="?metaSelectableItemBackground"/>
+                    style="@style/SelectableItemBackground"/>
             </RelativeLayout>
 
         </LinearLayout>

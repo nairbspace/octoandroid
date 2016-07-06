@@ -38,7 +38,7 @@
             tools:text="192.168.1.1"/>
     </LinearLayout>
 
-    <ImageView
+    <com.nairbspace.octoandroid.views.HintedImageView
         android:id="@+id/nav_printer_settings"
         android:layout_width="48dp"
         android:layout_height="48dp"
@@ -48,7 +48,7 @@
         android:layout_alignParentRight="true"
         android:contentDescription="@string/printer_settings"
         android:src="@drawable/ic_settings_black_24dp"
-        android:background="?attr/metaSelectableItemBackground"
+        style="@style/SelectableItemBackground"
         android:tint="@android:color/white"/>
 
 </RelativeLayout>

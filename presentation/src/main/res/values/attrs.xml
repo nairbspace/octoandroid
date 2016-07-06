@@ -8,7 +8,6 @@
     <declare-styleable name="ButtonBarContainerTheme">
         <attr name="metaButtonBarStyle" format="reference"/>
         <attr name="metaButtonBarButtonStyle" format="reference"/>
-        <attr name="metaSelectableItemBackground" format="reference"/>
     </declare-styleable>
 
 </resources>
