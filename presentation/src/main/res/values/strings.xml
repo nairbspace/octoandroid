@@ -171,4 +171,13 @@
 
     <string name="ssl_warning">Warning: SSL may cause issues since certificate is self-signed</string>
 
+    <string name="jog_y_axis_up">Jog Y-Axis Up</string>
+    <string name="jog_y_axis_down">Jog Y-Axis Down</string>
+    <string name="jog_x_axis_left">Jog X-Axis Left</string>
+    <string name="jog_x_axis_right">Jog X-Axis Right</string>
+    <string name="home_x_y_axes">Home X/Y Axes</string>
+    <string name="jog_z_axis_up">Jog Z-Axis Up</string>
+    <string name="jog_z_axis_down">Jog Z-Axis Down</string>
+    <string name="home_z_axis">Home Z-Axis</string>
+
 </resources>

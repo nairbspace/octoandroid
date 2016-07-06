@@ -30,6 +30,9 @@
     <dimen name="playback_disabled_alpha_float">.12px</dimen>
 
     <dimen name="jog_arrow_size">72dp</dimen>
+    <dimen name="jog_home_size">60dp</dimen>
+    <dimen name="jog_home_margin">6dp</dimen>
+    <dimen name="jog_home_padding">6dp</dimen>
     <dimen name="jog_tenth_multiplier">0.1px</dimen>
     <dimen name="jog_one_multiplier">1px</dimen>
     <dimen name="jog_ten_multiplier">10px</dimen>
