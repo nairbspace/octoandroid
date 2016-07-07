@@ -7,13 +7,14 @@ import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.View;
 
-public class ScrollHideBehavior extends CoordinatorLayout.Behavior<FloatingActionButton> {
+public class ScrollHideBehavior extends FloatingActionButton.Behavior {
 
     public ScrollHideBehavior() {
+        super();
     }
 
     public ScrollHideBehavior(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        super();
     }
 
     @Override

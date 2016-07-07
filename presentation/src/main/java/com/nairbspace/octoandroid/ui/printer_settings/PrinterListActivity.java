@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
@@ -37,9 +36,7 @@ public class PrinterListActivity extends BaseActivity<PrinterListScreen>
     @Inject PrinterListPresenter mPresenter;
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.printer_list_recyclerview) RecyclerView mRecyclerView;
-    @BindView(R.id.add_printer_fab) FloatingActionButton mFab;
     @BindView(R.id.rainbow_refresh) SwipeRefreshLayout mRefreshLayout;
-    private Snackbar mSnackbar;
 
     private boolean mPrinterWasAdded = false;
     private int mEditPosition = -1;
@@ -58,8 +55,6 @@ public class PrinterListActivity extends BaseActivity<PrinterListScreen>
         setUpArrow(getSupportActionBar());
         mRecyclerView.setAdapter(new PrinterListRvAdapter(this, null));
         mRefreshLayout.setOnRefreshListener(this);
-        mSnackbar = Snackbar.make(mFab, "", Snackbar.LENGTH_SHORT);
-        mSnackbar.setCallback(new SnackbarCallback());
     }
 
     private void setUpArrow(ActionBar actionBar) {
@@ -168,8 +163,7 @@ public class PrinterListActivity extends BaseActivity<PrinterListScreen>
 
     @Override
     public void showSnackbar(String message) {
-        mSnackbar.setText(message);
-        mSnackbar.show();
+        Snackbar.make(mToolbar, message, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
@@ -190,24 +184,5 @@ public class PrinterListActivity extends BaseActivity<PrinterListScreen>
     @Override
     public void setRefreshing(boolean enable) {
         mRefreshLayout.setRefreshing(enable);
-    }
-
-    /**
-     * FAB in this layout has {@link com.nairbspace.octoandroid.views.ScrollHideBehavior} as behavior.
-     * {@link com.nairbspace.octoandroid.views.ScrollHideBehavior} currently cannot extend from
-     * {@link android.support.design.widget.FloatingActionButton.Behavior} or it will crash so
-     * have to hide FAB instead when Snackbar is shown.
-     */
-    private final class SnackbarCallback extends Snackbar.Callback {
-
-        @Override
-        public void onDismissed(Snackbar snackbar, int event) {
-            mFab.show();
-        }
-
-        @Override
-        public void onShown(Snackbar snackbar) {
-            mFab.hide();
-        }
     }
 }
