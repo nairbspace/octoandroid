@@ -8,12 +8,13 @@ import com.nairbspace.octoandroid.domain.model.Websocket;
 import com.nairbspace.octoandroid.mapper.WebsocketModelMapper;
 import com.nairbspace.octoandroid.model.WebsocketModel;
 import com.nairbspace.octoandroid.services.WebsocketService.FinishType;
+import com.nairbspace.octoandroid.ui.templates.UseCasePresenter;
 
 import javax.inject.Inject;
 
 import timber.log.Timber;
 
-public class WebsocketServiceHelper {
+public class WebsocketServicePresenter extends UseCasePresenter<WebsocketServiceListener> {
     private static final int COMPLETE = 100;
 
     private final GetWebsocket mGetWebsocket;
@@ -21,21 +22,23 @@ public class WebsocketServiceHelper {
     private final GetPushNotificationSetting mGetPushSetting;
     private final GetStickyNotificationSetting mGetStickySetting;
 
-    private Listener mListener;
+    private WebsocketServiceListener mListener;
     private boolean mStickyOn;
 
     @Inject
-    public WebsocketServiceHelper(GetWebsocket getWebsocket,
-                                  WebsocketModelMapper websocketModelMapper,
-                                  GetPushNotificationSetting getPushSetting,
-                                  GetStickyNotificationSetting getStickySetting) {
+    public WebsocketServicePresenter(GetWebsocket getWebsocket,
+                                     WebsocketModelMapper websocketModelMapper,
+                                     GetPushNotificationSetting getPushSetting,
+                                     GetStickyNotificationSetting getStickySetting) {
+        super(getWebsocket, websocketModelMapper, getPushSetting, getStickySetting);
         mGetWebsocket = getWebsocket;
         mWebsocketModelMapper = websocketModelMapper;
         mGetPushSetting = getPushSetting;
         mGetStickySetting = getStickySetting;
     }
 
-    protected void onCreate(Listener listener) {
+    @Override
+    protected void onInitialize(WebsocketServiceListener listener) {
         Timber.d("onCreate");
         mListener = listener;
     }
@@ -123,21 +126,5 @@ public class WebsocketServiceHelper {
     private void subscriberError(Throwable t) {
         Timber.e(t, null);
         mListener.showFinishedAndDestroy(FinishType.ERROR, null);
-    }
-
-    protected void onDestroy() {
-        Timber.d("onDestroy");
-        mGetWebsocket.unsubscribe();
-        mWebsocketModelMapper.unsubscribe();
-        mGetPushSetting.unsubscribe();
-        mGetStickySetting.unsubscribe();
-        mListener = null;
-    }
-
-    public interface Listener {
-        void turnOffAlarmAndStopService();
-        void showSticky(WebsocketModel model);
-        void showFinishedAndDestroy(FinishType type, String fileName);
-        void checkApplicationStatus();
     }
 }

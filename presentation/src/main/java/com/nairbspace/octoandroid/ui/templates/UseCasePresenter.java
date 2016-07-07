@@ -18,8 +18,8 @@ public abstract class UseCasePresenter<T> extends Presenter<T> {
 
     @Override
     protected void onDestroy(T t) {
-        super.onDestroy(t);
         unsubscribeAll();
+        super.onDestroy(t);
     }
 
     protected void unsubscribeAll() {

@@ -1,7 +1,6 @@
 package com.nairbspace.octoandroid.services;
 
 import android.app.Notification;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -15,7 +14,8 @@ import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.app.LifecycleHandler;
 import com.nairbspace.octoandroid.app.SetupApplication;
 import com.nairbspace.octoandroid.model.WebsocketModel;
-import com.nairbspace.octoandroid.ui.Navigator;
+import com.nairbspace.octoandroid.ui.templates.BaseService;
+import com.nairbspace.octoandroid.ui.templates.Presenter;
 
 import java.util.concurrent.TimeUnit;
 
@@ -26,12 +26,11 @@ import rx.Subscription;
 import rx.functions.Action1;
 import rx.subscriptions.Subscriptions;
 
-public class WebsocketService extends Service implements WebsocketServiceHelper.Listener {
+public class WebsocketService extends BaseService<WebsocketServiceListener> implements WebsocketServiceListener {
     private static final int PRINT_NOTIFICATION_ID = 1;
     private static final int COMPLETE = 100;
 
-    @Inject Navigator mNavigator;
-    @Inject WebsocketServiceHelper mServiceHelper;
+    @Inject WebsocketServicePresenter mPresenter;
 
     private NotificationCompat.Builder mStickyBuilder;
     private NotificationCompat.Builder mFinishedBuilder;
@@ -47,8 +46,8 @@ public class WebsocketService extends Service implements WebsocketServiceHelper.
     @Override
     public void onCreate() {
         SetupApplication.get(getApplicationContext()).getAppComponent().inject(this);
-        mServiceHelper.onCreate(this);
         mNotificationManager = NotificationManagerCompat.from(this);
+        super.onCreate();
     }
 
     public static Intent newIntent(Context context) {
@@ -57,7 +56,7 @@ public class WebsocketService extends Service implements WebsocketServiceHelper.
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        mServiceHelper.onStartCommand();
+        mPresenter.onStartCommand();
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -107,7 +106,7 @@ public class WebsocketService extends Service implements WebsocketServiceHelper.
                 .setAutoCancel(true)
                 .setOngoing(true);
 
-        mNavigator.createNotificationToDispatchActivity(this, mStickyBuilder, PRINT_NOTIFICATION_ID);
+        getNavigator().createNotificationToDispatchActivity(this, mStickyBuilder, PRINT_NOTIFICATION_ID);
     }
 
     private void updateSticky(WebsocketModel model) {
@@ -121,7 +120,7 @@ public class WebsocketService extends Service implements WebsocketServiceHelper.
         mNotificationManager.notify(PRINT_NOTIFICATION_ID, mStickyBuilder.build());
     }
 
-    public enum FinishType {
+    protected enum FinishType {
         REGULAR, ERROR, NONE
     }
 
@@ -153,26 +152,37 @@ public class WebsocketService extends Service implements WebsocketServiceHelper.
 
     private void showFinishedNotification(@NonNull NotificationCompat.Builder builder) {
         mFinishedBuilder = builder.setAutoCancel(true).setDefaults(Notification.DEFAULT_ALL);
-        mNavigator.createNotificationToDispatchActivity(this, mFinishedBuilder, PRINT_NOTIFICATION_ID);
+        getNavigator().createNotificationToDispatchActivity(this, mFinishedBuilder, PRINT_NOTIFICATION_ID);
     }
 
     @Override
     public void turnOffAlarmAndStopService() {
-        mNavigator.setWebsocketServiceAlarm(this, false);
+        getNavigator().setWebsocketServiceAlarm(this, false);
         stopSelf();
     }
 
     /**
      * Checks to see if {@link #mFinishedBuilder} is null to not accidentally cancel
      * the notification, but will cancel the sticky notification if present. Also
-     * Calls {@link WebsocketServiceHelper#onDestroy()} method.
+     * Calls {@link WebsocketServicePresenter#onDestroy(Object)} method.
      */
     @Override
     public void onDestroy() {
         if (mFinishedBuilder == null) mNotificationManager.cancel(PRINT_NOTIFICATION_ID);
         unsubDelayedSub();
-        mServiceHelper.onDestroy();
         super.onDestroy();
+    }
+
+    @NonNull
+    @Override
+    protected Presenter setPresenter() {
+        return mPresenter;
+    }
+
+    @NonNull
+    @Override
+    protected WebsocketServiceListener setListener() {
+        return this;
     }
 
 //    public static void toggleServiceAlarm(Context context) {
