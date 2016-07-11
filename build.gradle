@@ -24,10 +24,10 @@ allprojects {
         androidApplicationId = "com.nairbspace.octoandroid"
         androidVersionCode = 17
         androidVersionName = "1.8.0"
-        androidBuildToolsVersion = "23.0.3"
-        androidCompileSdkVersion = 23
+        androidBuildToolsVersion = "24.0.0"
+        androidCompileSdkVersion = 24
         androidMinSdkVersion = 16
-        androidTargetSdkVersion = 23
+        androidTargetSdkVersion = 24
     }
 }
 

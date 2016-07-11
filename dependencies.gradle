@@ -17,7 +17,7 @@ ext {
     autoValueAnnotationsVersion = "1.2-update1"
     autoValueParcelVersion = "0.2.1" // 0.2.2 Doesn't compile
     autoValueGsonVersion = "0.2.5"
-    androidSupportVersion = "23.4.0"
+    androidSupportVersion = "24.0.0"
     gsonVersion = "2.6.2"
     greenDaoVersion = "2.2.1"
     greenDaoGeneratorVersion = "2.2.0"
@@ -31,7 +31,7 @@ ext {
     leakcanaryVersion = "1.4-SNAPSHOT"
     mpAndroidChartVersion = "v2.2.5"
     crashlyticsVersion = "2.5.6@aar"
-//    preferenceVersion = "23.4.0.5"
+    preferenceVersion = "24.0.0.1"
 
     // Testing Libraries
     jUnitVersion = "4.12"
@@ -84,7 +84,7 @@ ext {
 
     presentationDependencies = [
             appcompat_v7:               "com.android.support:appcompat-v7:${androidSupportVersion}",
-//            preference_v7:              "com.takisoft.fix:preference-v7:${preferenceVersion}",
+            preference_v7:              "com.takisoft.fix:preference-v7:${preferenceVersion}",
             design:                     "com.android.support:design:${androidSupportVersion}",
             cardview_v7:                "com.android.support:cardview-v7:${androidSupportVersion}",
             recyclerView_v7:            "com.android.support:recyclerview-v7:${androidSupportVersion}",
