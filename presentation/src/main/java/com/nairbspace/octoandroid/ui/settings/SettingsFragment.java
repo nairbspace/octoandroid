@@ -1,22 +1,21 @@
 package com.nairbspace.octoandroid.ui.settings;
 
 import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.support.v7.preference.ListPreference;
+import android.support.v7.preference.Preference;
 
 import com.nairbspace.octoandroid.R;
+import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat;
 
-public class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
+public class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceChangeListener {
 
     public static SettingsFragment newInstance() {
         return new SettingsFragment();
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreatePreferencesFix(Bundle savedInstanceState, String rootKey) {
         // Add 'general' preferences, defined in the XML file
         addPreferencesFromResource(R.xml.preferences);
 
