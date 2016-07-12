@@ -36,10 +36,12 @@ android {
         versionName globalConfiguration.getAt("androidVersionName")
         resValue "string", "google_app_id", MyGoogleAppId
         manifestPlaceholders = [
-                crashlyticsName :       CrashlyticsName,
+                crashlyticsName:       CrashlyticsName,
                 crashlyticsApiKey:      CrashlyticsApiKey,
-                googleBackupName :      GoogleBackupName,
-                googleBackupApiKey :    GoogleBackupApiKey,
+                googleBackupName:      GoogleBackupName,
+                googleBackupApiKey:    GoogleBackupApiKey,
+                nsHost:                 NsHost,
+                nsPath:                 NsPath,
         ]
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
