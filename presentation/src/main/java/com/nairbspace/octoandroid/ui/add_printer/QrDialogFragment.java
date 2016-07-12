@@ -24,6 +24,8 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.nairbspace.octoandroid.R;
 import com.nairbspace.octoandroid.ui.templates.BaseDialogFragment;
 
+import java.io.IOException;
+
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -132,6 +134,15 @@ public class QrDialogFragment extends BaseDialogFragment<QrDialogFragment.Listen
 
         @Override
         public void surfaceCreated(SurfaceHolder holder) {
+
+            // Need to check if detector is operational before executing
+            // See v9.2 Release notes
+            // https://developers.google.com/vision/release-notes
+            if (!mBarcodeDetector.isOperational()) {
+                toastErrorAndDismiss();
+                return;
+            }
+
             try {
                 if (ActivityCompat.checkSelfPermission(getActivity(),
                         Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -139,10 +150,9 @@ public class QrDialogFragment extends BaseDialogFragment<QrDialogFragment.Listen
                     return;
                 }
                 mCameraSource.start(mCameraView.getHolder());
-            } catch (Exception e) {
+            } catch (IOException e) {
                 Timber.e(e, null);
-                Toast.makeText(getContext(), CAMERA_ERROR, Toast.LENGTH_SHORT).show();
-                dismiss();
+                toastErrorAndDismiss();
             }
         }
 
@@ -150,6 +160,11 @@ public class QrDialogFragment extends BaseDialogFragment<QrDialogFragment.Listen
         public void surfaceDestroyed(SurfaceHolder holder) {
             mCameraSource.stop();
         }
+    }
+
+    private void toastErrorAndDismiss() {
+        Toast.makeText(getContext(), CAMERA_ERROR, Toast.LENGTH_SHORT).show();
+        dismiss();
     }
 
     private final class QrProcessor extends BarcodeProcessor implements Runnable {
