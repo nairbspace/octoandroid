@@ -3,10 +3,15 @@ package com.nairbspace.octoandroid.data.disk;
 import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
 import com.nairbspace.octoandroid.data.db.PrinterDbEntityDao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import de.greenrobot.dao.DaoException;
+import de.greenrobot.dao.query.Query;
 
 /** Convenience methods for db related info */
 @Singleton
@@ -14,6 +19,9 @@ public class DbHelper {
 
     private final PrinterDbEntityDao mPrinterDbEntityDao;
     private final PrefHelper mPrefHelper;
+    private Map<String, Query<PrinterDbEntity>> mNameSearchQueryMap = new HashMap<>();
+    private Map<Long, Query<PrinterDbEntity>> mIdSearchQueryMap = new HashMap<>();
+    private Query<PrinterDbEntity> mListQuery;
 
     @Inject
     public DbHelper(PrinterDbEntityDao printerDbEntityDao, PrefHelper prefHelper) {
@@ -27,37 +35,42 @@ public class DbHelper {
     }
 
     public PrinterDbEntity getPrinterFromDbByName(String name) {
-        PrinterDbEntity printerDbEntity;
-        try {
-            printerDbEntity = mPrinterDbEntityDao.queryBuilder()
+        Query<PrinterDbEntity> query = mNameSearchQueryMap.get(name);
+        if (query == null) {
+            query = mPrinterDbEntityDao.queryBuilder()
                     .where(PrinterDbEntityDao.Properties.Name.eq(name))
-                    .unique();
-        } catch (Exception e) {
-            printerDbEntity = null;
+                    .build();
+            mNameSearchQueryMap.put(name, query);
         }
 
-        return printerDbEntity;
+        try {
+            return query.unique();
+        } catch (DaoException e) {
+            return null; // Shouldn't happen
+        }
     }
 
     public PrinterDbEntity getPrinterFromDbById(long printerId) {
-        PrinterDbEntity printerDbEntity;
-        try {
-            printerDbEntity = mPrinterDbEntityDao.queryBuilder()
+        Query<PrinterDbEntity> query = mIdSearchQueryMap.get(printerId);
+        if (query == null) {
+            query = mPrinterDbEntityDao.queryBuilder()
                     .where(PrinterDbEntityDao.Properties.Id.eq(printerId))
-                    .unique();
-        } catch (Exception e) {
-            printerDbEntity = null;
+                    .build();
+            mIdSearchQueryMap.put(printerId, query);
         }
-
-        return printerDbEntity;
+        try {
+            return query.unique();
+        } catch (DaoException e) {
+            return null; // Shouldn't happen
+        }
     }
 
     public List<PrinterDbEntity> getPrintersFromDb() {
-        try {
-            return mPrinterDbEntityDao.queryBuilder().list();
-        } catch (Exception e) {
-            return null;
+        if (mListQuery == null) {
+            mListQuery = mPrinterDbEntityDao.queryBuilder().build();
         }
+
+        return mListQuery.list();
     }
 
     public void deletePrinterInDb(PrinterDbEntity printerDbEntity) {
