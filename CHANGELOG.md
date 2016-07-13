@@ -1,6 +1,18 @@
 Change Log
 ==========
 
+Version 1.9.0 *(2016-07-13)*
+----------------------------
+
+ Feature: Auto-Backup
+ 
+ * Toggle in temperature graph layout now also locks vertical scroll
+ * Minor fixes to UI
+ * Updated build and libraries to SDK 24
+ * Switched to Support Preference Library for PreferenceFragments
+ * Added check if barcode detector is operational before executing
+ * Added alert dialog to prevent accidental disconnects when printing
+ 
 Version 1.8.0 *(2016-07-01)*
 ----------------------------
 
