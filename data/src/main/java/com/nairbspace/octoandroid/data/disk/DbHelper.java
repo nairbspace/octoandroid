@@ -22,6 +22,7 @@ public class DbHelper {
     private Map<String, Query<PrinterDbEntity>> mNameSearchQueryMap = new HashMap<>();
     private Map<Long, Query<PrinterDbEntity>> mIdSearchQueryMap = new HashMap<>();
     private Query<PrinterDbEntity> mListQuery;
+    public final static Object sLock = new Object();
 
     @Inject
     public DbHelper(PrinterDbEntityDao printerDbEntityDao, PrefHelper prefHelper) {
@@ -44,7 +45,10 @@ public class DbHelper {
         }
 
         try {
-            return query.unique();
+            synchronized (sLock) {
+                // Need to call forCurrentThread or else it will throw DaoException
+                return query.forCurrentThread().unique();
+            }
         } catch (DaoException e) {
             return null; // Shouldn't happen
         }
@@ -59,7 +63,10 @@ public class DbHelper {
             mIdSearchQueryMap.put(printerId, query);
         }
         try {
-            return query.unique();
+            synchronized (sLock) {
+                // Need to call forCurrentThread or else it will throw DaoException
+                return query.forCurrentThread().unique();
+            }
         } catch (DaoException e) {
             return null; // Shouldn't happen
         }
@@ -70,7 +77,10 @@ public class DbHelper {
             mListQuery = mPrinterDbEntityDao.queryBuilder().build();
         }
 
-        return mListQuery.list();
+        synchronized (sLock) {
+            // Need to call forCurrentThread or else it will throw DaoException
+            return mListQuery.forCurrentThread().list();
+        }
     }
 
     public void deletePrinterInDb(PrinterDbEntity printerDbEntity) {
@@ -81,13 +91,17 @@ public class DbHelper {
             oldPrinterDbEntity = getPrinterFromDbByName(printerDbEntity.getName());
         }
         if (oldPrinterDbEntity != null) {
-            mPrinterDbEntityDao.delete(oldPrinterDbEntity);
+            synchronized (sLock) {
+                mPrinterDbEntityDao.delete(oldPrinterDbEntity);
+            }
         }
     }
 
     public long insertOrReplace(PrinterDbEntity printerDbEntity) {
         mPrefHelper.setSaveTimeMillis(System.currentTimeMillis());
-        return mPrinterDbEntityDao.insertOrReplace(printerDbEntity);
+        synchronized (sLock) {
+            return mPrinterDbEntityDao.insertOrReplace(printerDbEntity);
+        }
     }
 
     /**

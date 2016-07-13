@@ -71,7 +71,7 @@ public class DiskManagerImpl implements DiskManager {
             @Override
             public void call(Subscriber<? super List<PrinterDbEntity>> subscriber) {
                 List<PrinterDbEntity> list = mDbHelper.getPrintersFromDb();
-                if (list == null) {
+                if (list == null || list.isEmpty()) {
                     subscriber.onError(new PrinterDataNotFoundException());
                 }
                 subscriber.onNext(list);

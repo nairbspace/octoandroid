@@ -10,6 +10,7 @@ import com.nairbspace.octoandroid.data.db.DaoMaster;
 import com.nairbspace.octoandroid.data.db.DaoSession;
 import com.nairbspace.octoandroid.data.db.PrinterDbEntityDao;
 import com.nairbspace.octoandroid.data.db.helper.DbOpenHelper;
+import com.nairbspace.octoandroid.data.disk.DbHelper;
 import com.nairbspace.octoandroid.data.disk.PrefHelper;
 import com.nairbspace.octoandroid.data.disk.ResManager;
 
@@ -49,7 +50,9 @@ public class StorageModule {
     @Provides
     @Singleton
     SQLiteDatabase provideSqLiteDatabase(DbOpenHelper helper) {
-        return helper.getWritableDatabase();
+        synchronized (DbHelper.sLock) {
+            return helper.getWritableDatabase();
+        }
     }
 
     @Provides

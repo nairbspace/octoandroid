@@ -1,12 +1,17 @@
 package com.nairbspace.octoandroid.app;
 
 import android.app.backup.BackupAgentHelper;
+import android.app.backup.BackupDataInput;
+import android.app.backup.BackupDataOutput;
 import android.app.backup.FileBackupHelper;
 import android.app.backup.SharedPreferencesBackupHelper;
+import android.os.ParcelFileDescriptor;
 
+import com.nairbspace.octoandroid.data.disk.DbHelper;
 import com.nairbspace.octoandroid.di.modules.StorageModule;
 
 import java.io.File;
+import java.io.IOException;
 
 public class OctoBackupAgent extends BackupAgentHelper {
     private static final String DEFAULT_PREFS_FILENAME = "com.nairbspace.octoandroid_preferences";
@@ -29,5 +34,19 @@ public class OctoBackupAgent extends BackupAgentHelper {
     public File getFilesDir() {
         File path = getDatabasePath(StorageModule.DB_NAME);
         return path.getParentFile();
+    }
+
+    @Override
+    public void onBackup(ParcelFileDescriptor oldState, BackupDataOutput data, ParcelFileDescriptor newState) throws IOException {
+        synchronized (DbHelper.sLock) {
+            super.onBackup(oldState, data, newState);
+        }
+    }
+
+    @Override
+    public void onRestore(BackupDataInput data, int appVersionCode, ParcelFileDescriptor newState) throws IOException {
+        synchronized (DbHelper.sLock) {
+            super.onRestore(data, appVersionCode, newState);
+        }
     }
 }
