@@ -14,4 +14,6 @@ public interface ConnectionScreen {
 
     void showErrorView();
 
+    void showDisconnectAlert();
+
 }

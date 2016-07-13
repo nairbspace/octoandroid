@@ -31,6 +31,7 @@
     <string name="disconnect">Disconnect</string>
     <string name="print">Print</string>
     <string name="download">Download</string>
+    <string name="disconnect_warning">Are you sure you want to disconnect?</string>
 
     <string name="files">Files</string>
     <string name="load">Load</string>

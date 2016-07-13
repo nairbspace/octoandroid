@@ -1,9 +1,11 @@
 package com.nairbspace.octoandroid.ui.connection;
 
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -144,6 +146,29 @@ public class ConnectionFragment extends BasePagerFragmentListener<ConnectionScre
     void connectButtonPressed() {
         mPresenter.connectButtonClicked(getConnectModel());
     }
+
+    @Override
+    public void showDisconnectAlert() {
+        new AlertDialog.Builder(getContext())
+                .setIcon(R.drawable.ic_warning_black_24dp)
+                .setTitle(R.string.warning)
+                .setMessage(R.string.disconnect_warning)
+                .setCancelable(true)
+                .setNegativeButton(android.R.string.cancel, mDisconnectListener)
+                .setPositiveButton(android.R.string.ok, mDisconnectListener)
+                .show();
+    }
+
+    private DialogInterface.OnClickListener mDisconnectListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialogInterface, int which) {
+            switch (which) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    mPresenter.executeConnect(getConnectModel());
+                    break;
+            }
+        }
+    };
 
     @Override
     public void setEnableInputViews(boolean shouldEnable) {

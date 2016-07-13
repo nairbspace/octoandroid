@@ -61,6 +61,11 @@ public class ConnectionPresenter extends UseCaseEventPresenter<ConnectionScreen,
     }
 
     public void connectButtonClicked(ConnectModel connectModel) {
+        if (!connectModel.isNotConnected()) mScreen.showDisconnectAlert();
+        else executeConnect(connectModel);
+    }
+
+    public void executeConnect(ConnectModel connectModel) {
         mScreen.showProgressBar(true);
         mConnectModelMapper.execute(new TransformSubscriber(), connectModel);
     }
