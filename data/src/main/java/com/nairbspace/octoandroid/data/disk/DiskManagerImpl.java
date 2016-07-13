@@ -59,6 +59,12 @@ public class DiskManagerImpl implements DiskManager {
                     subscriber.onError(new PrinterDataNotFoundException());
                 }
 
+                // Will need this if data is ever restored from backup
+                // since backup does not restore accounts. Priority not high, just looks cool.
+                if (!mAccountHelper.doesPrinterExistInAccountManager(printerDbEntity)) {
+                    mAccountHelper.addAccount(printerDbEntity);
+                }
+
                 subscriber.onNext(printerDbEntity);
                 subscriber.onCompleted();
             }

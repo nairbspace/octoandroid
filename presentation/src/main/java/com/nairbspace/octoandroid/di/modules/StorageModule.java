@@ -1,6 +1,7 @@
 package com.nairbspace.octoandroid.di.modules;
 
 import android.accounts.AccountManager;
+import android.app.backup.BackupManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
@@ -53,6 +54,12 @@ public class StorageModule {
         synchronized (DbHelper.sLock) {
             return helper.getWritableDatabase();
         }
+    }
+
+    @Provides
+    @Singleton
+    BackupManager provideBackupManager(Context context) {
+        return new BackupManager(context);
     }
 
     @Provides

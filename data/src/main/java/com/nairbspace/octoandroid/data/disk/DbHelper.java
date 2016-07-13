@@ -1,5 +1,7 @@
 package com.nairbspace.octoandroid.data.disk;
 
+import android.app.backup.BackupManager;
+
 import com.nairbspace.octoandroid.data.db.PrinterDbEntity;
 import com.nairbspace.octoandroid.data.db.PrinterDbEntityDao;
 
@@ -19,15 +21,18 @@ public class DbHelper {
 
     private final PrinterDbEntityDao mPrinterDbEntityDao;
     private final PrefHelper mPrefHelper;
+    private final BackupManager mBackupManager;
     private Map<String, Query<PrinterDbEntity>> mNameSearchQueryMap = new HashMap<>();
     private Map<Long, Query<PrinterDbEntity>> mIdSearchQueryMap = new HashMap<>();
     private Query<PrinterDbEntity> mListQuery;
     public final static Object sLock = new Object();
 
     @Inject
-    public DbHelper(PrinterDbEntityDao printerDbEntityDao, PrefHelper prefHelper) {
+    public DbHelper(PrinterDbEntityDao printerDbEntityDao, PrefHelper prefHelper,
+                    BackupManager backupManager) {
         mPrinterDbEntityDao = printerDbEntityDao;
         mPrefHelper = prefHelper;
+        mBackupManager = backupManager;
     }
 
     public PrinterDbEntity getActivePrinterDbEntity() {
@@ -93,6 +98,7 @@ public class DbHelper {
         if (oldPrinterDbEntity != null) {
             synchronized (sLock) {
                 mPrinterDbEntityDao.delete(oldPrinterDbEntity);
+                mBackupManager.dataChanged();
             }
         }
     }
@@ -100,7 +106,9 @@ public class DbHelper {
     public long insertOrReplace(PrinterDbEntity printerDbEntity) {
         mPrefHelper.setSaveTimeMillis(System.currentTimeMillis());
         synchronized (sLock) {
-            return mPrinterDbEntityDao.insertOrReplace(printerDbEntity);
+            long id = mPrinterDbEntityDao.insertOrReplace(printerDbEntity);
+            mBackupManager.dataChanged();
+            return id;
         }
     }
 
