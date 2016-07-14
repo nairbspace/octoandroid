@@ -20,7 +20,7 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-public class PlaybackPresenter extends UseCasePresenter<PlaybackScreen> {
+public final class PlaybackPresenter extends UseCasePresenter<PlaybackScreen> {
 
     private PlaybackScreen mScreen;
 
@@ -33,7 +33,7 @@ public class PlaybackPresenter extends UseCasePresenter<PlaybackScreen> {
     private boolean mIsPushOn;
 
     @Inject
-    public PlaybackPresenter(GetWebsocket getWebsocket, WebsocketModelMapper mapper,
+    PlaybackPresenter(GetWebsocket getWebsocket, WebsocketModelMapper mapper,
                              SendJobCommand sendJobCommand,
                              GetPushNotificationSetting getPushSetting,
                              SlicingProgressModelMapper progressModelMapper, EventBus eventBus) {
@@ -131,7 +131,7 @@ public class PlaybackPresenter extends UseCasePresenter<PlaybackScreen> {
         }
     }
 
-    public void renderScreen(WebsocketModel websocketModel) {
+    void renderScreen(WebsocketModel websocketModel) {
         boolean isFileLoaded = websocketModel.fileLoaded();
         boolean isPaused = websocketModel.paused();
         boolean isPrinting = websocketModel.printing();
@@ -156,7 +156,7 @@ public class PlaybackPresenter extends UseCasePresenter<PlaybackScreen> {
         }
     }
 
-    public void onClickPressed(int viewId, WebsocketModel websocketModel) {
+    void onClickPressed(int viewId, WebsocketModel websocketModel) {
         if (viewId == mScreen.getPrintRestartId()) {
             if (websocketModel.paused()) {
                 executeJobCommand(JobCommandModel.CommandType.RESTART);
@@ -172,11 +172,16 @@ public class PlaybackPresenter extends UseCasePresenter<PlaybackScreen> {
                 executeJobCommand(JobCommandModel.CommandType.RESUME);
             }
         } else if (viewId == mScreen.getStopId()) {
-            executeJobCommand(JobCommandModel.CommandType.CANCEL);
+            if (websocketModel.printing()) mScreen.showCancelAlert();
+            else executeStopCommand();
         }
     }
 
-    private void executeJobCommand(JobCommandModel.CommandType type) {
+    void executeStopCommand() {
+        executeJobCommand(JobCommandModel.CommandType.CANCEL);
+    }
+
+    void executeJobCommand(JobCommandModel.CommandType type) {
         mSendJobCommand.execute(new SendJobSubscriber(), JobCommandModel.getCommand(type));
     }
 

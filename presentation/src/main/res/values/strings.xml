@@ -41,6 +41,7 @@
     <string name="print_restart">Print/Restart</string>
     <string name="resume_pause">Resume/Pause</string>
     <string name="stop">Stop</string>
+    <string name="stop_print_warning">Are you sure you want to cancel this print?</string>
     <string name="file_details">File Details</string>
     <string name="upload">Upload</string>
     <string name="more">More</string>

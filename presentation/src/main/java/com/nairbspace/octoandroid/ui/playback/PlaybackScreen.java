@@ -23,4 +23,6 @@ public interface PlaybackScreen {
     void setWebsocketServiceAndAlarm(boolean shouldStartAlarm);
 
     boolean isPrinting();
+
+    void showCancelAlert();
 }

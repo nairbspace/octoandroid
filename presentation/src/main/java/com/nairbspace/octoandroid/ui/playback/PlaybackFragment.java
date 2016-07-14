@@ -1,9 +1,11 @@
 package com.nairbspace.octoandroid.ui.playback;
 
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -106,6 +108,29 @@ public class PlaybackFragment extends BaseFragmentListener<PlaybackScreen,
     public void onClick(View v) {
         mPresenter.onClickPressed(v.getId(), mWebsocketModel);
     }
+
+    @Override
+    public void showCancelAlert() {
+        new AlertDialog.Builder(getContext())
+                .setTitle(R.string.warning)
+                .setIcon(R.drawable.ic_warning_black_24dp)
+                .setMessage(R.string.stop_print_warning)
+                .setCancelable(true)
+                .setNegativeButton(android.R.string.cancel, mCancelListener)
+                .setPositiveButton(android.R.string.ok, mCancelListener)
+                .show();
+    }
+
+    private DialogInterface.OnClickListener mCancelListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialogInterface, int which) {
+            switch (which) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    mPresenter.executeStopCommand();
+                    break;
+            }
+        }
+    };
 
     @Override
     public void showPrintingScreen() {
