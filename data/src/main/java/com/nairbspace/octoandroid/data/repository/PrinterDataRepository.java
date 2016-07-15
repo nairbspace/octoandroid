@@ -73,18 +73,17 @@ public class PrinterDataRepository implements PrinterRepository {
 
     @Override
     public Observable addPrinterDetails(AddPrinter addPrinter) {
-        // Stash active printer in case adding new printer fails to reset.
-        long id = mDiskManager.getActivePrinterId();
-
         Observable entityObs = Observable
                 .create(mMapperHelper.mapAddPrinterToPrinterDbEntity(addPrinter))
                 .map(mDiskManager.putPrinterInDb());
 
+        // Stash active printer in case adding new printer fails to reset.
+        long id = mDiskManager.getActivePrinterId();
         Observable verifyObs = mApiManager.getVersion()
-                .map(mDiskManager.putVersionInDb());
-
-        return Observable.concat(entityObs, verifyObs)
+                .map(mDiskManager.putVersionInDb())
                 .doOnError(mDiskManager.deleteUnverifiedPrinter(id));
+
+        return Observable.concat(entityObs, verifyObs);
     }
 
     @Override
