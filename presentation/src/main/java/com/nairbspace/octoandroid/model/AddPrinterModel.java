@@ -1,20 +1,19 @@
 package com.nairbspace.octoandroid.model;
 
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 
 @AutoValue
 public abstract class AddPrinterModel implements Parcelable {
 
-    @Nullable public abstract String accountName();
+    public abstract String accountName();
 
-    @Nullable public abstract String ipAddress();
+    public abstract String ipAddress();
 
-    @Nullable public abstract String port();
+    public abstract String port();
 
-    @Nullable public abstract String apiKey();
+    public abstract String apiKey();
 
     public abstract Boolean isSslChecked();
 
