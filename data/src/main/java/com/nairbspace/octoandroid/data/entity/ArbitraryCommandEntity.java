@@ -11,7 +11,7 @@ import java.util.List;
 @AutoGson(autoValueClass = AutoValue_ArbitraryCommandEntity.class)
 public abstract class ArbitraryCommandEntity {
     private static final String COMMAND_MOTORS_OFF = "M18";
-    private static final String COMMAND_FAN_ON = "M105";
+    private static final String COMMAND_FAN_ON = "M106";
     private static final String COMMAND_FAN_OFF = "M106 S0";
 
     @SerializedName("commands") public abstract List<String> commands();
