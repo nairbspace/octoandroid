@@ -150,7 +150,9 @@ public class QrDialogFragment extends BaseDialogFragment<QrDialogFragment.Listen
                     return;
                 }
                 mCameraSource.start(mCameraView.getHolder());
-            } catch (IOException e) {
+                // Getting RuntimeException: could not find requested camera
+                // even though its checked before starting fragment
+            } catch (IOException | RuntimeException e) {
                 Timber.e(e, null);
                 toastErrorAndDismiss();
             }
