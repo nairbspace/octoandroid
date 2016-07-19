@@ -1,6 +1,15 @@
 Change Log
 ==========
 
+Version 1.9.1 *(2016-07-19)*
+----------------------------
+
+ * Added alert dialog when trying to cancel print and still printing
+ * Fixed error handling when adding printer and it fails
+ * Fixed crash when trying to start camera
+ * Fixed logic for restoring instance in SlicingFragment
+ * Fixed logic for updating files when slicing is complete
+ 
 Version 1.9.0 *(2016-07-13)*
 ----------------------------
 
