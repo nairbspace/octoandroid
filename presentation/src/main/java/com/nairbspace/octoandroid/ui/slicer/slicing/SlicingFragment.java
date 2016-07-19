@@ -2,7 +2,6 @@ package com.nairbspace.octoandroid.ui.slicer.slicing;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -32,6 +31,7 @@ import com.nairbspace.octoandroid.ui.templates.Presenter;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -40,12 +40,15 @@ import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import rx.Observable;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.Subscriptions;
 
 public class SlicingFragment extends BaseFragmentListener<SlicingScreen, SlicingFragment.Listener>
         implements SlicingScreen, SwipeRefreshLayout.OnRefreshListener {
-
-    private static final int UPDATE_FILES_TIMER = 2000; // in milliseconds
-    private static final int UPDATE_SLICER_PROFILE_DELAY = 100; // in milliseconds
 
     private static final String SLICER_SCREEN_MODEL_KEY = "slicer_screen_model_key";
     private static final String API_URL_KEY = "api_url_key";
@@ -168,14 +171,14 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
         if (!TextUtils.isEmpty(apiUrl)) setApiUrl(apiUrl);
     }
 
+    private int mSlicerProfilePosition = -1;
+
     private void restoreSpinnerPositions(final SlicingCommandModel model) {
+        mSlicerProfilePosition = model.slicingProfilePosition();
+
+        // This triggers onItemSelectedListener which will also update the slicer profile position
         mSlicerSpinner.setSelection(model.slicerPosition());
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mSlicerProfileSpinner.setSelection(model.slicingProfilePosition());
-            }
-        }, UPDATE_SLICER_PROFILE_DELAY);
+
         mPrinterProfileSpinner.setSelection(model.printerProfilePosition());
         mAfterSlicingSpinner.setSelection(model.afterSlicingPosition());
     }
@@ -204,16 +207,26 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
         toastMessage(SLICING_PARAMETERS_MISSING);
     }
 
+    private Subscription mUpdateFilesSub = Subscriptions.unsubscribed();
+
     @Override
     public void showSliceCompleteAndUpdateFiles() {
         toastMessage(SLICE_COMPLETE);
 
         // After slice complete, wait couple seconds before updating FilesFragment.
-        new Handler().postDelayed(new Runnable() {
+        mUpdateFilesSub = Observable.timer(2, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(updateFiles());
+    }
+
+    private Action1<Long> updateFiles() {
+        return new Action1<Long>() {
             @Override
-            public void run() {mListener.updateFiles();
+            public void call(Long aLong) {
+                mListener.updateFiles();
             }
-        }, UPDATE_FILES_TIMER);
+        };
     }
 
     @Override
@@ -265,6 +278,10 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
             if (mSlicerModels == null) return;
             List<SlicerModel.Profile> profiles = mSlicerModels.get(position).profiles();
             mSlicerProfileSpinner.setAdapter(getNewAdapter(profiles));
+            if (mSlicerProfilePosition > -1) {
+                mSlicerProfileSpinner.setSelection(mSlicerProfilePosition);
+                mSlicerProfilePosition = -1;
+            }
         }
     };
 
@@ -289,6 +306,12 @@ public class SlicingFragment extends BaseFragmentListener<SlicingScreen, Slicing
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        if (!mUpdateFilesSub.isUnsubscribed()) mUpdateFilesSub.unsubscribe();
+        super.onDestroy();
     }
 
     @NonNull
