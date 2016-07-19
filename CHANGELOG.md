@@ -9,6 +9,7 @@ Version 1.9.1 *(2016-07-19)*
  * Fixed crash when trying to start camera
  * Fixed logic for restoring instance in SlicingFragment
  * Fixed logic for updating files when slicing is complete
+ * Fix Fan On command with correct command
  
 Version 1.9.0 *(2016-07-13)*
 ----------------------------
